@@ -41,6 +41,15 @@
     ll = "ls -l --time-style long-iso --icons";
     tree = "ls -T";
     ps = "${procs}/bin/procs";
+
+
+    ###weather
+    laWeather = "noglob curl -4 http://wttr.in/LA?m";
+    sfWeather = "noglob curl -4 http://wttr.in/SF?m";
+    seoulWeather = "noglob curl -4 http://wttr.in/Seoul?m";
+    tokyoWeather = "noglob curl -4 http://wttr.in/Tokyo?m";
+    nyWeather = "noglob curl -4 http://wttr.in/NY?m";
+
   };
 }
 
