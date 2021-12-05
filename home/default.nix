@@ -60,6 +60,10 @@
     tokei #source code line counter
     nixpkgs-fmt #nix formatter
 
+    ## kubernetes
+    kubectl
+    krew
+
     ## Language servers
     haskell-language-server
     rnix-lsp
