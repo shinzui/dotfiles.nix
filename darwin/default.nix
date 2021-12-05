@@ -24,8 +24,7 @@
     terminal-notifier
   ];
 
-  # https://github.com/nix-community/home-manager/issues/423
-  #programs.nix-index.enable = true;
+  programs.nix-index.enable = true;
 
   # Fonts
   #fonts.enableFontDir = true;
