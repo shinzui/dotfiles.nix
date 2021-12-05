@@ -1,13 +1,10 @@
 { config, pkgs, lib, ... }:
 
 {
-  #https://rycee.gitlab.io/home-manager/options.html#opt-programs.zsh.enable
-  programs.zsh.enable = true;
-
-
   # Starship Prompt
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.starship.enable
   programs.starship.enable = true;
+
 
   programs.starship.settings = {
     # See docs here: https://starship.rs/config/

@@ -5,6 +5,7 @@
   imports = [
     ./git.nix
     ./neovim.nix
+    ./zsh.nix
     ./shells.nix
   ];
 
