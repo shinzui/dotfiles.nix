@@ -42,6 +42,15 @@
   programs.zoxide.enable = true;
 
 
+  #Broot. Better directory navigation
+  #https://github.com/Canop/broot
+  #https://rycee.gitlab.io/home-manager/options.html#opt-programs.broot.enable
+  programs.broot = {
+  	enable = true;
+	modal = true;
+  };
+
+
 
   # }}}
 
@@ -51,20 +60,33 @@
     bottom #Fancy `top`
     coreutils
     curl
+    #dateutils
     du-dust #Fancy `du` https://github.com/bootandy/dust
     exa #fancy `ls`
+    fd #fancy `find`
     procs #fancy `ps`
     ripgrep
+    sd # `sed` and `awk` replacement
+    #watchexec
     wget
+    xsv
 
     # Dev packages
     google-cloud-sdk
     cloud-sql-proxy
     dhall
     dhall-json
+
+    ## Haskell
     haskellPackages.cabal-install
     haskellPackages.hoogle
     haskellPackages.implicit-hie
+
+    ## OCaml
+    ocaml
+    dune-release
+    opam
+
     tokei #source code line counter
     nixpkgs-fmt #nix formatter
     nodePackages.typescript
@@ -73,16 +95,21 @@
 
     ## kubernetes
     kubectl
+    kubernetes-helm
     krew
 
     ## Language servers
     haskell-language-server
     dhall-lsp-server
+    nodePackages.typescript-language-server
     rnix-lsp
     terraform-lsp
+    ocamlPackages.ocaml-lsp
 
     #Nix related tools
     cachix
+    manix #nix documentation lookup
+    nix-prefetch-git
   ];
 
   # }}}
