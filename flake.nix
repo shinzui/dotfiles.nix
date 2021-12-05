@@ -120,12 +120,12 @@
           };
         };
 
-        # pkgs-stable = final: prev: {
-        #   pkgs-stable = import inputs.nixpkgs-stable {
-        #     inherit (prev.stdenv) system;
-        #     inherit (nixpkgsConfig) config;
-        #   };
-        # };
+        pkgs-stable = final: prev: {
+           pkgs-stable = import inputs.nixpkgs-stable {
+             inherit (prev.stdenv) system;
+             inherit (nixpkgsConfig) config;
+           };
+         };
 
         pkgs-unstable = final: prev: {
           pkgs-unstable = import inputs.nixpkgs-unstable {

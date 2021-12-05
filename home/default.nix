@@ -57,7 +57,14 @@
     haskellPackages.cabal-install
     haskellPackages.hoogle
     tokei #source code line counter
+    
+    ## Language servers
+    #haskell-language-server
+    rnix-lsp
+    terraform-lsp
 
+
+    
 
     #Nix related tools
     cachix
