@@ -37,6 +37,14 @@
       # Configuration for `nixpkgs` mostly used in personal configs.
       nixpkgsConfig = {
         config = { allowUnfree = true; };
+	overlays = attrValues self.overlays ++ singleton (
+          # Sub in x86 version of packages that don't build on Apple Silicon yet
+          final: prev: (optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
+            inherit (final.pkgs-x86)
+	      haskell-language-server
+              nix-index;
+          })
+        );
       };
 
       # Personal configuration shared between `nix-darwin` and plain `home-manager` configs.

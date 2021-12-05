@@ -59,7 +59,7 @@
     tokei #source code line counter
     
     ## Language servers
-    #haskell-language-server
+    haskell-language-server
     rnix-lsp
     terraform-lsp
 
