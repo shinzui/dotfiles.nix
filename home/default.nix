@@ -7,6 +7,7 @@
     ./neovim.nix
     ./zsh.nix
     ./shells.nix
+    ./tmux.nix
   ];
 
 
@@ -46,8 +47,8 @@
   #https://github.com/Canop/broot
   #https://rycee.gitlab.io/home-manager/options.html#opt-programs.broot.enable
   programs.broot = {
-  	enable = true;
-	modal = true;
+    enable = true;
+    modal = true;
   };
 
 
