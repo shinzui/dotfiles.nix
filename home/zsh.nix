@@ -24,9 +24,6 @@
     kgd = "kg deployment";
     kex = "kubectl exec -it";
 
-
-
-
     #nix
     nb = "nix build";
     nd = "nix develop";
@@ -41,6 +38,7 @@
     ll = "ls -l --time-style long-iso --icons";
     tree = "ls -T";
     ps = "${procs}/bin/procs";
+    top = "bt";
 
 
     ###weather

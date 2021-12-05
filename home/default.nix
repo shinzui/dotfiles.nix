@@ -50,6 +50,7 @@
   # Other packages {{{
 
   home.packages = with pkgs; [
+    bottom #Fancy `top`
     coreutils
     curl
     du-dust #Fancy `du` https://github.com/bootandy/dust
@@ -61,10 +62,16 @@
     # Dev packages
     google-cloud-sdk
     cloud-sql-proxy
+    dhall
+    dhall-json
     haskellPackages.cabal-install
     haskellPackages.hoogle
+    haskellPackages.implicit-hie
     tokei #source code line counter
     nixpkgs-fmt #nix formatter
+    nodePackages.typescript
+    nodejs
+    jq
 
     ## kubernetes
     kubectl
@@ -72,11 +79,9 @@
 
     ## Language servers
     haskell-language-server
+    dhall-lsp-server
     rnix-lsp
     terraform-lsp
-
-
-
 
     #Nix related tools
     cachix
