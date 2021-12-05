@@ -13,6 +13,18 @@
     view = "v -R";
     vim = "v";
 
+    ###Kubernetes
+    k = "kubectl";
+    kg = "kubectl get";
+    kd = "kubectl describe";
+    kgp = "kg pods";
+    kdp = "kd pods";
+    kgs = "kg service";
+    kds = "kd service";
+    kgd = "kg deployment";
+    kex = "kubectl exec -it";
+
+
 
 
     #nix
