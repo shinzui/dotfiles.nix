@@ -2,7 +2,15 @@
 
 {
   #https://rycee.gitlab.io/home-manager/options.html#opt-programs.zsh.enable
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+  };
+
+  #https://rycee.gitlab.io/home-manager/options.html#opt-programs.zsh.sessionVariables
+  programs.zsh.sessionVariables = {
+     EDITOR = "nvim";
+     MANPAGER="nvim -c 'set ft=man' -";
+  };
 
   programs.zsh.shellAliases = with pkgs; {
     #general 
