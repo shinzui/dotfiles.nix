@@ -44,6 +44,7 @@
     du = "${du-dust}/bin/dust";
     ls = "${exa}/bin/exa";
     ll = "ls -l --time-style long-iso --icons";
+    lsa = "ll -a";
     tree = "ls -T";
     ps = "${procs}/bin/procs";
     top = "bt";
