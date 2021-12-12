@@ -73,6 +73,7 @@
     xsv
 
     # Dev packages
+    git-extras
     google-cloud-sdk
     cloud-sql-proxy
     dhall
