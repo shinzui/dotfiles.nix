@@ -51,6 +51,11 @@
     modal = true;
   };
 
+  #Broken on aarch64-darwin
+  #programs.atuin = {
+  #  enable = true;
+  #};
+
 
 
   # }}}
@@ -59,20 +64,23 @@
 
   home.packages = with pkgs; [
     bottom #Fancy `top`
-    coreutils
+    #coreutils
     curl
     #dateutils
     du-dust #Fancy `du` https://github.com/bootandy/dust
     exa #fancy `ls`
+    hyperfine #benchmarking
     fd #fancy `find`
     procs #fancy `ps`
     ripgrep
     sd # `sed` and `awk` replacement
+    rargs # `xargs` + `awk`
     #watchexec
     wget
     xsv
 
     # Dev packages
+    angle-grinder #Fast log processor
     git-extras
     google-cloud-sdk
     cloud-sql-proxy
@@ -88,6 +96,9 @@
     ocaml
     dune-release
     opam
+
+    ## Rust
+    cargo
 
     tokei #source code line counter
     nixpkgs-fmt #nix formatter
