@@ -19,6 +19,10 @@ in
   homebrew.global.brewfile = true;
   homebrew.global.noLock = true;
 
+  homebrew.brews = [
+    "pam-reattach"
+  ];
+
   homebrew.taps = [
     "homebrew/cask"
     "homebrew/cask-drivers"
@@ -44,6 +48,7 @@ in
 
   # If an app isn't available in the Mac App Store install the Homebrew Cask.
   homebrew.casks = [
+    #TODO fixme by moving conflicting apps
     #"discord"
     #"google-chrome"
   ];
