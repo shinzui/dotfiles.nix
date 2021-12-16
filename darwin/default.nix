@@ -6,7 +6,7 @@
     ./bootstrap.nix
 
     # Other nix-darwin configuration
-    #./homebrew.nix
+    ./homebrew.nix
     #./defaults.nix
   ];
 

@@ -1,0 +1,50 @@
+{ config, lib, pkgs, ... }:
+
+let
+  brewBinPrefix = if pkgs.system == "aarch64-darwin" then "/opt/homebrew/bin" else "/usr/local/bin";
+in
+
+{
+  environment.shellInit = ''
+    eval "$(${brewBinPrefix}/brew shellenv)"
+  '';
+
+  #https://docs.brew.sh/Shell-Completion#configuring-completions-in-zsh
+  #TODO configure autocompletion
+
+  homebrew.enable = true;
+  homebrew.brewPrefix = brewBinPrefix;
+  homebrew.autoUpdate = true;
+  homebrew.cleanup = "zap";
+  homebrew.global.brewfile = true;
+  homebrew.global.noLock = true;
+
+  homebrew.taps = [
+    "homebrew/cask"
+    "homebrew/cask-drivers"
+    "homebrew/cask-fonts"
+    "homebrew/cask-versions"
+    "homebrew/core"
+    "homebrew/services"
+  ];
+
+  # Prefer installing application from the Mac App Store
+  #
+  # Commented apps suffer continual update issue:
+  # https://github.com/malob/nixpkgs/issues/9
+  #
+  # `mas` not working on macOS 12
+  # https://github.com/mas-cli/mas/issues/417
+  # homebrew.masApps = {
+  #   # "1Blocker" = 1365531024;
+  #   "1Password" = 1333542190;
+  #   Slack = 803453959;
+  #   Xcode = 497799835;
+  # };
+
+  # If an app isn't available in the Mac App Store install the Homebrew Cask.
+  homebrew.casks = [
+    #"discord"
+    #"google-chrome"
+  ];
+}
