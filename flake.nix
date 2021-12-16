@@ -2,7 +2,7 @@
   description = "Shinzui's dotfiles";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/master";
+    nixpkgs.url = "github:nixos/nixpkgs/master";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     darwin = {
@@ -167,7 +167,7 @@
         inherit (nixpkgsConfig) config;
         overlays = with self.overlays; [
           pkgs-master
-          # pkgs-stable
+          #pkgs-stable
           apple-silicon
         ];
       };
