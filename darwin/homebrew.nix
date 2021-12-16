@@ -5,7 +5,7 @@ let
 in
 
 {
-  environment.shellInit = ''
+  programs.zsh.shellInit = ''
     eval "$(${brewBinPrefix}/brew shellenv)"
   '';
 
