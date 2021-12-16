@@ -37,11 +37,11 @@
       # Configuration for `nixpkgs` mostly used in personal configs.
       nixpkgsConfig = {
         config = { allowUnfree = true; };
-	overlays = attrValues self.overlays ++ singleton (
+        overlays = attrValues self.overlays ++ singleton (
           # Sub in x86 version of packages that don't build on Apple Silicon yet
           final: prev: (optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
             inherit (final.pkgs-x86)
-	      haskell-language-server
+              haskell-language-server
               nix-index;
           })
         );
@@ -60,7 +60,6 @@
 
       nixDarwinCommonModules = [
         # Include extra `nix-darwin`
-        #self.darwinModules.programs.nix-index
         #self.darwinModules.security.pam
         self.darwinModules.users
         # Main `nix-darwin` config
@@ -129,11 +128,11 @@
         };
 
         pkgs-stable = final: prev: {
-           pkgs-stable = import inputs.nixpkgs-stable {
-             inherit (prev.stdenv) system;
-             inherit (nixpkgsConfig) config;
-           };
-         };
+          pkgs-stable = import inputs.nixpkgs-stable {
+            inherit (prev.stdenv) system;
+            inherit (nixpkgsConfig) config;
+          };
+        };
 
         pkgs-unstable = final: prev: {
           pkgs-unstable = import inputs.nixpkgs-unstable {
@@ -154,22 +153,24 @@
       };
 
       darwinModules = {
-        # programs-nix-index = import ./modules/darwin/programs/nix-index.nix;
         # security-pam = import ./modules/darwin/security/pam.nix;
         users = import ./modules/darwin/users.nix;
       };
 
 
       # }}}
-    } // flake-utils.lib.eachDefaultSystem (system: {
-      legacyPackages = import inputs.nixpkgs-unstable {
+    } // flake-utils.lib.eachDefaultSystem (system:
+      let legacyPackages = import inputs.nixpkgs-unstable {
         inherit system;
         inherit (nixpkgsConfig) config;
         overlays = with self.overlays; [
           pkgs-master
-          #pkgs-stable
+          pkgs-stable
           apple-silicon
         ];
-      };
+      }; 
+      pkgs = legacyPackages;
+      in {
+      devShell = import ./shell.nix { inherit pkgs; };
     });
 }
