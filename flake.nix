@@ -48,13 +48,18 @@
       };
 
       # Personal configuration shared between `nix-darwin` and plain `home-manager` configs.
+
+      # This value determines the Home Manager release that your configuration is compatible with. This
+      # helps avoid breakage when a new Home Manager release introduces backwards incompatible changes.
+      #
+      # You can update Home Manager without changing this value. See the Home Manager release notes for
+      # a list of state version changes in each release.
+      homeManagerStateVersion = "22.05";
+
       homeManagerCommonConfig = with self.homeManagerModules; {
-        imports = [
+        imports = attrValues self.homeManagerModules ++ [
           ./home
-          #configs.git.aliases
-          #configs.gh.aliases
-          #configs.starship.symbols
-          #programs.neovim.extras
+          { home.stateVersion = homeManagerStateVersion; }
         ];
       };
 
@@ -157,10 +162,18 @@
         users = import ./modules/darwin/users.nix;
       };
 
+      homeManagerModules = {
+        #configs-git-aliases = import ./home/config/git-aliases.nix;
+        #configs-gh-aliases = import ./home/config/gh-aliases.nix;
+        configs-starship-symbols = import ./home/config/starship-symbols.nix;
+      };
+
+
 
       # }}}
     } // flake-utils.lib.eachDefaultSystem (system:
-      let legacyPackages = import inputs.nixpkgs-unstable {
+    let
+      legacyPackages = import inputs.nixpkgs-unstable {
         inherit system;
         inherit (nixpkgsConfig) config;
         overlays = with self.overlays; [
@@ -168,9 +181,10 @@
           pkgs-stable
           apple-silicon
         ];
-      }; 
+      };
       pkgs = legacyPackages;
-      in {
+    in
+    {
       devShell = import ./shell.nix { inherit pkgs; };
     });
 }
