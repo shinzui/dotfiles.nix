@@ -32,11 +32,6 @@
   programs.fzf.enable = true;
 
 
-  #Github's official cli
-  #https://github.com/cli/cli
-  #https://rycee.gitlab.io/home-manager/options.html#opt-programs.gh.enable
-  programs.gh.enable = true;
-
   # Zoxide, a faster way to navigate the filesystem
   # https://github.com/ajeetdsouza/zoxide
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.zoxide.enable

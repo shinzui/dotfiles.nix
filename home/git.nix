@@ -31,4 +31,9 @@
       init.defaultBranch = "master";
     };
   };
+
+  # GitHub CLI
+  # https://rycee.gitlab.io/home-manager/options.html#opt-programs.gh.enable
+  programs.gh.enable = true;
+  programs.gh.settings.git_protocol = "ssh";
 }
