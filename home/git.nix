@@ -10,7 +10,14 @@
     userEmail = "nadeem@gmail.com";
     userName = "Nadeem Bitar";
 
+    delta.enable = true;
+    lfs.enable = true;
+
     extraConfig = {
+      credential.helper = if pkgs.stdenvNoCC.isDarwin then
+        "osxkeychain"
+      else
+        "cache --timeout=1000000000";
       core = {
         editor = "nvim";
         ignorecase = false;
