@@ -14,7 +14,7 @@ in
 
   homebrew.enable = true;
   homebrew.brewPrefix = brewBinPrefix;
-  homebrew.autoUpdate = true;
+  homebrew.autoUpdate = false;
   homebrew.cleanup = "zap";
   homebrew.global.brewfile = true;
   homebrew.global.noLock = true;
