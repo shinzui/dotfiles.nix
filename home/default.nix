@@ -123,3 +123,4 @@
   # }}}
 
 }
+# vim: foldmethod=marker

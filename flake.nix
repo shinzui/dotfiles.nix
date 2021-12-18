@@ -188,3 +188,4 @@
       devShell = import ./shell.nix { inherit pkgs; };
     });
 }
+# vim: foldmethod=marker
