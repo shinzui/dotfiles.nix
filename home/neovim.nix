@@ -33,6 +33,7 @@ in
 
   programs.neovim.plugins = with pkgs.vimPlugins; [
     nord-nvim
+    vim-tmux-navigator
   ] ++ map optionalPlugin [
     telescope-symbols-nvim
   ] ++ map pluginWithConfig [
