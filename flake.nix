@@ -17,7 +17,8 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     flake-utils.url = "github:numtide/flake-utils";
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
-    lspsaga-nvim = { url = github:tami5/lspsaga.nvim; flake = false; };
+    lspsaga-nvim = { url = "github:tami5/lspsaga.nvim"; flake = false; };
+    onenord-nvim = { url = "github:rmehri01/onenord.nvim"; flake = false; }; 
   };
 
   outputs =
@@ -159,10 +160,9 @@
             vimPlugins = prev.vimPlugins.extend (super: self:
               (vimUtils.buildVimPluginsFromFlakeInputs inputs [
                 "lspsaga-nvim"
+		"onenord-nvim"
               ]));
           };
-
-
 
         # Overlay useful on Macs with Apple Silicon
         apple-silicon = final: prev: optionalAttrs (prev.stdenv.system == "aarch64-darwin") {

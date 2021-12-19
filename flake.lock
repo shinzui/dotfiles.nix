@@ -225,6 +225,22 @@
         "type": "github"
       }
     },
+    "onenord-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1639698799,
+        "narHash": "sha256-caYxC19AwGFddcb6RL990qHWqlrQbiRbvuJhN3xhR6A=",
+        "owner": "rmehri01",
+        "repo": "onenord.nvim",
+        "rev": "c74b2faac2c4a14e3a78be73a8c764db71875feb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rmehri01",
+        "repo": "onenord.nvim",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "darwin": "darwin",
@@ -234,7 +250,8 @@
         "lspsaga-nvim": "lspsaga-nvim",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nixpkgs": "nixpkgs_3",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "onenord-nvim": "onenord-nvim"
       }
     }
   },
