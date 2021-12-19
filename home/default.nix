@@ -97,6 +97,7 @@
 
     tokei #source code line counter
     nixpkgs-fmt #nix formatter
+    stylua #lua formatter
     nodePackages.typescript
     nodejs
     jq
