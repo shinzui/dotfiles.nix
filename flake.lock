@@ -104,6 +104,22 @@
         "type": "github"
       }
     },
+    "lspsaga-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1639733393,
+        "narHash": "sha256-/jwB0R2M7eh2Gho3jIbxlw2Rlb3MAMdgKbhem5AJGT4=",
+        "owner": "tami5",
+        "repo": "lspsaga.nvim",
+        "rev": "dc41d1db65f629c272e5e2d5dc8e7effcedd0509",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tami5",
+        "repo": "lspsaga.nvim",
+        "type": "github"
+      }
+    },
     "neovim-flake": {
       "inputs": {
         "flake-utils": "flake-utils_2",
@@ -215,6 +231,7 @@
         "flake-compat": "flake-compat",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
+        "lspsaga-nvim": "lspsaga-nvim",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable"

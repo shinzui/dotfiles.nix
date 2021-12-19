@@ -17,6 +17,7 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     flake-utils.url = "github:numtide/flake-utils";
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
+    lspsaga-nvim = { url = github:tami5/lspsaga.nvim; flake = false; };
   };
 
   outputs =
@@ -145,6 +146,23 @@
             inherit (nixpkgsConfig) config;
           };
         };
+
+        # Overlay that adds various additional utility functions to `vimUtils`
+        vimUtils = import ./overlays/vimUtils.nix;
+
+        # Overlay that adds some additional Neovim plugins
+        vimPlugins = final: prev:
+          let
+            inherit (self.overlays.vimUtils final prev) vimUtils;
+          in
+          {
+            vimPlugins = prev.vimPlugins.extend (super: self:
+              (vimUtils.buildVimPluginsFromFlakeInputs inputs [
+                "lspsaga-nvim"
+              ]));
+          };
+
+
 
         # Overlay useful on Macs with Apple Silicon
         apple-silicon = final: prev: optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
