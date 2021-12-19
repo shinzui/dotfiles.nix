@@ -5,6 +5,20 @@ let
   inherit (config.lib.file) mkOutOfStoreSymlink;
   nixConfigDir = "${config.home.homeDirectory}/.config/dotfiles.nix";
 
+  pluginWithDeps = plugin: deps: plugin.overrideAttrs (_: { dependencies = deps; });
+  optionalPlugin = plugin: {
+    plugin = plugin;
+    optional = true;
+  };
+
+  pluginWithConfig = plugin: {
+    plugin = plugin;
+    optional = true;
+    config = ''
+      lua require('shinzui.' .. string.gsub('${plugin.pname}', '%.', '-'))
+    '';
+  };
+
 in
 {
   programs.neovim.enable = true;
@@ -16,6 +30,12 @@ in
   # `init.lua`.
   xdg.configFile."nvim/lua".source = mkOutOfStoreSymlink "${nixConfigDir}/config/nvim/lua";
   programs.neovim.extraConfig = "lua require('init')";
+
+  programs.neovim.plugins = with pkgs.vimPlugins; [
+    nord-nvim
+  ] ++ map pluginWithConfig [
+    (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
+  ];
 
   # }}}
 
