@@ -33,9 +33,12 @@ in
 
   programs.neovim.plugins = with pkgs.vimPlugins; [
     nord-nvim
+  ] ++ map optionalPlugin [
+    telescope-symbols-nvim
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-treesitter
+    (pluginWithDeps telescope-nvim [ nvim-web-devicons ])
   ];
 
   # }}}
