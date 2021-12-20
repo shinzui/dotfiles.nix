@@ -40,6 +40,7 @@ in
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-treesitter
     onenord-nvim
+    gitsigns-nvim
     (pluginWithDeps telescope-nvim [ nvim-web-devicons ])
     #(pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
   ];
