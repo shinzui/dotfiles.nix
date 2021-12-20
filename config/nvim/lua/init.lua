@@ -15,3 +15,5 @@ g.maplocalleader = ','
 
 --which-keys doesn't work without this option
 o.timeoutlen = 100 -- time to wait for a mapped sequence to complete (in milliseconds)
+
+keymap("n", "<C-f>", "<cmd>lua require('telescope.builtin').find_files()<cr>", opts)
