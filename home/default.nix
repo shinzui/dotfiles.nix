@@ -83,6 +83,7 @@
     dhall-json
 
     ## Haskell
+    ghc
     haskellPackages.cabal-install
     haskellPackages.hoogle
     haskellPackages.implicit-hie
