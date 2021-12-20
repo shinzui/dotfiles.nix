@@ -35,7 +35,7 @@
 
   # Keyboard
   system.keyboard.enableKeyMapping = true;
-  system.keyboard.remapCapsLockToEscape = true;
+  system.keyboard.remapCapsLockToControl = true;
 
   # Add ability to used TouchID for sudo authentication
   #security.pam.enableSudoTouchIdAuth = true;
