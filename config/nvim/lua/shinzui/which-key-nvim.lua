@@ -9,6 +9,29 @@ local wk = require "which-key"
 wk.setup { plugins = { spelling = { enabled = true } } }
 
 local normal_mode_mappings = {
+  -- Git
+  g = {
+    name = "+Git",
+    -- gitsigns.nvim
+    h = {
+      name = "+Hunks",
+      s = { require("gitsigns").stage_hunk, "Stage" },
+      u = { require("gitsigns").undo_stage_hunk, "Undo stage" },
+      r = { require("gitsigns").reset_hunk, "Reset" },
+      n = { require("gitsigns").next_hunk, "Go to next" },
+      N = { require("gitsigns").prev_hunk, "Go to prev" },
+      p = { require("gitsigns").preview_hunk, "Preview" },
+    },
+    -- telescope.nvim lists
+    l = {
+      name = "+Lists",
+      s = { "<Cmd>Telescope git_status<CR>", "Status" },
+      c = { "<Cmd>Telescope git_commits<CR>", "Commits" },
+      C = { "<Cmd>Telescope git_commits<CR>", "Buffer commits" },
+      b = { "<Cmd>Telescope git_branches<CR>", "Branches" },
+    },
+  },
+
   s = {
     name = "+Search",
     b = { "<Cmd>Telescope file_browser<CR>", "File Browser" },
