@@ -41,6 +41,7 @@ in
     which-key-nvim
     nvim-lspconfig
     nvim-treesitter
+    telescope-fzf-native-nvim
     onenord-nvim
     gitsigns-nvim
     (pluginWithDeps telescope-nvim [ nvim-web-devicons ])
