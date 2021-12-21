@@ -39,6 +39,7 @@ in
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     which-key-nvim
+    nvim-lspconfig
     nvim-treesitter
     onenord-nvim
     gitsigns-nvim
