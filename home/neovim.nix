@@ -44,6 +44,7 @@ in
     gitsigns-nvim
     (pluginWithDeps telescope-nvim [ nvim-web-devicons ])
     #(pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
+    comment-nvim
   ];
 
   # }}}
