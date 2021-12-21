@@ -11,6 +11,10 @@
     historyLimit = 10000; #Maximum number of lines held in window history.
     keyMode = "vi";
     terminal = "screen-256color";
+    aggressiveResize = true;
+    extraConfig = ''
+	set-option -g renumber-windows on
+    '';
 
     plugins = with pkgs; [
       tmuxPlugins.sensible #basic tmux settings
