@@ -66,6 +66,7 @@
     exa #fancy `ls`
     hyperfine #benchmarking
     fd #fancy `find`
+    navi #interactive cli cheat sheet
     procs #fancy `ps`
     ripgrep
     sd # `sed` and `awk` replacement
@@ -86,6 +87,7 @@
     ghc
     haskellPackages.cabal-install
     haskellPackages.hoogle
+    #haskellPackages.ormolu #broken on arm
     haskellPackages.implicit-hie
 
     ## OCaml
