@@ -3,9 +3,12 @@
 --https://github.com/kyazdani42/nvim-tree.lua
 
 local g = vim.g
+local keymap = vim.api.nvim_set_keymap
+local opts = { noremap = true, silent = true }
 
 vim.cmd "packadd nvim-tree.lua"
 g["nvim_tree_quit_on_open"] = 1
+keymap("n", "-", "<cmd>NvimTreeFindFile<CR>", opts)
 
 require("nvim-tree").setup {
   auto_close = true,
