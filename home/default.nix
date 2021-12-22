@@ -118,6 +118,7 @@
     rnix-lsp
     terraform-lsp
     ocamlPackages.ocaml-lsp
+    sumneko-lua-language-server
 
     #Nix related tools
     cachix
