@@ -18,7 +18,9 @@
     flake-utils.url = "github:numtide/flake-utils";
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
     lspsaga-nvim = { url = "github:tami5/lspsaga.nvim"; flake = false; };
-    onenord-nvim = { url = "github:rmehri01/onenord.nvim"; flake = false; }; 
+    onenord-nvim = { url = "github:rmehri01/onenord.nvim"; flake = false; };
+    moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
+
   };
 
   outputs =
@@ -113,6 +115,7 @@
               users.primaryUser = "shinzui";
               networking.computerName = "sungkyung";
               networking.hostName = "sungkyung";
+
               #networksetup -listallnetworkservices
               networking.knownNetworkServices = [
                 "Wi-Fi"
@@ -160,8 +163,11 @@
             vimPlugins = prev.vimPlugins.extend (super: self:
               (vimUtils.buildVimPluginsFromFlakeInputs inputs [
                 "lspsaga-nvim"
-		"onenord-nvim"
-              ]));
+                "onenord-nvim"
+              ]) // {
+                moses-nvim = vimUtils.buildNeovimLuaPackagePluginFromFlakeInput inputs "moses-lua";
+              }
+            );
           };
 
         # Overlay useful on Macs with Apple Silicon

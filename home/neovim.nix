@@ -33,6 +33,7 @@ in
 
   programs.neovim.plugins = with pkgs.vimPlugins; [
     nord-nvim
+    moses-nvim
     vim-tmux-navigator
   ] ++ map optionalPlugin [
     telescope-symbols-nvim
@@ -42,6 +43,7 @@ in
     nvim-lspconfig
     nvim-treesitter
     telescope-fzf-native-nvim
+    lspsaga-nvim
     onenord-nvim
     gitsigns-nvim
     trouble-nvim
