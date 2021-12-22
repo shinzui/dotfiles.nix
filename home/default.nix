@@ -82,6 +82,7 @@
     cloud-sql-proxy
     dhall
     dhall-json
+    postgresql_14
 
     ## Haskell
     ghc
