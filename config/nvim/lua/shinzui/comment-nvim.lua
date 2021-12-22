@@ -3,4 +3,4 @@
 -- https://github.com/numtostr/comment.nvim/
 vim.cmd "packadd comment.nvim"
 
-require('Comment').setup()
+require("Comment").setup()

@@ -3,7 +3,6 @@
 -- https://github.com/folke/trouble.nvim
 
 vim.cmd "packadd trouble.nvim"
-local trouble = require('trouble')
+local trouble = require "trouble"
 
-trouble.setup {
-}
+trouble.setup {}

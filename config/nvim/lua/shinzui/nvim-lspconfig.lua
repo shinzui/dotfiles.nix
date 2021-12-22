@@ -2,14 +2,14 @@
 --Configure LSPs
 --https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 --
-vim.cmd 'packadd nvim-lspconfig'
+vim.cmd "packadd nvim-lspconfig"
 
-local lspconf = require 'lspconfig'
+local lspconf = require "lspconfig"
 
 lspconf.hls.setup {}
 lspconf.jsonls.setup {}
 lspconf.rnix.setup {}
-lspconf.dhall_lsp_server.setup{}
+lspconf.dhall_lsp_server.setup {}
 lspconf.tsserver.setup {}
 lspconf.yamlls.setup {
   settings = {
@@ -21,7 +21,7 @@ lspconf.yamlls.setup {
     },
   },
 }
-local runtime_path = vim.split(package.path, ';')
+local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 lspconf.sumneko_lua.setup {
@@ -29,13 +29,13 @@ lspconf.sumneko_lua.setup {
     Lua = {
       runtime = {
         -- Tell the language server which version of Lua you're using (LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
+        version = "LuaJIT",
         -- Setup your lua path
         path = runtime_path,
       },
       diagnostics = {
         -- Get the language server to recognize the `vim` global
-        globals = { 'vim' },
+        globals = { "vim" },
       },
       workspace = {
         -- Make the server aware of Neovim runtime files
@@ -47,4 +47,3 @@ lspconf.sumneko_lua.setup {
     },
   },
 }
-
