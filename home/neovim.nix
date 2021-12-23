@@ -43,6 +43,7 @@ in
     cmp-emoji
     cmp-buffer
     cmp-nvim-lsp
+    (pluginWithDeps cmp_luasnip [luasnip])
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-cmp
