@@ -30,7 +30,6 @@ vim.cmd "packadd cmp-buffer"
 --https://github.com/hrsh7th/cmp-nvim-lsp/
 vim.cmd "packadd cmp-nvim-lsp"
 
-
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 cmp.setup {
@@ -60,6 +59,7 @@ cmp.setup {
         end
       end,
     },
+    ["<CR>"] = cmp.mapping.confirm { select = true },
   },
   sources = cmp.config.sources {
     { name = "nvim_lsp" },
@@ -70,14 +70,14 @@ cmp.setup {
   },
 }
 
-cmp.setup.cmdline(':', {
+cmp.setup.cmdline(":", {
   sources = {
-    { name = 'cmdline' }
-  }
+    { name = "cmdline" },
+  },
 })
 
-cmp.setup.cmdline('/', {
+cmp.setup.cmdline("/", {
   sources = {
-    { name = 'buffer' }
-  }
+    { name = "buffer" },
+  },
 })
