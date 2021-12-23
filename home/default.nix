@@ -85,6 +85,7 @@
 
     ## Haskell
     ghc
+    hlint
     haskellPackages.cabal-install
     haskellPackages.hoogle
     #haskellPackages.ormolu #broken on arm
