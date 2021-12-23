@@ -30,9 +30,8 @@ require("lspsaga").init_lsp_saga {
   rename_prompt_prefix = "❯",
 }
 
--- Show LSP diagnostics in popups on cursor hold, not in virtual text
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  virtual_text = false,
+  virtual_text = true,
   signs = true,
   update_in_insert = false,
 })
