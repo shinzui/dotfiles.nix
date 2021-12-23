@@ -21,6 +21,8 @@ in
 
   homebrew.brews = [
     "pam-reattach"
+    #TODO remove after it's fixed in nix
+    "ormolu"
   ];
 
   homebrew.taps = [
