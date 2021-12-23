@@ -4,6 +4,7 @@ local cmd = vim.cmd
 
 cmd "packadd which-key.nvim"
 cmd "packadd! gitsigns.nvim" -- needed for some mappings
+cmd "packadd! nvim-spectre"
 
 local wk = require "which-key"
 wk.setup { plugins = { spelling = { enabled = true } } }
@@ -40,6 +41,14 @@ local normal_mode_mappings = {
     g = { "<Cmd>Telescope live_grep<CR>", "Grep in cwd" },
     l = { "<Cmd>Telescope current_buffer_fuzzy_find<CR>", "Buffer lines" },
     o = { "<Cmd>Telescope oldfiles<CR>", "Old files" },
+    r = {
+      name = "+Search/Replace",
+      o = { "<CMD>lua require('spectre').open()<cr>", "Open search/replace panel" },
+      w = {
+        "<CMD>lua require('spectre').open_visual({select_word=true})<cr>",
+        "Select current word for search/replace",
+      },
+    },
     t = { "<Cmd>Telescope builtin<CR>", "Telescope lists" },
     w = { "<Cmd>Telescope grep_string<CR>", "Grep word in cwd" },
     v = {

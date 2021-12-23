@@ -57,6 +57,7 @@ in
     (pluginWithDeps telescope-nvim [ nvim-web-devicons ])
     #(pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
     comment-nvim
+    nvim-spectre
   ];
 
   # }}}
@@ -66,6 +67,7 @@ in
   programs.neovim.extraPackages = with pkgs; [
     gcc # needed for nvim-treesitter
     tree-sitter # needed for nvim-treesitter
+    gnused #needed for nvim-spectre
   ];
 
   # }}}
