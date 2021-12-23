@@ -60,7 +60,7 @@
     bottom #Fancy `top`
     #coreutils
     curl
-    #dateutils
+    dateutils
     du-dust #Fancy `du` https://github.com/bootandy/dust
     exa #fancy `ls`
     hyperfine #benchmarking
