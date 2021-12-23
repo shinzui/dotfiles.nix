@@ -46,10 +46,9 @@
     modal = true;
   };
 
-  #Broken on aarch64-darwin
-  #programs.atuin = {
-  #  enable = true;
-  #};
+  programs.atuin = {
+    enable = true;
+  };
 
 
 
