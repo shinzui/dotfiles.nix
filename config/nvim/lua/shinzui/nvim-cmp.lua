@@ -69,3 +69,15 @@ cmp.setup {
     { name = "buffer", keyword_length = 5 },
   },
 }
+
+cmp.setup.cmdline(':', {
+  sources = {
+    { name = 'cmdline' }
+  }
+})
+
+cmp.setup.cmdline('/', {
+  sources = {
+    { name = 'buffer' }
+  }
+})
