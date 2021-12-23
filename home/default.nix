@@ -111,7 +111,7 @@
     krew
 
     ## Language servers
-    haskell-language-server
+    # haskell-language-server
     dhall-lsp-server
     nodePackages.typescript-language-server
     rnix-lsp
