@@ -44,6 +44,7 @@ in
     cmp-buffer
     cmp-nvim-lsp
     (pluginWithDeps cmp_luasnip [luasnip])
+    lspkind-nvim
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-cmp

@@ -6,6 +6,11 @@
 vim.cmd "packadd nvim-cmp"
 local cmp = require "cmp"
 
+--vscode-like pictograms for neovim lsp completion items
+--https://github.com/onsails/lspkind-nvim
+vim.cmd "packadd lspkind-nvim"
+local lspkind = require "lspkind"
+
 --nvim-cmp source for nvim lua
 --https://github.com/hrsh7th/cmp-nvim-lua/
 vim.cmd "packadd cmp-nvim-lua"
@@ -106,6 +111,11 @@ cmp.setup {
     { name = "emoji" },
     { name = "buffer", keyword_length = 5 },
     { name = "luasnip" },
+  },
+  formatting = {
+    format = lspkind.cmp_format {
+      with_text = true,
+    },
   },
 }
 
