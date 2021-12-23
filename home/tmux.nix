@@ -13,7 +13,8 @@
     terminal = "screen-256color";
     aggressiveResize = true;
     extraConfig = ''
-	set-option -g renumber-windows on
+set-option -g renumber-windows on
+set -as terminal-features ',screen-256color:RGB'
     '';
 
     plugins = with pkgs; [

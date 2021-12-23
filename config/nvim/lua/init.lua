@@ -42,6 +42,10 @@ opt.wrap = false -- don't wrap lines
 opt.scrolloff = 5 --number of context line above or below cursor
 opt.sidescrolloff = 5 --number of context columns
 
+
+opt.termguicolors = true -- -- set term gui colors
+
+
 --mappings
 
 keymap("n", "<C-f>", "<cmd>lua require('telescope.builtin').find_files()<cr>", opts)
