@@ -32,6 +32,27 @@ local normal_mode_mappings = {
       b = { "<Cmd>Telescope git_branches<CR>", "Branches" },
     },
   },
+  -- Language server
+  l = {
+    name = "+LSP",
+    h = { "<Cmd>Lspsaga hover_doc<CR>", "Hover" },
+    d = { vim.lsp.buf.definition, "Jump to definition" },
+    D = { vim.lsp.buf.declaration, "Jump to declaration" },
+    a = { "<Cmd>Lspsaga code_action<CR>", "Code action" },
+    f = { vim.lsp.buf.formatting, "Format" },
+    r = { "<Cmd>Lspsaga rename<CR>", "Rename" },
+    t = { vim.lsp.buf.type_definition, "Jump to type definition" },
+    n = { "<Cmd>Lspsaga diagnostic_jump_next<CR>", "Jump to next diagnostic" },
+    N = { "<Cmd>Lspsaga diagnostic_jump_prev<CR>", "Jump to prevdiagnostic" },
+    l = {
+      name = "+Lists",
+      a = { "<Cmd>Telescope lsp_code_actions<CR>", "Code actions" },
+      A = { "<Cmd>Telescope lsp_range_code_actions<CR>", "Code actions (range)" },
+      r = { "<Cmd>Telescope lsp_references<CR>", "References" },
+      s = { "<Cmd>Telescope lsp_document_symbols<CR>", "Documents symbols" },
+      S = { "<Cmd>Telescope lsp_workspace_symbols<CR>", "Workspace symbols" },
+    },
+  },
 
   s = {
     name = "+Search",
