@@ -3,15 +3,28 @@
 --https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 --
 vim.cmd "packadd nvim-lspconfig"
+vim.cmd "packadd cmp-nvim-lsp"
 
 local lspconf = require "lspconfig"
+local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-lspconf.hls.setup {}
-lspconf.jsonls.setup {}
-lspconf.rnix.setup {}
-lspconf.dhall_lsp_server.setup {}
-lspconf.tsserver.setup {}
+lspconf.hls.setup {
+  capabilities = capabilities,
+}
+lspconf.jsonls.setup {
+  capabilities = capabilities,
+}
+lspconf.rnix.setup {
+  capabilities = capabilities,
+}
+lspconf.dhall_lsp_server.setup {
+  capabilities = capabilities,
+}
+lspconf.tsserver.setup {
+  capabilities = capabilities,
+}
 lspconf.yamlls.setup {
+  capabilities = capabilities,
   settings = {
     yaml = {
       format = {
@@ -25,6 +38,7 @@ local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 lspconf.sumneko_lua.setup {
+  capabilities = capabilities,
   settings = {
     Lua = {
       runtime = {

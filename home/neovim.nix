@@ -37,8 +37,15 @@ in
     vim-tmux-navigator
   ] ++ map optionalPlugin [
     telescope-symbols-nvim
+    cmp-nvim-lua
+    cmp-cmdline
+    cmp-path
+    cmp-emoji
+    cmp-buffer
+    cmp-nvim-lsp
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
+    nvim-cmp
     which-key-nvim
     nvim-lspconfig
     nvim-treesitter
