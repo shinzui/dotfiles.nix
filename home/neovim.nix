@@ -62,6 +62,7 @@ in
     # (pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
     comment-nvim
     nvim-spectre
+    hop-nvim
   ];
 
   # }}}

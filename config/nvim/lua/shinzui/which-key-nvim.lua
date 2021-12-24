@@ -53,6 +53,12 @@ local normal_mode_mappings = {
       S = { "<Cmd>Telescope lsp_workspace_symbols<CR>", "Workspace symbols" },
     },
   },
+  n = {
+    name = "+Navigate",
+    c = { "<Cmd>HopChar2<CR>", "Hop to any occurance of 2 chars" },
+    l = { "<Cmd>HopLine<CR>", "Hop to any visible line" },
+    p = { "<Cmd>HopPattern<CR>", "Hop by pattern" },
+  },
 
   s = {
     name = "+Search",
