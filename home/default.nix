@@ -46,6 +46,8 @@
     modal = true;
   };
 
+  #https://rycee.gitlab.io/home-manager/options.html#opt-programs.atuin.enable
+  #https://github.com/ellie/atuin/blob/main/docs/config.md
   programs.atuin = {
     enable = true;
   };
@@ -119,6 +121,8 @@
     terraform-lsp
     ocamlPackages.ocaml-lsp
     sumneko-lua-language-server
+    yaml-language-server
+    nodePackages.vscode-langservers-extracted
 
     #Nix related tools
     cachix
