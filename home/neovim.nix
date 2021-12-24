@@ -45,6 +45,7 @@ in
     cmp-nvim-lsp
     (pluginWithDeps cmp_luasnip [luasnip])
     lspkind-nvim
+    (pluginWithDeps lualine-lsp-progress [lualine-nvim])
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-cmp
@@ -57,7 +58,8 @@ in
     gitsigns-nvim
     trouble-nvim
     (pluginWithDeps telescope-nvim [ nvim-web-devicons ])
-    #(pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
+    lualine-nvim
+    # (pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
     comment-nvim
     nvim-spectre
   ];
