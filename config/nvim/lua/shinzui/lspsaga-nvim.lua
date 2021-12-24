@@ -3,6 +3,8 @@
 -- https://github.com/tami5/lspsaga.nvim
 local lib = require "shinzui.library"
 local s = lib.symbols
+local keymap = vim.api.nvim_set_keymap
+local opts = { noremap = true, silent = true }
 vim.cmd "packadd lspsaga-nvim"
 
 require("lspsaga").init_lsp_saga {
@@ -41,3 +43,6 @@ lib.augroup {
     { "CursorHold", "*", "lua require'lspsaga.diagnostic'.show_line_diagnostics()" },
   },
 }
+
+keymap("n", "[e", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
+keymap("n", "]e", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
