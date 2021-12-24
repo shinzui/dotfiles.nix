@@ -23,6 +23,9 @@ lspconf.dhall_lsp_server.setup {
 lspconf.tsserver.setup {
   capabilities = capabilities,
 }
+
+lspconf.terraform_lsp.setup{}
+
 lspconf.yamlls.setup {
   capabilities = capabilities,
   settings = {
