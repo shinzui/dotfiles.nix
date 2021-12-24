@@ -50,6 +50,9 @@
   #https://github.com/ellie/atuin/blob/main/docs/config.md
   programs.atuin = {
     enable = true;
+    settings = {
+      search_mode = "fulltext";
+    };
   };
 
 
