@@ -87,6 +87,7 @@
     dhall
     dhall-json
     postgresql_14
+    yarn
 
     ## Haskell
     ghc
