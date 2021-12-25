@@ -64,6 +64,7 @@ in
     nvim-spectre
     hop-nvim
     git-blame-nvim
+    toggleterm-nvim
   ];
 
   # }}}
