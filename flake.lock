@@ -268,7 +268,24 @@
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "onenord-nvim": "onenord-nvim"
+        "onenord-nvim": "onenord-nvim",
+        "telescope-hoogle": "telescope-hoogle"
+      }
+    },
+    "telescope-hoogle": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1615453063,
+        "narHash": "sha256-uMriQ9NeeYySrbRuOdycJOdL0PV+mp8MSYGB3TMHOsQ=",
+        "owner": "luc-tielen",
+        "repo": "telescope_hoogle",
+        "rev": "01d3b174754cb335a7f06ce602f1690e34bb63de",
+        "type": "github"
+      },
+      "original": {
+        "owner": "luc-tielen",
+        "repo": "telescope_hoogle",
+        "type": "github"
       }
     }
   },

@@ -48,6 +48,7 @@ in
     (pluginWithDeps cmp_luasnip [luasnip])
     lspkind-nvim
     (pluginWithDeps lualine-lsp-progress [lualine-nvim])
+    telescope-hoogle
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-cmp

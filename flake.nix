@@ -20,6 +20,7 @@
     lspsaga-nvim = { url = "github:tami5/lspsaga.nvim"; flake = false; };
     onenord-nvim = { url = "github:rmehri01/onenord.nvim"; flake = false; };
     moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
+    telescope-hoogle = { url = "github:luc-tielen/telescope_hoogle"; flake = false; };
 
   };
 
@@ -163,6 +164,7 @@
             vimPlugins = prev.vimPlugins.extend (super: self:
               (vimUtils.buildVimPluginsFromFlakeInputs inputs [
                 "lspsaga-nvim"
+                "telescope-hoogle"
                 "onenord-nvim"
               ]) // {
                 moses-nvim = vimUtils.buildNeovimLuaPackagePluginFromFlakeInput inputs "moses-lua";
