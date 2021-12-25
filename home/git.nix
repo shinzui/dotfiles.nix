@@ -44,6 +44,16 @@
       };
       init.defaultBranch = "master";
     };
+
+    ignores = [
+      ".DS_STORE"
+      ".DS_Store"
+      "*~"
+      "*.bak"
+      "*.log"
+      "*.swp"
+      "node_modules"
+    ];
   };
 
   # GitHub CLI
