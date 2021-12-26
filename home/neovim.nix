@@ -37,6 +37,7 @@ in
     vim-surround
     vim-repeat
     vim-tmux-navigator
+    vim-asterisk
   ] ++ map optionalPlugin [
     telescope-symbols-nvim
     cmp-nvim-lua
@@ -68,6 +69,7 @@ in
     hop-nvim
     git-blame-nvim
     toggleterm-nvim
+    nvim-hlslens
   ];
 
   # }}}
