@@ -39,6 +39,7 @@ local normal_mode_mappings = {
     d = { vim.lsp.buf.definition, "Jump to definition" },
     D = { vim.lsp.buf.declaration, "Jump to declaration" },
     a = { "<Cmd>Lspsaga code_action<CR>", "Code action" },
+    s = { vim.lsp.codelens.run, "Run codelens action" },
     f = { vim.lsp.buf.formatting, "Format" },
     r = { "<Cmd>Lspsaga rename<CR>", "Rename" },
     t = { vim.lsp.buf.type_definition, "Jump to type definition" },
