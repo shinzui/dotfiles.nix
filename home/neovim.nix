@@ -70,6 +70,7 @@ in
     git-blame-nvim
     toggleterm-nvim
     nvim-hlslens
+    symbols-outline-nvim
   ];
 
   # }}}
