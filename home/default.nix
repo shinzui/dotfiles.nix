@@ -96,6 +96,7 @@
     haskellPackages.hoogle
     #haskellPackages.ormolu #broken on arm
     haskellPackages.implicit-hie
+    haskellPackages.cabal-fmt
 
     ## OCaml
     ocaml
