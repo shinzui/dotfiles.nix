@@ -43,6 +43,7 @@ local normal_mode_mappings = {
     f = { vim.lsp.buf.formatting, "Format" },
     r = { "<Cmd>Lspsaga rename<CR>", "Rename" },
     t = { vim.lsp.buf.type_definition, "Jump to type definition" },
+    T = { "<Cmd>SymbolsOutline<CR>", "Show symbols outline" },
     n = { "<Cmd>Lspsaga diagnostic_jump_next<CR>", "Jump to next diagnostic" },
     N = { "<Cmd>Lspsaga diagnostic_jump_prev<CR>", "Jump to prevdiagnostic" },
     l = {
@@ -94,6 +95,14 @@ local normal_mode_mappings = {
       r = { "<Cmd>Telescope registers<CR>", "Registers" },
       t = { "<Cmd>Telescope filetypes<CR>", "Filetypes" },
     },
+  },
+  w = {
+    name = "+Windows",
+    -- Split creation
+    s = { "<Cmd>split<CR>", "Split below" },
+    v = { "<Cmd>vsplit<CR>", "Split right" },
+    q = { "<Cmd>q<CR>", "Close" },
+    o = { "<Cmd>only<CR>", "Close all other" },
   },
 }
 
