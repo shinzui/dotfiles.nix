@@ -71,6 +71,7 @@ in
     toggleterm-nvim
     nvim-hlslens
     symbols-outline-nvim
+    neogit
   ];
 
   # }}}
