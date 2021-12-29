@@ -72,6 +72,7 @@ in
     nvim-hlslens
     symbols-outline-nvim
     neogit
+    (pluginWithDeps diffview-nvim [nvim-web-devicons])
   ];
 
   # }}}
