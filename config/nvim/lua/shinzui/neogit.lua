@@ -3,5 +3,9 @@
 -- https://github.com/TimUntersberger/neogit
 vim.cmd "packadd neogit"
 
-local neogit = require('neogit')
-neogit.setup{}
+local neogit = require "neogit"
+neogit.setup {
+  integrations = {
+    diffview = true,
+  },
+}
