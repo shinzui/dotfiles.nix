@@ -31,6 +31,8 @@ local normal_mode_mappings = {
       C = { "<Cmd>Telescope git_commits<CR>", "Buffer commits" },
       b = { "<Cmd>Telescope git_branches<CR>", "Branches" },
     },
+    d = { "<Cmd>DiffviewOpen<CR>", "Open Diff view" },
+    n = { "<Cmd>Neogit<CR>", "Open Neogit" },
   },
   -- Language server
   l = {
