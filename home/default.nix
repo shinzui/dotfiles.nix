@@ -88,11 +88,13 @@
     dhall-json
     postgresql_14
     yarn
+    nodePackages.prettier
 
     ## Haskell
     ghc
     hlint
     haskellPackages.cabal-install
+    haskellPackages.stack
     haskellPackages.hoogle
     #haskellPackages.ormolu #broken on arm
     haskellPackages.implicit-hie
