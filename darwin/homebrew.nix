@@ -51,6 +51,7 @@ in
   # If an app isn't available in the Mac App Store install the Homebrew Cask.
   homebrew.casks = [
     "tuple"
+    "zoom"
     #TODO fixme by moving conflicting apps
     #"discord"
     #"google-chrome"
