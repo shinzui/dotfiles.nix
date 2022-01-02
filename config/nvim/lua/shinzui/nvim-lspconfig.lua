@@ -6,7 +6,6 @@ vim.cmd "packadd nvim-lspconfig"
 vim.cmd "packadd cmp-nvim-lsp"
 
 local lspconf = require "lspconfig"
-local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local function on_attach(client, bufnr)
   local function cmd(mode, key, luacmd)
