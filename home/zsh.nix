@@ -47,7 +47,7 @@
     lsa = "ll -a";
     tree = "ls -T";
     ps = "${procs}/bin/procs";
-    top = "bt";
+    top = "${bottom}/bin/btm";
 
 
     ###weather
