@@ -21,7 +21,7 @@
     onenord-nvim = { url = "github:rmehri01/onenord.nvim"; flake = false; };
     moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
     telescope-hoogle = { url = "github:luc-tielen/telescope_hoogle"; flake = false; };
-
+    vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
   };
 
   outputs =
@@ -166,6 +166,7 @@
                 "lspsaga-nvim"
                 "telescope-hoogle"
                 "onenord-nvim"
+                "vim-rescript"
               ]) // {
                 moses-nvim = vimUtils.buildNeovimLuaPackagePluginFromFlakeInput inputs "moses-lua";
               }

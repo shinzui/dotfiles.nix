@@ -11,14 +11,16 @@ let
     optional = true;
   };
 
-  pluginWithConfig = plugin: {
+  pluginWithConfigAndExtraConfig = extraConfig: plugin: {
     plugin = plugin;
     optional = true;
     config = ''
+      ${extraConfig}
       lua require('shinzui.' .. string.gsub('${plugin.pname}', '%.', '-'))
     '';
   };
 
+  pluginWithConfig = pluginWithConfigAndExtraConfig ""; 
 in
 {
   programs.neovim.enable = true;
@@ -29,7 +31,9 @@ in
   # minimal init.vim config to load lua config. nix and home manager don't currently support
   # `init.lua`.
   xdg.configFile."nvim/lua".source = mkOutOfStoreSymlink "${nixConfigDir}/config/nvim/lua";
-  programs.neovim.extraConfig = "lua require('init')";
+  programs.neovim.extraConfig = ''
+    lua require('init')
+  '';
 
   programs.neovim.plugins = with pkgs.vimPlugins; [
     nord-nvim
@@ -50,11 +54,11 @@ in
     lspkind-nvim
     (pluginWithDeps lualine-lsp-progress [lualine-nvim])
     telescope-hoogle
+    vim-rescript
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-cmp
     which-key-nvim
-    nvim-lspconfig
     nvim-treesitter
     telescope-fzf-native-nvim
     lspsaga-nvim
@@ -73,8 +77,9 @@ in
     symbols-outline-nvim
     neogit
     (pluginWithDeps diffview-nvim [nvim-web-devicons])
-  ];
-
+  ] ++ [
+    (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
+    ];
   # }}}
 
   # Required packages {{{

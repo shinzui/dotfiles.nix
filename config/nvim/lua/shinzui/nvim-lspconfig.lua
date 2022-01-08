@@ -4,6 +4,7 @@
 --
 vim.cmd "packadd nvim-lspconfig"
 vim.cmd "packadd cmp-nvim-lsp"
+vim.cmd "packadd vim-rescript"
 
 local lspconf = require "lspconfig"
 
@@ -45,6 +46,7 @@ local opts = {
   capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
+
 local lsps = {
   hls = {},
   jsonls = {},
@@ -63,6 +65,10 @@ local lsps = {
     },
   },
 
+  rescriptls = {
+    -- TODO: Figure out a better way to do this
+    cmd = { "node", vim.api.nvim_get_var('rescript_lsp_path'), "--stdio" },
+  },
   ocamllsp = {},
   sumneko_lua = {
     settings = {

@@ -269,7 +269,8 @@
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "onenord-nvim": "onenord-nvim",
-        "telescope-hoogle": "telescope-hoogle"
+        "telescope-hoogle": "telescope-hoogle",
+        "vim-rescript": "vim-rescript"
       }
     },
     "telescope-hoogle": {
@@ -285,6 +286,22 @@
       "original": {
         "owner": "luc-tielen",
         "repo": "telescope_hoogle",
+        "type": "github"
+      }
+    },
+    "vim-rescript": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1626688321,
+        "narHash": "sha256-zlIqHsNNpwXdwg17aOdG5Uuo1gLu6HtEjfky1L+SscU=",
+        "owner": "rescript-lang",
+        "repo": "vim-rescript",
+        "rev": "08de54132587131e762b036c11e0e9a9603992fa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rescript-lang",
+        "repo": "vim-rescript",
         "type": "github"
       }
     }
