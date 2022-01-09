@@ -20,7 +20,7 @@ let
     '';
   };
 
-  pluginWithConfig = pluginWithConfigAndExtraConfig ""; 
+  pluginWithConfig = pluginWithConfigAndExtraConfig "";
 in
 {
   programs.neovim.enable = true;
@@ -50,9 +50,9 @@ in
     cmp-emoji
     cmp-buffer
     cmp-nvim-lsp
-    (pluginWithDeps cmp_luasnip [luasnip])
+    (pluginWithDeps cmp_luasnip [ luasnip ])
     lspkind-nvim
-    (pluginWithDeps lualine-lsp-progress [lualine-nvim])
+    (pluginWithDeps lualine-lsp-progress [ lualine-nvim ])
     telescope-hoogle
     vim-rescript
   ] ++ map pluginWithConfig [
@@ -76,10 +76,11 @@ in
     nvim-hlslens
     symbols-outline-nvim
     neogit
-    (pluginWithDeps diffview-nvim [nvim-web-devicons])
+    null-ls-nvim
+    (pluginWithDeps diffview-nvim [ nvim-web-devicons ])
   ] ++ [
     (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
-    ];
+  ];
   # }}}
 
   # Required packages {{{
