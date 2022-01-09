@@ -75,7 +75,8 @@
     ripgrep
     sd # `sed` and `awk` replacement
     rargs # `xargs` + `awk`
-    #watchexec
+    # watchexec
+    watchman
     wget
     xsv
 
