@@ -73,6 +73,7 @@
     navi #interactive cli cheat sheet
     procs #fancy `ps`
     ripgrep
+    gnused
     sd # `sed` and `awk` replacement
     rargs # `xargs` + `awk`
     # watchexec
