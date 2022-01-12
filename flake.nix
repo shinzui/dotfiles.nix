@@ -14,7 +14,6 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     flake-utils.url = "github:numtide/flake-utils";
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
     lspsaga-nvim = { url = "github:tami5/lspsaga.nvim"; flake = false; };
@@ -30,7 +29,6 @@
     , nixpkgs-unstable
     , darwin
     , home-manager
-    , neovim-nightly-overlay
     , flake-utils
     , ...
     }@inputs:
