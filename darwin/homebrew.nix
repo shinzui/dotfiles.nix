@@ -20,6 +20,8 @@ in
   homebrew.global.noLock = true;
 
   homebrew.brews = [
+    #TODO figure out how to use nix's gnu-sed
+    "gnu-sed" # neovim spectre needs gsed in the neovim path
     "pam-reattach"
     #TODO remove after it's fixed in nix
     "ormolu"
