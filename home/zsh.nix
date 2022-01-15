@@ -9,7 +9,7 @@
   #https://rycee.gitlab.io/home-manager/options.html#opt-programs.zsh.sessionVariables
   programs.zsh.sessionVariables = {
      EDITOR = "nvim";
-     MANPAGER="nvim -c 'set ft=man' -";
+     MANPAGER="nvim +Man!";
   };
 
   programs.zsh.shellAliases = with pkgs; {
