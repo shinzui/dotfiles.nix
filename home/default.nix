@@ -69,6 +69,7 @@
     du-dust #Fancy `du` https://github.com/bootandy/dust
     exa #fancy `ls`
     hyperfine #benchmarking
+    ht-rust #xh http tool
     fd #fancy `find`
     navi #interactive cli cheat sheet
     procs #fancy `ps`
