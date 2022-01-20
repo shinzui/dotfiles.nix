@@ -89,6 +89,7 @@
     cloud-sql-proxy
     dhall
     dhall-json
+    just
     postgresql_14
     yarn
     nodePackages.prettier
