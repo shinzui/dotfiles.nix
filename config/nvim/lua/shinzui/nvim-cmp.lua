@@ -2,6 +2,7 @@
 -- completion plugin
 -- https://github.com/hrsh7th/nvim-cmp/
 --
+local lib = require "shinzui.library"
 
 vim.cmd "packadd nvim-cmp"
 local cmp = require "cmp"
@@ -56,9 +57,14 @@ cmp.setup {
     end,
   },
   mapping = {
+    ["<C-k>"] = cmp.mapping.select_prev_item(),
+    ["<C-j>"] = cmp.mapping.select_next_item(),
     ["<C-d>"] = cmp.mapping.scroll_docs(-4),
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
-    ["<C-e>"] = cmp.mapping.close(),
+    ["<C-e>"] = cmp.mapping {
+      i = cmp.mapping.abort(),
+      c = cmp.mapping.close(),
+    },
     ["<c-y>"] = cmp.mapping(
       cmp.mapping.confirm {
         behavior = cmp.ConfirmBehavior.Insert,
