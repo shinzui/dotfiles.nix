@@ -23,6 +23,7 @@ in
     #TODO figure out how to use nix's gnu-sed
     "gnu-sed" # neovim spectre needs gsed in the neovim path
     "pam-reattach"
+    "watchman"
     #TODO remove after it's fixed in nix
     "ormolu"
   ];
