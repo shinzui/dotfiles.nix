@@ -23,6 +23,12 @@ local function on_attach(client, bufnr)
   if client.resolved_capabilities.type_definition then
     cmd("n", "gy", "vim.lsp.buf.type_definition()")
   end
+
+  --Disable tsserver formatting since we're using prettier
+  if client.name == "tsserver" then
+    client.resolved_capabilities.document_formatting = false
+  end
+
   if client.resolved_capabilities.signature_help then
     cmd("n", "gt", "vim.lsp.buf.signature_help()")
   end
@@ -46,7 +52,6 @@ local opts = {
   capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
-
 local lsps = {
   hls = {},
   jsonls = {},
@@ -67,7 +72,7 @@ local lsps = {
 
   rescriptls = {
     -- TODO: Figure out a better way to do this
-    cmd = { "node", vim.api.nvim_get_var('rescript_lsp_path'), "--stdio" },
+    cmd = { "node", vim.api.nvim_get_var "rescript_lsp_path", "--stdio" },
   },
   ocamllsp = {},
   sumneko_lua = {
