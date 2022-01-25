@@ -139,6 +139,7 @@
     cachix
     manix #nix documentation lookup
     nix-prefetch-git
+    nodePackages.node2nix
   ];
 
   # }}}
