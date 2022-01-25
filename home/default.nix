@@ -1,5 +1,7 @@
 { config, pkgs, lib, ... }:
 
+let myNodePackages = import ../packages/node { pkgs= pkgs; };
+in
 {
   # Import config broken out into files
   imports = [
@@ -134,6 +136,8 @@
     sumneko-lua-language-server
     yaml-language-server
     nodePackages.vscode-langservers-extracted
+    myNodePackages.emmet-ls
+    # myNodePackages."@tailwindcss/language-server"
 
     #Nix related tools
     cachix
