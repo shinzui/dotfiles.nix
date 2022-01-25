@@ -106,13 +106,13 @@ let
   };
 in
 {
-  emmet-ls = nodeEnv.buildNodePackage {
-    name = "emmet-ls";
-    packageName = "emmet-ls";
-    version = "0.2.0";
+  ls_emmet = nodeEnv.buildNodePackage {
+    name = "ls_emmet";
+    packageName = "ls_emmet";
+    version = "1.0.8";
     src = fetchurl {
-      url = "https://registry.npmjs.org/emmet-ls/-/emmet-ls-0.2.0.tgz";
-      sha512 = "K8/z4yfMW4rTaOevmxyu/IvMX+JTBSjRaNn8qhGOIu1NCPmJ8OcdAb6pYCTDtEo1CrAgiJR2lDtfzz68ytVCyQ==";
+      url = "https://registry.npmjs.org/ls_emmet/-/ls_emmet-1.0.8.tgz";
+      sha512 = "tWYnu4SHOtUYxYR6wqpEm7xQEDU+h5IMP0IGYtngfpmbGEKVay3EWjXuA9noDdSnO1ce6HcC6KHJR4Au1BOjOg==";
     };
     dependencies = [
       sources."@emmetio/abbreviation-2.2.2"
@@ -129,8 +129,8 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "emmet support by LSP";
-      homepage = "https://github.com/aca/emmet-ls#readme";
+      description = "Just emmet completion with LSP";
+      homepage = "https://github.com/pedro757/emmet#readme";
       license = "MIT";
     };
     production = true;

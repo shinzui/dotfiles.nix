@@ -7,6 +7,40 @@ vim.cmd "packadd cmp-nvim-lsp"
 vim.cmd "packadd vim-rescript"
 
 local lspconf = require "lspconfig"
+local configs = require "lspconfig.configs"
+
+--Add support for ls_emmet since emmet_ls is broken
+if not configs.ls_emmet then
+  configs.ls_emmet = {
+    default_config = {
+      cmd = { "ls_emmet", "--stdio" },
+      filetypes = {
+        "html",
+        "css",
+        "scss",
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "haml",
+        "xml",
+        "xsl",
+        "pug",
+        "slim",
+        "sass",
+        "stylus",
+        "less",
+        "sss",
+        "hbs",
+        "handlebars",
+      },
+      root_dir = function(fname)
+        return vim.loop.cwd()
+      end,
+      settings = {},
+    },
+  }
+end
 
 local function on_attach(client, bufnr)
   local function cmd(mode, key, luacmd)
@@ -55,7 +89,7 @@ local opts = {
 local lsps = {
   hls = {},
   jsonls = {},
-  rnix = {},
+  ls_emmet = {},
   dhall_lsp_server = {},
   tsserver = {},
   terraform_lsp = {},

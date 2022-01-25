@@ -136,7 +136,7 @@ in
     sumneko-lua-language-server
     yaml-language-server
     nodePackages.vscode-langservers-extracted
-    myNodePackages.emmet-ls
+    myNodePackages.ls_emmet
     # myNodePackages."@tailwindcss/language-server"
 
     #Nix related tools
