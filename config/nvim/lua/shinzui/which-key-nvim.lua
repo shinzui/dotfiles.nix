@@ -113,4 +113,17 @@ local normal_mode_opts = {
   prefix = "<leader>",
 }
 
+local visual_mode_mappings = {
+  l = {
+    name = "+LSP",
+    f = { vim.lsp.buf.range_formatting, "Format range", mode = "v" },
+  },
+}
+
+local visual_mode_opts = {
+  mode = "v",
+  prefix = "<leader>",
+}
+
 wk.register(normal_mode_mappings, normal_mode_opts)
+wk.register(visual_mode_mappings, visual_mode_opts)
