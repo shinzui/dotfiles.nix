@@ -94,6 +94,7 @@ in
     just
     postgresql_14
     yarn
+    deno
     nodePackages.prettier
 
     ## Haskell
