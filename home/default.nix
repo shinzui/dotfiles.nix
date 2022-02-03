@@ -138,6 +138,7 @@ in
     yaml-language-server
     nodePackages.vscode-langservers-extracted
     myNodePackages.ls_emmet
+    myNodePackages.graphql-language-service-cli
     # myNodePackages."@tailwindcss/language-server"
 
     #Nix related tools

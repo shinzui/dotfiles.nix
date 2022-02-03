@@ -91,6 +91,7 @@ local lsps = {
   jsonls = {},
   ls_emmet = {},
   dhall_lsp_server = {},
+  graphql = {},
   tsserver = {},
   terraform_lsp = {},
   yamlls = {
