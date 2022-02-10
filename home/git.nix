@@ -53,6 +53,8 @@
       "*.log"
       "*.swp"
       "node_modules"
+      ".direnv/"
+      ".vim-bookmarks"
     ];
   };
 
