@@ -7,6 +7,6 @@ require("nvim-treesitter.configs").setup {
   ignore_install = { "php", "phpdoc" },
   highlight = { enable = true, disable = { "markdown" } },
   incremental_selection = { enable = true },
-  indent = { enable = true },
+  indent = { enable = false },
   compilers = { "gcc" },
 }
