@@ -9,6 +9,7 @@ vim.cmd "packadd lualine-lsp-progress"
 require("lualine").setup {
   sections = {
     lualine_c = {
+      "filename",
       "lsp_progress",
     },
   },
