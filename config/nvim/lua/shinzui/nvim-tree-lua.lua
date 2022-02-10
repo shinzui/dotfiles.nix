@@ -12,7 +12,7 @@ g["nvim_tree_disable_window_picker"] = 1
 keymap("n", "-", "<cmd>NvimTreeFindFile<CR>", opts)
 
 require("nvim-tree").setup {
-  auto_close = true,
+  auto_close = false,
   diagnostics = {
     enable = true,
   },
