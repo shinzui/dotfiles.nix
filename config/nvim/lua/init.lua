@@ -2,6 +2,7 @@
 
 local g = vim.g
 local o = vim.o
+local wo = vim.wo
 local opt = vim.opt
 local env = vim.env
 local keymap = vim.api.nvim_set_keymap
@@ -44,6 +45,9 @@ opt.sidescrolloff = 5 --number of context columns
 
 
 opt.termguicolors = true -- -- set term gui colors
+
+wo.signcolumn     = 'yes' -- always have signcolumn open to avoid thing shifting around all the time
+
 
 
 --mappings
