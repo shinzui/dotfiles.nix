@@ -94,6 +94,7 @@ local lsps = {
   graphql = {},
   tsserver = {},
   terraform_lsp = {},
+  rnix = {},
   yamlls = {
     settings = {
       yaml = {
