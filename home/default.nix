@@ -84,6 +84,9 @@ in
     wget
     xsv
 
+    #desktop apps
+    element-desktop
+
     # Dev packages
     angle-grinder #Fast log processor
     git-extras
