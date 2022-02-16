@@ -64,6 +64,7 @@ in
   # Other packages {{{
 
   home.packages = with pkgs; [
+    bandwhich #bandwidth utilization tool
     bottom #Fancy `top`
     #coreutils
     curl
