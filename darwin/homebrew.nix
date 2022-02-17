@@ -55,6 +55,7 @@ in
   homebrew.casks = [
     "tuple"
     "zoom"
+    "visual-studio-code"
     #TODO fixme by moving conflicting apps
     #"discord"
     #"google-chrome"
