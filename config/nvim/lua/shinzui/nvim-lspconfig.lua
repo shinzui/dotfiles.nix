@@ -110,7 +110,13 @@ local lsps = {
     -- TODO: Figure out a better way to do this
     cmd = { "node", vim.api.nvim_get_var "rescript_lsp_path", "--stdio" },
   },
-  ocamllsp = {},
+  -- Legacy deprecated ocaml lsp
+  ocamlls = {
+    filetypes = { "reason" },
+  },
+  ocamllsp = {
+    filetypes = { "ocaml", "ocaml.menhir", "ocaml.interface", "ocaml.ocamllex" },
+  },
   sumneko_lua = {
     settings = {
       Lua = {

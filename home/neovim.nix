@@ -55,6 +55,7 @@ in
     (pluginWithDeps lualine-lsp-progress [ lualine-nvim ])
     telescope-hoogle
     vim-rescript
+    vim-reasonml
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-cmp

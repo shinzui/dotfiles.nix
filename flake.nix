@@ -21,6 +21,8 @@
     moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
     telescope-hoogle = { url = "github:luc-tielen/telescope_hoogle"; flake = false; };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
+    # vim-reason-plus = { url = "github:reasonml-editor/vim-reason-plus"; flake = false; };
+    vim-reasonml = { url ="github:jordwalke/vim-reasonml"; flake = false; };
   };
 
   outputs =
@@ -158,6 +160,7 @@
                 "telescope-hoogle"
                 "onenord-nvim"
                 "vim-rescript"
+                "vim-reasonml"
               ]) // {
                 moses-nvim = vimUtils.buildNeovimLuaPackagePluginFromFlakeInput inputs "moses-lua";
               }
