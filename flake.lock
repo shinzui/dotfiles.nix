@@ -76,11 +76,11 @@
     "lspsaga-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1644281133,
-        "narHash": "sha256-uCz5FXZwY2vv6Ma8aQUm6x9kpvri84+jNl+AOVP8uDg=",
+        "lastModified": 1645328419,
+        "narHash": "sha256-DP2xP6qn2u8NcdsxtE69NG/EOJKQpRwcsLBsJM1Ru/U=",
         "owner": "tami5",
         "repo": "lspsaga.nvim",
-        "rev": "d8073a0e4d19d71da900fb77dcc5f23d72bb8707",
+        "rev": "a613f00f19ce0f8b88377b24d77ae26ea877bfa6",
         "type": "github"
       },
       "original": {

@@ -38,14 +38,12 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
   update_in_insert = false,
 })
 
--- Disable since lspsaga has a bug with show_line_diagnostics
--- https://github.com/tami5/lspsaga.nvim/issues/55
--- lib.augroup {
---   name = "LSP",
---   cmds = {
---     { "CursorHold", "*", "lua require'lspsaga.diagnostic'.show_line_diagnostics()" },
---   },
--- }
+lib.augroup {
+  name = "LSP",
+  cmds = {
+    { "CursorHold", "*", "lua require'lspsaga.diagnostic'.show_line_diagnostics()" },
+  },
+}
 
 keymap("n", "[e", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
 keymap("n", "]e", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
