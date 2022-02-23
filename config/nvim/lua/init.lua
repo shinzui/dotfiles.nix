@@ -26,6 +26,7 @@ opt.number = true
 
 opt.expandtab = true -- expand tab to spaces
 opt.tabstop = 2 --tabs are two spaces
+opt.shiftwidth = 2 -- auto-indent width
 
 opt.cmdheight = 2 --Better display for messages
 
@@ -46,7 +47,8 @@ opt.sidescrolloff = 5 --number of context columns
 
 opt.termguicolors = true -- -- set term gui colors
 
-wo.signcolumn     = 'yes' -- always have signcolumn open to avoid thing shifting around all the time
+wo.signcolumn = 'yes' -- always have signcolumn open to avoid shifting
+
 
 
 
