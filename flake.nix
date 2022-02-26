@@ -22,7 +22,7 @@
     telescope-hoogle = { url = "github:luc-tielen/telescope_hoogle"; flake = false; };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
     # vim-reason-plus = { url = "github:reasonml-editor/vim-reason-plus"; flake = false; };
-    vim-reasonml = { url ="github:jordwalke/vim-reasonml"; flake = false; };
+    vim-reasonml = { url = "github:jordwalke/vim-reasonml"; flake = false; };
   };
 
   outputs =
@@ -42,7 +42,12 @@
       # Configuration for `nixpkgs` mostly used in personal configs.
       nixpkgsConfig = {
         config = { allowUnfree = true; };
-        overlays = attrValues self.overlays; 
+        overlays = attrValues self.overlays ++ singleton (
+          final: prev: (optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
+            inherit (final.pkgs-x86)
+              starship;
+          })
+        );
       };
 
       # Personal configuration shared between `nix-darwin` and plain `home-manager` configs.
