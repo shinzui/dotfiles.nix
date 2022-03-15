@@ -7,12 +7,15 @@ local keymap = vim.api.nvim_set_keymap
 local opts = { noremap = true, silent = true }
 
 vim.cmd "packadd nvim-tree.lua"
-g["nvim_tree_quit_on_open"] = 1
-g["nvim_tree_disable_window_picker"] = 1
 keymap("n", "-", "<cmd>NvimTreeFindFile<CR>", opts)
 
 require("nvim-tree").setup {
   auto_close = false,
+  actions = {
+    open_file = {
+      quit_on_open = true
+    },
+  },
   diagnostics = {
     enable = true,
   },
