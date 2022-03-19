@@ -1,10 +1,9 @@
 -- which-key.nvim
 -- https://github.com/folke/which-key.nvim
-local cmd = vim.cmd
 
-cmd "packadd which-key.nvim"
-cmd "packadd! gitsigns.nvim" -- needed for some mappings
-cmd "packadd! nvim-spectre"
+vim.cmd "packadd which-key.nvim"
+vim.cmd "packadd! gitsigns.nvim" -- needed for some mappings
+vim.cmd "packadd! nvim-spectre"
 
 local wk = require "which-key"
 wk.setup { plugins = { spelling = { enabled = true } } }
@@ -48,6 +47,7 @@ local normal_mode_mappings = {
     T = { "<Cmd>SymbolsOutline<CR>", "Show symbols outline" },
     n = { "<Cmd>Lspsaga diagnostic_jump_next<CR>", "Jump to next diagnostic" },
     N = { "<Cmd>Lspsaga diagnostic_jump_prev<CR>", "Jump to prevdiagnostic" },
+    w = { "<Cmd>Lspsaga show_line_diagnostics<CR>", "Show line diagnostics"},
     l = {
       name = "+Lists",
       a = { "<Cmd>Telescope lsp_code_actions<CR>", "Code actions" },
