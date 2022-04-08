@@ -110,6 +110,7 @@ in
     #haskellPackages.ormolu #broken on arm
     haskellPackages.implicit-hie
     haskellPackages.cabal-fmt
+    haskellPackages.cabal-plan
 
     ## OCaml
     ocaml
