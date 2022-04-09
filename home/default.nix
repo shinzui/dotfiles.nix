@@ -148,6 +148,7 @@ in
 
     #Nix related tools
     cachix
+    hydra-check
     manix #nix documentation lookup
     nix-prefetch-git
     nodePackages.node2nix
