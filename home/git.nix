@@ -29,7 +29,7 @@
         editor = "nvim";
         ignorecase = false;
       };
-      rerere.enabled = 1;
+      rerere.enabled = true;
       push = {
         default = "tracking";
         followTags = true;
