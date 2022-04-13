@@ -131,6 +131,7 @@ in
     kubectl
     kubernetes-helm
     krew
+    k9s
 
     ## Language servers
     # haskell-language-server
