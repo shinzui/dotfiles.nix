@@ -8,6 +8,20 @@ vim.cmd "packadd vim-rescript"
 
 local lspconf = require "lspconfig"
 local configs = require "lspconfig.configs"
+local util = require "lspconfig.util"
+
+if not configs.rescript_relay_lsp then
+  configs.rescript_relay_lsp = {
+    default_config = {
+      cmd = { "npx", "rescript-relay-compiler", "lsp"},
+      filetypes = {
+        "rescript",
+      },
+      root_dir = util.root_pattern "relay.config.js",
+    },
+    settings = {},
+  }
+end
 
 --Add support for ls_emmet since emmet_ls is broken
 if not configs.ls_emmet then
@@ -110,6 +124,7 @@ local lsps = {
     -- TODO: Figure out a better way to do this
     cmd = { "node", vim.api.nvim_get_var "rescript_lsp_path", "--stdio" },
   },
+  rescript_relay_lsp = {},
   -- Legacy deprecated ocaml lsp
   ocamlls = {
     filetypes = { "reason" },
