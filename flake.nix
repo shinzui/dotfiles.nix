@@ -42,12 +42,7 @@
       # Configuration for `nixpkgs` mostly used in personal configs.
       nixpkgsConfig = {
         config = { allowUnfree = true; };
-        overlays = attrValues self.overlays ++ singleton (
-          final: prev: (optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
-            inherit (final.pkgs-x86)
-              starship;
-          })
-        );
+        overlays = attrValues self.overlays;
       };
 
       # Personal configuration shared between `nix-darwin` and plain `home-manager` configs.
