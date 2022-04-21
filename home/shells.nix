@@ -10,6 +10,8 @@
     # See docs here: https://starship.rs/config/
     # Symbols config configured in Flake.
 
-    battery.display.threshold = 25; # display battery information if charge is <= 25%
+    battery.display = [{
+      threshold = 25; # display battery information if charge is <= 25%
+    }];
   };
 }
