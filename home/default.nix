@@ -152,6 +152,7 @@ in
     hydra-check
     manix #nix documentation lookup
     nix-prefetch-git
+    nix-tree
     nodePackages.node2nix
   ];
 
