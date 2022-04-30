@@ -71,6 +71,7 @@ in
     dateutils
     du-dust #Fancy `du` https://github.com/bootandy/dust
     exa #fancy `ls`
+    difftastic # syntax-aware diff tool
     hyperfine #benchmarking
     ht-rust #xh http tool
     fd #fancy `find`
