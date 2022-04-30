@@ -19,6 +19,8 @@
     };
     lfs.enable = true;
 
+
+
     extraConfig = {
       credential.helper =
         if pkgs.stdenvNoCC.isDarwin then
@@ -43,6 +45,21 @@
         "ssh://git@github.com/" = { insteadOf = "sgh:"; };
       };
       init.defaultBranch = "master";
+      diff = {
+        tool = "difftastic";
+      };
+
+      difftool = {
+        prompt = false;
+
+        difftastic = {
+          cmd = ''difft "$LOCAL" "$REMOTE"'';
+        };
+      };
+
+      pager = {
+        difftool = true;
+      };
     };
 
     ignores = [

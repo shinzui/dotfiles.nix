@@ -14,5 +14,8 @@
     # Rebase commands
     rba = "rebase --abort";
     rbc = "rebase --continue";
+
+    #difftool
+    dft = "difftool";
   };
 }
