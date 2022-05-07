@@ -88,6 +88,7 @@ in
 
   programs.neovim.extraPackages = with pkgs; [
     gcc # needed for nvim-treesitter
+    gccStdenv
     tree-sitter # needed for nvim-treesitter
     gnused #needed for nvim-spectre
   ];
