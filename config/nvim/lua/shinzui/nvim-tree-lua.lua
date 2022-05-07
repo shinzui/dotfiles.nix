@@ -10,7 +10,6 @@ vim.cmd "packadd nvim-tree.lua"
 keymap("n", "-", "<cmd>NvimTreeFindFile<CR>", opts)
 
 require("nvim-tree").setup {
-  auto_close = false,
   actions = {
     open_file = {
       quit_on_open = true
@@ -18,8 +17,5 @@ require("nvim-tree").setup {
   },
   diagnostics = {
     enable = true,
-  },
-  view = {
-    auto_resize = true,
   },
 }
