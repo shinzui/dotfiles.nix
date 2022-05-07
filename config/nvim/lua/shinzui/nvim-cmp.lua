@@ -56,7 +56,7 @@ cmp.setup {
       luasnip.lsp_expand(args.body)
     end,
   },
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     ["<C-k>"] = cmp.mapping.select_prev_item(),
     ["<C-j>"] = cmp.mapping.select_next_item(),
     ["<C-d>"] = cmp.mapping.scroll_docs(-4),
@@ -109,7 +109,7 @@ cmp.setup {
         fallback()
       end
     end, { "i", "s" }),
-  },
+  }),
   sources = cmp.config.sources {
     { name = "nvim_lsp" },
     { name = "nvim_lua" },
@@ -126,12 +126,14 @@ cmp.setup {
 }
 
 cmp.setup.cmdline(":", {
+  mapping = cmp.mapping.preset.cmdline(),
   sources = {
     { name = "cmdline" },
   },
 })
 
 cmp.setup.cmdline("/", {
+  mapping = cmp.mapping.preset.cmdline(),
   sources = {
     { name = "buffer" },
   },
