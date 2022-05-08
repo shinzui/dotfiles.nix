@@ -78,6 +78,7 @@ in
     symbols-outline-nvim
     neogit
     null-ls-nvim
+    octo-nvim
     (pluginWithDeps diffview-nvim [ nvim-web-devicons ])
   ] ++ [
     (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
