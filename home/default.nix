@@ -13,7 +13,7 @@ in
   ];
 
 
-  # Packages with configuration {{{
+  # Packages with configuration 
 
 
   # Bat, a substitute for cat.
@@ -59,10 +59,7 @@ in
 
 
 
-  # }}}
-
-  # Other packages {{{
-
+  # Other packages 
   home.packages = with pkgs; [
     bandwhich #bandwidth utilization tool
     bottom #Fancy `top`
@@ -72,9 +69,11 @@ in
     du-dust #Fancy `du` https://github.com/bootandy/dust
     exa #fancy `ls`
     difftastic # syntax-aware diff tool
+    lazydocker #docker terminal UI https://github.com/jesseduffield/lazydocker
     hyperfine #benchmarking
     ht-rust #xh http tool
     fd #fancy `find`
+    miller #like awk, sed, cut, join, and sort for CSV and tabular JSON
     navi #interactive cli cheat sheet
     procs #fancy `ps`
     ripgrep
@@ -157,7 +156,7 @@ in
     nodePackages.node2nix
   ];
 
-  # }}}
+  # 
 
 }
 # vim: foldmethod=marker
