@@ -91,6 +91,7 @@ in
     # Dev packages
     angle-grinder #Fast log processor
     git-extras
+    git-absorb
     google-cloud-sdk
     cloud-sql-proxy
     dhall
