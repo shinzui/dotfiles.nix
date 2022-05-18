@@ -24,6 +24,7 @@ in
     "gnu-sed" # neovim spectre needs gsed in the neovim path
     "pam-reattach"
     "watchman"
+    "kubefwd"
   ];
 
   homebrew.taps = [
@@ -33,6 +34,7 @@ in
     "homebrew/cask-versions"
     "homebrew/core"
     "homebrew/services"
+    "txn2/tap"
   ];
 
   # Prefer installing application from the Mac App Store
