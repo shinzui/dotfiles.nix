@@ -99,6 +99,7 @@ in
     dhall-json
     just
     postgresql_14
+    treefmt
     yarn
     # deno
     nodePackages.prettier
