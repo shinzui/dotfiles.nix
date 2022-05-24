@@ -13,7 +13,7 @@ local util = require "lspconfig.util"
 if not configs.rescript_relay_lsp then
   configs.rescript_relay_lsp = {
     default_config = {
-      cmd = { "npx", "rescript-relay-compiler", "lsp"},
+      cmd = { "npx", "rescript-relay-compiler", "lsp" },
       filetypes = {
         "rescript",
       },
@@ -101,7 +101,9 @@ local opts = {
 }
 
 local lsps = {
-  hls = {},
+  hls = {
+    cmd = { "haskell-language-server", "--lsp" }
+  },
   jsonls = {},
   ls_emmet = {},
   dhall_lsp_server = {},
