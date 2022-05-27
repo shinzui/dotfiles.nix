@@ -42,6 +42,7 @@ in
     vim-repeat
     vim-tmux-navigator
     vim-asterisk
+    vim-helm
   ] ++ map optionalPlugin [
     telescope-symbols-nvim
     cmp-nvim-lua
