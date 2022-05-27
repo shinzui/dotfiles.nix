@@ -23,6 +23,7 @@ if not configs.rescript_relay_lsp then
   }
 end
 
+
 --Add support for ls_emmet since emmet_ls is broken
 if not configs.ls_emmet then
   configs.ls_emmet = {
@@ -72,11 +73,6 @@ local function on_attach(client, bufnr)
     cmd("n", "gy", "vim.lsp.buf.type_definition()")
   end
 
-  --Disable tsserver formatting since we're using prettier
-  if client.name == "tsserver" then
-    client.resolved_capabilities.document_formatting = false
-  end
-
   if client.resolved_capabilities.signature_help then
     cmd("n", "gt", "vim.lsp.buf.signature_help()")
   end
@@ -95,7 +91,7 @@ local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
-local opts = {
+local default_lsp_opts = {
   on_attach = on_attach,
   capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
@@ -108,7 +104,12 @@ local lsps = {
   ls_emmet = {},
   dhall_lsp_server = {},
   graphql = {},
-  tsserver = {},
+  tsserver = {
+    on_attach = function(client, bufnr)
+      client.resolved_capabilities.document_formatting = false
+      default_lsp_opts.on_attach(client, bufnr)
+    end
+  },
   terraform_lsp = {},
   rnix = {},
   yamlls = {
@@ -160,5 +161,5 @@ local lsps = {
 }
 
 for lsp, lsp_opts in pairs(lsps) do
-  lspconf[lsp].setup(vim.tbl_extend("force", opts, lsp_opts))
+  lspconf[lsp].setup(vim.tbl_extend("force", default_lsp_opts, lsp_opts))
 end
