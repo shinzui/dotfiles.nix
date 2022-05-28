@@ -97,6 +97,8 @@ in
     cloud-sql-proxy
     dhall
     dhall-json
+    docker
+    colima #containers in Lima
     just
     postgresql_14
     treefmt
