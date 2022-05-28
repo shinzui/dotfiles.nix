@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 
+let
+  home = config.home.homeDirectory;
+  in
 {
   #https://rycee.gitlab.io/home-manager/options.html#opt-programs.zsh.enable
   programs.zsh = {
@@ -10,6 +13,8 @@
   programs.zsh.sessionVariables = {
      EDITOR = "nvim";
      MANPAGER="nvim +Man!";
+     #needed by lazydocker to connect to docker daemon managed by colima
+     DOCKER_HOST="unix://${home}/.colima/docker.sock";
   };
 
   programs.zsh.shellAliases = with pkgs; {
@@ -49,6 +54,8 @@
     ps = "${procs}/bin/procs";
     top = "${bottom}/bin/btm";
 
+    #lazydocker
+    lzd = "${lazydocker}/bin/lazydocker";
 
     ###weather
     laWeather = "noglob curl -4 http://wttr.in/LA?m";
