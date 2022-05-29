@@ -1,6 +1,21 @@
 { config, pkgs, lib, ... }:
 
-let myNodePackages = import ../packages/node { pkgs= pkgs; };
+let
+  myNodePackages = import ../packages/node { pkgs = pkgs; };
+  fzfConfig =
+    let fd = "${pkgs.fd}/bin/fd"; in
+    rec {
+      defaultCommand = "${fd} --type f";
+      defaultOptions = [ "--height 50%" ];
+      fileWidgetCommand = "${defaultCommand}";
+      fileWidgetOptions = [
+        "--preview '${pkgs.bat}/bin/bat --color=always --plain --line-range=:200 {}'"
+      ];
+      changeDirWidgetCommand = "${fd} --type d";
+      changeDirWidgetOptions =
+        [ "--preview '${pkgs.tree}/bin/tree -C {} | head -200'" ];
+      historyWidgetOptions = [ ];
+    };
 in
 {
   # Import config broken out into files
@@ -31,7 +46,11 @@ in
   #A command-line fuzzy finder
   #https://github.com/junegunn/fzf
   #https://rycee.gitlab.io/home-manager/options.html#opt-programs.fzf.enable
-  programs.fzf.enable = true;
+  programs.fzf =
+    {
+      enable = true;
+      enableZshIntegration = true;
+    } // fzfConfig;
 
 
   # Zoxide, a faster way to navigate the filesystem
@@ -80,6 +99,7 @@ in
     ripgrep
     gnused
     sd # `sed` and `awk` replacement
+    tree
     rargs # `xargs` + `awk`
     # watchexec
     watchman
