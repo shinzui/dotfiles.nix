@@ -28,7 +28,6 @@ null_ls.setup {
         "graphql",
       },
     },
-    formatting.stylua,
     diagnostics.eslint
   },
 }
