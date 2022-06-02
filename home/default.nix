@@ -132,7 +132,7 @@ in
     haskellPackages.cabal-install
     haskellPackages.stack
     haskellPackages.hoogle
-    #haskellPackages.ormolu #broken on arm
+    haskellPackages.ormolu
     haskellPackages.implicit-hie
     haskellPackages.cabal-fmt
     haskellPackages.cabal-plan
