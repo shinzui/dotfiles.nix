@@ -3,4 +3,6 @@
 --https://github.com/rmehri01/onenord.nvim
 vim.cmd "packadd onenord-nvim"
 
-require("onenord").setup()
+require("onenord").setup({
+  theme = "dark"
+})
