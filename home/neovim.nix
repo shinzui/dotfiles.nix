@@ -81,6 +81,7 @@ in
     null-ls-nvim
     octo-nvim
     (pluginWithDeps diffview-nvim [ nvim-web-devicons ])
+    nvim-treesitter-context
   ] ++ [
     (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
   ];
