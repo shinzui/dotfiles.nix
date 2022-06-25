@@ -13,6 +13,7 @@ local diagnostics = null_ls.builtins.diagnostics
 null_ls.setup {
   debug = false,
   sources = {
+    formatting.cabal_fmt,
     formatting.prettier.with {
       filetypes = {
         "javascript",
