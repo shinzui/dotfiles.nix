@@ -123,7 +123,7 @@ in
     postgresql_14
     treefmt
     yarn
-    # deno
+    deno
     nodePackages.prettier
 
     ## Haskell
