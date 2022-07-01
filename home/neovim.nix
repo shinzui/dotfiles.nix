@@ -61,7 +61,7 @@ in
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-cmp
     which-key-nvim
-    nvim-treesitter
+    (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
     telescope-fzf-native-nvim
     lspsaga-nvim
     onenord-nvim
@@ -92,7 +92,7 @@ in
   programs.neovim.extraPackages = with pkgs; [
     gcc # needed for nvim-treesitter
     gccStdenv
-    tree-sitter # needed for nvim-treesitter
+    # tree-sitter # needed for nvim-treesitter
     gnused #needed for nvim-spectre
   ];
 
