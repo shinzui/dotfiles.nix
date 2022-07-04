@@ -47,14 +47,14 @@ local normal_mode_mappings = {
     T = { "<Cmd>SymbolsOutline<CR>", "Show symbols outline" },
     n = { "<Cmd>Lspsaga diagnostic_jump_next<CR>", "Jump to next diagnostic" },
     N = { "<Cmd>Lspsaga diagnostic_jump_prev<CR>", "Jump to prevdiagnostic" },
-    w = { "<Cmd>Lspsaga show_line_diagnostics<CR>", "Show line diagnostics"},
+    w = { "<Cmd>Lspsaga show_line_diagnostics<CR>", "Show line diagnostics" },
+    S = { "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>", "Workspace symbols" },
     l = {
       name = "+Lists",
       a = { "<Cmd>Telescope lsp_code_actions<CR>", "Code actions" },
       A = { "<Cmd>Telescope lsp_range_code_actions<CR>", "Code actions (range)" },
       r = { "<Cmd>Telescope lsp_references<CR>", "References" },
       s = { "<Cmd>Telescope lsp_document_symbols<CR>", "Documents symbols" },
-      S = { "<Cmd>Telescope lsp_workspace_symbols<CR>", "Workspace symbols" },
     },
   },
   n = {
@@ -66,12 +66,11 @@ local normal_mode_mappings = {
 
   s = {
     name = "+Search",
-    b = { "<Cmd>Telescope file_browser<CR>", "File Browser" },
-
+    b = { "<Cmd>Telescope buffers<CR>", "Buffers" },
     f = { "<Cmd>Telescope find_files<CR>", "Files in cwd" },
     g = { "<Cmd>Telescope live_grep<CR>", "Grep in cwd" },
     l = { "<Cmd>Telescope current_buffer_fuzzy_find<CR>", "Buffer lines" },
-    o = { "<Cmd>Telescope oldfiles<CR>", "Old files" },
+    o = { "<Cmd>lua require('telescope.builtin').oldfiles({only_cwd= true})<CR>", "Old files" },
     r = {
       name = "+Search/Replace",
       o = { "<CMD>lua require('spectre').open()<cr>", "Open search/replace panel" },
@@ -85,7 +84,6 @@ local normal_mode_mappings = {
     v = {
       name = "+Vim",
       a = { "<Cmd>Telescope autocommands<CR>", "Autocommands" },
-      b = { "<Cmd>Telescope buffers<CR>", "Buffers" },
       c = { "<Cmd>Telescope commands<CR>", "Commands" },
       C = { "<Cmd>Telescope command_history<CR>", "Command history" },
       h = { "<Cmd>Telescope highlights<CR>", "Highlights" },
@@ -97,6 +95,7 @@ local normal_mode_mappings = {
       r = { "<Cmd>Telescope registers<CR>", "Registers" },
       t = { "<Cmd>Telescope filetypes<CR>", "Filetypes" },
     },
+    ['?'] = { '<Cmd>Telescope help_tags<CR>', 'Vim help' },
   },
   w = {
     name = "+Windows",
