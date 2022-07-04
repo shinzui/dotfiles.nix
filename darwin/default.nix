@@ -7,7 +7,7 @@
 
     # Other nix-darwin configuration
     ./homebrew.nix
-    #./defaults.nix
+    ./mac-defaults.nix
   ];
 
   # Networking
