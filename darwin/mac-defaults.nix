@@ -1,7 +1,7 @@
 {
   system.defaults.NSGlobalDomain = {
     # Configures the trackpad tracking speed (0 to 3). The default is "1"
-    "com.apple.trackpad.scaling" = "3.0";
+    "com.apple.trackpad.scaling" = "2.0";
     AppleInterfaceStyleSwitchesAutomatically = true;
     AppleMeasurementUnits = "Centimeters";
     AppleMetricUnits = 1;
