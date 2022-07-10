@@ -63,8 +63,9 @@
 
       nixDarwinCommonModules = [
         # Include extra `nix-darwin`
-        #self.darwinModules.security.pam
+        self.darwinModules.pam
         self.darwinModules.users
+
         # Main `nix-darwin` config
         ./darwin
         # `home-manager` module
@@ -181,6 +182,7 @@
       darwinModules = {
         # security-pam = import ./modules/darwin/security/pam.nix;
         users = import ./modules/darwin/users.nix;
+        pam = import ./modules/darwin/pam.nix;
       };
 
       homeManagerModules = {
