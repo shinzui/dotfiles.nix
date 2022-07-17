@@ -119,6 +119,7 @@ in
     dhall-json
     docker
     colima #containers in Lima
+    hadolint #dockerfile linter
     just
     postgresql_14
     treefmt
@@ -150,6 +151,7 @@ in
     stylua #lua formatter
     nodePackages.typescript
     nodejs
+    bun
     jq
 
     ## kubernetes
