@@ -58,7 +58,7 @@ let
     lzd = "${lazydocker}/bin/lazydocker";
 
     ###weather
-    laWeather = "noglob curl -4 http://wttr.in/LA?m";
+    laWeather = "noglob curl -4 http://wttr.in/DTLA?m";
     sfWeather = "noglob curl -4 http://wttr.in/SF?m";
     seoulWeather = "noglob curl -4 http://wttr.in/Seoul?m";
     tokyoWeather = "noglob curl -4 http://wttr.in/Tokyo?m";
