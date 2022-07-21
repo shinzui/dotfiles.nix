@@ -181,6 +181,7 @@ in
     nix-prefetch-git
     nix-tree
     nodePackages.node2nix
+    nix-script
   ];
 
   # 
