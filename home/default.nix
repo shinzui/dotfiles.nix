@@ -105,6 +105,7 @@ in
     watchman
     wget
     xsv
+    imagemagick
 
     #desktop apps
     element-desktop
