@@ -53,6 +53,7 @@ let
     tree = "ls -T";
     ps = "${procs}/bin/procs";
     top = "${bottom}/bin/btm";
+    watch = "${viddy}/bin/viddy";
 
     #lazydocker
     lzd = "${lazydocker}/bin/lazydocker";

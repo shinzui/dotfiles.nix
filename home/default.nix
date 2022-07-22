@@ -103,6 +103,7 @@ in
     rargs # `xargs` + `awk`
     # watchexec
     watchman
+    viddy # modern watch
     wget
     xsv
     imagemagick
