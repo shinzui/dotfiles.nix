@@ -110,7 +110,7 @@ local lsps = {
       default_lsp_opts.on_attach(client, bufnr)
     end
   },
-  terraform_lsp = {},
+  terraformls = {},
   rnix = {},
   yamlls = {
     settings = {

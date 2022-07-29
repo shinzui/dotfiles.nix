@@ -167,7 +167,7 @@ in
     dhall-lsp-server
     nodePackages.typescript-language-server
     rnix-lsp
-    terraform-lsp
+    terraform-ls
     ocamlPackages.ocaml-lsp
     sumneko-lua-language-server
     yaml-language-server
