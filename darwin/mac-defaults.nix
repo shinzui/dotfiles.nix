@@ -12,7 +12,7 @@
 
   # Firewall
   system.defaults.alf = {
-    globalstate = 1;
+    globalstate = 0;
     allowsignedenabled = 1;
     allowdownloadsignedenabled = 1;
     stealthenabled = 1;
