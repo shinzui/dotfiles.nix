@@ -22,6 +22,9 @@
 
 
     extraConfig = {
+      alias = {
+        dft = "difftool";
+      };
       credential.helper =
         if pkgs.stdenvNoCC.isDarwin then
           "osxkeychain"
