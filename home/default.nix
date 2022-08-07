@@ -141,9 +141,9 @@ in
     haskellPackages.cabal-plan
 
     ## OCaml
-    ocaml
-    dune-release
-    opam
+    #ocaml
+    #dune-release
+    #opam
 
     ## Rust
     cargo
