@@ -88,7 +88,7 @@ in
     du-dust #Fancy `du` https://github.com/bootandy/dust
     exa #fancy `ls`
     difftastic # syntax-aware diff tool
-    dog # dns client
+    dogdns # dns client
     lazydocker #docker terminal UI https://github.com/jesseduffield/lazydocker
     hyperfine #benchmarking
     ht-rust #xh http tool
@@ -174,6 +174,7 @@ in
     nodePackages.vscode-langservers-extracted
     myNodePackages.ls_emmet
     myNodePackages.graphql-language-service-cli
+    #myNodePackages."@idleberg/caniuse-cli"
     # myNodePackages."@tailwindcss/language-server"
 
     #Nix related tools
