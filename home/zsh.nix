@@ -22,9 +22,8 @@ let
     ".." = "cd ..";
 
     #common cli aliases
-    v = "${neovim}/bin/nvim";
+    v = "nvim";
     view = "v -R";
-    vim = "v";
 
     ###Kubernetes
     k = "kubectl";

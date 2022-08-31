@@ -23,7 +23,12 @@ let
   pluginWithConfig = pluginWithConfigAndExtraConfig "";
 in
 {
-  programs.neovim.enable = true;
+  programs.neovim = { 
+    enable = true;
+    viAlias = true;
+    vimAlias = true;
+    vimdiffAlias = true;
+  };
 
 
   # Config and plugins {{{
