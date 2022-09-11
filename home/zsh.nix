@@ -15,6 +15,7 @@ let
      MANPAGER="nvim +Man!";
      #needed by lazydocker to connect to docker daemon managed by colima
      DOCKER_HOST="unix://${home}/.colima/docker.sock";
+     LS_COLORS="${pkgs.vivid}/bin/vivid generate nord";
   };
 
   programs.zsh.shellAliases = with pkgs; {
