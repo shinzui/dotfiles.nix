@@ -100,10 +100,12 @@ in
     gnused
     sd # `sed` and `awk` replacement
     tree
+    tealdeer #fasts impl of tldr in rust
     rargs # `xargs` + `awk`
     # watchexec
     watchman
     viddy # modern watch
+    vivid #A themeable LS_COLORS generator 
     wget
     xsv
     imagemagick
