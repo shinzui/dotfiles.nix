@@ -109,6 +109,7 @@ in
     wget
     xsv
     imagemagick
+    jpegoptim
 
     #desktop apps
     element-desktop
