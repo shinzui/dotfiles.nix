@@ -118,6 +118,7 @@ in
     angle-grinder #Fast log processor
     git-extras
     git-absorb
+    gitui #terminal git UI written in rust
     google-cloud-sdk
     cloud-sql-proxy
     dhall
