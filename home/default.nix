@@ -91,7 +91,7 @@ in
     dogdns # dns client
     lazydocker #docker terminal UI https://github.com/jesseduffield/lazydocker
     hyperfine #benchmarking
-    ht-rust #xh http tool
+    xh #xh http tool
     fd #fancy `find`
     miller #like awk, sed, cut, join, and sort for CSV and tabular JSON
     navi #interactive cli cheat sheet
