@@ -14,10 +14,11 @@ in
 
   homebrew.enable = true;
   homebrew.brewPrefix = brewBinPrefix;
-  homebrew.autoUpdate = true;
-  homebrew.cleanup = "zap";
+  #https://daiderd.com/nix-darwin/manual/index.html#opt-homebrew.onActivation.autoUpdate
+  homebrew.onActivation.autoUpdate = true;
+  homebrew.onActivation.cleanup = "zap";
   homebrew.global.brewfile = true;
-  homebrew.global.noLock = true;
+  homebrew.global.lockfiles = false;
 
   homebrew.brews = [
     #TODO figure out how to use nix's gnu-sed
