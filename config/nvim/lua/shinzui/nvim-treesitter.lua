@@ -3,7 +3,7 @@
 vim.cmd "packadd nvim-treesitter"
 
 require("nvim-treesitter.configs").setup {
-  ensure_installed = "all",
+  ensure_installed = {},
   ignore_install = { "php", "phpdoc" },
   highlight = { enable = true, disable = { "markdown" } },
   incremental_selection = { enable = true },
