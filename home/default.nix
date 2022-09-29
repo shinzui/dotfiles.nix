@@ -64,7 +64,7 @@ in
   #https://rycee.gitlab.io/home-manager/options.html#opt-programs.broot.enable
   programs.broot = {
     enable = true;
-    modal = true;
+    settings.modal = true;
   };
 
   #https://rycee.gitlab.io/home-manager/options.html#opt-programs.atuin.enable
