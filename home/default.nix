@@ -97,6 +97,7 @@ in
     navi #interactive cli cheat sheet
     procs #fancy `ps`
     ripgrep
+    retry #https://github.com/minfrin/retry
     gnused
     sd # `sed` and `awk` replacement
     tree
