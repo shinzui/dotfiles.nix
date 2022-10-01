@@ -84,6 +84,7 @@ in
     symbols-outline-nvim
     neogit
     null-ls-nvim
+    nvim-ts-autotag
     octo-nvim
     (pluginWithDeps diffview-nvim [ nvim-web-devicons ])
     nvim-treesitter-context
