@@ -111,6 +111,7 @@ in
     xsv
     imagemagick
     jpegoptim
+    rnr #cli to batch rename files and dirs
 
     #desktop apps
     element-desktop
