@@ -121,7 +121,7 @@ in
     git-extras
     git-absorb
     gitui #terminal git UI written in rust
-    google-cloud-sdk
+    (google-cloud-sdk.withExtraComponents ([ google-cloud-sdk.components.gke-gcloud-auth-plugin ]))
     cloud-sql-proxy
     dhall
     dhall-json
