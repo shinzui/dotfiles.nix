@@ -139,7 +139,6 @@ in
     ghc
     hlint
     haskellPackages.cabal-install
-    haskellPackages.stack
     haskellPackages.hoogle
     haskellPackages.ormolu
     haskellPackages.implicit-hie
