@@ -19,7 +19,7 @@ let
   mkSudoTouchIdAuthScript = isEnabled:
     let
       file = "/etc/pam.d/sudo";
-      option = "security.pam.enableSudoTouchIdAuth";
+      option = "security.pam.enableSudoTouchIdAuthCustom";
       sed = "${pkgs.gnused}/bin/sed";
     in
     ''
@@ -42,7 +42,7 @@ in
 
 {
   options = {
-    security.pam.enableSudoTouchIdAuth = mkEnableOption ''
+    security.pam.enableSudoTouchIdAuthCustom = mkEnableOption ''
       Enable sudo authentication with Touch ID
       When enabled, this option adds the following line to /etc/pam.d/sudo:
           auth       optional       pam_reattach.so
