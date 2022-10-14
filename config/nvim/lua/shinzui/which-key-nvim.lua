@@ -41,7 +41,7 @@ local normal_mode_mappings = {
     D = { vim.lsp.buf.declaration, "Jump to declaration" },
     a = { "<Cmd>Lspsaga code_action<CR>", "Code action" },
     s = { vim.lsp.codelens.run, "Run codelens action" },
-    f = { vim.lsp.buf.formatting, "Format" },
+    f = { function() vim.lsp.buf.format { async = true } end, "Format" },
     r = { "<Cmd>Lspsaga rename<CR>", "Rename" },
     t = { vim.lsp.buf.type_definition, "Jump to type definition" },
     T = { "<Cmd>SymbolsOutline<CR>", "Show symbols outline" },

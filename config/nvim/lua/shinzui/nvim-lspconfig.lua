@@ -65,18 +65,18 @@ local function on_attach(client, bufnr)
   cmd("n", "gd", "vim.lsp.buf.definition()")
   cmd("n", "gD", "vim.lsp.buf.declaration()")
 
-  if client.resolved_capabilities.hover then
+  if client.server_capabilities.hoverProvider then
     cmd("n", "K", "vim.lsp.buf.hover()")
   end
 
-  if client.resolved_capabilities.type_definition then
+  if client.server_capabilities.typeDefinitionProvider then
     cmd("n", "gy", "vim.lsp.buf.type_definition()")
   end
 
-  if client.resolved_capabilities.signature_help then
+  if client.server_capabilities.signatureHelpProvider then
     cmd("n", "gt", "vim.lsp.buf.signature_help()")
   end
-  if client.resolved_capabilities.code_lens then
+  if client.server_capabilities.codeLensProvider then
     vim.cmd [[
        augroup lsp_codelens
         autocmd!
