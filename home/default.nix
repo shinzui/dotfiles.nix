@@ -134,6 +134,7 @@ in
     yarn
     # deno
     nodePackages.prettier
+    nodePackages.graphql-language-service-cli
 
     ## Haskell
     ghc
@@ -178,7 +179,6 @@ in
     yaml-language-server
     nodePackages.vscode-langservers-extracted
     myNodePackages.ls_emmet
-    myNodePackages.graphql-language-service-cli
     #myNodePackages."@idleberg/caniuse-cli"
     # myNodePackages."@tailwindcss/language-server"
 
