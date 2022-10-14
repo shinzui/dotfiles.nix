@@ -106,7 +106,7 @@ local lsps = {
   graphql = {},
   tsserver = {
     on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = false
+      client.server_capabilities.documentFormattingProvider  = false
       default_lsp_opts.on_attach(client, bufnr)
     end
   },
