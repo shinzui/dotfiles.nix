@@ -112,6 +112,7 @@ in
     imagemagick
     jpegoptim
     rnr #cli to batch rename files and dirs
+    pigz # modern gzip
 
     #desktop apps
     element-desktop
