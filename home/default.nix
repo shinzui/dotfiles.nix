@@ -178,6 +178,7 @@ in
     sumneko-lua-language-server
     yaml-language-server
     nodePackages.vscode-langservers-extracted
+    myNodePackages."@tailwindcss/language-server"
     myNodePackages.ls_emmet
     #myNodePackages."@idleberg/caniuse-cli"
     # myNodePackages."@tailwindcss/language-server"

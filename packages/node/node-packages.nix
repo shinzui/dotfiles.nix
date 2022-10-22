@@ -31,13 +31,13 @@ let
         sha512 = "8HqW8EVqjnCmWXVpqAOZf+EGESdkR27odcMMMGefgKXtar00SoYNSryGv//TELI4T3QFsECo78p+0lmalk/CFA==";
       };
     };
-    "@types/node-16.11.65" = {
+    "@types/node-16.11.68" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "16.11.65";
+      version = "16.11.68";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-16.11.65.tgz";
-        sha512 = "Vfz7wGMOr4jbQGiQHVJm8VjeQwM9Ya7mHe9LtQ264/Epf5n1KiZShOFqk++nBzw6a/ubgYdB9Od7P+MH/LjoWw==";
+        url = "https://registry.npmjs.org/@types/node/-/node-16.11.68.tgz";
+        sha512 = "JkRpuVz3xCNCWaeQ5EHLR/6woMbHZz/jZ7Kmc63AkU+1HxnoUugzSWMck7dsR4DvNYX8jp9wTi9K7WvnxOIQZQ==";
       };
     };
     "emmet-2.3.6" = {
@@ -118,7 +118,7 @@ in
       sources."@emmetio/abbreviation-2.2.3"
       sources."@emmetio/css-abbreviation-2.1.4"
       sources."@emmetio/scanner-1.0.0"
-      sources."@types/node-16.11.65"
+      sources."@types/node-16.11.68"
       sources."emmet-2.3.6"
       sources."typescript-4.8.4"
       sources."vscode-jsonrpc-6.0.0"
@@ -131,6 +131,24 @@ in
     meta = {
       description = "Just emmet completion with LSP";
       homepage = "https://github.com/pedro757/emmet#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  "@tailwindcss/language-server" = nodeEnv.buildNodePackage {
+    name = "_at_tailwindcss_slash_language-server";
+    packageName = "@tailwindcss/language-server";
+    version = "0.0.10";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/@tailwindcss/language-server/-/language-server-0.0.10.tgz";
+      sha512 = "4rG07stqhws4/UyRLbHDc+plmxDfTOH/w0sLGvK7LoQq4GaaN0Ov8vEqL60ef94am6pp/ZrjIB5qL6kG7DshHA==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Tailwind CSS Language Server";
+      homepage = "https://github.com/tailwindlabs/tailwindcss-intellisense/tree/HEAD/packages/tailwindcss-language-server#readme";
       license = "MIT";
     };
     production = true;
