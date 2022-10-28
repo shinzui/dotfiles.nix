@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1666614183,
-        "narHash": "sha256-R5+bCtUquwSfQmRBbCYc6FT6xtCaAebh0KE187e8458=",
+        "lastModified": 1666776005,
+        "narHash": "sha256-HwSMF19PpczfqNHKcFsA6cF4PVbG00uUSdbq6q3jB5o=",
         "owner": "LnL7",
         "repo": "nix-darwin",
-        "rev": "0f90e1c34caedd0bf765ebe47b92dd1ceffafcc8",
+        "rev": "f6648ca0698d1611d7eadfa72b122252b833f86c",
         "type": "github"
       },
       "original": {
@@ -60,11 +60,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1666649150,
-        "narHash": "sha256-kINnLxC0KFalUk4tVO/H5hUU7FVAOYYcUSWrsBpnl+I=",
+        "lastModified": 1666903647,
+        "narHash": "sha256-sFI1Gh9DTGzHnBINondupUGYbe+T0wZcpcZjkW0qffM=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "7dc4e4ebd71280842b4d30975439980baaac9db8",
+        "rev": "213a06295dff96668a1d673b9fd1c03ce1de6745",
         "type": "github"
       },
       "original": {
@@ -108,11 +108,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1666710503,
-        "narHash": "sha256-cKBlKc4pIkNvNlsS/V3+S3EjsZe3/1N8TslDBSXAKn0=",
+        "lastModified": 1666967146,
+        "narHash": "sha256-E9WTEtdtPdpZRAyVDQxFAAMFJGCnklx9hWcR0iwJQLw=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "1ce20e8b30c6053044e5019c4f141df8bcdceaad",
+        "rev": "1e8348a3ad4f0840afe11e289367f04e4e332270",
         "type": "github"
       },
       "original": {
@@ -124,11 +124,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1666688649,
-        "narHash": "sha256-i1Tq2VgXbEZKgjM2p2OqZdxcnK4FZjRZ9Oy4Ewx8gjA=",
+        "lastModified": 1666926733,
+        "narHash": "sha256-+gYfOEnQVISPDRNoWm2VJD5OEuTUySt48RchLpvm61o=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "03a00f66fc4e893dccba1579df6d0c83852e1c2c",
+        "rev": "f44ba1be526c8da9e79a5759feca2365204003f6",
         "type": "github"
       },
       "original": {
@@ -173,11 +173,11 @@
     "telescope-hoogle": {
       "flake": false,
       "locked": {
-        "lastModified": 1652872345,
-        "narHash": "sha256-E+WpIvK+s8WbuTtVzUfrrsTfYw9ffNaAMPsUY7ZPp00=",
+        "lastModified": 1666874001,
+        "narHash": "sha256-VnhZ6gjwIBFw/qviA1V5azoMTUo7Nbw3xGP1bPkqWN4=",
         "owner": "luc-tielen",
         "repo": "telescope_hoogle",
-        "rev": "c64cab3e8a5a7481c26323fea7ea6567467bfe59",
+        "rev": "6322f74655a2773974377a8fc8d170c00f24938f",
         "type": "github"
       },
       "original": {
