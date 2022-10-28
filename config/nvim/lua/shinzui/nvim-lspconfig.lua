@@ -93,7 +93,7 @@ table.insert(runtime_path, "lua/?/init.lua")
 
 local default_lsp_opts = {
   on_attach = on_attach,
-  capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
 
