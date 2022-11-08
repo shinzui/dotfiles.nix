@@ -113,6 +113,7 @@ in
     jpegoptim
     rnr #cli to batch rename files and dirs
     pigz # modern gzip
+    kondo # clean software project files
 
     #desktop apps
     element-desktop
