@@ -137,6 +137,7 @@ in
     # deno
     nodePackages.prettier
     nodePackages.graphql-language-service-cli
+    nodePackages.pnpm
 
     ## Haskell
     ghc
