@@ -114,6 +114,7 @@ in
     rnr #cli to batch rename files and dirs
     pigz # modern gzip
     kondo # clean software project files
+    youtube-dl
 
     #desktop apps
     element-desktop
