@@ -66,7 +66,7 @@ in
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-cmp
     which-key-nvim
-    (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
+    nvim-treesitter.withAllGrammars
     telescope-fzf-native-nvim
     lspsaga-nvim
     onenord-nvim
