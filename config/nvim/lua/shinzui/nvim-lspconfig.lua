@@ -113,7 +113,7 @@ local lsps = {
   },
   terraformls = {},
   tailwindcss = {},
-  rnix = {},
+  nil_ls = {},
   yamlls = {
     settings = {
       yaml = {
