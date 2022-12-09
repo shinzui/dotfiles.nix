@@ -189,6 +189,8 @@ in
 
     #Nix related tools
     cachix
+    statix
+    deadnix
     hydra-check
     manix #nix documentation lookup
     nix-prefetch-git
