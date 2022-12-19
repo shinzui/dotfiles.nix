@@ -176,7 +176,7 @@ in
     # haskell-language-server
     dhall-lsp-server
     nodePackages.typescript-language-server
-    nil
+    nil #nix language server
     terraform-ls
     ocamlPackages.ocaml-lsp
     sumneko-lua-language-server

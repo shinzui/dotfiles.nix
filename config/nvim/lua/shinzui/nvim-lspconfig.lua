@@ -107,13 +107,21 @@ local lsps = {
   graphql = {},
   tsserver = {
     on_attach = function(client, bufnr)
-      client.server_capabilities.documentFormattingProvider  = false
+      client.server_capabilities.documentFormattingProvider = false
       default_lsp_opts.on_attach(client, bufnr)
     end
   },
   terraformls = {},
   tailwindcss = {},
-  nil_ls = {},
+  nil_ls = {
+    settings = {
+      ['nil'] = {
+        formatting = {
+          command = { "nixpkgs-fmt" },
+        },
+      }
+    }
+  },
   yamlls = {
     settings = {
       yaml = {
