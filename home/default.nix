@@ -92,6 +92,7 @@ in
     lazydocker #docker terminal UI https://github.com/jesseduffield/lazydocker
     hyperfine #benchmarking
     xh #xh http tool
+    k6 # load testing tool
     fd #fancy `find`
     miller #like awk, sed, cut, join, and sort for CSV and tabular JSON
     navi #interactive cli cheat sheet
