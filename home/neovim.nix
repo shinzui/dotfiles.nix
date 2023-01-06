@@ -60,6 +60,7 @@ in
     lspkind-nvim
     (pluginWithDeps lualine-lsp-progress [ lualine-nvim ])
     telescope-hoogle
+    telescope-manix
     vim-rescript
     vim-reasonml
   ] ++ map pluginWithConfig [
@@ -100,6 +101,8 @@ in
     gccStdenv
     # tree-sitter # needed for nvim-treesitter
     gnused #needed for nvim-spectre
+    nodePackages.typescript
+    nodePackages.typescript-language-server
   ];
 
   # }}}

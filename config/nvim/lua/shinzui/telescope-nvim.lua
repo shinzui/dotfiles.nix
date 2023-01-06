@@ -3,6 +3,7 @@
 vim.cmd "packadd telescope.nvim"
 vim.cmd "packadd telescope-symbols.nvim"
 vim.cmd "packadd telescope-hoogle"
+vim.cmd "packadd telescope-manix" 
 
 local telescope = require "telescope"
 local actions = require "telescope.actions"
@@ -15,3 +16,4 @@ telescope.setup {
 }
 
 telescope.load_extension('hoogle')
+telescope.load_extension('manix')
