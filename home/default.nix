@@ -185,12 +185,11 @@ in
     nodePackages.vscode-langservers-extracted
     myNodePackages."@tailwindcss/language-server"
     myNodePackages.ls_emmet
-    #myNodePackages."@idleberg/caniuse-cli"
-    # myNodePackages."@tailwindcss/language-server"
 
     #Nix related tools
     cachix
-    statix
+    comma #run anything from nixpkgs without installing it
+    statix 
     deadnix
     hydra-check
     manix #nix documentation lookup
