@@ -116,6 +116,7 @@ in
     pigz # modern gzip
     kondo # clean software project files
     youtube-dl
+    sapling # facebook SCM that's also a git client
 
     #desktop apps
     element-desktop
