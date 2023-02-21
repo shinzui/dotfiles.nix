@@ -155,7 +155,7 @@ local lsps = {
   ocamllsp = {
     filetypes = { "ocaml", "ocaml.menhir", "ocaml.interface", "ocaml.ocamllex" },
   },
-  sumneko_lua = {
+  lua_ls = {
     settings = {
       Lua = {
         runtime = {

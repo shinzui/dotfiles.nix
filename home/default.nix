@@ -147,7 +147,7 @@ in
     hlint
     haskellPackages.cabal-install
     haskellPackages.hoogle
-    haskellPackages.ormolu
+    # haskellPackages.ormolu
     haskellPackages.implicit-hie
     haskellPackages.cabal-fmt
     haskellPackages.cabal-plan
@@ -181,7 +181,7 @@ in
     nil #nix language server
     terraform-ls
     ocamlPackages.ocaml-lsp
-    sumneko-lua-language-server
+    lua-language-server
     yaml-language-server
     nodePackages.vscode-langservers-extracted
     myNodePackages."@tailwindcss/language-server"
