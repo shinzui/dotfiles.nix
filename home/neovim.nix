@@ -31,7 +31,7 @@ in
   };
 
 
-  # Config and plugins {{{
+  # Config and plugins 
 
   # minimal init.vim config to load lua config. nix and home manager don't currently support
   # `init.lua`.
@@ -64,6 +64,7 @@ in
     telescope-manix
     vim-rescript
     vim-reasonml
+    twoslash-queries
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-cmp
@@ -93,9 +94,9 @@ in
   ] ++ [
     (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
   ];
-  # }}}
+  # 
 
-  # Required packages {{{
+  # Required packages 
 
   programs.neovim.extraPackages = with pkgs; [
     gcc # needed for nvim-treesitter
@@ -106,6 +107,6 @@ in
     nodePackages.typescript-language-server
   ];
 
-  # }}}
+  # 
 }
 # vim: foldmethod=marker

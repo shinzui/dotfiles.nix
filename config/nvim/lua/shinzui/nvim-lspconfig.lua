@@ -6,6 +6,10 @@ vim.cmd "packadd nvim-lspconfig"
 vim.cmd "packadd cmp-nvim-lsp"
 vim.cmd "packadd vim-rescript"
 
+-- plugin which adds support for twoslash queries into typescript projects 
+-- https://github.com/marilari88/twoslash-queries.nvim
+vim.cmd "packadd twoslash-queries"
+
 local lspconf = require "lspconfig"
 local configs = require "lspconfig.configs"
 local util = require "lspconfig.util"
@@ -108,6 +112,9 @@ local lsps = {
   tsserver = {
     on_attach = function(client, bufnr)
       client.server_capabilities.documentFormattingProvider = false
+
+      require("twoslash-queries").attach(client, bufnr)
+
       default_lsp_opts.on_attach(client, bufnr)
     end
   },

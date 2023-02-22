@@ -166,6 +166,7 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "onenord-nvim": "onenord-nvim",
         "telescope-hoogle": "telescope-hoogle",
+        "twoslash-queries": "twoslash-queries",
         "vim-just": "vim-just",
         "vim-reasonml": "vim-reasonml",
         "vim-rescript": "vim-rescript"
@@ -184,6 +185,22 @@
       "original": {
         "owner": "luc-tielen",
         "repo": "telescope_hoogle",
+        "type": "github"
+      }
+    },
+    "twoslash-queries": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1674084057,
+        "narHash": "sha256-VX18jjq8wXBH62tLPe+q5d2DkCTx8aW8/OKAskhuh/8=",
+        "owner": "marilari88",
+        "repo": "twoslash-queries.nvim",
+        "rev": "f2122d8fa34cf8316783d0828f6aa69f1c5ba87f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "marilari88",
+        "repo": "twoslash-queries.nvim",
         "type": "github"
       }
     },

@@ -23,7 +23,8 @@
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
     # vim-reason-plus = { url = "github:reasonml-editor/vim-reason-plus"; flake = false; };
     vim-reasonml = { url = "github:jordwalke/vim-reasonml"; flake = false; };
-    vim-just = { url ="github:NoahTheDuke/vim-just"; flake = false; };
+    vim-just = { url = "github:NoahTheDuke/vim-just"; flake = false; };
+    twoslash-queries = { url = "github:marilari88/twoslash-queries.nvim"; flake = false; };
   };
 
   outputs =
@@ -164,6 +165,7 @@
                 "vim-rescript"
                 "vim-reasonml"
                 "vim-just"
+                "twoslash-queries"
               ]) // {
                 moses-nvim = vimUtils.buildNeovimLuaPackagePluginFromFlakeInput inputs "moses-lua";
               }
