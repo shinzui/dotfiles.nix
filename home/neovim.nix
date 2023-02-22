@@ -48,6 +48,7 @@ in
     vim-tmux-navigator
     vim-asterisk
     vim-helm
+    vim-just
   ] ++ map optionalPlugin [
     telescope-symbols-nvim
     cmp-nvim-lua
