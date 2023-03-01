@@ -103,7 +103,12 @@ local default_lsp_opts = {
 
 local lsps = {
   hls = {
-    cmd = { "haskell-language-server", "--lsp" }
+    cmd = { "haskell-language-server", "--lsp" },
+    settings = {
+      haskell = {
+        formattingProvider = "fourmolu"
+      }
+    }
   },
   jsonls = {},
   ls_emmet = {},
