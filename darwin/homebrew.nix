@@ -57,8 +57,9 @@ in
     "tuple"
     "zoom"
     "visual-studio-code"
+    "discord"
+    # "raycast"
     #TODO fixme by moving conflicting apps
-    #"discord"
     #"google-chrome"
   ];
 }
