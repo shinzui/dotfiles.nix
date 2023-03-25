@@ -7,10 +7,10 @@
 
     # Other nix-darwin configuration
     ./homebrew.nix
+    ./secrets.nix
     ./mac-defaults.nix
   ];
 
-  # Networking
   networking.dns = [
     "1.1.1.1"
     "8.8.8.8"

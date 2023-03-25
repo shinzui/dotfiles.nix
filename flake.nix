@@ -14,6 +14,10 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     flake-utils.url = "github:numtide/flake-utils";
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
     lspsaga-nvim = { url = "github:tami5/lspsaga.nvim"; flake = false; };
@@ -34,6 +38,7 @@
     , darwin
     , home-manager
     , flake-utils
+    , agenix
     , ...
     }@inputs:
     let
@@ -67,6 +72,8 @@
         # Include extra `nix-darwin`
         self.darwinModules.pam
         self.darwinModules.users
+
+        agenix.darwinModules.default
 
         # Main `nix-darwin` config
         ./darwin
@@ -211,9 +218,10 @@
         ];
       };
       pkgs = legacyPackages;
+      agenix = inputs.agenix;
     in
     {
-      devShell = import ./shell.nix { inherit pkgs; };
+      devShell = import ./shell.nix { inherit pkgs system agenix; };
     });
 }
 # vim: foldmethod=marker
