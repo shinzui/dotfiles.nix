@@ -19,7 +19,14 @@
     };
     lfs.enable = true;
 
-
+    includes = [
+      {
+        condition = "gitdir:~/Keikaku/work/";
+        contents.user = {
+          email = "nadeem@topagentnetwork.com";
+        };
+      }
+    ];
 
     extraConfig = {
       alias = {
