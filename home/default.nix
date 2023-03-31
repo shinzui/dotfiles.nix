@@ -171,8 +171,11 @@ in
     ## kubernetes
     kubectl
     kubernetes-helm
+    kustomize
     krew
     k9s
+    argocd
+    argocd-autopilot
 
     ## Language servers
     # haskell-language-server
