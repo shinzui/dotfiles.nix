@@ -6,4 +6,5 @@ in
 {
   "netrc.age".publicKeys = shinzuiAtSungkyung;
   "npmrc.age".publicKeys = shinzuiAtSungkyung;
+  "access_tokens.conf.age".publicKeys = shinzuiAtSungkyung;
 }

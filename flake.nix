@@ -76,7 +76,8 @@
         agenix.darwinModules.default
 
         # Main `nix-darwin` config
-        ./darwin
+        ./darwin 
+
         # `home-manager` module
         home-manager.darwinModules.home-manager
         (

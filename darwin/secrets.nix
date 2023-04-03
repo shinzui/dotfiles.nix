@@ -15,5 +15,10 @@
       mode = "700";
       owner = "shinzui";
     };
+    access_token = {
+      file = ../secrets/access_tokens.conf.age;
+      mode = "700";
+      owner = "shinzui";
+    };
   };
 }
