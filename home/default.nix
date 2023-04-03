@@ -167,6 +167,7 @@ in
     nodejs
     bun
     jq
+    yq-go #jq for yaml
 
     ## kubernetes
     kubectl
