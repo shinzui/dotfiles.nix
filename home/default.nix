@@ -133,6 +133,7 @@ in
     docker
     colima #containers in Lima
     hadolint #dockerfile linter
+    sops
     just
     postgresql_14
     treefmt
