@@ -58,6 +58,7 @@ in
     "zoom"
     "visual-studio-code"
     "discord"
+    "microsoft-teams"
     # "raycast"
     #TODO fixme by moving conflicting apps
     #"google-chrome"
