@@ -25,6 +25,7 @@ in
     ./zsh.nix
     ./shells.nix
     ./tmux.nix
+    ./navi.nix
   ];
 
 
@@ -95,7 +96,6 @@ in
     k6 # load testing tool
     fd #fancy `find`
     miller #like awk, sed, cut, join, and sort for CSV and tabular JSON
-    navi #interactive cli cheat sheet
     procs #fancy `ps`
     ripgrep
     retry #https://github.com/minfrin/retry
