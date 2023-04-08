@@ -29,6 +29,8 @@ null_ls.setup {
         "graphql",
       },
     },
-    diagnostics.eslint
+    formatting.yamlfmt,
+    diagnostics.eslint,
+    diagnostics.yamllint
   },
 }
