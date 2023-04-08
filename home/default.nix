@@ -171,6 +171,8 @@ in
     bun
     jq
     yq-go #jq for yaml
+    yamllint
+    yamlfmt
 
     ## kubernetes
     kubectl
