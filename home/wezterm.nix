@@ -15,6 +15,12 @@
     config.hide_tab_bar_if_only_one_tab = true
     config.color_scheme = 'nordfox'
 
+    config.set_environment_variables = {
+      TERMINFO_DIRS = '/home/user/.nix-profile/share/terminfo',
+      WSLENV = 'TERMINFO_DIRS',
+    }
+    config.term = 'wezterm'
+
     return config
   '';
     

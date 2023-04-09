@@ -145,6 +145,9 @@ in
     nodePackages.graphql-language-service-cli
     nodePackages.pnpm
 
+    ##terminfo
+    wezterm.terminfo
+
     ## Haskell
     ghc
     hlint
