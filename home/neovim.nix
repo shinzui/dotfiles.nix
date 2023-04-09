@@ -63,6 +63,7 @@ in
     telescope-hoogle
     telescope-manix
     telescope-live-grep-args-nvim
+    telescope-undo-nvim
     vim-rescript
     vim-reasonml
     twoslash-queries
