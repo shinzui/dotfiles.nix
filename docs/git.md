@@ -2,6 +2,8 @@
 
 `zsh` plugin to load [forgit](https://github.com/wfxr/forgit) via `git forgit`
 
+Use `↵` to confirm selections and `↹` to toggle mark and move up.
+
 
 ### git-extras
 
