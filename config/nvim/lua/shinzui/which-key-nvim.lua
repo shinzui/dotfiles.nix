@@ -47,13 +47,13 @@ local normal_mode_mappings = {
     T = { "<Cmd>SymbolsOutline<CR>", "Show symbols outline" },
     n = { "<Cmd>Lspsaga diagnostic_jump_next<CR>", "Jump to next diagnostic" },
     N = { "<Cmd>Lspsaga diagnostic_jump_prev<CR>", "Jump to prevdiagnostic" },
+    u = { "<Cmd>Telescope lsp_references<CR>", "References (usage)" },
     w = { "<Cmd>Lspsaga show_line_diagnostics<CR>", "Show line diagnostics" },
     S = { "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>", "Workspace symbols" },
     l = {
       name = "+Lists",
       a = { "<Cmd>Telescope lsp_code_actions<CR>", "Code actions" },
       A = { "<Cmd>Telescope lsp_range_code_actions<CR>", "Code actions (range)" },
-      r = { "<Cmd>Telescope lsp_references<CR>", "References" },
       s = { "<Cmd>Telescope lsp_document_symbols<CR>", "Documents symbols" },
     },
   },
@@ -63,7 +63,6 @@ local normal_mode_mappings = {
     l = { "<Cmd>HopLine<CR>", "Hop to any visible line" },
     p = { "<Cmd>HopPattern<CR>", "Hop by pattern" },
   },
-
   s = {
     name = "+Search",
     b = { "<Cmd>Telescope buffers<CR>", "Buffers" },
