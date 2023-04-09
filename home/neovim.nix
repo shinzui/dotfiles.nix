@@ -62,6 +62,7 @@ in
     (pluginWithDeps lualine-lsp-progress [ lualine-nvim ])
     telescope-hoogle
     telescope-manix
+    telescope-live-grep-args-nvim
     vim-rescript
     vim-reasonml
     twoslash-queries

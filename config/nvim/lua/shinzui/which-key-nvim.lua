@@ -67,7 +67,7 @@ local normal_mode_mappings = {
     name = "+Search",
     b = { "<Cmd>Telescope buffers<CR>", "Buffers" },
     f = { "<Cmd>Telescope find_files<CR>", "Files in cwd" },
-    g = { "<Cmd>Telescope live_grep<CR>", "Grep in cwd" },
+    g = { "<Cmd>Telescope live_grep_args<CR>", "Grep in cwd" },
     l = { "<Cmd>Telescope current_buffer_fuzzy_find<CR>", "Buffer lines" },
     o = { "<Cmd>lua require('telescope.builtin').oldfiles({only_cwd= true})<CR>", "Old files" },
     r = {
