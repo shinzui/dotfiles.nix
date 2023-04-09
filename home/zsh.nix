@@ -26,6 +26,7 @@ let
     #common cli aliases
     v = "nvim";
     view = "v -R";
+    ":q" = "exit";
 
     ###Kubernetes
     k = "kubectl";
