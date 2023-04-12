@@ -90,6 +90,7 @@
       "node_modules"
       ".direnv/"
       ".vim-bookmarks"
+      ".devenv/"
     ];
   };
 
