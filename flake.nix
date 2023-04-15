@@ -95,6 +95,7 @@
             home-manager.users.${primaryUser} = homeManagerCommonConfig;
             # Add a registry entry for this flake
             nix.registry.my.flake = self;
+            nix.registry.nixpkgs.flake = nixpkgs-unstable;
           }
         )
       ];
