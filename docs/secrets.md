@@ -18,7 +18,7 @@ To add a new secret, follow these steps:
 2.  Edit the secret file using the agenix cli:
 
 ```
-agenix -e newsecret
+agenix -e newsecret.age
 ```
 
 3.  Add the secret to the age NixOS module configured in `darwin/secrets.nix`:
