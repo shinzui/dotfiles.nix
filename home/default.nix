@@ -84,7 +84,8 @@ in
     bandwhich #bandwidth utilization tool
     bottom #Fancy `top`
     #coreutils
-    curl
+    curl # url parsing & manipulation
+    trurl
     dateutils
     du-dust #Fancy `du` https://github.com/bootandy/dust
     exa #fancy `ls`
