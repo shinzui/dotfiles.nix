@@ -45,6 +45,7 @@
       # Building blocks {{{
       inherit (darwin.lib) darwinSystem;
       inherit (inputs.nixpkgs-unstable.lib) attrValues makeOverridable optionalAttrs singleton;
+      # d = (import ./darwin)  { pkgs=nixpkgs-unstable; inherit nixpkgs-unstable; };
 
       # Configuration for `nixpkgs` mostly used in personal configs.
       nixpkgsConfig = {
@@ -69,6 +70,11 @@
       };
 
       nixDarwinCommonModules = [
+        {
+         config._module.args = {
+          inherit nixpkgs-unstable;
+         };
+        }
         # Include extra `nix-darwin`
         self.darwinModules.pam
         self.darwinModules.users
@@ -76,7 +82,7 @@
         agenix.darwinModules.default
 
         # Main `nix-darwin` config
-        ./darwin 
+        ./darwin
 
         # `home-manager` module
         home-manager.darwinModules.home-manager

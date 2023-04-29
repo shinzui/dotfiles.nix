@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, nixpkgs-unstable, lib, ... }:
 
 {
   ##################
@@ -41,6 +41,8 @@
   nix.configureBuildUsers = true;
 
   nix.package = pkgs.nixUnstable;
+
+  nix.registry.nixpkgs.flake = nixpkgs-unstable;
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
