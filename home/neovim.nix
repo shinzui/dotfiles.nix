@@ -73,7 +73,7 @@ in
     which-key-nvim
     nvim-treesitter.withAllGrammars
     telescope-fzf-native-nvim
-    lspsaga-nvim
+    lspsaga-nvim-original
     onenord-nvim
     gitsigns-nvim
     trouble-nvim

@@ -6,9 +6,14 @@ vim.cmd "packadd nvim-lspconfig"
 vim.cmd "packadd cmp-nvim-lsp"
 vim.cmd "packadd vim-rescript"
 
--- plugin which adds support for twoslash queries into typescript projects 
+-- plugin which adds support for twoslash queries into typescript projects
 -- https://github.com/marilari88/twoslash-queries.nvim
 vim.cmd "packadd twoslash-queries"
+
+require("twoslash-queries").setup({
+  multi_line = true,
+  highlight = "Type"
+})
 
 local lspconf = require "lspconfig"
 local configs = require "lspconfig.configs"
@@ -81,13 +86,13 @@ local function on_attach(client, bufnr)
     cmd("n", "gt", "vim.lsp.buf.signature_help()")
   end
   if client.server_capabilities.codeLensProvider then
-    vim.cmd [[
-       augroup lsp_codelens
-        autocmd!
-        autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
-        autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.display()
-      augroup END
-      ]]
+    -- vim.cmd [[
+    --    augroup lsp_codelens
+    --     autocmd!
+    --     autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
+    --     autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.display()
+    --   augroup END
+    --   ]]
   end
 end
 
@@ -154,7 +159,6 @@ local lsps = {
       end
     end
   },
-
   rescriptls = {
     -- TODO: Figure out a better way to do this
     cmd = { "node", vim.api.nvim_get_var "rescript_lsp_path", "--stdio" },
