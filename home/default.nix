@@ -26,6 +26,7 @@ in
     ./shells.nix
     ./tmux.nix
     ./navi.nix
+    ./btop.nix
   ];
 
 
@@ -158,6 +159,7 @@ in
     haskellPackages.implicit-hie
     haskellPackages.cabal-fmt
     haskellPackages.cabal-plan
+    haskellPackages.cabal-hoogle
 
     ## OCaml
     #ocaml

@@ -54,7 +54,7 @@ let
     lsa = "ll -a";
     tree = "ls -T";
     ps = "${procs}/bin/procs";
-    top = "${bottom}/bin/btm";
+    top = "${btop}/bin/btop";
     watch = "${viddy}/bin/viddy";
 
     #lazydocker
