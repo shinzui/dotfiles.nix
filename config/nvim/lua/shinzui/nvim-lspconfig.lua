@@ -16,15 +16,15 @@ local json_schemas = {
   description = "Babel configuration",
   fileMatch = { ".babelrc.json", ".babelrc", "babel.config.json" },
   url = "https://json.schemastore.org/babelrc.json"
- }, {
+}, {
   description = "ESLint config",
   fileMatch = { ".eslintrc.json", ".eslintrc" },
   url = "https://json.schemastore.org/eslintrc.json"
- }, {
+}, {
   description = "Prettier config",
   fileMatch = { ".prettierrc", ".prettierrc.json", "prettier.config.json" },
   url = "https://json.schemastore.org/prettierrc"
- },
+},
   {
     description = "Json schema for properties json file for a GitHub Workflow template",
     fileMatch = { ".github/workflow-templates/**.properties.json" },
@@ -33,7 +33,7 @@ local json_schemas = {
   description = "NPM configuration file",
   fileMatch = { "package.json" },
   url = "https://json.schemastore.org/package.json"
- }
+}
 }
 
 
@@ -118,13 +118,16 @@ local function on_attach(client, bufnr)
     cmd("n", "gt", "vim.lsp.buf.signature_help()")
   end
   if client.server_capabilities.codeLensProvider then
-    -- vim.cmd [[
-    --    augroup lsp_codelens
-    --     autocmd!
-    --     autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
-    --     autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.display()
-    --   augroup END
-    --   ]]
+    vim.api.nvim_exec(
+      [[
+      augroup lsp_codelens_refresh
+        autocmd! * <buffer>
+        autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
+        " autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.display()
+        augroup END
+      ]],
+      false
+    )
   end
 end
 
@@ -180,6 +183,10 @@ local lsps = {
           printWidth = 100,
           singleQuote = true,
         },
+        keyOrdering = false,
+        -- schemas = {
+        --   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+        -- },
       },
     },
     on_attach = function(client, bufnr)
