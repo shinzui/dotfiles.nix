@@ -4,6 +4,8 @@
 vim.cmd "packadd which-key.nvim"
 vim.cmd "packadd! gitsigns.nvim" -- needed for some mappings
 vim.cmd "packadd! nvim-spectre"
+vim.cmd "packadd! neotest"
+vim.cmd "packadd! neotest-haskell"
 
 local wk = require "which-key"
 wk.setup { plugins = { spelling = { enabled = true } } }
@@ -63,6 +65,11 @@ local normal_mode_mappings = {
     c = { "<Cmd>HopChar2<CR>", "Hop to any occurance of 2 chars" },
     l = { "<Cmd>HopLine<CR>", "Hop to any visible line" },
     p = { "<Cmd>HopPattern<CR>", "Hop by pattern" },
+  },
+  r = {
+    name = "+Run",
+    t = {"<CMD>lua require('neotest').run.run()<CR>", "Run nearest test" },
+    f = {"<CMD>lua require('neotest').run.run(vim.fn.expand('%'))<CR>", "Run tests in file" }
   },
   s = {
     name = "+Search",
