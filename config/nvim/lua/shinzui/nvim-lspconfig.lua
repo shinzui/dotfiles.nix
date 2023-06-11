@@ -7,6 +7,7 @@ vim.cmd "packadd cmp-nvim-lsp"
 vim.cmd "packadd vim-rescript"
 
 local json_opts = require("shinzui.lsp.jsonls")
+local hls_opts = require("shinzui.lsp.hls")
 
 -- plugin which adds support for twoslash queries into typescript projects
 -- https://github.com/marilari88/twoslash-queries.nvim
@@ -112,15 +113,8 @@ local default_lsp_opts = {
 
 
 local lsps = {
-  hls = {
-    cmd = { "haskell-language-server", "--lsp" },
-    settings = {
-      haskell = {
-        formattingProvider = "fourmolu"
-      }
-    }
-  },
-  jsonls = json_opts;
+  hls = hls_opts,
+  jsonls = json_opts,
   ls_emmet = {},
   dhall_lsp_server = {},
   graphql = {},
