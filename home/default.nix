@@ -119,6 +119,7 @@ in
     kondo # clean software project files
     youtube-dl
     sapling # facebook SCM that's also a git client
+    _1password #1password cli
 
     #desktop apps
     element-desktop
