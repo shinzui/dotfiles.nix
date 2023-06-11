@@ -8,6 +8,7 @@ vim.cmd "packadd vim-rescript"
 
 local json_opts = require("shinzui.lsp.jsonls")
 local hls_opts = require("shinzui.lsp.hls")
+local lua_ls_opts = require("shinzui.lsp.lua_ls")
 
 -- plugin which adds support for twoslash queries into typescript projects
 -- https://github.com/marilari88/twoslash-queries.nvim
@@ -102,9 +103,6 @@ local function on_attach(client, bufnr)
   end
 end
 
-local runtime_path = vim.split(package.path, ";")
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
 
 local default_lsp_opts = {
   on_attach = on_attach,
@@ -174,29 +172,7 @@ local lsps = {
   ocamllsp = {
     filetypes = { "ocaml", "ocaml.menhir", "ocaml.interface", "ocaml.ocamllex" },
   },
-  lua_ls = {
-    settings = {
-      Lua = {
-        runtime = {
-          -- Tell the language server which version of Lua you're using (LuaJIT in the case of Neovim)
-          version = "LuaJIT",
-          -- Setup your lua path
-          path = runtime_path,
-        },
-        diagnostics = {
-          -- Get the language server to recognize the `vim` global
-          globals = { "vim" },
-        },
-        workspace = {
-          -- Make the server aware of Neovim runtime files
-          library = vim.api.nvim_get_runtime_file("", true),
-        },
-        telemetry = {
-          enable = false,
-        },
-      },
-    },
-  },
+  lua_ls = lua_ls_opts,
 }
 
 for lsp, lsp_opts in pairs(lsps) do
