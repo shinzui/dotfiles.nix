@@ -20,5 +20,11 @@
       mode = "700";
       owner = "shinzui";
     };
+    openapi_secret = {
+      file = ../secrets/openai.age;
+      path = "/Users/shinzui/.openapi_secret";
+      mode = "700";
+      owner = "shinzui";
+    };
   };
 }

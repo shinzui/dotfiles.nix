@@ -94,6 +94,7 @@ in
     (pluginWithDeps diffview-nvim [ nvim-web-devicons ])
     nvim-treesitter-context
     markdown-preview-nvim
+    ChatGPT-nvim
     (pluginWithDeps neotest [neotest-haskell])
   ] ++ [
     (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
