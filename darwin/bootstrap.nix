@@ -21,6 +21,11 @@
       "shinzui"
       "@admin"
     ];
+
+    extra-substituters = [ "https://tan.cachix.org" ];
+    extra-trusted-public-keys = [ "tan.cachix.org-1:y9VYkIo4aZD4oK1wM/mYppPK0Pt//FMmTIyPcT6sbcs=" ];
+    netrc-file = config.age.secrets.netrc.path;
+
     auto-optimise-store = true;
 
     experimental-features = [

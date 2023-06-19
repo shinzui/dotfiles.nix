@@ -70,9 +70,9 @@
 
       nixDarwinCommonModules = [
         {
-         config._module.args = {
-          inherit nixpkgs-unstable;
-         };
+          config._module.args = {
+            inherit nixpkgs-unstable;
+          };
         }
         # Include extra `nix-darwin`
         self.darwinModules.pam
@@ -98,6 +98,11 @@
             users.users.${primaryUser}.home = "/Users/${primaryUser}";
             home-manager.useGlobalPkgs = true;
             home-manager.users.${primaryUser} = homeManagerCommonConfig;
+
+            home-manager.extraSpecialArgs = {
+              inherit (config) age;
+            };
+
             # Add a registry entry for this flake
             nix.registry.my.flake = self;
             nix.registry.nixpkgs.flake = nixpkgs-unstable;

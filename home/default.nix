@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib,... }:
 
 let
   myNodePackages = import ../packages/node { pkgs = pkgs; };
@@ -27,6 +27,7 @@ in
     ./tmux.nix
     ./navi.nix
     ./btop.nix
+    ./cachix.nix
   ];
 
 

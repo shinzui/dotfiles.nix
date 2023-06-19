@@ -26,5 +26,10 @@
       mode = "700";
       owner = "shinzui";
     };
+    cachix-authtoken = {
+      file = ../secrets/cachix_auth_token.dhall.age;
+      mode = "700";
+      owner = "shinzui";
+    };
   };
 }
