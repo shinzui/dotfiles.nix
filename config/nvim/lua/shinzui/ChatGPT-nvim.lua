@@ -3,5 +3,5 @@
 vim.cmd "packadd ChatGPT.nvim"
 
 require("chatgpt").setup({
-    api_key_cmd = "bat -p ~/.openapi_secret"
+    api_key_cmd = "bat -p /Users/shinzui/.openapi_secret"
 })
