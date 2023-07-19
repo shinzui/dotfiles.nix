@@ -1,4 +1,4 @@
-{ config, pkgs, lib,... }:
+{ config, pkgs, lib, ... }:
 
 let
   myNodePackages = import ../packages/node { pkgs = pkgs; };

@@ -10,11 +10,13 @@
       "https://cache.nixos.org/"
       "https://shinzui.cachix.org"
       "https://hydra.iohk.io"
+      "https://tan.cachix.org"
     ];
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "shinzui.cachix.org-1:QEmAoJrA9WwLP0uxfDgktLi2BRrcvQQWdz8NzcMg4/E="
       "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+      "tan.cachix.org-1:y9VYkIo4aZD4oK1wM/mYppPK0Pt//FMmTIyPcT6sbcs="
     ];
 
     trusted-users = [
@@ -22,8 +24,6 @@
       "@admin"
     ];
 
-    extra-substituters = [ "https://tan.cachix.org" ];
-    extra-trusted-public-keys = [ "tan.cachix.org-1:y9VYkIo4aZD4oK1wM/mYppPK0Pt//FMmTIyPcT6sbcs=" ];
     netrc-file = config.age.secrets.netrc.path;
 
     auto-optimise-store = true;
