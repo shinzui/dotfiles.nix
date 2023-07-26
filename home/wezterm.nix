@@ -18,7 +18,7 @@
     config.audible_bell = 'Disabled'
 
     config.set_environment_variables = {
-      TERMINFO_DIRS = '/home/user/.nix-profile/share/terminfo',
+      TERMINFO_DIRS = '/home/shinzui/.nix-profile/share/terminfo',
       WSLENV = 'TERMINFO_DIRS',
     }
     config.term = 'wezterm'
