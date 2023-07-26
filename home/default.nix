@@ -125,6 +125,7 @@ in
     #desktop apps
     element-desktop
     shortcat
+    postman
 
     # Dev packages
     angle-grinder #Fast log processor
