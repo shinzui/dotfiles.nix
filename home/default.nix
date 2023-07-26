@@ -101,6 +101,8 @@ in
     miller #like awk, sed, cut, join, and sort for CSV and tabular JSON
     procs #fancy `ps`
     ripgrep
+    ripgrep-all
+
     retry #https://github.com/minfrin/retry
     gnused
     sd # `sed` and `awk` replacement
