@@ -103,6 +103,7 @@ in
     procs #fancy `ps`
     ripgrep
     ripgrep-all
+    pspg #pager for psql
 
     retry #https://github.com/minfrin/retry
     gnused
