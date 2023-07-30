@@ -1,0 +1,20 @@
+-- https://www.postgresql.org/docs/current/app-psql.html
+\set QUIET 1
+
+\set PROMPT1 '/%R%# '
+\set PROMPT2 '%R > '
+
+\set VERBOSITY verbose
+
+\set COMP_KEYWORD_CASE lower
+
+\pset linestyle unicode
+\pset border 2
+\pset null ∅
+
+\setenv PAGER pspg
+
+\set HISTFILE ~/.psql_history- :DBNAME
+\set HISTCONTROL ignoredups
+
+\unset QUIET

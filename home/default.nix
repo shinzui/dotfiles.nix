@@ -28,6 +28,7 @@ in
     ./navi.nix
     ./btop.nix
     ./cachix.nix
+    ./external-configs.nix
   ];
 
 
