@@ -1,7 +1,7 @@
 -- https://www.postgresql.org/docs/current/app-psql.html
 \set QUIET 1
 
-\set PROMPT1 '/%R%# '
+\set PROMPT1 '%/%R%# '
 \set PROMPT2 '%R > '
 
 \set VERBOSITY verbose
@@ -12,7 +12,7 @@
 \pset border 2
 \pset null ∅
 
-\setenv PAGER pspg
+\setenv PAGER 'pspg --custom-style=onenord'
 
 \set HISTFILE ~/.psql_history- :DBNAME
 \set HISTCONTROL ignoredups

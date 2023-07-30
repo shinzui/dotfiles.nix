@@ -1,0 +1,22 @@
+template = 17
+template_menu = 17
+
+background = #3B4252, #2E3440
+data = #C8D0E0, #2E3440
+label = #C8D0E0, #2E3440, bold
+border = #4C566A, #2E3440
+footer = #88C0D0, #434C5E
+cursor_data = #2E3440, #81A1C1, bold
+cursor_border = #2E3440, #81A1C1
+cursor_label = #2E3440, #81A1C1, bold
+cross_cursor = #4C566A, #88C0D0, bold
+cross_cursor_border = #4C566A, #88C0D0
+status_bar = #C8D0E0, #434C5E
+title = #C8D0E0, #434C5E
+scrollbar_arrows = #C8D0E0, #2E3440
+scrollbar_background = #4C566A, #2E3440
+scrollbar_slider = #E5E9F0, #4C566A
+
+data* = #C8D0E0, #3B4252
+label* = #C8D0E0, #3B4252, bold
+border* = #4C566A, #3B4252

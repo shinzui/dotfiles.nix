@@ -16,7 +16,8 @@ let
      #needed by lazydocker to connect to docker daemon managed by colima
      DOCKER_HOST="unix://${home}/.colima/docker.sock";
      LS_COLORS="${pkgs.vivid}/bin/vivid generate nord";
-      USE_GKE_GCLOUD_AUTH_PLUGIN="True";
+     USE_GKE_GCLOUD_AUTH_PLUGIN="True";
+     PSPG_CONF="${config.xdg.configHome}/pspg/pspgconf";
   };
 
   programs.zsh.shellAliases = with pkgs; {
