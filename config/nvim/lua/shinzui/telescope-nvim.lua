@@ -10,13 +10,27 @@ vim.cmd "packadd telescope-undo.nvim"
 local telescope = require "telescope"
 local actions = require "telescope.actions"
 local previewers = require "telescope.previewers"
+local lga_actions = require("telescope-live-grep-args.actions")
 
 telescope.setup {
   defaults = {
     color_devicons = true,
   },
+  extensions = {
+    live_grep_args = {
+      -- enable/disable auto-quoting
+      auto_quoting = true,
+      mappings = {
+        i = {
+          ["<C-k>"] = lga_actions.quote_prompt(),
+          ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+        },
+      },
+    }
+  }
 }
 
+-- important to load after calling setup
 telescope.load_extension('hoogle')
 telescope.load_extension('manix')
 telescope.load_extension('live_grep_args')
