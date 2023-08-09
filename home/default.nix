@@ -92,6 +92,7 @@ in
     dateutils
     du-dust #Fancy `du` https://github.com/bootandy/dust
     exa #fancy `ls`
+    fdupes # find & delete duplicate files
     difftastic # syntax-aware diff tool
     dogdns # dns client
     lazydocker #docker terminal UI https://github.com/jesseduffield/lazydocker
