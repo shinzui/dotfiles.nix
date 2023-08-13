@@ -27,6 +27,8 @@ let
     #common cli aliases
     v = "nvim";
     view = "v -R";
+    vim = "nvim";
+    vimdiff = "nvim -d";
     ":q" = "exit";
 
     ###Kubernetes
