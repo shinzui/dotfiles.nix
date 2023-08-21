@@ -123,7 +123,7 @@ in
     rnr #cli to batch rename files and dirs
     pigz # modern gzip
     kondo # clean software project files
-    youtube-dl
+    yt-dlp
     sapling # facebook SCM that's also a git client
     _1password #1password cli
 
