@@ -26,6 +26,7 @@ in
     "pam-reattach"
     "watchman"
     "kubefwd"
+    "tidy-html5"
   ];
 
   homebrew.taps = [
@@ -59,6 +60,7 @@ in
     "visual-studio-code"
     "discord"
     "microsoft-teams"
+    "anki"
     # "raycast"
     #TODO fixme by moving conflicting apps
     #"google-chrome"
