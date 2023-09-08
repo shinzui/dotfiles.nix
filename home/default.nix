@@ -105,6 +105,7 @@ in
     ripgrep
     ripgrep-all
     pspg #pager for psql
+    jacinda # functional data processing
 
     retry #https://github.com/minfrin/retry
     gnused
