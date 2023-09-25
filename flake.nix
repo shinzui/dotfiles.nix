@@ -146,6 +146,9 @@
 
       # Outputs --- {{{
       overlays = {
+        #https://github.com/NixOS/nixpkgs/issues/250306
+        ripgrep-all = import ./overlays/ripgrep-all.nix;
+
         pkgs-master = final: prev: {
           pkgs-master = import inputs.nixpkgs {
             inherit (prev.stdenv) system;
@@ -164,11 +167,13 @@
           pkgs-unstable = import inputs.nixpkgs-unstable {
             inherit (prev.stdenv) system;
             inherit (nixpkgsConfig) config;
+            overlays = [ prev.ripgrep-all ];
           };
         };
 
         # Overlay that adds various additional utility functions to `vimUtils`
         vimUtils = import ./overlays/vimUtils.nix;
+
 
         # Overlay that adds some additional Neovim plugins
         vimPlugins = final: prev:
