@@ -156,6 +156,10 @@ in
     nodePackages.graphql-language-service-cli
     nodePackages.pnpm
 
+    #record cli session
+    asciinema
+    asciinema-agg
+
     ##terminfo
     wezterm.terminfo
 
