@@ -140,7 +140,7 @@ in
     gitui #terminal git UI written in rust
     zsh-forgit #zsh plugin to load forgit via `git forgit`
     (google-cloud-sdk.withExtraComponents ([ google-cloud-sdk.components.gke-gcloud-auth-plugin ]))
-    cloud-sql-proxy
+    google-cloud-sql-proxy
     dhall
     dhall-json
     docker
@@ -171,8 +171,8 @@ in
     # haskellPackages.ormolu
     haskellPackages.implicit-hie
     haskellPackages.cabal-fmt
-    haskellPackages.cabal-plan
-    haskellPackages.cabal-hoogle
+    # haskellPackages.cabal-plan
+    # haskellPackages.cabal-hoogle
 
     ## OCaml
     #ocaml
@@ -204,7 +204,7 @@ in
 
     ## Language servers
     # haskell-language-server
-    dhall-lsp-server
+    # dhall-lsp-server
     nodePackages.typescript-language-server
     nil #nix language server
     terraform-ls
