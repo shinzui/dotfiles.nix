@@ -190,6 +190,7 @@ in
     bun
     jq
     yq-go #jq for yaml
+    gron #make json greppaple
     yamllint
     yamlfmt
 
