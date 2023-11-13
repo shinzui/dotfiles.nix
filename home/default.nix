@@ -202,6 +202,7 @@ in
     k9s
     argocd
     argocd-autopilot
+    stern
 
     ## Language servers
     # haskell-language-server
