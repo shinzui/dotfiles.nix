@@ -143,6 +143,7 @@ in
     google-cloud-sql-proxy
     dhall
     dhall-json
+    nickel
     docker
     colima #containers in Lima
     hadolint #dockerfile linter
@@ -207,6 +208,7 @@ in
     ## Language servers
     # haskell-language-server
     # dhall-lsp-server
+    nls # nickel language server
     nodePackages.typescript-language-server
     nil #nix language server
     terraform-ls

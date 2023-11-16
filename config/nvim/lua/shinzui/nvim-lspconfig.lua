@@ -10,6 +10,7 @@ local json_opts = require("shinzui.lsp.jsonls")
 local hls_opts = require("shinzui.lsp.hls")
 local lua_ls_opts = require("shinzui.lsp.lua_ls")
 local nil_ls_opts = require("shinzui.lsp.nil_ls")
+local nls_opts = require("shinzui.lsp.nls")
 
 -- plugin which adds support for twoslash queries into typescript projects
 -- https://github.com/marilari88/twoslash-queries.nvim
@@ -129,6 +130,7 @@ local lsps = {
   terraformls = {},
   tailwindcss = {},
   nil_ls = nil_ls_opts,
+  nickel_ls = nls_opts,
   yamlls = {
     settings = {
       yaml = {

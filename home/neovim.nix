@@ -49,6 +49,7 @@ in
     vim-asterisk
     vim-helm
     vim-just
+    vim-nickel
   ] ++ map optionalPlugin [
     telescope-symbols-nvim
     cmp-nvim-lua
