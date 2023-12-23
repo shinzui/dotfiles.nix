@@ -67,7 +67,7 @@ in
   #https://github.com/Canop/broot
   #https://rycee.gitlab.io/home-manager/options.html#opt-programs.broot.enable
   programs.broot = {
-    enable = true;
+    enable = false;
     settings.modal = true;
   };
 
@@ -187,7 +187,7 @@ in
     nixpkgs-fmt #nix formatter
     stylua #lua formatter
     nodePackages.typescript
-    nodejs
+    # nodejs
     bun
     jq
     yq-go #jq for yaml
