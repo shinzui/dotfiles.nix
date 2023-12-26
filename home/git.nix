@@ -96,6 +96,12 @@
 
   # GitHub CLI
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.gh.enable
-  programs.gh.enable = true;
-  programs.gh.settings.git_protocol = "ssh";
+  programs.gh = {
+    enable = true;
+    settings = {
+      git_protocol = "ssh";
+      # Workaround for https://github.com/nix-community/home-manager/issues/4744
+      version = 1;
+    };
+  };
 }
