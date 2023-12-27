@@ -18,6 +18,8 @@ let
      LS_COLORS="${pkgs.vivid}/bin/vivid generate nord";
      USE_GKE_GCLOUD_AUTH_PLUGIN="True";
      PSPG_CONF="${config.xdg.configHome}/pspg/pspgconf";
+     #temp workaround for home-manager generating the config in the wrong location
+     NAVI_CONFIG="/Users/shinzui/Library/Application Support/navi/config.yaml";
   };
 
   programs.zsh.shellAliases = with pkgs; {
