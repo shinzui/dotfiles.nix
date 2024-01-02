@@ -127,6 +127,7 @@ in
     yt-dlp
     sapling # facebook SCM that's also a git client
     _1password #1password cli
+    duti # select default apps for file types
 
     #desktop apps
     element-desktop
