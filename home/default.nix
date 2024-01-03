@@ -89,6 +89,7 @@ in
     #coreutils
     curl 
     trurl # url parsing & manipulation
+    hurl #run & test http requests
     dateutils
     du-dust #Fancy `du` https://github.com/bootandy/dust
     eza #fancy `ls`
