@@ -87,8 +87,8 @@ in
     bandwhich #bandwidth utilization tool
     bottom #Fancy `top`
     #coreutils
-    curl # url parsing & manipulation
-    trurl
+    curl 
+    trurl # url parsing & manipulation
     dateutils
     du-dust #Fancy `du` https://github.com/bootandy/dust
     eza #fancy `ls`
@@ -113,7 +113,7 @@ in
     tree
     tealdeer #fasts impl of tldr in rust
     rargs # `xargs` + `awk`
-    # watchexec
+    watchexec
     watchman
     viddy # modern watch
     vivid #A themeable LS_COLORS generator 

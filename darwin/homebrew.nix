@@ -24,7 +24,6 @@ in
     #TODO figure out how to use nix's gnu-sed
     "gnu-sed" # neovim spectre needs gsed in the neovim path
     "pam-reattach"
-    "watchman"
     "kubefwd"
     "tidy-html5"
   ];
