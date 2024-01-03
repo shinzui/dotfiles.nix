@@ -108,6 +108,7 @@ in
     gcc # needed for nvim-treesitter
     gccStdenv
     # tree-sitter # needed for nvim-treesitter
+    vimPlugins.nvim-treesitter-parsers.hurl
     gnused #needed for nvim-spectre
     nodePackages.typescript
     nodePackages.typescript-language-server
