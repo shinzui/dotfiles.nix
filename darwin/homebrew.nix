@@ -60,6 +60,7 @@ in
     "discord"
     "microsoft-teams"
     "anki"
+    "insomnia"
     # "raycast"
     #TODO fixme by moving conflicting apps
     #"google-chrome"
