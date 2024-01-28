@@ -26,6 +26,7 @@ in
     "pam-reattach"
     "kubefwd"
     "tidy-html5"
+    "xq"
   ];
 
   homebrew.taps = [
