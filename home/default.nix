@@ -224,7 +224,7 @@ in
 
     #Nix related tools
     cachix
-    nix
+    # nix
     comma #run anything from nixpkgs without installing it
     statix 
     deadnix
