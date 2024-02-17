@@ -49,6 +49,13 @@
       pull = {
         rebase = true;
       };
+
+      rebase = {
+        # stash before rebase then pop the stash after
+        autostash = true;
+        # --autosquash always gets passed automatically to git rebase
+        autosquash = true;
+      };
       apply.whitespace = "nowarn";
       url = {
         "https://github.com/" = { insteadOf = "gh:"; };
@@ -57,6 +64,7 @@
       init.defaultBranch = "master";
       diff = {
         tool = "difftastic";
+        algorithm = "histogram";
       };
 
       difftool = {
@@ -66,6 +74,7 @@
           cmd = ''difft "$LOCAL" "$REMOTE"'';
         };
       };
+      
 
       pager = {
         difftool = true;
