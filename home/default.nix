@@ -210,7 +210,7 @@ in
 
     ## Language servers
     haskell-language-server
-    # dhall-lsp-server
+    dhall-lsp-server
     nls # nickel language server
     nodePackages.typescript-language-server
     nil #nix language server
