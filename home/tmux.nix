@@ -13,8 +13,20 @@
     terminal = "screen-256color";
     aggressiveResize = true;
     extraConfig = ''
-set-option -g renumber-windows on
-set -as terminal-features ',screen-256color:RGB'
+      set-option -g renumber-windows on
+      set -as terminal-features ',screen-256color:RGB'
+      bind-key x kill-pane # skip "kill-pane 1? (y/n)" prompt
+      set -g detach-on-destroy off  # don't exit from tmux when closing a session
+      bind-key "T" run-shell "sesh connect $(
+        sesh list -tz | fzf-tmux -p 55%,60% \
+          --no-sort --border-label ' sesh ' --prompt '⚡  ' \
+          --header '  ^a all ^t tmux ^x zoxide ^f find' \
+          --bind 'tab:down,btab:up' \
+          --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list)' \
+          --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t)' \
+          --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z)' \
+          --bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .Trash . ~)'
+      )"
     '';
 
     plugins = with pkgs; [

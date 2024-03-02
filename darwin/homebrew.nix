@@ -27,6 +27,7 @@ in
     "kubefwd"
     "tidy-html5"
     "xq"
+    "joshmedeski/sesh/sesh"
   ];
 
   homebrew.taps = [
