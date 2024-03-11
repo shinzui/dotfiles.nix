@@ -148,8 +148,6 @@
       overlays = {
         #https://github.com/NixOS/nixpkgs/issues/250306
         ripgrep-all = import ./overlays/ripgrep-all.nix;
-        hurl = import ./overlays/hurl.nix;
-        # trurl = import ./overlays/trurl.nix;
 
         pkgs-master = final: prev: {
           pkgs-master = import inputs.nixpkgs {
@@ -169,7 +167,7 @@
           pkgs-unstable = import inputs.nixpkgs-unstable {
             inherit (prev.stdenv) system;
             inherit (nixpkgsConfig) config;
-            overlays = [ prev.ripgrep-all prev.hurl ];
+            overlays = [ prev.ripgrep-all ];
           };
         };
 
