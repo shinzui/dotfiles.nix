@@ -156,8 +156,7 @@ in
     just
     postgresql_14
     treefmt
-    yarn
-    # deno
+    nodePackages.npm
     nodePackages.prettier
     nodePackages.graphql-language-service-cli
     nodePackages.pnpm
