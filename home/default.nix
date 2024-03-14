@@ -131,6 +131,7 @@ in
     jujutsu # git-compatible VCS
     _1password #1password cli
     duti # select default apps for file types
+    sesh
 
     #desktop apps
     element-desktop
