@@ -97,7 +97,7 @@ in
     markdown-preview-nvim
     ChatGPT-nvim
     glance-nvim
-    (pluginWithDeps neotest [neotest-haskell])
+    (pluginWithDeps neotest [neotest-haskell nvim-nio])
   ] ++ [
     (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
   ];
@@ -113,6 +113,7 @@ in
     gnused #needed for nvim-spectre
     nodePackages.typescript
     nodePackages.typescript-language-server
+    luajitPackages.nvim-nio
   ];
 
   # 
