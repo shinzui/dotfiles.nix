@@ -161,7 +161,8 @@ in
     nodePackages.prettier
     nodePackages.graphql-language-service-cli
     nodePackages.pnpm
-
+    lazygit
+    
     #record cli session
     asciinema
     asciinema-agg
