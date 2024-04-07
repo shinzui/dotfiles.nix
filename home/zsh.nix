@@ -2,24 +2,31 @@
 
 let
   home = config.home.homeDirectory;
-  in
+in
 {
   #https://rycee.gitlab.io/home-manager/options.html#opt-programs.zsh.enable
   programs.zsh = {
     enable = true;
+    plugins = [
+      {
+        name = "vi-mode";
+        src = pkgs.zsh-vi-mode;
+        file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
+      }
+    ];
   };
 
   #https://rycee.gitlab.io/home-manager/options.html#opt-programs.zsh.sessionVariables
   programs.zsh.sessionVariables = {
-     EDITOR = "nvim";
-     MANPAGER="nvim +Man!";
-     #needed by lazydocker to connect to docker daemon managed by colima
-     DOCKER_HOST="unix://${home}/.colima/docker.sock";
-     LS_COLORS="${pkgs.vivid}/bin/vivid generate nord";
-     USE_GKE_GCLOUD_AUTH_PLUGIN="True";
-     PSPG_CONF="${config.xdg.configHome}/pspg/pspgconf";
-     #temp workaround for home-manager generating the config in the wrong location
-     NAVI_CONFIG="/Users/shinzui/Library/Application Support/navi/config.yaml";
+    EDITOR = "nvim";
+    MANPAGER = "nvim +Man!";
+    #needed by lazydocker to connect to docker daemon managed by colima
+    DOCKER_HOST = "unix://${home}/.colima/docker.sock";
+    LS_COLORS = "${pkgs.vivid}/bin/vivid generate nord";
+    USE_GKE_GCLOUD_AUTH_PLUGIN = "True";
+    PSPG_CONF = "${config.xdg.configHome}/pspg/pspgconf";
+    #temp workaround for home-manager generating the config in the wrong location
+    NAVI_CONFIG = "/Users/shinzui/Library/Application Support/navi/config.yaml";
   };
 
   programs.zsh.shellAliases = with pkgs; {
