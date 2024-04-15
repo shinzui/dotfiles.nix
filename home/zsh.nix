@@ -7,13 +7,6 @@ in
   #https://rycee.gitlab.io/home-manager/options.html#opt-programs.zsh.enable
   programs.zsh = {
     enable = true;
-    plugins = [
-      {
-        name = "vi-mode";
-        src = pkgs.zsh-vi-mode;
-        file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
-      }
-    ];
   };
 
   #https://rycee.gitlab.io/home-manager/options.html#opt-programs.zsh.sessionVariables
@@ -28,6 +21,12 @@ in
     #temp workaround for home-manager generating the config in the wrong location
     NAVI_CONFIG = "/Users/shinzui/Library/Application Support/navi/config.yaml";
   };
+
+  programs.zsh.initExtra = ''
+    ZVM_INIT_MODE=sourcing
+    source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+    unset ZVM_INIT_MODE
+  '';
 
   programs.zsh.shellAliases = with pkgs; {
     #general 
