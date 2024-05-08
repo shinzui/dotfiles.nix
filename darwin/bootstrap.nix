@@ -43,7 +43,7 @@
 
   nix.configureBuildUsers = true;
 
-  nix.package = pkgs.nixUnstable;
+  nix.package = pkgs.nixVersions.latest;
 
   nix.registry.nixpkgs.flake = nixpkgs-unstable;
 
