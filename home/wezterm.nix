@@ -9,6 +9,7 @@
   # https://wezfurlong.org/wezterm/config/files.html
   programs.wezterm.extraConfig = ''
     local wezterm = require 'wezterm'
+
     local config = {}
     config.font = wezterm.font 'PragmataPro Mono Liga'
     config.window_decorations = 'RESIZE'
