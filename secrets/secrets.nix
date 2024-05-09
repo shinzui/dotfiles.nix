@@ -9,4 +9,5 @@ in
   "access_tokens.conf.age".publicKeys = shinzuiAtSungkyung;
   "openai.age".publicKeys = shinzuiAtSungkyung;
   "cachix_auth_token.dhall.age".publicKeys = shinzuiAtSungkyung;
+  "tableplus_gcp_service_account.json.age".publicKeys = shinzuiAtSungkyung;
 }

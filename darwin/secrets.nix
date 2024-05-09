@@ -31,5 +31,11 @@
       mode = "700";
       owner = "shinzui";
     };
+    tableplus-gcp-service-account = {
+      file = ../secrets/tableplus_gcp_service_account.json.age;
+      path = "/Users/shinzui/.config/gcloud/tableplus_gcp_service_account.json";
+      mode = "700";
+      owner = "shinzui";
+    };
   };
 }
