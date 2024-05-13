@@ -42,7 +42,7 @@ local normal_mode_mappings = {
     d = { vim.lsp.buf.definition, "Jump to definition" },
     D = { vim.lsp.buf.declaration, "Jump to declaration" },
     a = { "<Cmd>Lspsaga code_action<CR>", "Code action" },
-    c = { "<Cmd>Lspsage incoming_calls<CR>", "Incoming Call Hierachry"},
+    c = { "<Cmd>Lspsaga incoming_calls<CR>", "Incoming Call Hierachry"},
     s = { vim.lsp.codelens.run, "Run codelens action" },
     f = { function() vim.lsp.buf.format { async = true } end, "Format" },
     r = { "<Cmd>Lspsaga rename<CR>", "Rename" },
