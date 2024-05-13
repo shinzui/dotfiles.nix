@@ -162,6 +162,7 @@ in
     nodePackages.graphql-language-service-cli
     nodePackages.pnpm
     lazygit
+    duckdb
     
     #record cli session
     asciinema
