@@ -57,6 +57,8 @@ in
     nr = "nix run";
     ns = "nix search";
 
+    formatjson = ''jq . "$1" | sponge "$1" '';
+
     #modern cli tools 
     cat = "${bat}/bin/bat";
     du = "${du-dust}/bin/dust";
