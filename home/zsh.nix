@@ -4,12 +4,12 @@ let
   home = config.home.homeDirectory;
 in
 {
-  #https://rycee.gitlab.io/home-manager/options.html#opt-programs.zsh.enable
+  #https://nix-community.github.io/home-manager/options.xhtml#opt-programs.zsh.enable
   programs.zsh = {
     enable = true;
   };
 
-  #https://rycee.gitlab.io/home-manager/options.html#opt-programs.zsh.sessionVariables
+  #https://nix-community.github.io/home-manager/options.xhtml#opt-programs.zsh.sessionVariables
   programs.zsh.sessionVariables = {
     EDITOR = "nvim";
     MANPAGER = "nvim +Man!";
@@ -57,7 +57,7 @@ in
     nr = "nix run";
     ns = "nix search";
 
-    formatjson = ''jq . "$1" | sponge "$1" '';
+    formatjson = "f() {jq . $1 | sponge $1};f";
 
     #modern cli tools 
     cat = "${bat}/bin/bat";
