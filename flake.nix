@@ -20,6 +20,7 @@
     };
     flake-utils.url = "github:numtide/flake-utils";
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
+    nix-neovimplugins = { url = "github:jooooscha/nixpkgs-vim-extra-plugins"; };
     onenord-nvim = { url = "github:rmehri01/onenord.nvim"; flake = false; };
     moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
     telescope-hoogle = { url = "github:luc-tielen/telescope_hoogle"; flake = false; };
@@ -38,6 +39,7 @@
     , home-manager
     , flake-utils
     , agenix
+    , nix-neovimplugins
     , ...
     }@inputs:
     let
@@ -149,6 +151,7 @@
         #https://github.com/NixOS/nixpkgs/issues/250306
         ripgrep-all = import ./overlays/ripgrep-all.nix;
         sesh = import ./overlays/sesh.nix;
+        nix-neovimplugins = nix-neovimplugins.overlays.default; 
 
         pkgs-master = final: prev: {
           pkgs-master = import inputs.nixpkgs {
@@ -175,6 +178,7 @@
         # Overlay that adds various additional utility functions to `vimUtils`
         vimUtils = import ./overlays/vimUtils.nix;
 
+        
 
         # Overlay that adds some additional Neovim plugins
         vimPlugins = final: prev:
