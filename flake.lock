@@ -52,11 +52,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1716204319,
-        "narHash": "sha256-3KL5dRGk89SUaeODFO6B9lxymCVav3UzqsNxOzAbwVY=",
+        "lastModified": 1716240091,
+        "narHash": "sha256-++gJuNv0X8naF1VkaO2sAiM3T4wLx1NtdfubEsRzX7U=",
         "owner": "LnL7",
         "repo": "nix-darwin",
-        "rev": "e1cacc63e6e324ae95e65e8aaea62dec74686208",
+        "rev": "8bf083c992e2bc0a8c07f5860d3866739b698883",
         "type": "github"
       },
       "original": {
@@ -236,11 +236,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1716190602,
-        "narHash": "sha256-xYRimrR0duWvokWQEvB87bSsICeCvvX9DxpUOzCfsDE=",
+        "lastModified": 1716220750,
+        "narHash": "sha256-Lhhrd1ZBNXCbUupWGq6gRPIy1qMKEdcAXcjnwgVqe/U=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "5a5ac83292c7842072318f57d68a48474f8bd34d",
+        "rev": "641daa314d5bc1bca4b345da8eb08a130b109c79",
         "type": "github"
       },
       "original": {
@@ -252,33 +252,17 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1716236596,
-        "narHash": "sha256-HUYXLWOst0tPXDVjWbuzamq8rVXxATQgbnwTe0doJmA=",
+        "lastModified": 1716293225,
+        "narHash": "sha256-pU9ViBVE3XYb70xZx+jK6SEVphvt7xMTbm6yDIF4xPs=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "4c0171822671f5f87761852c1ce591a8c7e36a8b",
+        "rev": "3eaeaeb6b1e08a016380c279f8846e0bd8808916",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "ref": "master",
         "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "onenord-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1715272832,
-        "narHash": "sha256-2Zi7yD/nlLo86WYK1F7KnQI3beUmfr6A/CKfdkudRCg=",
-        "owner": "rmehri01",
-        "repo": "onenord.nvim",
-        "rev": "f1e25fd839442d4b3c6bd36cfc7fa56edc629671",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rmehri01",
-        "repo": "onenord.nvim",
         "type": "github"
       }
     },
@@ -319,7 +303,6 @@
         "nix-neovimplugins": "nix-neovimplugins",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "onenord-nvim": "onenord-nvim",
         "telescope-hoogle": "telescope-hoogle",
         "twoslash-queries": "twoslash-queries",
         "vim-just": "vim-just",

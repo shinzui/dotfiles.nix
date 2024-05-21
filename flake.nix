@@ -21,11 +21,9 @@
     flake-utils.url = "github:numtide/flake-utils";
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
     nix-neovimplugins = { url = "github:jooooscha/nixpkgs-vim-extra-plugins"; };
-    onenord-nvim = { url = "github:rmehri01/onenord.nvim"; flake = false; };
     moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
     telescope-hoogle = { url = "github:luc-tielen/telescope_hoogle"; flake = false; };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
-    # vim-reason-plus = { url = "github:reasonml-editor/vim-reason-plus"; flake = false; };
     vim-reasonml = { url = "github:jordwalke/vim-reasonml"; flake = false; };
     vim-just = { url = "github:NoahTheDuke/vim-just"; flake = false; };
     twoslash-queries = { url = "github:marilari88/twoslash-queries.nvim"; flake = false; };
@@ -189,7 +187,6 @@
             vimPlugins = prev.vimPlugins.extend (super: self:
               (vimUtils.buildVimPluginsFromFlakeInputs inputs [
                 "telescope-hoogle"
-                "onenord-nvim"
                 "vim-rescript"
                 "vim-reasonml"
                 "vim-just"
