@@ -61,7 +61,7 @@ in
     (pluginWithDeps cmp_luasnip [ luasnip ])
     lspkind-nvim
     (pluginWithDeps lualine-lsp-progress [ lualine-nvim ])
-    telescope-hoogle
+    telescope_hoogle
     telescope-manix
     telescope-live-grep-args-nvim
     telescope-undo-nvim

@@ -303,9 +303,7 @@
         "nix-neovimplugins": "nix-neovimplugins",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "telescope-hoogle": "telescope-hoogle",
         "twoslash-queries": "twoslash-queries",
-        "vim-just": "vim-just",
         "vim-reasonml": "vim-reasonml",
         "vim-rescript": "vim-rescript"
       }
@@ -355,22 +353,6 @@
         "type": "github"
       }
     },
-    "telescope-hoogle": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1695205112,
-        "narHash": "sha256-xxg20v3qE9TrQpfTKg0FzXISETnq7Q+B63s1naC/v1o=",
-        "owner": "luc-tielen",
-        "repo": "telescope_hoogle",
-        "rev": "5c2ae51bcf905a7101134a597e6f7be2dc05f975",
-        "type": "github"
-      },
-      "original": {
-        "owner": "luc-tielen",
-        "repo": "telescope_hoogle",
-        "type": "github"
-      }
-    },
     "twoslash-queries": {
       "flake": false,
       "locked": {
@@ -384,22 +366,6 @@
       "original": {
         "owner": "marilari88",
         "repo": "twoslash-queries.nvim",
-        "type": "github"
-      }
-    },
-    "vim-just": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1714573127,
-        "narHash": "sha256-v9c7Fwk18AE6SBYWSOgtc3zLaruC/NybBAgrR0KTAsY=",
-        "owner": "NoahTheDuke",
-        "repo": "vim-just",
-        "rev": "a621ede3bcf551144358c112ba1f4e6c2e84e092",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NoahTheDuke",
-        "repo": "vim-just",
         "type": "github"
       }
     },

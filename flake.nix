@@ -22,10 +22,8 @@
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
     nix-neovimplugins = { url = "github:jooooscha/nixpkgs-vim-extra-plugins"; };
     moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
-    telescope-hoogle = { url = "github:luc-tielen/telescope_hoogle"; flake = false; };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
     vim-reasonml = { url = "github:jordwalke/vim-reasonml"; flake = false; };
-    vim-just = { url = "github:NoahTheDuke/vim-just"; flake = false; };
     twoslash-queries = { url = "github:marilari88/twoslash-queries.nvim"; flake = false; };
   };
 
@@ -41,7 +39,7 @@
     , ...
     }@inputs:
     let
-      # Building blocks {{{
+      # Building blocks 
       inherit (darwin.lib) darwinSystem;
       inherit (inputs.nixpkgs-unstable.lib) attrValues makeOverridable optionalAttrs singleton;
       # d = (import ./darwin)  { pkgs=nixpkgs-unstable; inherit nixpkgs-unstable; };
@@ -109,10 +107,10 @@
           }
         )
       ];
-      # }}}
+      
     in
     {
-      #Various configs (only Sungkyung for now) {{{
+      #Various configs (only Sungkyung for now) 
 
       #nix-darwin configs
       darwinConfigurations = rec {
@@ -142,9 +140,9 @@
         };
       };
 
-      #}}}
+      #
 
-      # Outputs --- {{{
+      # Outputs --- 
       overlays = {
         #https://github.com/NixOS/nixpkgs/issues/250306
         ripgrep-all = import ./overlays/ripgrep-all.nix;
@@ -186,10 +184,8 @@
           {
             vimPlugins = prev.vimPlugins.extend (super: self:
               (vimUtils.buildVimPluginsFromFlakeInputs inputs [
-                "telescope-hoogle"
                 "vim-rescript"
                 "vim-reasonml"
-                "vim-just"
                 "twoslash-queries"
               ]) // {
                 moses-nvim = vimUtils.buildNeovimLuaPackagePluginFromFlakeInput inputs "moses-lua";
@@ -223,7 +219,7 @@
 
 
 
-      # }}}
+      
     } // flake-utils.lib.eachDefaultSystem (system:
     let
       legacyPackages = import inputs.nixpkgs-unstable {

@@ -2,7 +2,7 @@
 -- https://github.com/nvim-telescope/telescope.nvim
 vim.cmd "packadd telescope.nvim"
 vim.cmd "packadd telescope-symbols.nvim"
-vim.cmd "packadd telescope-hoogle"
+vim.cmd "packadd telescope_hoogle"
 vim.cmd "packadd telescope-manix"
 vim.cmd "packadd telescope-live-grep-args.nvim"
 vim.cmd "packadd telescope-undo.nvim"
