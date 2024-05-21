@@ -144,7 +144,7 @@ in
     git-absorb
     gitui #terminal git UI written in rust
     zsh-forgit #zsh plugin to load forgit via `git forgit`
-    (google-cloud-sdk.withExtraComponents ([ google-cloud-sdk.components.gke-gcloud-auth-plugin ]))
+    (google-cloud-sdk.withExtraComponents ([ google-cloud-sdk.components.gke-gcloud-auth-plugin google-cloud-sdk.components.alpha google-cloud-sdk.components.beta ]))
     google-cloud-sql-proxy
     dhall
     dhall-json
