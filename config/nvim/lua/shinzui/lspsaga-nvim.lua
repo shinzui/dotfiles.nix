@@ -14,6 +14,9 @@ require("lspsaga").setup({
       exec = "<CR>",
     },
   },
+  lightbulb = {
+    enable = false,
+  },
   hover = {
     max_width = 0.6,
     open_link = 'gx',
