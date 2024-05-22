@@ -303,7 +303,6 @@
         "nix-neovimplugins": "nix-neovimplugins",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "twoslash-queries": "twoslash-queries",
         "vim-reasonml": "vim-reasonml",
         "vim-rescript": "vim-rescript"
       }
@@ -350,22 +349,6 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
-        "type": "github"
-      }
-    },
-    "twoslash-queries": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1707603237,
-        "narHash": "sha256-QlzfWZg8v0N19SmwPquWjCc/nsWAeOLeri5iMXOIueA=",
-        "owner": "marilari88",
-        "repo": "twoslash-queries.nvim",
-        "rev": "e000134c7ca3ea44f1095df3ceea89e485b7bdd5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "marilari88",
-        "repo": "twoslash-queries.nvim",
         "type": "github"
       }
     },

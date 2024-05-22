@@ -24,7 +24,6 @@
     moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
     vim-reasonml = { url = "github:jordwalke/vim-reasonml"; flake = false; };
-    twoslash-queries = { url = "github:marilari88/twoslash-queries.nvim"; flake = false; };
   };
 
   outputs =
@@ -186,7 +185,6 @@
               (vimUtils.buildVimPluginsFromFlakeInputs inputs [
                 "vim-rescript"
                 "vim-reasonml"
-                "twoslash-queries"
               ]) // {
                 moses-nvim = vimUtils.buildNeovimLuaPackagePluginFromFlakeInput inputs "moses-lua";
               }

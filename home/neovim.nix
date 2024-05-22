@@ -67,7 +67,7 @@ in
     telescope-undo-nvim
     vim-rescript
     vim-reasonml
-    twoslash-queries
+    pkgs.vimExtraPlugins.twoslash-queries-nvim
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-cmp
