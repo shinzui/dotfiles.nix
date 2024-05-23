@@ -93,7 +93,7 @@ in
     nvim-ts-autotag
     octo-nvim
     (pluginWithDeps diffview-nvim [ nvim-web-devicons ])
-    nvim-treesitter-context
+    # nvim-treesitter-context
     markdown-preview-nvim
     ChatGPT-nvim
     glance-nvim
