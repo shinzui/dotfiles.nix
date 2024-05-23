@@ -74,7 +74,7 @@ in
     which-key-nvim
     nvim-treesitter.withAllGrammars
     telescope-fzf-native-nvim
-    lspsaga-nvim
+    pkgs.vimExtraPlugins.lspsaga-nvim
     onenord-nvim
     gitsigns-nvim
     trouble-nvim

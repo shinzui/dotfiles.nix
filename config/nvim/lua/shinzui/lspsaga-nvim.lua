@@ -2,7 +2,7 @@
 -- Improve lsp UI and experience
 -- https://github.com/nvimdev/lspsaga.nvim
 --
-vim.cmd "packadd lspsaga.nvim"
+vim.cmd "packadd lspsaga-nvim"
 
 require("lspsaga").setup({
   code_action = {
