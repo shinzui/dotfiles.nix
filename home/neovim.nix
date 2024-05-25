@@ -88,7 +88,7 @@ in
     toggleterm-nvim
     nvim-hlslens
     symbols-outline-nvim
-    neogit
+    # pkgs.vimExtraPlugins.neogit
     null-ls-nvim
     nvim-ts-autotag
     octo-nvim
