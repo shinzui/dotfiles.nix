@@ -157,7 +157,6 @@ in
     postgresql_14
     treefmt
     pgformatter
-    nodePackages.npm
     nodePackages.prettier
     nodePackages.graphql-language-service-cli
     nodePackages.pnpm
@@ -194,7 +193,7 @@ in
     nixpkgs-fmt #nix formatter
     stylua #lua formatter
     nodePackages.typescript
-    # nodejs
+    nodejs_22
     bun
     jq
     yq-go #jq for yaml
