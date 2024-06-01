@@ -77,7 +77,7 @@ in
     pkgs.vimExtraPlugins.lspsaga-nvim
     onenord-nvim
     gitsigns-nvim
-    trouble-nvim
+    pkgs.vimExtraPlugins.trouble-nvim
     (pluginWithDeps telescope-nvim [ nvim-web-devicons ])
     lualine-nvim
     # (pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
