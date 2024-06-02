@@ -203,7 +203,6 @@
       };
 
       darwinModules = {
-        # security-pam = import ./modules/darwin/security/pam.nix;
         users = import ./modules/darwin/users.nix;
         pam = import ./modules/darwin/pam.nix;
       };
