@@ -72,6 +72,35 @@ if not configs.ls_emmet then
   }
 end
 
+-- Copied from LunarVim
+local function setup_code_lens(client, bufnr)
+  local status_ok, codelens_supported = pcall(function()
+    return client.supports_method "textDocument/codeLens"
+  end)
+  if not status_ok or not codelens_supported then
+    return
+  end
+  local group = "lsp_code_lens_refresh"
+  local cl_events = { "BufEnter", "InsertLeave" }
+  local ok, cl_autocmds = pcall(vim.api.nvim_get_autocmds, {
+    group = group,
+    buffer = bufnr,
+    event = cl_events,
+  })
+
+  if ok and #cl_autocmds > 0 then
+    return
+  end
+  vim.api.nvim_create_augroup(group, { clear = false })
+  vim.api.nvim_create_autocmd(cl_events, {
+    group = group,
+    buffer = bufnr,
+    callback = function()
+      vim.lsp.codelens.refresh { bufnr = bufnr }
+    end,
+  })
+end
+
 local function on_attach(client, bufnr)
   local function cmd(mode, key, luacmd)
     vim.api.nvim_buf_set_keymap(bufnr, mode, key, "<cmd>lua " .. luacmd .. "<CR>", { noremap = true })
@@ -91,18 +120,8 @@ local function on_attach(client, bufnr)
   if client.server_capabilities.signatureHelpProvider then
     cmd("n", "gt", "vim.lsp.buf.signature_help()")
   end
-  if client.server_capabilities.codeLensProvider then
-    vim.api.nvim_exec(
-      [[
-      augroup lsp_codelens_refresh
-        autocmd! * <buffer>
-        autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
-        " autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.display()
-        augroup END
-      ]],
-      false
-    )
-  end
+  setup_code_lens(client, bufnr)
+
 end
 
 
