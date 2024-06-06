@@ -133,6 +133,7 @@ in
     _1password #1password cli
     duti # select default apps for file types
     sesh
+    monolith # CLI tool for saving complete web pages
 
     #desktop apps
     element-desktop
