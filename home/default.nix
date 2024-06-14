@@ -90,6 +90,7 @@ in
     curl 
     trurl # url parsing & manipulation
     hurl #run & test http requests
+    httpstat # output curl statistics 
     dateutils
     moreutils #collection of unix tools
     du-dust #Fancy `du` https://github.com/bootandy/dust
