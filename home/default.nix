@@ -159,6 +159,7 @@ in
     postgresql_14
     treefmt
     pgformatter
+    pgcli
     nodePackages.prettier
     nodePackages.graphql-language-service-cli
     nodePackages.pnpm
