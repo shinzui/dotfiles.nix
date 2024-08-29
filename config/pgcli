@@ -17,7 +17,7 @@ always_use_single_connection = False
 # this is set to True, then the end of the statements must have a semi-colon.
 # If this is set to False then sql statements can't be split into multiple
 # lines. End of line (return) is considered as the end of the statement.
-multi_line = False
+multi_line = True
 
 # If multi_line_mode is set to "psql", in multi-line mode, [Enter] will execute
 # the current input if the input ends in a semicolon.
@@ -154,7 +154,7 @@ row_limit = 1000
 max_field_width = 500
 
 # Skip intro on startup and goodbye on exit
-less_chatty = False
+less_chatty = True
 
 # Show all Postgres error fields (as listed in
 # https://www.postgresql.org/docs/current/protocol-error-fields.html).
