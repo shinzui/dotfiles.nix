@@ -143,9 +143,6 @@
 
       # Outputs --- 
       overlays = {
-        #https://github.com/NixOS/nixpkgs/issues/250306
-        ripgrep-all = import ./overlays/ripgrep-all.nix;
-        sesh = import ./overlays/sesh.nix;
         nix-neovimplugins = nix-neovimplugins.overlays.default; 
 
         pkgs-master = final: prev: {
@@ -166,7 +163,7 @@
           pkgs-unstable = import inputs.nixpkgs-unstable {
             inherit (prev.stdenv) system;
             inherit (nixpkgsConfig) config;
-            overlays = [ prev.ripgrep-all prev.sesh ];
+            overlays = [ ];
           };
         };
 
