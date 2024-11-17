@@ -9,7 +9,7 @@ local cmp = require "cmp"
 
 --vscode-like pictograms for neovim lsp completion items
 --https://github.com/onsails/lspkind-nvim
-vim.cmd "packadd lspkind-nvim"
+vim.cmd "packadd lspkind.nvim"
 local lspkind = require "lspkind"
 
 --nvim-cmp source for nvim lua
