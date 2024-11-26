@@ -17,6 +17,8 @@
       set -as terminal-features ',screen-256color:RGB'
       bind-key x kill-pane # skip "kill-pane 1? (y/n)" prompt
       set -g detach-on-destroy off  # don't exit from tmux when closing a session
+      set -gu default-command
+      set -g default-shell "$SHELL"
       bind-key "T" run-shell "sesh connect $(
         sesh list -tz | fzf-tmux -p 55%,60% \
           --no-sort --border-label ' sesh ' --prompt '⚡  ' \
