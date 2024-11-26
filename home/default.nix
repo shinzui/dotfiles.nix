@@ -131,8 +131,8 @@ in
     yt-dlp
     sapling # facebook SCM that's also a git client
     jujutsu # git-compatible VCS
-    _1password #1password cli
     duti # select default apps for file types
+    _1password-cli #1password cli
     sesh
     monolith # CLI tool for saving complete web pages
 
