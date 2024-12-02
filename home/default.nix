@@ -91,6 +91,7 @@ in
     trurl # url parsing & manipulation
     hurl #run & test http requests
     httpstat # output curl statistics 
+    lychee #link checker
     dateutils
     moreutils #collection of unix tools
     du-dust #Fancy `du` https://github.com/bootandy/dust
