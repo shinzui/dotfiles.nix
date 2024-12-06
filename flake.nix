@@ -144,7 +144,6 @@
       # Outputs --- 
       overlays = {
         nix-neovimplugins = nix-neovimplugins.overlays.default; 
-        curl = import ./overlays/curl.nix;
 
         pkgs-master = final: prev: {
           pkgs-master = import inputs.nixpkgs {
@@ -164,7 +163,7 @@
           pkgs-unstable = import inputs.nixpkgs-unstable {
             inherit (prev.stdenv) system;
             inherit (nixpkgsConfig) config;
-            overlays = [ prev.curl];
+            overlays = [];
           };
         };
 
