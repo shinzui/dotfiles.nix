@@ -11,6 +11,7 @@
     local wezterm = require 'wezterm'
 
     local config = {}
+    config.front_end = 'WebGpu'
     config.font = wezterm.font 'PragmataPro Mono Liga'
     config.window_decorations = 'RESIZE'
     config.hide_tab_bar_if_only_one_tab = true
@@ -22,7 +23,6 @@
       TERMINFO_DIRS = '/home/shinzui/.nix-profile/share/terminfo',
       WSLENV = 'TERMINFO_DIRS',
     }
-    config.term = 'wezterm'
 
     config.mouse_bindings = {
        -- and make CTRL-Click open hyperlinks
@@ -35,10 +35,8 @@
 
     return config
   '';
-    
-
   # }}}
 
 
 }
-# vim: foldmethod=market
+# vim: foldmethod=marker

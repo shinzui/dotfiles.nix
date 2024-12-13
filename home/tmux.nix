@@ -13,6 +13,9 @@
     terminal = "screen-256color";
     aggressiveResize = true;
     extraConfig = ''
+      # https://gist.github.com/andersevenrud/015e61af2fd264371032763d4ed965b6
+      set -sg terminal-overrides ",*:RGB"
+
       set-option -g renumber-windows on
       set -as terminal-features ',screen-256color:RGB'
       bind-key x kill-pane # skip "kill-pane 1? (y/n)" prompt
