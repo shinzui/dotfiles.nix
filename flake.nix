@@ -106,7 +106,7 @@
           }
         )
       ];
-      
+
     in
     {
       #Various configs (only Sungkyung for now) 
@@ -143,7 +143,13 @@
 
       # Outputs --- 
       overlays = {
-        nix-neovimplugins = nix-neovimplugins.overlays.default; 
+        nix-neovimplugins = nix-neovimplugins.overlays.default;
+
+        my-packages = final: prev: {
+          cai = final.callPackage (self + "/derivations/cai.nix") {
+            inherit (final) lib rustPlatform fetchFromGitHub;
+          };
+        };
 
         pkgs-master = final: prev: {
           pkgs-master = import inputs.nixpkgs {
@@ -163,14 +169,14 @@
           pkgs-unstable = import inputs.nixpkgs-unstable {
             inherit (prev.stdenv) system;
             inherit (nixpkgsConfig) config;
-            overlays = [];
+            overlays = [ ];
           };
         };
 
         # Overlay that adds various additional utility functions to `vimUtils`
         vimUtils = import ./overlays/vimUtils.nix;
 
-        
+
 
         # Overlay that adds some additional Neovim plugins
         vimPlugins = final: prev:
@@ -213,7 +219,7 @@
 
 
 
-      
+
     } // flake-utils.lib.eachDefaultSystem (system:
     let
       legacyPackages = import inputs.nixpkgs-unstable {
@@ -223,6 +229,7 @@
           pkgs-master
           pkgs-stable
           apple-silicon
+          my-packages
         ];
       };
       pkgs = legacyPackages;
