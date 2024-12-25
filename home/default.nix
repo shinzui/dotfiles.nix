@@ -135,8 +135,11 @@ in
     _1password-cli #1password cli
     duti # select default apps for file types
     sesh
-    cai
     # monolith # CLI tool for saving complete web pages
+
+    #AI clis
+    cai
+    aider-chat #AI pair programming
 
     #desktop apps
     element-desktop
