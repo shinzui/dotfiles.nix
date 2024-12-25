@@ -135,6 +135,7 @@ in
     _1password-cli #1password cli
     duti # select default apps for file types
     sesh
+    pandoc
     # monolith # CLI tool for saving complete web pages
 
     #AI clis
