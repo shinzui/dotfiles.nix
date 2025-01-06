@@ -88,6 +88,7 @@ in
     bottom #Fancy `top`
     #coreutils
     curl 
+    # curl-impersonate
     trurl # url parsing & manipulation
     hurl #run & test http requests
     httpstat # output curl statistics 
@@ -166,6 +167,7 @@ in
     treefmt
     pgformatter
     pgcli
+    harlequin # DB client that supports duckdb and postgresql
     nodePackages.prettier
     nodePackages.graphql-language-service-cli
     nodePackages.pnpm
