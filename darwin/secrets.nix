@@ -43,5 +43,11 @@
       mode = "700";
       owner = "shinzui";
     };
+    pgpass = {
+      file = ../secrets/pgpass.age;
+      path = "/Users/shinzui/.pgpass";
+      mode = "600";
+      owner = "shinzui";
+    };
   };
 }
