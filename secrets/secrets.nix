@@ -11,4 +11,5 @@ in
   "cachix_auth_token.dhall.age".publicKeys = shinzuiAtSungkyung;
   "tableplus_gcp_service_account.json.age".publicKeys = shinzuiAtSungkyung;
   "cai_secrets.yaml.age".publicKeys = shinzuiAtSungkyung;
+  "pgpass.age".publicKeys = shinzuiAtSungkyung;
 }
