@@ -249,6 +249,9 @@ Token.Output.Null = '#BF616A'
 [alias_dsn]
 # example_dsn = postgresql://[user[:password]@][netloc][:port][/dbname]
 
+staging = postgresql://postgres@?host=/tmp/tan-ng:us-west1:master-database
+staging12 = postgresql://postgres@?host=/tmp/tan-ng:us-west1:stage-master-database
+
 # Format for number representation
 # for decimal "d" - 12345678, ",d" - 12,345,678
 # for float "g" - 123456.78, ",g" - 123,456.78
