@@ -1,0 +1,8 @@
+extends: default
+rules:
+  line-length:
+    max: 280
+    level: warning # You can change this to 'error' if preferred
+  comments:
+    min-spaces-from-content: disable # Disables the rule for spaces before comments
+  document-start: disable # Disables the rule requiring a `---` at the start of the document`
