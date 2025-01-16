@@ -49,5 +49,11 @@
       mode = "600";
       owner = "shinzui";
     };
+    aider-conf = {
+      file = ../secrets/aider.conf.yml;
+      path = "/Users/shinzui/.aider.conf.yml";
+      mode = "600";
+      owner = "shinzui";
+    };
   };
 }
