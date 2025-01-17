@@ -6,6 +6,9 @@ vim.cmd "packadd! gitsigns.nvim" -- needed for some mappings
 vim.cmd "packadd! nvim-spectre"
 vim.cmd "packadd! neotest"
 vim.cmd "packadd! neotest-haskell"
+vim.cmd "packadd! mini-nvim"
+
+require('mini.icons').setup()
 
 local wk = require "which-key"
 wk.setup { plugins = { spelling = { enabled = true } } }
