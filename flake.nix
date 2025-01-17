@@ -23,7 +23,6 @@
     nix-neovimplugins = { url = "github:jooooscha/nixpkgs-vim-extra-plugins"; };
     moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
-    vim-reasonml = { url = "github:jordwalke/vim-reasonml"; flake = false; };
   };
 
   outputs =
@@ -187,7 +186,6 @@
             vimPlugins = prev.vimPlugins.extend (super: self:
               (vimUtils.buildVimPluginsFromFlakeInputs inputs [
                 "vim-rescript"
-                "vim-reasonml"
               ]) // {
                 moses-nvim = vimUtils.buildNeovimLuaPackagePluginFromFlakeInput inputs "moses-lua";
               }

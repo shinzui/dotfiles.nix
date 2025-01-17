@@ -303,7 +303,6 @@
         "nix-neovimplugins": "nix-neovimplugins",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "vim-reasonml": "vim-reasonml",
         "vim-rescript": "vim-rescript"
       }
     },
@@ -349,22 +348,6 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
-        "type": "github"
-      }
-    },
-    "vim-reasonml": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1594940760,
-        "narHash": "sha256-RJPRe2QY3cS27yzRMO04sxYgZifzq3UEBRRbtTKh1Pk=",
-        "owner": "jordwalke",
-        "repo": "vim-reasonml",
-        "rev": "50dafc42085b704acaa03576cd2ffcaacea58e14",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jordwalke",
-        "repo": "vim-reasonml",
         "type": "github"
       }
     },

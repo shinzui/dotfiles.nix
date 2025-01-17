@@ -23,7 +23,7 @@ let
   pluginWithConfig = pluginWithConfigAndExtraConfig "";
 in
 {
-  programs.neovim = { 
+  programs.neovim = {
     enable = true;
     viAlias = true;
     vimAlias = true;
@@ -66,7 +66,6 @@ in
     telescope-live-grep-args-nvim
     telescope-undo-nvim
     vim-rescript
-    vim-reasonml
     pkgs.vimExtraPlugins.twoslash-queries-nvim
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
@@ -97,7 +96,7 @@ in
     markdown-preview-nvim
     ChatGPT-nvim
     glance-nvim
-    (pluginWithDeps neotest [neotest-haskell nvim-nio])
+    (pluginWithDeps neotest [ neotest-haskell nvim-nio ])
   ] ++ [
     (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
   ];
