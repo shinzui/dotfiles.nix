@@ -50,7 +50,7 @@
       owner = "shinzui";
     };
     aider-conf = {
-      file = ../secrets/aider.conf.yml;
+      file = ../secrets/aider.conf.yml.age;
       path = "/Users/shinzui/.aider.conf.yml";
       mode = "600";
       owner = "shinzui";
