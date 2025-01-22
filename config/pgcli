@@ -253,6 +253,7 @@ staging = postgresql://postgres@?host=/tmp/tan-ng:us-west1:master-database
 staging12 = postgresql://postgres@?host=/tmp/tan-ng:us-west1:stage-master-database
 prod = postgresql://postgres@?host=/tmp/tan-ng-prod:us-west1:prod-master-database
 prod12 = postgresql://postgres@?host=/tmp/tan-ng-prod:us-west1:prod-master2-database
+prod-analytics = postgresql://postgres@?host=/tmp/tan-ng-prod:us-west1:prod-analytics-database
 
 # Format for number representation
 # for decimal "d" - 12345678, ",d" - 12,345,678
