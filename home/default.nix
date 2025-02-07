@@ -122,8 +122,8 @@ in
     watchman
     viddy # modern watch
     vivid #A themeable LS_COLORS generator 
+    xan # csv power tool
     wget
-    xsv
     imagemagick
     jpegoptim
     rnr #cli to batch rename files and dirs
