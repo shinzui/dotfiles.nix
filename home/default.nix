@@ -118,7 +118,6 @@ in
     sd # `sed` and `awk` replacement
     tree
     tealdeer #fasts impl of tldr in rust
-    rargs # `xargs` + `awk`
     watchexec
     watchman
     viddy # modern watch
