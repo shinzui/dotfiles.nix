@@ -27,6 +27,7 @@ in
     "kubefwd"
     "tidy-html5"
     "xq"
+    "duckdb"
   ];
 
   homebrew.taps = [
