@@ -39,14 +39,10 @@
     !include ${config.age.secrets.access_token.path}
   '';
 
-  nix.configureBuildUsers = true;
 
   nix.package = pkgs.nixVersions.latest;
 
   nix.registry.nixpkgs.flake = nixpkgs-unstable;
-
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
 
   ##################
   # Shell
