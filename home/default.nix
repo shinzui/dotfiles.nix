@@ -140,7 +140,7 @@ in
 
     #AI clis
     cai
-    aider-chat #AI pair programming
+    aider-chat.withPlaywright #AI pair programming
 
     #desktop apps
     element-desktop

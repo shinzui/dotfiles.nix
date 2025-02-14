@@ -80,11 +80,6 @@ in
   aider-chat =
     let
       basePackage =
-        if prev ? aider-chat && builtins.compareVersions (builtins.parseDrvName prev.aider-chat.name).version version >= 0
-        then
-          builtins.trace "WARNING: nixpkgs version of aider-chat is now >= ${version}. This overlay can be removed."
-            prev.aider-chat.withPlaywright
-        else
           builtins.trace "Using override for aider-chat ${version}"
             (prev.aider-chat.withPlaywright.overridePythonAttrs (oldAttrs: {
               inherit version;
