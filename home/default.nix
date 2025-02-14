@@ -183,6 +183,7 @@ in
     ## Haskell
     ghc
     hlint
+    pkgs.hackage-diff
     haskellPackages.cabal-install
     haskellPackages.hoogle
     # haskellPackages.ormolu

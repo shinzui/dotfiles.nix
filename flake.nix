@@ -23,6 +23,10 @@
     nix-neovimplugins = { url = "github:jooooscha/nixpkgs-vim-extra-plugins"; };
     moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
+    hackage-diff = {
+      url = "github:MercuryTechnologies/hackage-diff";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs =
@@ -173,6 +177,7 @@
             inherit (nixpkgsConfig) config;
             overlays = [ self.overlays.moviepy self.overlays.aider-chat ];
           };
+          hackage-diff = inputs.hackage-diff.packages.${prev.stdenv.system}.default;
         };
 
         # Overlay that adds various additional utility functions to `vimUtils`
