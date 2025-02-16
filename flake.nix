@@ -23,6 +23,7 @@
     nix-neovimplugins = { url = "github:jooooscha/nixpkgs-vim-extra-plugins"; };
     moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
+    private-fonts = { url = "github:shinzui/fonts";};
     hackage-diff = {
       url = "github:MercuryTechnologies/hackage-diff";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -38,6 +39,7 @@
     , flake-utils
     , agenix
     , nix-neovimplugins
+    , private-fonts
     , ...
     }@inputs:
     let
@@ -139,6 +141,7 @@
               ];
             }
           ];
+          specialArgs = { inherit private-fonts; };
         };
       };
 

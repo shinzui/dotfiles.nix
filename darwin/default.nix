@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, private-fonts, ... }:
 
 {
   imports = [
@@ -27,11 +27,9 @@
   programs.nix-index.enable = true;
 
   # Fonts
-  #fonts.enableFontDir = true;
-  #fonts.fonts = with pkgs; [
-  #   recursive
-  #  (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-  # ];
+  fonts.packages = [
+    private-fonts.packages.aarch64-darwin.pragmataPro
+  ];
 
   # Keyboard
   system.keyboard.enableKeyMapping = true;
