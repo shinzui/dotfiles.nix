@@ -11,7 +11,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-exdBfZk2jco6XGbAUO669mDXzmZPUrg1/beCYj2SUS4=";
   };
 
-  cargoSha256 = "sha256-6Wp5ccfjpCuF0kGg5MCmacxEF/7d8Th0dn+3CbpQWs0=";
+  cargoHash = "sha256-ev0gs5gJ7yod6cyExwhRu44+s/3zmdFxw66RTbmzDRQ";
+  useFetchCargoVendor = true;
 
   # Disable running tests
   # Tests are writing to the fs 
