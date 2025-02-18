@@ -168,7 +168,7 @@ in
     pgcli
     harlequin # DB client that supports duckdb and postgresql
     nodePackages.prettier
-    nodePackages.graphql-language-service-cli
+    # nodePackages.graphql-language-service-cli
     nodePackages.pnpm
     lazygit
     # duckdb
