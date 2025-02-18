@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cai";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "ad-si";
     repo = "cai";
     rev = "v${version}";
-    sha256 = "sha256-exdBfZk2jco6XGbAUO669mDXzmZPUrg1/beCYj2SUS4=";
+    sha256 = "sha256-MO0JB1cYx/FBvYgRxpkIfa95281CZ1kmpvDY+p95YiI=";
   };
 
-  cargoHash = "sha256-ev0gs5gJ7yod6cyExwhRu44+s/3zmdFxw66RTbmzDRQ";
+  cargoHash = "sha256-mUyXOPE9knLvRsfXND+PMVR2vLeRUUXhPcbganHyL+I=";
   useFetchCargoVendor = true;
 
   # Disable running tests
