@@ -3,7 +3,7 @@
 
 vim.cmd "packadd which-key.nvim"
 vim.cmd "packadd! gitsigns.nvim" -- needed for some mappings
-vim.cmd "packadd! nvim-spectre"
+vim.cmd "packadd! grug-far-nvim"
 vim.cmd "packadd! neotest"
 vim.cmd "packadd! neotest-haskell"
 vim.cmd "packadd! mini-nvim"
@@ -84,9 +84,9 @@ local normal_mode_mappings = {
     o = { "<Cmd>lua require('telescope.builtin').oldfiles({only_cwd= true})<CR>", "Old files" },
     r = {
       name = "+Search/Replace",
-      o = { "<CMD>lua require('spectre').open()<cr>", "Open search/replace panel" },
+      o = { "<CMD>GrugFar", "Open search/replace panel" },
       w = {
-        "<CMD>lua require('spectre').open_visual({select_word=true})<cr>",
+        "<CMD>lua require('grug-far').with_visual_selection()<CR>",
         "Select current word for search/replace",
       },
     },

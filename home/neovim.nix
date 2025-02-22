@@ -82,7 +82,7 @@ in
     lualine-nvim
     # (pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
     comment-nvim
-    nvim-spectre
+    pkgs.vimExtraPlugins.grug-far-nvim
     hop-nvim
     git-blame-nvim
     toggleterm-nvim
@@ -110,7 +110,6 @@ in
     gccStdenv
     # tree-sitter # needed for nvim-treesitter
     vimPlugins.nvim-treesitter-parsers.hurl
-    gnused #needed for nvim-spectre
     nodePackages.typescript
     nodePackages.typescript-language-server
     luajitPackages.nvim-nio

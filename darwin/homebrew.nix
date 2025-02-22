@@ -21,8 +21,6 @@ in
   homebrew.global.lockfiles = false;
 
   homebrew.brews = [
-    #TODO figure out how to use nix's gnu-sed
-    "gnu-sed" # neovim spectre needs gsed in the neovim path
     "pam-reattach"
     "kubefwd"
     "tidy-html5"
