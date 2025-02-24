@@ -138,9 +138,10 @@ in
     pandoc
     # monolith # CLI tool for saving complete web pages
 
-    #AI clis
+    #人工知能 
     cai
     aider-chat.withPlaywright #AI pair programming
+    repomix
 
     #desktop apps
     element-desktop
