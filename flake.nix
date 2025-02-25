@@ -158,6 +158,7 @@
           cai = final.callPackage (self + "/derivations/cai.nix") {
             inherit (final) lib rustPlatform fetchFromGitHub;
           };
+          claude-code = final.callPackage (self + "/derivations/claude-code/claude-code.nix") {};
         };
 
         pkgs-master = final: prev: {

@@ -142,6 +142,7 @@ in
     cai
     aider-chat.withPlaywright #AI pair programming
     repomix
+    claude-code
 
     #desktop apps
     element-desktop
