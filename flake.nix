@@ -150,9 +150,6 @@
       # Outputs --- 
       overlays = {
         nix-neovimplugins = nix-neovimplugins.overlays.default;
-        moviepy = import ./overlays/moviepy.nix;
-        aider-chat = (import ./overlays/aider.nix { inherit inputs; });
-
 
         my-packages = final: prev: {
           cai = final.callPackage (self + "/derivations/cai.nix") {
@@ -178,7 +175,7 @@
           pkgs-unstable = import inputs.nixpkgs-unstable {
             inherit (prev.stdenv) system;
             inherit (nixpkgsConfig) config;
-            overlays = [ self.overlays.moviepy self.overlays.aider-chat ];
+            overlays = [ ];
           };
           hackage-diff = inputs.hackage-diff.packages.${prev.stdenv.system}.default;
         };

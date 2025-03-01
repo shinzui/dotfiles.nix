@@ -26,6 +26,7 @@ in
     "tidy-html5"
     "xq"
     "duckdb"
+    "aider"
   ];
 
   homebrew.taps = [
