@@ -140,7 +140,7 @@ in
 
     #人工知能 
     cai
-    aider-chat.withPlaywright #AI pair programming
+    # aider-chat.withPlaywright #AI pair programming
     repomix
     claude-code
 
