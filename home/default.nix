@@ -143,6 +143,7 @@ in
     # aider-chat.withPlaywright #AI pair programming
     repomix
     claude-code
+    llm
 
     #desktop apps
     element-desktop
