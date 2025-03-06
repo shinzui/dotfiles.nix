@@ -84,7 +84,7 @@ local normal_mode_mappings = {
     o = { "<Cmd>lua require('telescope.builtin').oldfiles({only_cwd= true})<CR>", "Old files" },
     r = {
       name = "+Search/Replace",
-      o = { "<CMD>GrugFar", "Open search/replace panel" },
+      o = { "<CMD>GrugFar<CR>", "Open search/replace panel" },
       w = {
         "<CMD>lua require('grug-far').with_visual_selection()<CR>",
         "Select current word for search/replace",
