@@ -13,4 +13,5 @@ in
   "cai_secrets.yaml.age".publicKeys = shinzuiAtSungkyung;
   "pgpass.age".publicKeys = shinzuiAtSungkyung;
   "aider.conf.yml.age".publicKeys = shinzuiAtSungkyung;
+  "llm-keys.json.age".publicKeys = shinzuiAtSungkyung;
 }

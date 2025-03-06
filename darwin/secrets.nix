@@ -55,5 +55,11 @@
       mode = "600";
       owner = "shinzui";
     };
+    datasette-llm-keys = {
+      file = ../secrets/llm-keys.json.age;
+      path = "/Users/shinzui/Library/Application Support/io.datasette.llm/keys.json";
+      mode = "600";
+      owner = "shinzui";
+    };
   };
 }
