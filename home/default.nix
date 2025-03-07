@@ -144,6 +144,7 @@ in
     repomix
     claude-code
     llm
+    goose-cli
 
     #desktop apps
     element-desktop
