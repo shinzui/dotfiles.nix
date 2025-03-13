@@ -42,7 +42,6 @@ in
 
   programs.neovim.plugins = with pkgs.vimPlugins; [
     nord-nvim
-    moses-nvim
     vim-surround
     vim-repeat
     vim-tmux-navigator

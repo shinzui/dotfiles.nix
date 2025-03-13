@@ -21,7 +21,6 @@
     flake-utils.url = "github:numtide/flake-utils";
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
     nix-neovimplugins = { url = "github:jooooscha/nixpkgs-vim-extra-plugins"; };
-    moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
     private-fonts = { url = "github:shinzui/fonts";};
     hackage-diff = {
@@ -195,7 +194,6 @@
               (vimUtils.buildVimPluginsFromFlakeInputs inputs [
                 "vim-rescript"
               ]) // {
-                moses-nvim = vimUtils.buildNeovimLuaPackagePluginFromFlakeInput inputs "moses-lua";
               }
             );
           };

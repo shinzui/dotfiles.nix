@@ -1,5 +1,4 @@
 local vim = vim
-local _ = require "moses"
 
 -- Clear environment
 local _ENV = {}
@@ -35,9 +34,9 @@ M.symbols = {
 function M.augroup(t)
   vim.cmd("augroup " .. t.name)
   vim.cmd "au!"
-  _.eachi(t.cmds, function(v)
-    vim.cmd("au " .. _.concat(v, " "))
-  end)
+  for i, v in ipairs(t.cmds) do
+    vim.cmd("au " .. table.concat(v, " "))
+  end
   vim.cmd "augroup END"
 end
 
