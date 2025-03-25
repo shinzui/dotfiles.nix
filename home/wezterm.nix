@@ -14,6 +14,7 @@
     config.front_end = 'WebGpu'
     config.font = wezterm.font 'PragmataPro Mono Liga'
     config.window_decorations = 'RESIZE'
+    config.warn_about_missing_glyphs = false
     config.hide_tab_bar_if_only_one_tab = true
     config.color_scheme = 'nordfox'
 
