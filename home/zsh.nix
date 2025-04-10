@@ -81,6 +81,8 @@ in
     tokyoWeather = "noglob curl -4 http://wttr.in/Tokyo?m";
     nyWeather = "noglob curl -4 http://wttr.in/NY?m";
 
+    ###markdown
+    viewMd = "glow -p -w 200";
   };
 }
 
