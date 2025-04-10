@@ -135,6 +135,7 @@ in
     duti # select default apps for file types
     sesh
     pandoc
+    glow #cli markdown viewer
     # monolith # CLI tool for saving complete web pages
 
     #人工知能 
