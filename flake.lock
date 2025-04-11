@@ -355,11 +355,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1739718126,
-        "narHash": "sha256-lZfcBDnJPoS6V4d6z/bEplqC+LiKxcJrFM/kizLC9uw=",
+        "lastModified": 1744341953,
+        "narHash": "sha256-82alsqKPW4bxoPhnBLW8rGTmf+cvV+Zv/v1qMV7W7jk=",
         "owner": "shinzui",
         "repo": "fonts",
-        "rev": "9346a0630fe51755b7c5e9f0fde654f7d50c48f4",
+        "rev": "70729c94d38c0bc8d9ef207bdf5fbab3283544b2",
         "type": "github"
       },
       "original": {
