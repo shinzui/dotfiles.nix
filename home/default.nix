@@ -176,6 +176,7 @@ in
     nodePackages.pnpm
     lazygit
     # duckdb
+    devenv
     
     #record cli session
     asciinema
