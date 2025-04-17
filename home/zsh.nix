@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, age, ... }:
 
 let
   home = config.home.homeDirectory;
@@ -22,6 +22,11 @@ in
     NAVI_CONFIG = "/Users/shinzui/Library/Application Support/navi/config.yaml";
     PATH="$HOME/.npm-global/bin:$PATH";
   };
+
+  # Load OpenAI API key from the agenix secret
+  programs.zsh.initExtraFirst = ''
+    export OPENAI_API_KEY=$(cat ${age.secrets.openapi_secret.path})
+  '';
 
   programs.zsh.initExtra = ''
     ZVM_INIT_MODE=sourcing
