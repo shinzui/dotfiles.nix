@@ -78,6 +78,7 @@ in
     gitsigns-nvim
     pkgs.vimExtraPlugins.trouble-nvim
     pkgs.vimExtraPlugins.nvim-lint
+    pkgs.vimExtraPlugins.conform-nvim
     (pluginWithDeps telescope-nvim [ nvim-web-devicons ])
     lualine-nvim
     # (pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
