@@ -136,6 +136,7 @@ in
     sesh
     pandoc
     glow #cli markdown viewer
+    presenterm #markdown terminal slideshow tool
     # monolith # CLI tool for saving complete web pages
 
     #人工知能 
