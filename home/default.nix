@@ -227,6 +227,7 @@ in
     argocd
     argocd-autopilot
     stern
+    kubetail
 
     ## Language servers
     haskell-language-server
