@@ -149,7 +149,6 @@ in
 
     #desktop apps
     element-desktop
-    shortcat
 
     # Dev packages
     angle-grinder #Fast log processor
