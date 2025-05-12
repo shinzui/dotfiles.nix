@@ -1,7 +1,6 @@
---nvim-lspconfig.lua
---Configure LSPs
---https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
---
+-- nvim-lspconfig.lua
+-- Configure LSPs using Neovim's built-in LSP client (for Neovim 0.11+)
+
 vim.cmd "packadd nvim-lspconfig"
 vim.cmd "packadd cmp-nvim-lsp"
 vim.cmd "packadd vim-rescript"
@@ -12,7 +11,7 @@ local lua_ls_opts = require("shinzui.lsp.lua_ls")
 local nil_ls_opts = require("shinzui.lsp.nil_ls")
 local nls_opts = require("shinzui.lsp.nls")
 
--- plugin which adds support for twoslash queries into typescript projects
+-- Plugin which adds support for twoslash queries into typescript projects
 -- https://github.com/marilari88/twoslash-queries.nvim
 vim.cmd "packadd twoslash-queries-nvim"
 
@@ -21,58 +20,7 @@ require("twoslash-queries").setup({
   highlight = "Type"
 })
 
-local lspconf = require "lspconfig"
-local configs = require "lspconfig.configs"
-local util = require "lspconfig.util"
-
-if not configs.rescript_relay_lsp then
-  configs.rescript_relay_lsp = {
-    default_config = {
-      cmd = { "npx", "rescript-relay-compiler", "lsp" },
-      filetypes = {
-        "rescript",
-      },
-      root_dir = util.root_pattern "relay.config.js",
-    },
-    settings = {},
-  }
-end
-
-
---Add support for ls_emmet since emmet_ls is broken
-if not configs.ls_emmet then
-  configs.ls_emmet = {
-    default_config = {
-      cmd = { "ls_emmet", "--stdio" },
-      filetypes = {
-        "html",
-        "css",
-        "scss",
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "haml",
-        "xml",
-        "xsl",
-        "pug",
-        "slim",
-        "sass",
-        "stylus",
-        "less",
-        "sss",
-        "hbs",
-        "handlebars",
-      },
-      root_dir = function(fname)
-        return vim.loop.cwd()
-      end,
-      settings = {},
-    },
-  }
-end
-
--- Copied from LunarVim
+-- Copied from LunarVim - Setup code lens for LSP clients that support it
 local function setup_code_lens(client, bufnr)
   local status_ok, codelens_supported = pcall(function()
     return client.supports_method "textDocument/codeLens"
@@ -101,6 +49,7 @@ local function setup_code_lens(client, bufnr)
   })
 end
 
+-- On-attach function for LSP clients
 local function on_attach(client, bufnr)
   local function cmd(mode, key, luacmd)
     vim.api.nvim_buf_set_keymap(bufnr, mode, key, "<cmd>lua " .. luacmd .. "<CR>", { noremap = true })
@@ -121,74 +70,117 @@ local function on_attach(client, bufnr)
     cmd("n", "gt", "vim.lsp.buf.signature_help()")
   end
   setup_code_lens(client, bufnr)
-
 end
 
+-- Default capabilities for all LSP clients
+local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-local default_lsp_opts = {
+-- Global default configuration for all LSP clients
+vim.lsp.config('*', {
   on_attach = on_attach,
-  capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
-}
+  capabilities = capabilities,
+  -- Common root markers for all LSP clients
+  root_markers = { '.git', '.hg' },
+})
 
+-- Configure specific language servers
+-- Relay LSP for Rescript
+vim.lsp.config('rescript_relay_lsp', {
+  cmd = { "npx", "rescript-relay-compiler", "lsp" },
+  filetypes = { "rescript" },
+  root_dir = function(_, on_dir)
+    on_dir(vim.fn.getcwd(), { "relay.config.js" }) 
+  end,
+})
 
-local lsps = {
-  hls = hls_opts,
-  jsonls = json_opts,
-  ls_emmet = {},
-  dhall_lsp_server = {},
-  graphql = {},
-  ts_ls = {
-    on_attach = function(client, bufnr)
-      client.server_capabilities.documentFormattingProvider = false
-
-      require("twoslash-queries").attach(client, bufnr)
-
-      default_lsp_opts.on_attach(client, bufnr)
-    end
+-- ls_emmet support
+vim.lsp.config('ls_emmet', {
+  cmd = { "ls_emmet", "--stdio" },
+  filetypes = {
+    "html", "css", "scss", "javascript", "javascriptreact", 
+    "typescript", "typescriptreact", "haml", "xml", "xsl", 
+    "pug", "slim", "sass", "stylus", "less", "sss", 
+    "hbs", "handlebars",
   },
-  terraformls = {},
-  tailwindcss = {},
-  nil_ls = nil_ls_opts,
-  nickel_ls = nls_opts,
-  yamlls = {
-    settings = {
-      yaml = {
-        format = {
-          printWidth = 100,
-          singleQuote = true,
-        },
-        keyOrdering = false,
-        -- schemas = {
-        --   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-        -- },
+  root_dir = function(_, on_dir)
+    on_dir(vim.fn.getcwd())
+  end,
+})
+
+-- Configure TypeScript LSP with custom on_attach
+vim.lsp.config('ts_ls', {
+  on_attach = function(client, bufnr)
+    client.server_capabilities.documentFormattingProvider = false
+    require("twoslash-queries").attach(client, bufnr)
+    on_attach(client, bufnr)
+  end,
+})
+
+-- Configure YAML LSP with custom on_attach
+vim.lsp.config('yamlls', {
+  settings = {
+    yaml = {
+      format = {
+        printWidth = 100,
+        singleQuote = true,
       },
+      keyOrdering = false,
     },
-    on_attach = function(client, bufnr)
-      default_lsp_opts.on_attach(client, bufnr)
-      -- disable and reset diagnostics for helm files
-      if vim.bo[bufnr].buftype ~= "" or vim.bo[bufnr].filetype == "helm" then
-        vim.diagnostic.disable(bufnr)
-        vim.defer_fn(function()
-          vim.diagnostic.reset(nil, bufnr)
-        end, 1000)
-      end
+  },
+  on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+    -- Disable and reset diagnostics for helm files
+    if vim.bo[bufnr].buftype ~= "" or vim.bo[bufnr].filetype == "helm" then
+      vim.diagnostic.disable(bufnr)
+      vim.defer_fn(function()
+        vim.diagnostic.reset(nil, bufnr)
+      end, 1000)
     end
-  },
-  rescriptls = {
-    -- TODO: Figure out a better way to do this
-    cmd = { "node", vim.api.nvim_get_var "rescript_lsp_path", "--stdio" },
-  },
-  rescript_relay_lsp = {},
-  -- Legacy deprecated ocaml lsp
-  ocamlls = {
-    filetypes = { "reason" },
-  },
-  ocamllsp = {
-    filetypes = { "ocaml", "ocaml.menhir", "ocaml.interface", "ocaml.ocamllex" },
-  },
-  lua_ls = lua_ls_opts,
+  end,
+})
+
+-- Configure Rescript LSP
+vim.lsp.config('rescriptls', {
+  cmd = { "node", vim.api.nvim_get_var "rescript_lsp_path", "--stdio" },
+})
+
+-- Legacy deprecated ocaml lsp
+vim.lsp.config('ocamlls', {
+  filetypes = { "reason" },
+})
+
+vim.lsp.config('ocamllsp', {
+  filetypes = { "ocaml", "ocaml.menhir", "ocaml.interface", "ocaml.ocamllex" },
+})
+
+-- Configure language servers with custom options
+vim.lsp.config('hls', hls_opts)
+vim.lsp.config('jsonls', json_opts)
+vim.lsp.config('lua_ls', lua_ls_opts)
+vim.lsp.config('nil_ls', nil_ls_opts)
+vim.lsp.config('nickel_ls', nls_opts)
+
+-- Enable LSP clients
+local lsp_servers = {
+  'hls',
+  'jsonls',
+  'ls_emmet',
+  'dhall_lsp_server',
+  'graphql',
+  'ts_ls',
+  'terraformls',
+  'tailwindcss',
+  'nil_ls',
+  'nickel_ls',
+  'yamlls',
+  'rescriptls',
+  'rescript_relay_lsp',
+  'ocamlls',
+  'ocamllsp',
+  'lua_ls',
 }
 
-for lsp, lsp_opts in pairs(lsps) do
-  lspconf[lsp].setup(vim.tbl_extend("force", default_lsp_opts, lsp_opts))
+-- Enable all configured language servers
+for _, lsp in ipairs(lsp_servers) do
+  vim.lsp.enable(lsp)
 end
