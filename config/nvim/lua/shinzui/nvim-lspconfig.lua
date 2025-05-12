@@ -84,6 +84,7 @@ vim.lsp.config('*', {
 })
 
 -- Configure specific language servers
+
 -- Relay LSP for Rescript
 vim.lsp.config('rescript_relay_lsp', {
   cmd = { "npx", "rescript-relay-compiler", "lsp" },
@@ -153,6 +154,10 @@ vim.lsp.config('ocamllsp', {
   filetypes = { "ocaml", "ocaml.menhir", "ocaml.interface", "ocaml.ocamllex" },
 })
 
+vim.lsp.config('relay_lsp', {
+  cmd = { "bunx", "relay-compiler", "lsp"}
+})
+
 -- Configure language servers with custom options
 vim.lsp.config('hls', hls_opts)
 vim.lsp.config('jsonls', json_opts)
@@ -178,6 +183,7 @@ local lsp_servers = {
   'ocamlls',
   'ocamllsp',
   'lua_ls',
+  'relay_lsp'
 }
 
 -- Enable all configured language servers
