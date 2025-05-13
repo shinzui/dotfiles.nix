@@ -31,6 +31,7 @@
     extraConfig = {
       alias = {
         dft = "difftool";
+        fpush = "push --force-with-lease";
       };
       credential.helper =
         if pkgs.stdenvNoCC.isDarwin then
@@ -73,6 +74,9 @@
         difftastic = {
           cmd = ''difft "$LOCAL" "$REMOTE"'';
         };
+      };
+      branch = {
+        sort = "-committerdate";
       };
       
 
