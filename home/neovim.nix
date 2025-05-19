@@ -90,7 +90,7 @@ in
     toggleterm-nvim
     nvim-hlslens
     symbols-outline-nvim
-    # pkgs.vimExtraPlugins.neogit
+    pkgs.vimExtraPlugins.neogit
     nvim-ts-autotag
     octo-nvim
     (pluginWithDeps diffview-nvim [ nvim-web-devicons ])
