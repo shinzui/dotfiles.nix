@@ -1,6 +1,7 @@
 { config, pkgs, nixpkgs-unstable, lib, ... }:
 
 {
+  system.primaryUser = "shinzui";
   ##################
   # Nix configuration
   ##################
