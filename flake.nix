@@ -154,6 +154,9 @@
           cai = final.callPackage (self + "/derivations/cai.nix") {
             inherit (final) lib rustPlatform fetchFromGitHub;
           };
+          tmuxai = final.callPackage (self + "/derivations/tmuxai.nix") {
+            inherit (final) lib buildGoModule fetchFromGitHub tmux;
+          };
         };
 
         pkgs-master = final: prev: {
@@ -241,6 +244,11 @@
     in
     {
       devShell = import ./shell.nix { inherit pkgs system agenix; };
+      
+      packages = {
+        tmuxai = pkgs.tmuxai;
+        cai = pkgs.cai;
+      };
     });
 }
 # vim: foldmethod=marker

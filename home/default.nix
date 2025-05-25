@@ -146,6 +146,7 @@ in
     claude-code
     llm
     goose-cli
+    tmuxai
 
     #desktop apps
     element-desktop
