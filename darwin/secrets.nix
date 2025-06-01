@@ -61,5 +61,11 @@
       mode = "600";
       owner = "shinzui";
     };
+    tmuxai-conf = {
+      file = ../secrets/tmuxai.config.yaml.age;
+      path = "/Users/shinzui/.config/tmuxai/config.yaml";
+      mode = "600";
+      owner = "shinzui";
+    };
   };
 }

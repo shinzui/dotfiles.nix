@@ -14,4 +14,5 @@ in
   "pgpass.age".publicKeys = shinzuiAtSungkyung;
   "aider.conf.yml.age".publicKeys = shinzuiAtSungkyung;
   "llm-keys.json.age".publicKeys = shinzuiAtSungkyung;
+  "tmuxai.config.yaml.age".publicKeys = shinzuiAtSungkyung;
 }
