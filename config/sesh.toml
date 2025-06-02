@@ -1,0 +1,12 @@
+[[session]]
+name = "kawa 川"
+path = "~/Keikaku/bokuno/kawa"
+windows = [ "frontend", "graphql-server"]
+
+[[window]]
+name = "frontend"
+path = "~/Keikaku/bokuno/kawa/kawa-frontend/"
+
+[[window]]
+name = "graphql-server"
+path = "~/Keikaku/bokuno/kawa/kawa-api-gateway/"
