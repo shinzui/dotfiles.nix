@@ -22,16 +22,20 @@
       set -g detach-on-destroy off  # don't exit from tmux when closing a session
       set -gu default-command
       set -g default-shell "$SHELL"
-      bind-key "T" run-shell "sesh connect $(
-        sesh list -tz | fzf-tmux -p 55%,60% \
-          --no-sort --border-label ' sesh ' --prompt '⚡  ' \
-          --header '  ^a all ^t tmux ^x zoxide ^f find' \
+      bind-key "T" run-shell "sesh connect \"$(
+        sesh list --icons | fzf-tmux -p 80%,70% \
+          --no-sort --ansi --border-label ' sesh ' --prompt '⚡  ' \
+          --header '  ^a all ^t tmux ^g configs ^x zoxide ^d tmux kill ^f find' \
           --bind 'tab:down,btab:up' \
-          --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list)' \
-          --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t)' \
-          --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z)' \
-          --bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .Trash . ~)'
-      )"
+          --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list --icons)' \
+          --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t --icons)' \
+          --bind 'ctrl-g:change-prompt(⚙️  )+reload(sesh list -c --icons)' \
+          --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z --icons)' \
+          --bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .Trash . ~)' \
+          --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list --icons)' \
+          --preview-window 'right:55%' \
+          --preview 'sesh preview {}'
+      )\""
     '';
 
     plugins = with pkgs; [
