@@ -150,6 +150,9 @@
       overlays = {
         nix-neovimplugins = nix-neovimplugins.overlays.default;
 
+        # Overlay to use master version of sesh
+        sesh = import ./overlays/sesh.nix;
+
         my-packages = final: prev: {
           cai = final.callPackage (self + "/derivations/cai.nix") {
             inherit (final) lib rustPlatform fetchFromGitHub;
@@ -177,7 +180,7 @@
           pkgs-unstable = import inputs.nixpkgs-unstable {
             inherit (prev.stdenv) system;
             inherit (nixpkgsConfig) config;
-            overlays = [ ];
+            overlays = [self.overlays.sesh ];
           };
           hackage-diff = inputs.hackage-diff.packages.${prev.stdenv.system}.default;
         };
@@ -237,6 +240,7 @@
           pkgs-stable
           apple-silicon
           my-packages
+          sesh
         ];
       };
       pkgs = legacyPackages;
