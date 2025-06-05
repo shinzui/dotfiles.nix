@@ -28,6 +28,7 @@ in
     ./navi.nix
     ./btop.nix
     ./cachix.nix
+    ./pay-respects.nix
     ./external-configs.nix
   ];
 
