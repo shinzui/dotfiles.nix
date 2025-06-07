@@ -134,7 +134,9 @@ in
     jujutsu # git-compatible VCS
     _1password-cli #1password cli
     duti # select default apps for file types
-    sesh
+    sesh # smart session manager for tmux
+    tmuxp # tmux session manager
+
     pandoc
     glow #cli markdown viewer
     presenterm #markdown terminal slideshow tool
