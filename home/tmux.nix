@@ -48,6 +48,7 @@
       tmuxPlugins.sessionist #Lightweight tmux utils for manipulating sessions
       tmuxPlugins.nord #Nord tmux color theme
       tmuxPlugins.tmux-fzf #Use fzf to manage your tmux work environment!
+      tmuxPlugins.extrakto #extract text without using mouse 
     ];
   };
 }
