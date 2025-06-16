@@ -88,6 +88,9 @@ in
 
     ###markdown
     viewMd = "glow -p -w 200";
+
+    ###claude-code
+    danegerous-claude = "SHELL=zsh claude --dangerously-skip-permissions";
   };
 }
 
