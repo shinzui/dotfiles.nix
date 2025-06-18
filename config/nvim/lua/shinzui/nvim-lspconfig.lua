@@ -158,6 +158,10 @@ vim.lsp.config('relay_lsp', {
   cmd = { "bunx", "relay-compiler", "lsp"}
 })
 
+vim.lsp.config('oxlint', {
+  cmd = { "bunx", "oxc_language_server" }
+})
+
 -- Configure language servers with custom options
 vim.lsp.config('hls', hls_opts)
 vim.lsp.config('jsonls', json_opts)
@@ -183,7 +187,8 @@ local lsp_servers = {
   'ocamlls',
   'ocamllsp',
   'lua_ls',
-  'relay_lsp'
+  'relay_lsp',
+  'oxlint'
 }
 
 -- Enable all configured language servers
