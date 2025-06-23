@@ -10,14 +10,6 @@
     KeyRepeat = 2;
   };
 
-  # Firewall
-  system.defaults.alf = {
-    globalstate = 0;
-    allowsignedenabled = 1;
-    allowdownloadsignedenabled = 1;
-    stealthenabled = 1;
-  };
-
   # Dock and Mission Control
   system.defaults.dock = {
     autohide = true;
@@ -31,6 +23,8 @@
     wvous-tl-corner = 1;
     wvous-tr-corner = 1;
   };
+
+  networking.applicationFirewall.allowSignedApp = true;
 
 
   system.defaults.loginwindow = {
