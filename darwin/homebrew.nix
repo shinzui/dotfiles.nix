@@ -19,6 +19,8 @@ in
   homebrew.onActivation.cleanup = "zap";
   homebrew.global.brewfile = true;
   homebrew.global.lockfiles = false;
+  #https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-homebrew.caskArgs.no_quarantine
+  homebrew.caskArgs.no_quarantine = true;
 
   homebrew.brews = [
     "pam-reattach"
@@ -61,6 +63,7 @@ in
     "microsoft-teams"
     "anki"
     "insomnia"
+    "min"
     # "raycast"
     #TODO fixme by moving conflicting apps
     #"google-chrome"
