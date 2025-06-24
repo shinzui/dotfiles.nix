@@ -98,6 +98,7 @@ in
     moreutils #collection of unix tools
     du-dust #Fancy `du` https://github.com/bootandy/dust
     eza #fancy `ls`
+    lstr # tree viewer
     fdupes # find & delete duplicate files
     difftastic # syntax-aware diff tool
     dogdns # dns client
