@@ -4,5 +4,4 @@
   home.file."${config.xdg.configHome}/pspg/pspgconf".source=../config/pspg/pspgconf;
   home.file."${config.xdg.configHome}/pspg/.pspg_theme_onenord".source=../config/pspg/pspg_theme_onenord;
   home.file."${config.xdg.configHome}/pgcli/config".source=../config/pgcli;
-  home.file."${config.xdg.configHome}/sesh/sesh.toml".source=../config/sesh.toml;
 }

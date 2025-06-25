@@ -67,5 +67,11 @@
       mode = "600";
       owner = "shinzui";
     };
+    sesh_config = {
+      file = ../secrets/sesh.toml.age;
+      path = "/Users/shinzui/.config/sesh.toml";
+      mode = "600";
+      owner = "shinzui";
+    };
   };
 }
