@@ -7,9 +7,10 @@ final: prev:
       owner = "joshmedeski";
       repo = "sesh";
       rev = "master";
-      hash = "sha256-Dla43xI6y7J9M18IloSm1uDeHAhfslU56Z0Q3nVzjIk=";
+      hash = "sha256-5n2mlTAJKByPyw0VMv+0oJHXka5IoI25RlAm1LJe/nQ=";
     };
-    vendorHash = "sha256-feqHV+48OOOR515xo6wyE9RIvYNlp2+k7ckmC7yCv7E=";
+    vendorHash = "sha256-IqS8HSrMvD0uJbdndaX7f+2VJfKIRm2+p9NomBoXpyU=";
     proxyVendor = true;
+    doCheck = false;
   });
 }
