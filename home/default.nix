@@ -114,6 +114,7 @@ in
     pspg #pager for psql
     jacinda # functional data processing
     ast-grep 
+    hwatch
 
     retry #https://github.com/minfrin/retry
     gnused
