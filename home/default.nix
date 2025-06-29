@@ -171,7 +171,7 @@ in
     hadolint #dockerfile linter
     sops
     just
-    postgresql_14
+    postgresql_17
     treefmt
     pgformatter
     pgcli
