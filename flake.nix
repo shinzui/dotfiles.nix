@@ -153,6 +153,9 @@
         # Overlay to use master version of sesh
         sesh = import ./overlays/sesh.nix;
 
+        # Fix tmux-extrakto to not pull in Linux-only dependencies on Darwin
+        tmux-extrakto-darwin-fix = import ./overlays/tmux-extrakto-darwin-fix.nix;
+
         my-packages = final: prev: {
           cai = final.callPackage (self + "/derivations/cai.nix") {
             inherit (final) lib rustPlatform fetchFromGitHub;
