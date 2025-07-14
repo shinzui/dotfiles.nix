@@ -24,15 +24,16 @@ in
   };
 
   # Load OpenAI API key from the agenix secret
-  programs.zsh.initExtraFirst = ''
-    export OPENAI_API_KEY=$(cat ${age.secrets.openapi_secret.path})
-  '';
-
-  programs.zsh.initExtra = ''
-    ZVM_INIT_MODE=sourcing
-    source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-    unset ZVM_INIT_MODE
-  '';
+  programs.zsh.initContent = lib.mkMerge [
+    (lib.mkBefore ''
+      export OPENAI_API_KEY=$(cat ${age.secrets.openapi_secret.path})
+    '')
+    (lib.mkAfter ''
+      ZVM_INIT_MODE=sourcing
+      source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+      unset ZVM_INIT_MODE
+    '')
+  ];
 
   programs.zsh.shellAliases = with pkgs; {
     #general 
