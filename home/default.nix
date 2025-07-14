@@ -115,6 +115,7 @@ in
     jacinda # functional data processing
     ast-grep 
     hwatch
+    biff
 
     retry #https://github.com/minfrin/retry
     gnused
