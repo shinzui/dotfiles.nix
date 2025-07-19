@@ -29,6 +29,7 @@ in
     ./btop.nix
     ./cachix.nix
     ./pay-respects.nix
+    ./carapace.nix
     ./external-configs.nix
   ];
 
