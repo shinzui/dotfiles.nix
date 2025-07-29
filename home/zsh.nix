@@ -28,6 +28,8 @@ in
     export OPENAI_API_KEY=$(cat ${age.secrets.openapi_secret.path})
   '';
 
+  # Configure zsh-vi-mode plugin for Vim keybindings in the shell
+  # ZVM_INIT_MODE=sourcing prevents automatic key binding during initialization
   programs.zsh.initExtra = ''
     ZVM_INIT_MODE=sourcing
     source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
