@@ -236,6 +236,7 @@ in
     argocd-autopilot
     stern
     kubetail
+    kubefwd
 
     ## Language servers
     haskell-language-server

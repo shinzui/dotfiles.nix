@@ -24,7 +24,6 @@ in
 
   homebrew.brews = [
     "pam-reattach"
-    "kubefwd"
     "tidy-html5"
     "xq"
     "duckdb"
