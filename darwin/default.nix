@@ -34,4 +34,9 @@
   # Keyboard
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;
+
+  # Sudoers configuration for kubefwd
+  security.sudo.extraConfig = ''
+    shinzui ALL=(ALL) NOPASSWD: /Users/shinzui/.nix-profile/bin/kubefwd 
+  '';
 }
