@@ -63,7 +63,6 @@ in
     "anki"
     "insomnia"
     "min"
-    "voiceink"
     # "raycast"
     #TODO fixme by moving conflicting apps
     #"google-chrome"
