@@ -150,9 +150,6 @@
       overlays = {
         nix-neovimplugins = nix-neovimplugins.overlays.default;
 
-        # Overlay to use master version of sesh
-        sesh = import ./overlays/sesh.nix;
-
         # Fix tmux-extrakto to not pull in Linux-only dependencies on Darwin
         tmux-extrakto-darwin-fix = import ./overlays/tmux-extrakto-darwin-fix.nix;
 
@@ -186,7 +183,6 @@
           pkgs-unstable = import inputs.nixpkgs-unstable {
             inherit (prev.stdenv) system;
             inherit (nixpkgsConfig) config;
-            overlays = [self.overlays.sesh ];
           };
           hackage-diff = inputs.hackage-diff.packages.${prev.stdenv.system}.default;
         };
