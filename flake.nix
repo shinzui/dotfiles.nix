@@ -155,6 +155,9 @@
 
         # Pin harlequin to avoid broken textual dependency
         harlequin-pin = import ./overlays/harlequin-pin.nix;
+        
+        # Fix pgspecial to avoid broken postgresql-test-hook dependency (named to apply early)
+        aaa-fix-pgspecial = import ./overlays/fix-pgspecial.nix;
 
         my-packages = final: prev: {
           cai = final.callPackage (self + "/derivations/cai.nix") {
