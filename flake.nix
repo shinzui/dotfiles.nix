@@ -245,7 +245,6 @@
           pkgs-stable
           apple-silicon
           my-packages
-          sesh
         ];
       };
       pkgs = legacyPackages;
