@@ -31,6 +31,7 @@ in
     ./pay-respects.nix
     ./carapace.nix
     ./external-configs.nix
+    ./television.nix
   ];
 
 
