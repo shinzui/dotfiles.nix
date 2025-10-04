@@ -32,6 +32,7 @@ in
     ./carapace.nix
     ./external-configs.nix
     ./television.nix
+    ./nix-search-tv.nix
   ];
 
 
