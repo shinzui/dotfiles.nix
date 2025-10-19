@@ -91,9 +91,9 @@ in
     bandwhich #bandwidth utilization tool
     bottom #Fancy `top`
     #coreutils
-    curl 
+    curl
     # curl-impersonate
-    trurl # url parsing & manipulation
+    (trurl.overrideAttrs (oldAttrs: { doCheck = false; })) # url parsing & manipulation (tests disabled)
     hurl #run & test http requests
     httpstat # output curl statistics 
     lychee #link checker
@@ -164,7 +164,7 @@ in
     angle-grinder #Fast log processor
     git-extras
     git-absorb
-    gitui #terminal git UI written in rust
+    # gitui #terminal git UI written in rust (disabled due to build failures on ARM64)
     zsh-forgit #zsh plugin to load forgit via `git forgit`
     (google-cloud-sdk.withExtraComponents ([ google-cloud-sdk.components.gke-gcloud-auth-plugin google-cloud-sdk.components.alpha google-cloud-sdk.components.beta ]))
     google-cloud-sql-proxy
