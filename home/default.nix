@@ -119,6 +119,7 @@ in
     ast-grep 
     hwatch
     biff
+    ffmpeg
 
     retry #https://github.com/minfrin/retry
     gnused
