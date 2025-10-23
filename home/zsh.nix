@@ -39,6 +39,7 @@ in
   programs.zsh.shellAliases = with pkgs; {
     #general 
     ".." = "cd ..";
+    cpcwd = "pwd | pbcopy";
 
     #common cli aliases
     v = "nvim";
