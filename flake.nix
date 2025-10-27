@@ -166,6 +166,9 @@
           tmuxai = final.callPackage (self + "/derivations/tmuxai.nix") {
             inherit (final) lib buildGoModule fetchFromGitHub tmux;
           };
+          oq = final.callPackage (self + "/derivations/oq.nix") {
+            inherit (final) lib buildGoModule fetchFromGitHub;
+          };
         };
 
         pkgs-master = final: prev: {
@@ -256,6 +259,7 @@
       packages = {
         tmuxai = pkgs.tmuxai;
         cai = pkgs.cai;
+        oq = pkgs.oq;
       };
     });
 }

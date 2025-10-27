@@ -163,6 +163,7 @@ in
 
     # Dev packages
     angle-grinder #Fast log processor
+    oq #OpenAPI spec viewer
     git-extras
     git-absorb
     # gitui #terminal git UI written in rust (disabled due to build failures on ARM64)
