@@ -70,7 +70,7 @@ in
 
     #modern cli tools 
     cat = "${bat}/bin/bat";
-    du = "${du-dust}/bin/dust";
+    du = "${dust}/bin/dust";
     ls = "${eza}/bin/eza";
     ll = "ls -l --time-style long-iso --icons";
     lsa = "ll -a";
