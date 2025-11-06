@@ -95,6 +95,8 @@ in
     # curl-impersonate
     (trurl.overrideAttrs (oldAttrs: { doCheck = false; })) # url parsing & manipulation (tests disabled)
     hurl #run & test http requests
+    openapi-tui #OpenAPI TUI
+    oq #OpenAPI spec viewer
     httpstat # output curl statistics 
     lychee #link checker
     dateutils
@@ -163,7 +165,6 @@ in
 
     # Dev packages
     angle-grinder #Fast log processor
-    oq #OpenAPI spec viewer
     git-extras
     git-absorb
     # gitui #terminal git UI written in rust (disabled due to build failures on ARM64)
