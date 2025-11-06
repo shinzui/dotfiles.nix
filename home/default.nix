@@ -111,6 +111,7 @@ in
     hyperfine #benchmarking
     xh #xh http tool
     k6 # load testing tool
+    trippy # network dianostic tool
     fd #fancy `find`
     miller #like awk, sed, cut, join, and sort for CSV and tabular JSON
     procs #fancy `ps`
