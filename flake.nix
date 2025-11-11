@@ -173,24 +173,24 @@
 
         pkgs-master = final: prev: {
           pkgs-master = import inputs.nixpkgs {
-            inherit (prev.stdenv) system;
+            system = prev.stdenv.hostPlatform.system;
             inherit (nixpkgsConfig) config;
           };
         };
 
         pkgs-stable = final: prev: {
           pkgs-stable = import inputs.nixpkgs-stable {
-            inherit (prev.stdenv) system;
+            system = prev.stdenv.hostPlatform.system;
             inherit (nixpkgsConfig) config;
           };
         };
 
         pkgs-unstable = final: prev: {
           pkgs-unstable = import inputs.nixpkgs-unstable {
-            inherit (prev.stdenv) system;
+            system = prev.stdenv.hostPlatform.system;
             inherit (nixpkgsConfig) config;
           };
-          hackage-diff = inputs.hackage-diff.packages.${prev.stdenv.system}.default;
+          hackage-diff = inputs.hackage-diff.packages.${prev.stdenv.hostPlatform.system}.default;
         };
 
         # Overlay that adds various additional utility functions to `vimUtils`
@@ -213,7 +213,7 @@
           };
 
         # Overlay useful on Macs with Apple Silicon
-        apple-silicon = final: prev: optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
+        apple-silicon = final: prev: optionalAttrs (prev.stdenv.hostPlatform.system == "aarch64-darwin") {
           # Add access to x86 packages system is running Apple Silicon
           pkgs-x86 = import inputs.nixpkgs-unstable {
             system = "x86_64-darwin";
