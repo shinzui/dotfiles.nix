@@ -7,16 +7,6 @@
   programs.git.enable = true;
 
   programs.git = {
-    userEmail = "nadeem@gmail.com";
-    userName = "Nadeem Bitar";
-
-    delta = {
-      enable = true;
-      options = {
-        dark = true;
-        syntax-theme = "Nord";
-      };
-    };
     lfs.enable = true;
 
     includes = [
@@ -28,7 +18,11 @@
       }
     ];
 
-    extraConfig = {
+    settings = {
+      user = {
+        email = "nadeem@gmail.com";
+        name = "Nadeem Bitar";
+      };
       alias = {
         dft = "difftool";
         fpush = "push --force-with-lease";
@@ -105,6 +99,16 @@
       ".vim-bookmarks"
       ".devenv/"
     ];
+  };
+
+  # Delta
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      dark = true;
+      syntax-theme = "Nord";
+    };
   };
 
   # GitHub CLI

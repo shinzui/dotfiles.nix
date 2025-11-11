@@ -1,5 +1,5 @@
 {
-  programs.git.aliases = {
+  programs.git.settings.alias = {
     # Basic commands
     st = "status -sb";
     dc = "diff --cached";
