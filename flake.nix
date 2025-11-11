@@ -160,9 +160,6 @@
         aaa-fix-pgspecial = import ./overlays/fix-pgspecial.nix;
 
         my-packages = final: prev: {
-          cai = final.callPackage (self + "/derivations/cai.nix") {
-            inherit (final) lib rustPlatform fetchFromGitHub;
-          };
           tmuxai = final.callPackage (self + "/derivations/tmuxai.nix") {
             inherit (final) lib buildGoModule fetchFromGitHub tmux;
           };
@@ -258,7 +255,6 @@
       
       packages = {
         tmuxai = pkgs.tmuxai;
-        cai = pkgs.cai;
         oq = pkgs.oq;
       };
     });

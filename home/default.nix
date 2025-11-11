@@ -152,8 +152,7 @@ in
     presenterm #markdown terminal slideshow tool
     # monolith # CLI tool for saving complete web pages
 
-    #人工知能 
-    cai
+    #人工知能
     # aider-chat.withPlaywright #AI pair programming
     repomix
     claude-code

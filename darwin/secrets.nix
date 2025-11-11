@@ -37,12 +37,6 @@
       mode = "700";
       owner = "shinzui";
     };
-    cai-secrets = {
-      file = ../secrets/cai_secrets.yaml.age;
-      path = "/Users/shinzui/.config/cai/secrets.yaml";
-      mode = "700";
-      owner = "shinzui";
-    };
     pgpass = {
       file = ../secrets/pgpass.age;
       path = "/Users/shinzui/.pgpass";
