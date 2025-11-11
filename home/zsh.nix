@@ -66,7 +66,7 @@ in
     nr = "nix run";
     ns = "nix search";
 
-    formatjson = "f() {jq . $1 | sponge $1};f";
+    formatjson=''_formatjson_impl() { jq . "$1" | sponge "$1"; }; _formatjson_impl'';
 
     #modern cli tools 
     cat = "${bat}/bin/bat";
