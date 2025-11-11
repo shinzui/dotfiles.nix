@@ -1,7 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  myNodePackages = import ../packages/node { pkgs = pkgs; };
+  myNodePackages = import ../packages/node {
+    inherit pkgs;
+    system = pkgs.stdenv.hostPlatform.system;
+  };
   fzfConfig =
     let fd = "${pkgs.fd}/bin/fd"; in
     rec {
