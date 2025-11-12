@@ -6,6 +6,7 @@ vim.cmd "packadd telescope_hoogle"
 vim.cmd "packadd telescope-manix"
 vim.cmd "packadd telescope-live-grep-args.nvim"
 vim.cmd "packadd telescope-undo.nvim"
+vim.cmd "packadd jsonfly.nvim"
 
 local telescope = require "telescope"
 local actions = require "telescope.actions"
@@ -35,3 +36,4 @@ telescope.load_extension('hoogle')
 telescope.load_extension('manix')
 telescope.load_extension('live_grep_args')
 telescope.load_extension('undo')
+telescope.load_extension('jsonfly')

@@ -64,6 +64,7 @@ in
     telescope-manix
     telescope-live-grep-args-nvim
     telescope-undo-nvim
+    jsonfly-nvim
     vim-rescript
     pkgs.vimExtraPlugins.twoslash-queries-nvim
     pkgs.vimExtraPlugins.mini-nvim
