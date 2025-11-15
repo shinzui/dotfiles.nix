@@ -28,6 +28,7 @@ in
     "xq"
     "duckdb"
     "aider"
+    "keyboardSwitcher"
   ];
 
   homebrew.taps = [
@@ -35,6 +36,7 @@ in
     "homebrew/cask-fonts"
     "homebrew/cask-versions"
     "homebrew/services"
+    "lutzifer/homebrew-tap"
     "txn2/tap"
   ];
 
