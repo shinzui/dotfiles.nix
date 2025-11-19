@@ -185,6 +185,7 @@ in
     lazygit
     # duckdb
     devenv
+    uv
     
     #record cli session
     asciinema
