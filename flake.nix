@@ -156,6 +156,9 @@
         # Fix tmux-extrakto to not pull in Linux-only dependencies on Darwin
         tmux-extrakto-darwin-fix = import ./overlays/tmux-extrakto-darwin-fix.nix;
 
+        # Pin harlequin to avoid broken textual dependency
+        harlequin-pin = import ./overlays/harlequin-pin.nix;
+
         my-packages = final: prev: {
           cai = final.callPackage (self + "/derivations/cai.nix") {
             inherit (final) lib rustPlatform fetchFromGitHub;
