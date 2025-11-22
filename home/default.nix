@@ -126,6 +126,7 @@ in
     hwatch
     biff
     ffmpeg
+    exiftool
 
     retry #https://github.com/minfrin/retry
     gnused
