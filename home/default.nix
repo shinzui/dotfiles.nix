@@ -245,6 +245,7 @@ in
     stern
     kubetail
     kubefwd
+    gonzo # log analysis
 
     ## Language servers
     haskell-language-server
