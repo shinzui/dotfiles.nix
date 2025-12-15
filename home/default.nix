@@ -127,6 +127,7 @@ in
     biff
     ffmpeg
     exiftool
+    silicon # Create beautiful image of your source code
 
     retry #https://github.com/minfrin/retry
     gnused
