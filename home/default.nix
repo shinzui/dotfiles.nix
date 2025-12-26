@@ -115,6 +115,7 @@ in
     xh #xh http tool
     k6 # load testing tool
     trippy # network dianostic tool
+    snitch #inspect network connections
     fd #fancy `find`
     miller #like awk, sed, cut, join, and sort for CSV and tabular JSON
     procs #fancy `ps`
