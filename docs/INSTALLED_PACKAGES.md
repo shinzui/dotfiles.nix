@@ -18,6 +18,10 @@ This document provides a comprehensive overview of all packages installed throug
 - [Security & Credentials](#security--credentials)
 - [Desktop Applications](#desktop-applications)
 - [Fonts](#fonts)
+- [Nix-Specific Tools](#nix-specific-tools)
+- [Additional Utilities](#additional-utilities)
+- [Previously Installed](#previously-installed)
+- [Temporarily Removed](#temporarily-removed)
 
 ---
 
@@ -34,6 +38,10 @@ This document provides a comprehensive overview of all packages installed throug
 - **[xh](https://github.com/ducaale/xh)** - Friendly and fast tool for sending HTTP requests
 - **[dogdns](https://github.com/ogham/dog)** - Command-line DNS client like dig
 - **[wget](https://www.gnu.org/software/wget/)** - Network downloader
+- **[openapi-tui](https://github.com/zaghaghi/openapi-tui)** - Terminal UI for browsing OpenAPI specifications
+- **[oq](https://github.com/tui-rs-revival/oq)** - Terminal-based viewer for OpenAPI specifications
+- **[trippy](https://github.com/fujiapple852/trippy)** - Network diagnostic tool combining traceroute and ping
+- **[snitch](https://github.com/evilsocket/snitch)** - Inspect network connections made by processes
 
 ---
 
@@ -67,7 +75,10 @@ This document provides a comprehensive overview of all packages installed throug
 - **[watchman](https://facebook.github.io/watchman/)** - Watches files and records, or triggers actions, when they change
 - **[viddy](https://github.com/sachaos/viddy)** - Modern watch command with time machine and diff highlight
 - **[hwatch](https://github.com/blacknon/hwatch)** - Alternative watch command that records command results
-- **[biff](https://github.com/BurntSushi/biff)** - A command line tool for datetime arithmetic, parsing, formatting 
+- **[biff](https://github.com/BurntSushi/biff)** - A command line tool for datetime arithmetic, parsing, formatting
+- **[ffmpeg](https://ffmpeg.org/)** - Complete solution to record, convert and stream audio and video
+- **[exiftool](https://exiftool.org/)** - Read, write and edit meta information in files
+- **[silicon](https://github.com/Aloxaf/silicon)** - Create beautiful images of your source code 
 
 ### Installed via Homebrew
 
@@ -112,12 +123,15 @@ This document provides a comprehensive overview of all packages installed throug
 - **[devenv](https://devenv.sh/)** - Fast, Declarative, Reproducible, and Composable Developer Environments
 - **[jujutsu](https://github.com/martinvonz/jj)** - Git-compatible distributed version control system
 - **[gh](https://cli.github.com/)** - GitHub's official command line tool
+- **[gh-dash](https://github.com/dlvhdr/gh-dash)** - GitHub CLI extension to display a dashboard of PRs and issues
 - **[git](https://git-scm.com/)** - Distributed version control system
 - **[delta](https://github.com/dandavison/delta)** - Syntax-highlighting pager for git, diff, and grep output
+- **[uv](https://github.com/astral-sh/uv)** - Extremely fast Python package installer and resolver
 
 ### Installed via Homebrew
 
 - **[aider](https://aider.chat/)** - AI pair programming in your terminal
+- **[keyboardSwitcher](https://github.com/Lutzifer/keyboardSwitcher)** - Command line tool to switch keyboard layouts on macOS
 
 ---
 
@@ -201,10 +215,8 @@ This document provides a comprehensive overview of all packages installed throug
 - **[argocd-autopilot](https://github.com/argoproj-labs/argocd-autopilot)** - Opinionated way of installing Argo CD and managing GitOps repositories
 - **[stern](https://github.com/stern/stern)** - Multi pod and container log tailing for Kubernetes
 - **[kubetail](https://github.com/johanhaleby/kubetail)** - Bash script to tail Kubernetes logs from multiple pods
-
-### Installed via Homebrew
-
 - **[kubefwd](https://github.com/txn2/kubefwd)** - Bulk port forwarding Kubernetes services
+- **[gonzo](https://github.com/kscarlett/gonzo)** - Log analysis tool for Kubernetes
 
 ---
 
@@ -223,10 +235,9 @@ This document provides a comprehensive overview of all packages installed throug
 
 ### Installed via Nix (nixpkgs)
 
-- **[cai](https://github.com/seaplane-io/cai)** - CLI tool for prompting LLMs from the command line
 - **[claude-code](https://docs.anthropic.com/en/docs/claude-code)** - Anthropic's official CLI for Claude
 - **[llm](https://llm.datasette.io/)** - CLI utility and Python library for interacting with Large Language Models
-- **[goose](https://github.com/block/goose)** - extensible AI agent 
+- **[goose-cli](https://github.com/block/goose)** - Extensible AI agent for autonomous development
 - **[tmuxai](https://github.com/samueldr/tmuxai)** - AI-powered tmux assistant
 - **[repomix](https://github.com/yamadashy/repomix)** - Pack repository contents into a single file for AI consumption
 
@@ -251,6 +262,9 @@ This document provides a comprehensive overview of all packages installed throug
 - **[tealdeer](https://github.com/dbrgn/tealdeer)** - Fast implementation of tldr in Rust
 - **[wezterm](https://wezfurlong.org/wezterm/)** - GPU-accelerated terminal emulator (terminfo)
 - **[neovim](https://neovim.io/)** - Hyperextensible Vim-based text editor
+- **[television](https://github.com/alexpasmantier/television)** - TV-like fuzzy finder for the terminal
+- **[nix-search-tv](https://github.com/3timeslazy/nix-search-tv)** - Nix package search with television integration
+- **[navi](https://github.com/denisidoro/navi)** - Interactive cheatsheet tool for the command-line
 
 ### Installed via Homebrew (Casks)
 
@@ -334,10 +348,61 @@ This document provides a comprehensive overview of all packages installed throug
 
 ---
 
+## Previously Installed
+
+These packages were previously installed but have been removed from the configuration.
+
+### Removed from Nix
+
+- **[cai](https://github.com/seaplane-io/cai)** - CLI tool for prompting LLMs from the command line
+
+---
+
+## Temporarily Removed
+
+These packages are currently commented out in the configuration and may be re-enabled in the future.
+
+### Nix Packages (Commented Out)
+
+- **coreutils** - GNU core utilities
+- **[curl-impersonate](https://github.com/lwthiker/curl-impersonate)** - curl impersonating Chrome/Firefox
+- **[monolith](https://github.com/Y2Z/monolith)** - CLI tool for saving complete web pages as a single HTML file
+- **[aider-chat](https://aider.chat/)** (withPlaywright) - AI pair programming with browser automation
+- **[gitui](https://github.com/extrawurst/gitui)** - Blazing fast terminal UI for git (disabled due to build failures on ARM64)
+- **graphql-language-service-cli** - GraphQL Language Server
+- **duckdb** (Nix version) - In-process SQL OLAP database (available via Homebrew instead)
+- **[ormolu](https://github.com/tweag/ormolu)** - Haskell source code formatter
+- **[cabal-plan](https://hackage.haskell.org/package/cabal-plan)** - Library for interacting with cabal's plan.json
+- **[cabal-hoogle](https://github.com/phadej/cabal-extras)** - Run hoogle on your cabal project
+- **[ocaml](https://ocaml.org/)** - OCaml programming language
+- **[dune-release](https://github.com/ocamllabs/dune-release)** - Release dune packages to opam
+- **[opam](https://opam.ocaml.org/)** - OCaml package manager
+
+### Homebrew Casks (Commented Out)
+
+- **[raycast](https://raycast.com/)** - Productivity tool and launcher
+- **[google-chrome](https://www.google.com/chrome/)** - Web browser (conflicting apps issue)
+
+### Mac App Store Apps (Disabled)
+
+The entire masApps section is disabled due to continual update issues ([malob/nixpkgs#9](https://github.com/malob/nixpkgs/issues/9)):
+
+- **1Password** - Password manager
+- **Slack** - Team communication platform
+- **Xcode** - Apple development IDE
+- **1Blocker** - Ad blocker for Safari
+
+### Disabled Programs
+
+- **[broot](https://dystroy.org/broot/)** - Interactive tree view file manager (programs.broot.enable = false)
+- **[carapace](https://carapace.sh/)** - Multi-shell completion framework (programs.carapace.enable = false)
+
+---
+
 ## Notes
 
 - **Source**: Packages marked as "Installed via Nix" are installed from nixpkgs
 - **Source**: Packages marked as "Installed via Homebrew" are installed through Homebrew (either as brews or casks)
-- **Custom Derivations**: Some packages like `cai`, `tmuxai`, and fonts are custom derivations or from private flakes
+- **Custom Derivations**: Some packages like `tmuxai`, `oq`, and fonts are custom derivations or from private flakes
 - **Language Servers**: Most language servers are installed to support the Neovim development environment
 - **Terminal Tools**: Heavy emphasis on modern CLI replacements (eza for ls, fd for find, ripgrep for grep, etc.)
