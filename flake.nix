@@ -166,6 +166,9 @@
           oq = final.callPackage (self + "/derivations/oq.nix") {
             inherit (final) lib buildGoModule fetchFromGitHub;
           };
+          uuinfo = final.callPackage (self + "/derivations/uuinfo.nix") {
+            inherit (final) lib rustPlatform fetchFromGitHub;
+          };
         };
 
         pkgs-master = final: prev: {
@@ -256,6 +259,7 @@
       packages = {
         tmuxai = pkgs.tmuxai;
         oq = pkgs.oq;
+        uuinfo = pkgs.uuinfo;
       };
     });
 }
