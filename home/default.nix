@@ -103,6 +103,7 @@ in
     httpstat # output curl statistics 
     lychee #link checker
     dateutils
+    uuinfo #debug unique identifiers (UUID, ULID, Snowflake, etc)
     moreutils #collection of unix tools
     dust #Fancy `du` https://github.com/bootandy/dust
     eza #fancy `ls`
