@@ -169,6 +169,7 @@
           uuinfo = final.callPackage (self + "/derivations/uuinfo.nix") {
             inherit (final) lib rustPlatform fetchFromGitHub;
           };
+          ck = final.callPackage (self + "/derivations/ck.nix") { };
         };
 
         pkgs-master = final: prev: {
@@ -260,6 +261,7 @@
         tmuxai = pkgs.tmuxai;
         oq = pkgs.oq;
         uuinfo = pkgs.uuinfo;
+        ck = pkgs.ck;
       };
     });
 }
