@@ -85,7 +85,7 @@ in
     # (pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
     comment-nvim
     pkgs.vimExtraPlugins.grug-far-nvim
-    hop-nvim
+    leap-nvim
     git-blame-nvim
     toggleterm-nvim
     nvim-hlslens
