@@ -68,7 +68,6 @@ in
     vim-rescript
     pkgs.vimExtraPlugins.twoslash-queries-nvim
     pkgs.vimExtraPlugins.mini-nvim
-    pkgs.vimExtraPlugins.render-markdown-nvim
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-cmp
@@ -101,6 +100,7 @@ in
     pkgs.vimExtraPlugins.direnv-nvim
     (pluginWithDeps neotest [ neotest-haskell nvim-nio ])
     claude-code-nvim
+    (pluginWithDeps markview-nvim [ nvim-web-devicons ])
   ] ++ [
     (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
   ];

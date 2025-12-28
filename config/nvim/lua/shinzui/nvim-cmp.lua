@@ -43,10 +43,6 @@ vim.cmd "packadd cmp_luasnip"
 vim.cmd "packadd luasnip"
 local luasnip = require "luasnip"
 
--- render-markdown-nvim
--- https://github.com/MeanderingProgrammer/render-markdown.nvim
-vim.cmd "packadd render-markdown-nvim"
-
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 local has_words_before = function()
@@ -123,8 +119,7 @@ cmp.setup {
     { name = "path" },
     { name = "emoji" },
     { name = "buffer",         keyword_length = 5 },
-    { name = "luasnip" },
-    { name = "render-markdown" }
+    { name = "luasnip" }
   },
   formatting = {
     format = lspkind.cmp_format {
