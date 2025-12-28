@@ -66,9 +66,8 @@ local normal_mode_mappings = {
   },
   n = {
     name = "+Navigate",
-    c = { "<Cmd>HopChar2<CR>", "Hop to any occurance of 2 chars" },
-    l = { "<Cmd>HopLine<CR>", "Hop to any visible line" },
-    p = { "<Cmd>HopPattern<CR>", "Hop by pattern" },
+    l = { "<Plug>(leap)", "Leap to location" },
+    w = { "<Plug>(leap-from-window)", "Leap to other window" },
   },
   r = {
     name = "+Run",
