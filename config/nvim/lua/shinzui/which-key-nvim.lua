@@ -7,6 +7,7 @@ vim.cmd "packadd! grug-far-nvim"
 vim.cmd "packadd! neotest"
 vim.cmd "packadd! neotest-haskell"
 vim.cmd "packadd! mini-nvim"
+vim.cmd "packadd! zen-mode-nvim"
 
 require('mini.icons').setup()
 
@@ -115,6 +116,7 @@ local normal_mode_mappings = {
     q = { "<Cmd>q<CR>", "Close" },
     o = { "<Cmd>only<CR>", "Close all other" },
   },
+  z = { "<Cmd>ZenMode<CR>", "Toggle Zen Mode" },
 }
 
 local normal_mode_opts = {

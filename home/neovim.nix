@@ -101,6 +101,7 @@ in
     (pluginWithDeps neotest [ neotest-haskell nvim-nio ])
     claude-code-nvim
     (pluginWithDeps markview-nvim [ nvim-web-devicons ])
+    pkgs.vimExtraPlugins.zen-mode-nvim
   ] ++ [
     (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
   ];
