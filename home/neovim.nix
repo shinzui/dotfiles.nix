@@ -102,6 +102,7 @@ in
     claude-code-nvim
     (pluginWithDeps markview-nvim [ nvim-web-devicons ])
     pkgs.vimExtraPlugins.zen-mode-nvim
+    pkgs.vimExtraPlugins.twilight-nvim
   ] ++ [
     (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
   ];

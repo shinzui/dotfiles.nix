@@ -25,7 +25,7 @@ require("zen-mode").setup({
       showcmd = false,
       laststatus = 0,
     },
-    twilight = { enabled = false },
+    twilight = { enabled = true },
     gitsigns = { enabled = false },
     tmux = { enabled = true },
     wezterm = {
