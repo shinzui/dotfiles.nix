@@ -150,6 +150,7 @@ in
     kondo # clean software project files
     yt-dlp
     jujutsu # git-compatible VCS
+    worktrunk # git worktree management for AI agents
     _1password-cli #1password cli
     duti # select default apps for file types
     sesh # smart session manager for tmux

@@ -170,6 +170,9 @@
             inherit (final) lib rustPlatform fetchFromGitHub;
           };
           ck = final.callPackage (self + "/derivations/ck.nix") { };
+          worktrunk = final.callPackage (self + "/derivations/worktrunk.nix") {
+            inherit (final) lib rustPlatform fetchFromGitHub;
+          };
         };
 
         pkgs-master = final: prev: {
@@ -262,6 +265,7 @@
         oq = pkgs.oq;
         uuinfo = pkgs.uuinfo;
         ck = pkgs.ck;
+        worktrunk = pkgs.worktrunk;
       };
     });
 }
