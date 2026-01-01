@@ -59,6 +59,7 @@ in
     cmp-nvim-lsp
     (pluginWithDeps cmp_luasnip [ luasnip ])
     lspkind-nvim
+    nvim-nio
     (pluginWithDeps lualine-lsp-progress [ lualine-nvim ])
     telescope_hoogle
     telescope-manix
@@ -103,6 +104,7 @@ in
     (pluginWithDeps markview-nvim [ nvim-web-devicons ])
     pkgs.vimExtraPlugins.zen-mode-nvim
     pkgs.vimExtraPlugins.twilight-nvim
+    fff-nvim
   ] ++ [
     (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
   ];
@@ -117,7 +119,6 @@ in
     vimPlugins.nvim-treesitter-parsers.hurl
     nodePackages.typescript
     nodePackages.typescript-language-server
-    luajitPackages.nvim-nio
   ];
 
   # 

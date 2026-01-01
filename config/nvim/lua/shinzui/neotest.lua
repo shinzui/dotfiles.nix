@@ -6,6 +6,7 @@
 -- neotest-haskell
 -- https://github.com/MrcJkb/neotest-haskell
 --
+vim.cmd "packadd nvim-nio"
 vim.cmd "packadd neotest"
 vim.cmd "packadd neotest-haskell"
 
