@@ -165,7 +165,6 @@ in
     # aider-chat.withPlaywright #AI pair programming
     repomix
     claude-code
-    llm
     goose-cli
     tmuxai
 
