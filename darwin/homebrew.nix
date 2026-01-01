@@ -29,6 +29,7 @@ in
     "duckdb"
     "aider"
     "keyboardSwitcher"
+    "steipete/tap/summarize"
   ];
 
   homebrew.taps = [
@@ -38,6 +39,7 @@ in
     "homebrew/services"
     "lutzifer/homebrew-tap"
     "txn2/tap"
+    "steipete/tap"
   ];
 
   # Prefer installing application from the Mac App Store
