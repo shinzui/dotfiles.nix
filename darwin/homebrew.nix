@@ -30,7 +30,6 @@ in
     "aider"
     "keyboardSwitcher"
     "steipete/tap/summarize"
-    "steipete/tap/repobar"
   ];
 
   homebrew.taps = [
@@ -59,6 +58,7 @@ in
 
   # If an app isn't available in the Mac App Store install the Homebrew Cask.
   homebrew.casks = [
+    "steipete/tap/repobar"
     "tuple"
     "ghostty"
     "zoom"
