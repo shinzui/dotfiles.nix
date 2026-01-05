@@ -102,6 +102,7 @@ in
     oq #OpenAPI spec viewer
     httpstat # output curl statistics 
     lychee #link checker
+    caddy #web server with automatic HTTPS
     dateutils
     uuinfo #debug unique identifiers (UUID, ULID, Snowflake, etc)
     ck #semantic code search

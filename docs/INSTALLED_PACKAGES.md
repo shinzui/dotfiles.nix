@@ -35,6 +35,7 @@ This document provides a comprehensive overview of all packages installed throug
 - **[hurl](https://hurl.dev/)** - Run and test HTTP requests with plain text
 - **[httpstat](https://github.com/reorx/httpstat)** - Curl statistics made simple
 - **[lychee](https://github.com/lycheeverse/lychee)** - Fast, async, stream-based link checker
+- **[caddy](https://caddyserver.com/)** - Fast, multi-platform web server with automatic HTTPS
 - **[xh](https://github.com/ducaale/xh)** - Friendly and fast tool for sending HTTP requests
 - **[dogdns](https://github.com/ogham/dog)** - Command-line DNS client like dig
 - **[wget](https://www.gnu.org/software/wget/)** - Network downloader
