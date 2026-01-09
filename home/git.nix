@@ -61,6 +61,13 @@
         tool = "difftastic";
         algorithm = "histogram";
       };
+      merge = {
+        conflictStyle = "diff3";
+        mergiraf = {
+          name = "mergiraf";
+          driver = "mergiraf merge --git %O %A %B -s %S -x %X -y %Y -p %P -l %L";
+        };
+      };
 
       difftool = {
         prompt = false;
@@ -98,6 +105,11 @@
       ".direnv/"
       ".vim-bookmarks"
       ".devenv/"
+    ];
+
+    # Use mergiraf as the merge driver for all files
+    attributes = [
+      "* merge=mergiraf"
     ];
   };
 

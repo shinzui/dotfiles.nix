@@ -176,6 +176,7 @@ in
     angle-grinder #Fast log processor
     git-extras
     git-absorb
+    mergiraf # syntax-aware git merge driver
     gh-dash # enhanced gh
     # gitui #terminal git UI written in rust (disabled due to build failures on ARM64)
     zsh-forgit #zsh plugin to load forgit via `git forgit`
