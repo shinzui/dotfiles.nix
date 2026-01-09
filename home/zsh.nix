@@ -28,6 +28,11 @@ in
     export OPENAI_API_KEY=$(cat ${age.secrets.openapi_secret.path})
   '';
 
+  # Add custom completions directory to fpath (before compinit)
+  programs.zsh.initExtraBeforeCompInit = ''
+    fpath=(~/.zfunc $fpath)
+  '';
+
   # Configure zsh-vi-mode plugin for Vim keybindings in the shell
   # ZVM_INIT_MODE=sourcing prevents automatic key binding during initialization
   programs.zsh.initExtra = ''
