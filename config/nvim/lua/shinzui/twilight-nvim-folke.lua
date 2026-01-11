@@ -1,7 +1,7 @@
 -- Dim inactive code
 -- twilight.nvim
 -- https://github.com/folke/twilight.nvim
-vim.cmd "packadd twilight-nvim"
+vim.cmd "packadd twilight-nvim-folke"
 
 require("twilight").setup({
   dimming = {

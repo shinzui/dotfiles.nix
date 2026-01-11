@@ -3,11 +3,11 @@
 
 vim.cmd "packadd which-key.nvim"
 vim.cmd "packadd! gitsigns.nvim" -- needed for some mappings
-vim.cmd "packadd! grug-far-nvim"
+vim.cmd "packadd! grug-far-nvim-MagicDuck"
 vim.cmd "packadd! neotest"
 vim.cmd "packadd! neotest-haskell"
-vim.cmd "packadd! mini-nvim"
-vim.cmd "packadd! zen-mode-nvim"
+vim.cmd "packadd! mini-nvim-echasnovski"
+vim.cmd "packadd! zen-mode-nvim-folke"
 
 require('mini.icons').setup()
 

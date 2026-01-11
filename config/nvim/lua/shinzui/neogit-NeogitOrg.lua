@@ -1,7 +1,7 @@
 -- neogit
 -- magit for neovim
 -- https://github.com/TimUntersberger/neogit
-vim.cmd "packadd neogit"
+vim.cmd "packadd neogit-NeogitOrg"
 
 local neogit = require "neogit"
 neogit.setup {

@@ -1,7 +1,7 @@
 -- Distraction-free coding
 -- zen-mode.nvim
 -- https://github.com/folke/zen-mode.nvim
-vim.cmd "packadd zen-mode-nvim"
+vim.cmd "packadd zen-mode-nvim-folke"
 
 require("zen-mode").setup({
   window = {

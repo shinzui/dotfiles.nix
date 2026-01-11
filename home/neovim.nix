@@ -67,43 +67,43 @@ in
     telescope-undo-nvim
     jsonfly-nvim
     vim-rescript
-    pkgs.vimExtraPlugins.twoslash-queries-nvim
-    pkgs.vimExtraPlugins.mini-nvim
+    pkgs.vimExtraPlugins.twoslash-queries-nvim-marilari88
+    pkgs.vimExtraPlugins.mini-nvim-echasnovski
   ] ++ map pluginWithConfig [
     (pluginWithDeps nvim-tree-lua [ nvim-web-devicons ])
     nvim-cmp
     which-key-nvim
     nvim-treesitter.withAllGrammars
     telescope-fzf-native-nvim
-    pkgs.vimExtraPlugins.lspsaga-nvim
+    pkgs.vimExtraPlugins.lspsaga-nvim-nvimdev
     onenord-nvim
     gitsigns-nvim
-    pkgs.vimExtraPlugins.trouble-nvim
-    pkgs.vimExtraPlugins.nvim-lint
-    pkgs.vimExtraPlugins.conform-nvim
+    pkgs.vimExtraPlugins.trouble-nvim-folke
+    pkgs.vimExtraPlugins.nvim-lint-mfussenegger
+    pkgs.vimExtraPlugins.conform-nvim-stevearc
     (pluginWithDeps telescope-nvim [ nvim-web-devicons ])
     lualine-nvim
     # (pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
     comment-nvim
-    pkgs.vimExtraPlugins.grug-far-nvim
+    pkgs.vimExtraPlugins.grug-far-nvim-MagicDuck
     leap-nvim
     git-blame-nvim
     toggleterm-nvim
     nvim-hlslens
     symbols-outline-nvim
-    pkgs.vimExtraPlugins.neogit
+    pkgs.vimExtraPlugins.neogit-NeogitOrg
     nvim-ts-autotag
     (pluginWithDeps diffview-nvim [ nvim-web-devicons ])
     # nvim-treesitter-context
     markdown-preview-nvim
     ChatGPT-nvim
     glance-nvim
-    pkgs.vimExtraPlugins.direnv-nvim
+    pkgs.vimExtraPlugins.direnv-nvim-notashelf
     (pluginWithDeps neotest [ neotest-haskell nvim-nio ])
     claude-code-nvim
     (pluginWithDeps markview-nvim [ nvim-web-devicons ])
-    pkgs.vimExtraPlugins.zen-mode-nvim
-    pkgs.vimExtraPlugins.twilight-nvim
+    pkgs.vimExtraPlugins.zen-mode-nvim-folke
+    pkgs.vimExtraPlugins.twilight-nvim-folke
     fff-nvim
   ] ++ [
     (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)

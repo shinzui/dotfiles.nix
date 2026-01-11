@@ -13,7 +13,7 @@ local nls_opts = require("shinzui.lsp.nls")
 
 -- Plugin which adds support for twoslash queries into typescript projects
 -- https://github.com/marilari88/twoslash-queries.nvim
-vim.cmd "packadd twoslash-queries-nvim"
+vim.cmd "packadd twoslash-queries-nvim-marilari88"
 
 require("twoslash-queries").setup({
   multi_line = true,

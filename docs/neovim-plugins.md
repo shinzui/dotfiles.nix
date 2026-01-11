@@ -127,17 +127,19 @@ programs.neovim.plugins = with pkgs.vimPlugins; [
 
 ### vimExtraPlugins (Extended Collection)
 
-For plugins not in nixpkgs, use the `nix-neovimplugins` overlay:
+For plugins not in nixpkgs, use the `nix-neovimplugins` overlay.
+
+**IMPORTANT:** vimExtraPlugins uses the naming convention `<plugin-name>-<owner>` to prevent conflicts between plugins with the same name from different authors.
 
 ```nix
 ] ++ map pluginWithConfig [
-  pkgs.vimExtraPlugins.lspsaga-nvim
-  pkgs.vimExtraPlugins.trouble-nvim
-  pkgs.vimExtraPlugins.conform-nvim
+  pkgs.vimExtraPlugins.lspsaga-nvim-nvimdev
+  pkgs.vimExtraPlugins.trouble-nvim-folke
+  pkgs.vimExtraPlugins.conform-nvim-stevearc
 ];
 ```
 
-Browse available plugins: https://github.com/jooooscha/nixpkgs-vim-extra-plugins
+Browse available plugins and find exact names: https://github.com/NixNeovim/NixNeovimPlugins/blob/main/plugins.md
 
 ## Handling Dependencies
 

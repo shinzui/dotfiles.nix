@@ -1,7 +1,7 @@
 -- conform-nvim
 -- https://github.com/stevearc/conform.nvim
 --
-vim.cmd "packadd conform-nvim"
+vim.cmd "packadd conform-nvim-stevearc"
 
 require("conform").setup({
   formatters_by_ft = {
