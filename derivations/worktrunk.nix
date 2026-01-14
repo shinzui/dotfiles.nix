@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "worktrunk";
-  version = "0.10.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "max-sixty";
     repo = "worktrunk";
     rev = "v${version}";
-    hash = "sha256-oDDXe+/QOuDzSZxrVf/Uoau114ZAYzHlmjjiqgMZNJI=";
+    hash = "sha256-eZpwRM2kx6QzZTkwlIEnVn8cyt+6+L41L0jKAIaJOSM=";
   };
 
-  cargoHash = "sha256-EghciTbB22i/cCOhtoV88Ml7vu+M6d4/HDFc6IkXYIc=";
+  cargoHash = "sha256-AYrOO1Dkk4uYjKMuILjmjLBpnf+iKNRviJAzLfEmB5Y=";
 
   # Test fails in sandbox due to time-based assertions
   doCheck = false;
