@@ -20,6 +20,16 @@
 
     config.audible_bell = 'Disabled'
 
+    -- Use the title set by tmux (session name) for the tab title
+    wezterm.on("format-tab-title", function(tab, tabs, panes, cfg, hover, max_width)
+      local pane = tab.active_pane
+      local title = pane.title
+      if title and #title > 0 then
+        return title
+      end
+      return tab.tab_index + 1
+    end)
+
     config.set_environment_variables = {
       TERMINFO_DIRS = '/home/shinzui/.nix-profile/share/terminfo',
       WSLENV = 'TERMINFO_DIRS',

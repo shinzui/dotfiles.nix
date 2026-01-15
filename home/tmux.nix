@@ -16,6 +16,10 @@
       # https://gist.github.com/andersevenrud/015e61af2fd264371032763d4ed965b6
       set -sg terminal-overrides ",*:RGB"
 
+      # Set terminal title to tmux session name
+      set-option -g set-titles on
+      set-option -g set-titles-string "#S"
+
       set-option -g renumber-windows on
       set -as terminal-features ',screen-256color:RGB'
       set -g detach-on-destroy off  # don't exit from tmux when closing a session
