@@ -1,6 +1,6 @@
 ---
-description: Update a Rust derivation to a new version with correct hashes
-argument-hint: <derivation-path> <new-version>
+name: update-rust-derivation
+description: Update a Rust derivation to a new version with correct hashes. Use when the user wants to update a Rust package in their nix derivations.
 ---
 
 # Update Rust Derivation

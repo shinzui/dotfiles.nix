@@ -1,6 +1,6 @@
 ---
-description: Add and configure a neovim plugin following the nix-based setup
-argument-hint: <plugin-name-or-github-url>
+name: add-nvim-plugin
+description: Add and configure a neovim plugin following the nix-based setup. Use when the user wants to add a new vim/neovim plugin.
 ---
 
 # Add Neovim Plugin

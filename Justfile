@@ -1,17 +1,17 @@
 # Dotfiles management recipes
 
-# Symlink Claude skills to ~/.claude/commands/
+# Symlink Claude skills to ~/.claude/skills/
 symlink-claude-skills:
     #!/usr/bin/env bash
     set -euo pipefail
-    src_dir="$(pwd)/claude/commands"
-    dest_dir="$HOME/.claude/commands"
+    src_dir="$(pwd)/claude/skills"
+    dest_dir="$HOME/.claude/skills"
 
     mkdir -p "$dest_dir"
 
-    for file in "$src_dir"/*.md; do
-        [ -e "$file" ] || continue
-        name=$(basename "$file")
+    for skill in "$src_dir"/*/; do
+        [ -d "$skill" ] || continue
+        name=$(basename "$skill")
         dest="$dest_dir/$name"
 
         if [ -L "$dest" ]; then
@@ -19,7 +19,7 @@ symlink-claude-skills:
         elif [ -e "$dest" ]; then
             echo "Warning: $dest exists and is not a symlink, skipping"
         else
-            ln -s "$file" "$dest"
+            ln -s "$skill" "$dest"
             echo "Linked $name"
         fi
     done
