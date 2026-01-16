@@ -39,6 +39,8 @@ opt.hlsearch =true --highlight all matches on previous search pattern
 opt.ignorecase = true --ignore case in search patterns
 opt.smartcase = true
 
+opt.digraph = true -- enable digraph input for special characters (C-k + two chars)
+
 opt.wrap = false -- don't wrap lines
 
 opt.scrolloff = 5 --number of context line above or below cursor
