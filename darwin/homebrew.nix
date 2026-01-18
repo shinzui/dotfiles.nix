@@ -30,6 +30,7 @@ in
     "aider"
     "keyboardSwitcher"
     "steipete/tap/summarize"
+    "steipete/tap/bird"
   ];
 
   homebrew.taps = [
