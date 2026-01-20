@@ -70,5 +70,6 @@ end)
 
 
 -- Hover Doc
--- Pressing the key twice will enter the hover window
+-- Press K twice to enter the hover window, or use gK to pin it
 keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>")
+keymap("n", "gK", "<cmd>Lspsaga hover_doc ++keep<CR>")
