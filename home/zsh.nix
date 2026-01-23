@@ -98,7 +98,7 @@ in
     viewMd = "glow -p -w 200";
 
     ###claude-code
-    dangerous-claude = "SHELL=zsh claude --dangerously-skip-permissions";
+    dangerous-claude = "SHELL=zsh /Users/shinzui/.local/bin/claude --dangerously-skip-permissions";
     ccusage = "bunx ccusage@latest";
   };
 }
