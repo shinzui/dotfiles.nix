@@ -112,7 +112,6 @@ in
     lstr # tree viewer
     fdupes # find & delete duplicate files
     difftastic # syntax-aware diff tool
-    dogdns # dns client
     lazydocker #docker terminal UI https://github.com/jesseduffield/lazydocker
     hyperfine #benchmarking
     xh #xh http tool
