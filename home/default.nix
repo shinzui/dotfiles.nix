@@ -115,6 +115,7 @@ in
     lazydocker #docker terminal UI https://github.com/jesseduffield/lazydocker
     hyperfine #benchmarking
     xh #xh http tool
+    websocat #WebSocket CLI client (curl for WebSockets)
     k6 # load testing tool
     trippy # network dianostic tool
     snitch #inspect network connections
