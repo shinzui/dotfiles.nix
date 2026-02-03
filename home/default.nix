@@ -121,6 +121,7 @@ in
     snitch #inspect network connections
     fd #fancy `find`
     miller #like awk, sed, cut, join, and sort for CSV and tabular JSON
+    parqeye #Parquet file viewer for the terminal
     procs #fancy `ps`
     ripgrep
     ripgrep-all
