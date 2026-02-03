@@ -173,6 +173,9 @@
           worktrunk = final.callPackage (self + "/derivations/worktrunk.nix") {
             inherit (final) lib rustPlatform fetchFromGitHub;
           };
+          parqeye = final.callPackage (self + "/derivations/parqeye.nix") {
+            inherit (final) lib rustPlatform fetchFromGitHub;
+          };
         };
 
         pkgs-master = final: prev: {
@@ -266,6 +269,7 @@
         uuinfo = pkgs.uuinfo;
         ck = pkgs.ck;
         worktrunk = pkgs.worktrunk;
+        parqeye = pkgs.parqeye;
       };
     });
 }
