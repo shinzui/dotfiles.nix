@@ -67,11 +67,5 @@
       mode = "600";
       owner = "shinzui";
     };
-    cabal_config = {
-      file = ../secrets/cabal.age;
-      path = "/Users/shinzui/.config/cabal/config";
-      mode = "600";
-      owner = "shinzui";
-    };
   };
 }
