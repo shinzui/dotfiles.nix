@@ -16,4 +16,5 @@ in
   "llm-keys.json.age".publicKeys = shinzuiAtSungkyung;
   "tmuxai.config.yaml.age".publicKeys = shinzuiAtSungkyung;
   "sesh.toml.age".publicKeys = shinzuiAtSungkyung;
+  "cabal.age".publicKeys = shinzuiAtSungkyung;
 }
