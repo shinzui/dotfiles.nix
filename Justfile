@@ -1,11 +1,11 @@
 # Dotfiles management recipes
 
-# Symlink Claude skills to ~/.claude/skills/
+# Symlink Claude skills to project-local .claude/skills/
 symlink-claude-skills:
     #!/usr/bin/env bash
     set -euo pipefail
     src_dir="$(pwd)/claude/skills"
-    dest_dir="$HOME/.claude/skills"
+    dest_dir="$(pwd)/.claude/skills"
 
     mkdir -p "$dest_dir"
 
