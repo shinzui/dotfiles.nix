@@ -31,6 +31,10 @@
       url = "github:MercuryTechnologies/hackage-diff";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    bun2nix = {
+      url = "github:nix-community/bun2nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs =
@@ -154,6 +158,7 @@
       overlays = {
         nix-neovimplugins = nix-neovimplugins.overlays.default;
         nvim-treesitter-main = inputs.nvim-treesitter-main.overlays.default;
+        bun2nix = inputs.bun2nix.overlays.default;
 
         # Fix tmux-extrakto to not pull in Linux-only dependencies on Darwin
         tmux-extrakto-darwin-fix = import ./overlays/tmux-extrakto-darwin-fix.nix;
@@ -181,6 +186,7 @@
           parqeye = final.callPackage (self + "/derivations/parqeye.nix") {
             inherit (final) lib rustPlatform fetchFromGitHub;
           };
+          beautiful-mermaid = final.callPackage (self + "/derivations/beautiful-mermaid") { };
         };
 
         pkgs-master = final: prev: {
@@ -259,6 +265,7 @@
           pkgs-master
           pkgs-stable
           apple-silicon
+          bun2nix
           my-packages
         ];
       };
@@ -275,6 +282,7 @@
         ck = pkgs.ck;
         worktrunk = pkgs.worktrunk;
         parqeye = pkgs.parqeye;
+        beautiful-mermaid = pkgs.beautiful-mermaid;
       };
     });
 }

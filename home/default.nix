@@ -166,6 +166,7 @@ in
     #人工知能
     # aider-chat.withPlaywright #AI pair programming
     repomix
+    beautiful-mermaid
     claude-code
     goose-cli
     tmuxai
