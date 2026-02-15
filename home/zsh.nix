@@ -46,6 +46,9 @@ in
     ".." = "cd ..";
     cpcwd = "pwd | pbcopy";
 
+    # Use macOS system cp instead of GNU coreutils cp (pulled in by nix-darwin stdenv)
+    cp = "/bin/cp";
+
     #common cli aliases
     v = "nvim";
     view = "v -R";
