@@ -47,6 +47,11 @@
 
   nix.registry.nixpkgs.flake = nixpkgs-unstable;
 
+  nix.linux-builder = {
+    enable = true;
+    config.virtualisation.darwin-builder.memorySize = 8 * 1024;
+  };
+
   ##################
   # Shell
   ##################
