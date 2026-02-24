@@ -20,8 +20,12 @@ in
     PSPG_CONF = "${config.xdg.configHome}/pspg/pspgconf";
     #temp workaround for home-manager generating the config in the wrong location
     NAVI_CONFIG = "/Users/shinzui/Library/Application Support/navi/config.yaml";
-    PATH="$HOME/.local/bin:$HOME/.npm-global/bin:$PATH";
   };
+
+  home.sessionPath = [
+    "${home}/.local/bin"
+    "${home}/.npm-global/bin"
+  ];
 
   # Load OpenAI API key from the agenix secret
   programs.zsh.initExtraFirst = ''
