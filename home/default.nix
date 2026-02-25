@@ -167,7 +167,6 @@ in
     # aider-chat.withPlaywright #AI pair programming
     repomix
     beautiful-mermaid
-    claude-code
     goose-cli
     tmuxai
 
@@ -211,6 +210,9 @@ in
 
     ##terminfo
     wezterm.terminfo
+
+    ## Mori
+    mori
 
     ## Haskell
     ghc

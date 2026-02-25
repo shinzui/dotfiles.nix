@@ -35,6 +35,10 @@
       url = "github:nix-community/bun2nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    mori = {
+      url = "github:shinzui/mori";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs =
@@ -187,6 +191,7 @@
             inherit (final) lib rustPlatform fetchFromGitHub;
           };
           beautiful-mermaid = final.callPackage (self + "/derivations/beautiful-mermaid") { };
+          mori = inputs.mori.packages.${prev.stdenv.hostPlatform.system}.default;
         };
 
         pkgs-master = final: prev: {
