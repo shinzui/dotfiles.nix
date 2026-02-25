@@ -36,6 +36,7 @@ in
     ./external-configs.nix
     ./television.nix
     ./nix-search-tv.nix
+    ./mori.nix
   ];
 
 
@@ -210,9 +211,6 @@ in
 
     ##terminfo
     wezterm.terminfo
-
-    ## Mori
-    mori
 
     ## Haskell
     ghc

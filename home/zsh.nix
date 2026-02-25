@@ -20,8 +20,6 @@ in
     PSPG_CONF = "${config.xdg.configHome}/pspg/pspgconf";
     #temp workaround for home-manager generating the config in the wrong location
     NAVI_CONFIG = "/Users/shinzui/Library/Application Support/navi/config.yaml";
-    # Mori project registry — shared local PostgreSQL instance
-    MORI_PG_CONNECTION_STRING = "host=/Users/shinzui/.mori/db dbname=mori";
   };
 
   home.sessionPath = [
