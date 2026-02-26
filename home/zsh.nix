@@ -43,6 +43,18 @@ in
     ZVM_INIT_MODE=sourcing
     source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
     unset ZVM_INIT_MODE
+
+    # mori shell integration — enables `mori cd` to change directory
+    mori() {
+      if [[ "$1" == "cd" ]]; then
+        shift
+        local target
+        target=$(command mori cd "$@") || return $?
+        builtin cd "$target"
+      else
+        command mori "$@"
+      fi
+    }
   '';
 
   programs.zsh.shellAliases = with pkgs; {
