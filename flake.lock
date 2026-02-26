@@ -362,11 +362,11 @@
         "typeid-hs-src": "typeid-hs-src"
       },
       "locked": {
-        "lastModified": 1772081834,
-        "narHash": "sha256-BYUGb0YUpaJHzt6cEVSOqcKe8xsbWIzTCjAX+uWahow=",
+        "lastModified": 1772084041,
+        "narHash": "sha256-eyrLMXODCmDTpqx95IjCzGlEV+0FVMYAzzVIFgp4QO8=",
         "owner": "shinzui",
         "repo": "mori",
-        "rev": "cd1b7036ca19a4623fd09d7b07d057bb94f945fe",
+        "rev": "e3dffaa497865dd6c940d706b91ff7fa02f5ed28",
         "type": "github"
       },
       "original": {
