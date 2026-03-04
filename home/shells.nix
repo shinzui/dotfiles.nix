@@ -13,5 +13,7 @@
     battery.display = [{
       threshold = 25; # display battery information if charge is <= 25%
     }];
+
+    gcloud.format = "on [$symbol$project(\\($region\\))]($style) ";
   };
 }
