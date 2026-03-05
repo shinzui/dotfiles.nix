@@ -7,6 +7,26 @@ let
   pgSocket = "${moriDir}/db";
   pgLog = "${moriDir}/logs";
 
+  connStr = "host=${pgSocket} dbname=mori";
+
+  mori-automate-wrapper = pkgs.writeShellScript "mori-automate" ''
+    set -euo pipefail
+    export MORI_PG_CONNECTION_STRING="${connStr}"
+
+    # Wait for PostgreSQL to be ready
+    for i in $(seq 1 30); do
+      if ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; then break; fi
+      sleep 1
+    done
+
+    if ! ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; then
+      echo "Error: PostgreSQL not ready after 30s" >&2
+      exit 1
+    fi
+
+    exec ${pkgs.mori}/bin/mori automate run
+  '';
+
   mori-db-setup = pkgs.writeShellScriptBin "mori-db-setup" ''
     set -euo pipefail
     PGHOST="${pgSocket}"
@@ -42,7 +62,7 @@ in
   ];
 
   programs.zsh.sessionVariables = {
-    MORI_PG_CONNECTION_STRING = "host=${pgSocket} dbname=mori";
+    MORI_PG_CONNECTION_STRING = connStr;
   };
 
   home.activation.mori-postgres-init = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -66,6 +86,21 @@ in
       KeepAlive = true;
       StandardOutPath = "${pgLog}/postgres.stdout.log";
       StandardErrorPath = "${pgLog}/postgres.stderr.log";
+    };
+  };
+
+  launchd.agents.mori-automate = {
+    enable = true;
+    config = {
+      Label = "com.shinzui.mori-automate";
+      ProgramArguments = [ "${mori-automate-wrapper}" ];
+      RunAtLoad = true;
+      KeepAlive = true;
+      StandardOutPath = "${pgLog}/automate.stdout.log";
+      StandardErrorPath = "${pgLog}/automate.stderr.log";
+      EnvironmentVariables = {
+        MORI_PG_CONNECTION_STRING = connStr;
+      };
     };
   };
 }
