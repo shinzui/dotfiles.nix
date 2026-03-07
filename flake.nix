@@ -39,6 +39,9 @@
       url = "github:shinzui/mori";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    determinate = {
+      url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
+    };
   };
 
   outputs =
@@ -93,6 +96,9 @@
 
         agenix.darwinModules.default
 
+        # Determinate Nix integration
+        inputs.determinate.darwinModules.default
+
         # Main `nix-darwin` config
         ./darwin
 
@@ -105,8 +111,6 @@
           in
           {
             nixpkgs = nixpkgsConfig;
-            # Hack to support legacy worklows that use `<nixpkgs>` etc.
-            nix.nixPath = { nixpkgs = "$HOME/.config/dotfiles.nix/nixpkgs.nix"; };
             # `home-manager` config
             users.users.${primaryUser}.home = "/Users/${primaryUser}";
             home-manager.useGlobalPkgs = true;
@@ -117,8 +121,8 @@
             };
 
             # Add a registry entry for this flake
-            nix.registry.my.flake = self;
-            nix.registry.nixpkgs.flake = nixpkgs-unstable;
+            determinateNix.registry.my.flake = self;
+            determinateNix.registry.nixpkgs.flake = nixpkgs-unstable;
           }
         )
       ];

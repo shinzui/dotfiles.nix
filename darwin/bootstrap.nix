@@ -3,10 +3,10 @@
 {
   system.primaryUser = "shinzui";
   ##################
-  # Nix configuration
+  # Nix configuration (managed via Determinate Nix)
   ##################
 
-  nix.settings = {
+  determinateNix.customSettings = {
     substituters = [
       "https://cache.nixos.org/"
       "https://shinzui.cachix.org"
@@ -25,32 +25,23 @@
       "@admin"
     ];
 
-    netrc-file = config.age.secrets.netrc.path;
-
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
-
     keep-outputs = true;
     keep-derivations = true;
 
     extra-platforms = lib.mkIf (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") [ "x86_64-darwin" "aarch64-darwin" ];
+
   };
 
-  nix.extraOptions = ''
+  # Include access tokens from agenix secret into nix.custom.conf
+  environment.etc."nix/nix.custom.conf".text = lib.mkAfter ''
     !include ${config.age.secrets.access_token.path}
   '';
 
+  determinateNix.determinateNixd.authentication.additionalNetrcSources = [
+    config.age.secrets.netrc.path
+  ];
 
-  nix.package = pkgs.nixVersions.latest;
-
-  nix.registry.nixpkgs.flake = nixpkgs-unstable;
-
-  nix.linux-builder = {
-    enable = true;
-    config.virtualisation.darwin-builder.memorySize = 8 * 1024;
-  };
+  determinateNix.registry.nixpkgs.flake = nixpkgs-unstable;
 
   ##################
   # Shell
