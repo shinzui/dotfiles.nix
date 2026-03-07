@@ -39,6 +39,10 @@
       url = "github:shinzui/mori";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    seihou = {
+      url = "github:shinzui/seihou";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     determinate = {
       url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
     };
@@ -196,6 +200,7 @@
           };
           beautiful-mermaid = final.callPackage (self + "/derivations/beautiful-mermaid") { };
           mori = inputs.mori.packages.${prev.stdenv.hostPlatform.system}.default;
+          seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
         };
 
         pkgs-master = final: prev: {

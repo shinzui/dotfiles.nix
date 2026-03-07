@@ -37,6 +37,7 @@ in
     ./television.nix
     ./nix-search-tv.nix
     ./mori.nix
+    ./seihou.nix
   ];
 
 
