@@ -282,7 +282,7 @@
       agenix = inputs.agenix;
     in
     {
-      devShell = import ./shell.nix { inherit pkgs system agenix; };
+      devShells.default = import ./shell.nix { inherit pkgs system agenix; };
       
       packages = {
         tmuxai = pkgs.tmuxai;
