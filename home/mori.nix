@@ -1,11 +1,9 @@
 { config, pkgs, lib, ... }:
 
 let
-  pg = pkgs.postgresql_18;
-  moriDir = "${config.home.homeDirectory}/.mori";
-  pgData = "${moriDir}/data";
-  pgSocket = "${moriDir}/db";
-  pgLog = "${moriDir}/logs";
+  pg = config.services.postgresql.package;
+  pgSocket = config.services.postgresql.socketDir;
+  moriLogDir = "${config.home.homeDirectory}/.mori/logs";
 
   connStr = "host=${pgSocket} dbname=mori";
 
@@ -29,30 +27,12 @@ let
 
   mori-db-setup = pkgs.writeShellScriptBin "mori-db-setup" ''
     set -euo pipefail
-    PGHOST="${pgSocket}"
-
-    echo "Waiting for PostgreSQL..."
-    for i in $(seq 1 30); do
-      if ${pg}/bin/pg_isready -h "$PGHOST" > /dev/null 2>&1; then break; fi
-      sleep 1
-    done
-
-    if ! ${pg}/bin/pg_isready -h "$PGHOST" > /dev/null 2>&1; then
-      echo "Error: PostgreSQL not ready. Check: launchctl list | grep mori"
-      exit 1
-    fi
-
-    if ! ${pg}/bin/psql -h "$PGHOST" -lqt | cut -d \| -f 1 | grep -qw mori; then
-      echo "Creating mori database..."
-      ${pg}/bin/createdb -h "$PGHOST" mori
-    else
-      echo "Database 'mori' already exists."
-    fi
+    pg-ensure-db mori
 
     echo ""
     echo "Database ready! Next: run migrations from the mori dev shell:"
     echo "  cd ~/Keikaku/bokuno/mori-project/mori"
-    echo "  PGHOST=$PGHOST PGDATABASE=mori just run-migrations"
+    echo "  PGHOST=${pgSocket} PGDATABASE=mori just run-migrations"
   '';
 in
 {
@@ -61,32 +41,12 @@ in
     mori-db-setup
   ];
 
-  programs.zsh.sessionVariables = {
-    MORI_PG_CONNECTION_STRING = connStr;
-  };
-
-  home.activation.mori-postgres-init = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    run mkdir -p "${pgSocket}" "${pgLog}"
-    if [ ! -d "${pgData}" ]; then
-      run ${pg}/bin/initdb --auth=trust --no-locale --encoding=UTF8 -D "${pgData}"
-    fi
+  home.activation.mori-log-dir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run mkdir -p "${moriLogDir}"
   '';
 
-  launchd.agents.mori-postgres = {
-    enable = true;
-    config = {
-      Label = "com.shinzui.mori-postgres";
-      ProgramArguments = [
-        "${pg}/bin/postgres"
-        "-D" pgData
-        "-k" pgSocket
-        "-c" "listen_addresses="
-      ];
-      RunAtLoad = true;
-      KeepAlive = true;
-      StandardOutPath = "${pgLog}/postgres.stdout.log";
-      StandardErrorPath = "${pgLog}/postgres.stderr.log";
-    };
+  programs.zsh.sessionVariables = {
+    MORI_PG_CONNECTION_STRING = connStr;
   };
 
   launchd.agents.mori-automate = {
@@ -96,8 +56,8 @@ in
       ProgramArguments = [ "${mori-automate-wrapper}" ];
       RunAtLoad = true;
       KeepAlive = true;
-      StandardOutPath = "${pgLog}/automate.stdout.log";
-      StandardErrorPath = "${pgLog}/automate.stderr.log";
+      StandardOutPath = "${moriLogDir}/automate.stdout.log";
+      StandardErrorPath = "${moriLogDir}/automate.stderr.log";
       EnvironmentVariables = {
         MORI_PG_CONNECTION_STRING = connStr;
       };

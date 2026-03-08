@@ -36,6 +36,7 @@ in
     ./external-configs.nix
     ./television.nix
     ./nix-search-tv.nix
+    ./postgresql.nix
     ./mori.nix
     ./seihou.nix
   ];
