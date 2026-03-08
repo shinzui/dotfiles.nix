@@ -1058,11 +1058,11 @@
         "treefmt-nix": "treefmt-nix_3"
       },
       "locked": {
-        "lastModified": 1772920441,
-        "narHash": "sha256-oOwWkhjKwBXMwZZh6lZfJtjMnVIhXVlPLcTzGvPSCtk=",
+        "lastModified": 1772928844,
+        "narHash": "sha256-ACjL4R0MMSZ5rV1ZxtFRkjyjSEV0KB+R5Jdr+qL0uvo=",
         "owner": "shinzui",
         "repo": "seihou",
-        "rev": "66b608ea6528ad089e9bfd1444609444bd8a0090",
+        "rev": "b6baa4fe4b93c3ea85489a1274765055344eda69",
         "type": "github"
       },
       "original": {
