@@ -36,6 +36,7 @@ in
   # minimal init.vim config to load lua config. nix and home manager don't currently support
   # `init.lua`.
   xdg.configFile."nvim/lua".source = mkOutOfStoreSymlink "${nixConfigDir}/config/nvim/lua";
+  xdg.configFile."nvim/after".source = mkOutOfStoreSymlink "${nixConfigDir}/config/nvim/after";
   programs.neovim.extraConfig = ''
     lua require('init')
   '';
