@@ -207,8 +207,11 @@ let
 
   # Extract the Node.js source code which is used to compile packages with
   # native bindings
+  # nodejs may be a wrapper (buildEnv) without src; fall back to the unwrapped package
+  nodeSource = nodejs.src or nodejs.pkgs.nodejs.src;
+
   nodeSources = runCommand "node-sources" {} ''
-    tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
+    tar --no-same-owner --no-same-permissions -xf ${nodeSource}
     mv node-* $out
   '';
 

@@ -2,14 +2,14 @@ final: prev:
 
 let
   buildVimPluginFromFlakeInput = inputs: name:
-    prev.vimUtils.buildVimPluginFrom2Nix {
+    prev.vimUtils.buildVimPlugin {
       pname = name;
       version = inputs.${name}.lastModifiedDate;
       src = inputs.${name};
     };
 
   buildNeovimLuaPackagePlugin = { pname, src, version ? "HEAD" }:
-    final.vimUtils.buildVimPluginFrom2Nix {
+    final.vimUtils.buildVimPlugin {
       inherit pname version;
       src = prev.linkFarm pname [{ name = "lua"; path = src; }];
     };

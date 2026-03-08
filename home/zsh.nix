@@ -27,35 +27,34 @@ in
     "${home}/.npm-global/bin"
   ];
 
-  # Load OpenAI API key from the agenix secret
-  programs.zsh.initExtraFirst = ''
-    export OPENAI_API_KEY=$(cat ${age.secrets.openapi_secret.path})
-  '';
-
+  # Load OpenAI API key from the agenix secret (early, before other init)
   # Add custom completions directory to fpath (before compinit)
-  programs.zsh.initExtraBeforeCompInit = ''
-    fpath=(~/.zfunc $fpath)
-  '';
-
   # Configure zsh-vi-mode plugin for Vim keybindings in the shell
-  # ZVM_INIT_MODE=sourcing prevents automatic key binding during initialization
-  programs.zsh.initExtra = ''
-    ZVM_INIT_MODE=sourcing
-    source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-    unset ZVM_INIT_MODE
+  programs.zsh.initContent = lib.mkMerge [
+    (lib.mkBefore ''
+      export OPENAI_API_KEY=$(cat ${age.secrets.openapi_secret.path})
+    '')
+    (lib.mkOrder 550 ''
+      fpath=(~/.zfunc $fpath)
+    '')
+    ''
+      ZVM_INIT_MODE=sourcing
+      source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+      unset ZVM_INIT_MODE
 
-    # mori shell integration — enables `mori cd` to change directory
-    mori() {
-      if [[ "$1" == "cd" ]]; then
-        shift
-        local target
-        target=$(command mori cd "$@") || return $?
-        builtin cd "$target"
-      else
-        command mori "$@"
-      fi
-    }
-  '';
+      # mori shell integration — enables `mori cd` to change directory
+      mori() {
+        if [[ "$1" == "cd" ]]; then
+          shift
+          local target
+          target=$(command mori cd "$@") || return $?
+          builtin cd "$target"
+        else
+          command mori "$@"
+        fi
+      }
+    ''
+  ];
 
   programs.zsh.shellAliases = with pkgs; {
     #general 

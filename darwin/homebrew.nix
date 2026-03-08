@@ -13,13 +13,11 @@ in
   #TODO configure autocompletion
 
   homebrew.enable = true;
-  homebrew.brewPrefix = brewBinPrefix;
   #https://daiderd.com/nix-darwin/manual/index.html#opt-homebrew.onActivation.autoUpdate
   homebrew.onActivation.autoUpdate = true;
   homebrew.onActivation.upgrade = true;
   homebrew.onActivation.cleanup = "zap";
   homebrew.global.brewfile = true;
-  homebrew.global.lockfiles = false;
   #https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-homebrew.caskArgs.no_quarantine
   homebrew.caskArgs.no_quarantine = true;
 

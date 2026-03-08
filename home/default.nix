@@ -173,7 +173,7 @@ in
     tmuxai
 
     #desktop apps
-    element-desktop
+    # element-desktop # broken on macOS: requires Xcode 26+ actool (upstream nixpkgs issue)
 
     # Dev packages
     angle-grinder #Fast log processor
@@ -217,7 +217,7 @@ in
     ghc
     hlint
     pkgs.hackage-diff
-    haskellPackages.cabal-install
+    (lib.lowPrio haskellPackages.cabal-install)
     haskellPackages.hoogle
     # haskellPackages.ormolu
     haskellPackages.implicit-hie
@@ -281,7 +281,6 @@ in
     manix #nix documentation lookup
     nix-prefetch-git
     nix-tree
-    nodePackages.node2nix
     nix-script
   ];
 
