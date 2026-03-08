@@ -21,6 +21,10 @@
     flake-utils.url = "github:numtide/flake-utils";
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
     nix-neovimplugins = { url = "github:NixNeovim/NixNeovimPlugins"; };
+    nvim-treesitter-main = {
+      url = "github:iofq/nvim-treesitter-main";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
     private-fonts = { url = "github:shinzui/fonts";};
     hackage-diff = {
@@ -165,6 +169,7 @@
       # Outputs --- 
       overlays = {
         nix-neovimplugins = nix-neovimplugins.overlays.default;
+        nvim-treesitter-main = inputs.nvim-treesitter-main.overlays.default;
         bun2nix = inputs.bun2nix.overlays.default;
 
         # Fix tmux-extrakto to not pull in Linux-only dependencies on Darwin
