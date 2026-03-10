@@ -39,6 +39,10 @@
       url = "github:shinzui/mori";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    rei = {
+      url = "github:shinzui/rei";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     seihou = {
       url = "github:shinzui/seihou";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -200,6 +204,7 @@
           };
           beautiful-mermaid = final.callPackage (self + "/derivations/beautiful-mermaid") { };
           mori = inputs.mori.packages.${prev.stdenv.hostPlatform.system}.default;
+          rei = inputs.rei.packages.${prev.stdenv.hostPlatform.system}.default;
           seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
         };
 
