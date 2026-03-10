@@ -38,6 +38,7 @@ in
     ./nix-search-tv.nix
     ./postgresql.nix
     ./mori.nix
+    ./rei.nix
     ./seihou.nix
   ];
 
