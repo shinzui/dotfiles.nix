@@ -34,12 +34,17 @@ let
     echo "  cd ~/Keikaku/bokuno/mori-project/mori"
     echo "  PGHOST=${pgSocket} PGDATABASE=mori just run-migrations"
   '';
+  mori-zsh-completions = pkgs.runCommand "mori-zsh-completions" { } ''
+    MORI_PG_CONNECTION_STRING="host=localhost dbname=mori" ${pkgs.mori}/bin/mori completions zsh > $out
+  '';
 in
 {
   home.packages = [
     pkgs.mori
     mori-db-setup
   ];
+
+  home.file.".zfunc/_mori".source = mori-zsh-completions;
 
   home.activation.mori-log-dir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run mkdir -p "${moriLogDir}"

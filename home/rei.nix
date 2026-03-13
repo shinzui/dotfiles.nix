@@ -39,6 +39,10 @@ let
     exec ${reiBin} worker all
   '';
 
+  rei-zsh-completions = pkgs.runCommand "rei-zsh-completions" { } ''
+    REI_PG_CONNECTION_STRING="host=localhost dbname=rei" ${reiBin} completions zsh > $out
+  '';
+
   rei-db-setup = pkgs.writeShellScriptBin "rei-db-setup" ''
     set -euo pipefail
     pg-ensure-db rei
@@ -54,6 +58,8 @@ in
     (lib.meta.lowPrio pkgs.rei)
     rei-db-setup
   ];
+
+  home.file.".zfunc/_rei".source = rei-zsh-completions;
 
   home.activation.rei-log-dir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run mkdir -p "${reiLogDir}"
