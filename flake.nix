@@ -71,7 +71,7 @@
     let
       # Building blocks 
       inherit (darwin.lib) darwinSystem;
-      inherit (inputs.nixpkgs-unstable.lib) attrValues makeOverridable optionalAttrs singleton;
+      inherit (inputs.nixpkgs-unstable.lib) attrValues singleton;
       # d = (import ./darwin)  { pkgs=nixpkgs-unstable; inherit nixpkgs-unstable; };
 
       # Configuration for `nixpkgs` mostly used in personal configs.
@@ -145,12 +145,11 @@
 
       #nix-darwin configs
       darwinConfigurations = rec {
-        # Mininal configurations to bootstrap systems
-        bootstrap-x86 = makeOverridable darwinSystem {
-          system = "x86_64-darwin";
+        # Mininal configuration to bootstrap systems
+        bootstrap-arm = darwinSystem {
+          system = "aarch64-darwin";
           modules = [ ./darwin/bootstrap.nix { nixpkgs = nixpkgsConfig; } ];
         };
-        bootstrap-arm = bootstrap-x86.override { system = "aarch64-darwin"; };
 
         #MacBook Pro M1X
         SungkyungM1X = darwinSystem {
@@ -251,14 +250,6 @@
             );
           };
 
-        # Overlay useful on Macs with Apple Silicon
-        apple-silicon = final: prev: optionalAttrs (prev.stdenv.hostPlatform.system == "aarch64-darwin") {
-          # Add access to x86 packages system is running Apple Silicon
-          pkgs-x86 = import inputs.nixpkgs-unstable {
-            system = "x86_64-darwin";
-            inherit (nixpkgsConfig) config;
-          };
-        };
 
       };
 
@@ -277,7 +268,7 @@
 
 
 
-    } // flake-utils.lib.eachDefaultSystem (system:
+    } // flake-utils.lib.eachSystem [ "aarch64-darwin" "aarch64-linux" "x86_64-linux" ] (system:
     let
       legacyPackages = import inputs.nixpkgs-unstable {
         inherit system;
@@ -285,7 +276,6 @@
         overlays = with self.overlays; [
           pkgs-master
           pkgs-stable
-          apple-silicon
           bun2nix
           my-packages
         ];
