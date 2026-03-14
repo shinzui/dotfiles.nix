@@ -155,7 +155,8 @@ vim.lsp.config('ocamllsp', {
 })
 
 vim.lsp.config('relay_lsp', {
-  cmd = { "bunx", "relay-compiler", "lsp"}
+  cmd = { "bunx", "relay-compiler", "lsp"},
+  root_markers = { "relay.config.js", "relay.config.ts", "relay.config.json", "relay.config.cjs", "relay.config.mjs" },
 })
 
 vim.lsp.config('oxlint', {
