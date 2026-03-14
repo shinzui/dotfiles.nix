@@ -196,9 +196,6 @@
             inherit (final) lib rustPlatform fetchFromGitHub;
           };
           ck = final.callPackage (self + "/derivations/ck.nix") { };
-          worktrunk = final.callPackage (self + "/derivations/worktrunk.nix") {
-            inherit (final) lib rustPlatform fetchFromGitHub;
-          };
           parqeye = final.callPackage (self + "/derivations/parqeye.nix") {
             inherit (final) lib rustPlatform fetchFromGitHub;
           };
@@ -299,7 +296,6 @@
         oq = pkgs.oq;
         uuinfo = pkgs.uuinfo;
         ck = pkgs.ck;
-        worktrunk = pkgs.worktrunk;
         parqeye = pkgs.parqeye;
         beautiful-mermaid = pkgs.beautiful-mermaid;
       };
