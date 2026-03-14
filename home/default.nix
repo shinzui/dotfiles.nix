@@ -40,6 +40,7 @@ in
     ./mori.nix
     ./rei.nix
     ./seihou.nix
+    ./kizamu.nix
   ];
 
 

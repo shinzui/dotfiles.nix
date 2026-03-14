@@ -47,6 +47,10 @@
       url = "github:shinzui/seihou";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    kizamu = {
+      url = "github:shinzui/kizamu";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     determinate = {
       url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
     };
@@ -203,6 +207,7 @@
           mori = inputs.mori.packages.${prev.stdenv.hostPlatform.system}.default;
           rei = inputs.rei.packages.${prev.stdenv.hostPlatform.system}.default;
           seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
+          kizamu = inputs.kizamu.packages.${prev.stdenv.hostPlatform.system}.default;
         };
 
         pkgs-master = final: prev: {
