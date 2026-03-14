@@ -800,11 +800,11 @@
         "typeid-hs-src": "typeid-hs-src"
       },
       "locked": {
-        "lastModified": 1773427819,
-        "narHash": "sha256-GsKNA5EJHG98Mx+TRnmCSaZqBABOWtMMHHwJbCIPGh4=",
+        "lastModified": 1773502535,
+        "narHash": "sha256-M/qtaSsZxJcUSocgQyy0ON5chIEsM7IbcKFjY4/C93M=",
         "owner": "shinzui",
         "repo": "mori",
-        "rev": "92aec7747cb3518f70dd61a8cf98bb52320d8683",
+        "rev": "d7fd5503fd4486ccad2c2943b08ac52c6063f3f2",
         "type": "github"
       },
       "original": {
