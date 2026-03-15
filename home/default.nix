@@ -200,6 +200,7 @@ in
     treefmt
     pgformatter
     pgcli
+    pg_rman
     harlequin # DB client that supports duckdb and postgresql
     nodePackages.prettier
     # nodePackages.graphql-language-service-cli
