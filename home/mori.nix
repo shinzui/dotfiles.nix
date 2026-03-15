@@ -22,7 +22,7 @@ let
       exit 1
     fi
 
-    exec ${pkgs.mori}/bin/mori automate run
+    exec ${pkgs.mori}/bin/mori automate daemon
   '';
 
   mori-db-setup = pkgs.writeShellScriptBin "mori-db-setup" ''

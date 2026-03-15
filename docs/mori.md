@@ -7,7 +7,7 @@ Project identity & automation system. Configured in `home/mori.nix`.
 Two launchd agents run as background services:
 
 - **mori-postgres** — dedicated PostgreSQL instance at `~/.mori/db` (unix socket, no TCP)
-- **mori-automate** — runs `mori automate run`, which starts all event subscriptions and the scheduled action worker
+- **mori-automate** — runs `mori automate daemon`, which starts all event subscriptions and the scheduled action worker
 
 The automate daemon handles all read model projections via subscriptions. CLI commands (`mori register`, `mori registry list`, etc.) write events to the event store and query the read model — they never do inline projection.
 
