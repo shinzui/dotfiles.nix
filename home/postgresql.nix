@@ -7,6 +7,8 @@ let
   pgStateDir = "${config.home.homeDirectory}/.local/state/postgresql";
   pgSocket = pgStateDir;
   pgLog = "${pgStateDir}/logs";
+  pgBackupDir = "${config.home.homeDirectory}/.local/share/postgresql/backups";
+  pgArchiveDir = "${config.home.homeDirectory}/.local/share/postgresql/archivelog";
 
   pg-ensure-db = pkgs.writeShellScriptBin "pg-ensure-db" ''
     set -euo pipefail
@@ -32,6 +34,69 @@ let
       echo "Database '$DBNAME' already exists."
     fi
   '';
+
+  pg-backup = pkgs.writeShellScriptBin "pg-backup" ''
+    set -euo pipefail
+    PGHOST="${pgSocket}"
+    BACKUP_MODE="''${1:-full}"
+
+    if [[ "$BACKUP_MODE" != "full" && "$BACKUP_MODE" != "incremental" ]]; then
+      echo "Usage: pg-backup [full|incremental]"
+      echo "  full         - Full backup (default)"
+      echo "  incremental  - Incremental backup (requires a prior full backup)"
+      exit 1
+    fi
+
+    if ! ${pg}/bin/pg_isready -h "$PGHOST" > /dev/null 2>&1; then
+      echo "Error: PostgreSQL is not running."
+      exit 1
+    fi
+
+    # Initialize catalog if needed
+    if [ ! -f "${pgBackupDir}/pg_rman.ini" ]; then
+      echo "Initializing pg_rman backup catalog..."
+      ${pkgs.pg_rman}/bin/pg_rman init \
+        -B "${pgBackupDir}" \
+        -D "${pgData}" \
+        -A "${pgArchiveDir}"
+    fi
+
+    echo "Starting $BACKUP_MODE backup..."
+    ${pkgs.pg_rman}/bin/pg_rman backup \
+      -B "${pgBackupDir}" \
+      -D "${pgData}" \
+      -A "${pgArchiveDir}" \
+      -b "$BACKUP_MODE" \
+      -d postgres \
+      -h "${pgSocket}" \
+      --progress
+
+    echo "Validating backup..."
+    ${pkgs.pg_rman}/bin/pg_rman validate \
+      -B "${pgBackupDir}"
+
+    echo ""
+    echo "Backup complete. Recent backups:"
+    ${pkgs.pg_rman}/bin/pg_rman show \
+      -B "${pgBackupDir}"
+  '';
+
+  pg-backup-show = pkgs.writeShellScriptBin "pg-backup-show" ''
+    set -euo pipefail
+    ${pkgs.pg_rman}/bin/pg_rman show \
+      -B "${pgBackupDir}" \
+      "$@"
+  '';
+
+  pg-backup-purge = pkgs.writeShellScriptBin "pg-backup-purge" ''
+    set -euo pipefail
+    KEEP_DAYS="''${1:-7}"
+    echo "Deleting backups older than $KEEP_DAYS days..."
+    ${pkgs.pg_rman}/bin/pg_rman delete \
+      -B "${pgBackupDir}" \
+      $(date -v-"''${KEEP_DAYS}"d +%Y-%m-%d)
+    echo "Done."
+  '';
 in
 {
   options.services.postgresql = {
@@ -53,12 +118,27 @@ in
   config = {
     home.packages = [
       pg-ensure-db
+      pg-backup
+      pg-backup-show
+      pg-backup-purge
     ];
 
     home.activation.postgresql-init = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      run mkdir -p "${pgSocket}" "${pgLog}" "${pgDataDir}"
+      run mkdir -p "${pgSocket}" "${pgLog}" "${pgDataDir}" "${pgBackupDir}" "${pgArchiveDir}"
       if [ ! -d "${pgData}" ]; then
         run ${pg}/bin/initdb --auth=trust --no-locale --encoding=UTF8 -D "${pgData}"
+      fi
+
+      # Ensure WAL archiving is configured in postgresql.conf (required by pg_rman)
+      CONF="${pgData}/postgresql.conf"
+      if ! grep -q "# managed by home-manager: pg_rman" "$CONF" 2>/dev/null; then
+        cat >> "$CONF" <<PGCONF
+
+# managed by home-manager: pg_rman
+wal_level = replica
+archive_mode = on
+archive_command = 'cp %p ${pgArchiveDir}/%f'
+PGCONF
       fi
     '';
 
