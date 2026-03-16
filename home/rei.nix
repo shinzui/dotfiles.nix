@@ -76,6 +76,7 @@ in
       ProgramArguments = [ "${rei-subscription-wrapper}" ];
       RunAtLoad = true;
       KeepAlive = true;
+      ExitTimeOut = 30;
       StandardOutPath = "${reiLogDir}/subscription.stdout.log";
       StandardErrorPath = "${reiLogDir}/subscription.stderr.log";
       EnvironmentVariables = {
@@ -92,6 +93,7 @@ in
       ProgramArguments = [ "${rei-worker-wrapper}" ];
       RunAtLoad = true;
       KeepAlive = true;
+      ExitTimeOut = 30;
       StandardOutPath = "${reiLogDir}/worker.stdout.log";
       StandardErrorPath = "${reiLogDir}/worker.stderr.log";
       EnvironmentVariables = {
