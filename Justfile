@@ -23,3 +23,23 @@ symlink-claude-skills:
             echo "Linked $name"
         fi
     done
+
+# Update kizamu flake input to latest
+update-kizamu:
+    nix flake update kizamu
+
+# Update mori flake input to latest
+update-mori:
+    nix flake update mori
+
+# Update seihou flake input to latest
+update-seihou:
+    nix flake update seihou
+
+# Update rei flake input to latest
+update-rei:
+    nix flake update rei
+
+# Update all personal tool flake inputs (kizamu, mori, seihou, rei)
+update-tools:
+    nix flake update kizamu mori seihou rei
