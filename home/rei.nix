@@ -65,6 +65,33 @@ in
     run mkdir -p "${reiLogDir}"
   '';
 
+  # Stop rei agents and wait for processes to fully exit before home-manager
+  # tries to re-register them. Without this, bootout returns before the process
+  # terminates, and the subsequent bootstrap fails with I/O error (code 5).
+  home.activation.rei-stop-agents = lib.hm.dag.entryBefore [ "setupLaunchAgents" ] ''
+    stop_and_wait() {
+      local label="$1"
+      local domain="gui/$(id -u)"
+
+      # Only attempt if the agent is currently loaded
+      if /bin/launchctl print "$domain/$label" &>/dev/null; then
+        verboseEcho "Stopping $label..."
+        /bin/launchctl bootout "$domain/$label" 2>/dev/null || true
+
+        # Wait for the process to fully exit (up to 30s)
+        for i in $(seq 1 30); do
+          if ! /bin/launchctl print "$domain/$label" &>/dev/null; then
+            break
+          fi
+          sleep 1
+        done
+      fi
+    }
+
+    stop_and_wait "com.shinzui.rei-worker"
+    stop_and_wait "com.shinzui.rei-subscription"
+  '';
+
   programs.zsh.sessionVariables = {
     REI_PG_CONNECTION_STRING = connStr;
   };
