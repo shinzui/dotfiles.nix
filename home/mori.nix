@@ -50,6 +50,34 @@ in
     run mkdir -p "${moriLogDir}"
   '';
 
+  # Stop mori agent and wait for process to fully exit before home-manager
+  # tries to re-register it. Without this, bootout returns before the process
+  # terminates, and the subsequent bootstrap fails with I/O error (code 5).
+  home.activation.mori-stop-agents = lib.hm.dag.entryBefore [ "setupLaunchAgents" ] ''
+    stop_and_wait() {
+      local label="$1"
+      local domain="gui/$(id -u)"
+
+      if /bin/launchctl print "$domain/$label" &>/dev/null; then
+        local pid
+        pid=$(/bin/launchctl print "$domain/$label" 2>/dev/null \
+              | /usr/bin/grep -m1 'pid =' | /usr/bin/awk '{print $NF}')
+
+        verboseEcho "Stopping $label (pid ''${pid:-unknown})..."
+        /bin/launchctl bootout "$domain/$label" 2>/dev/null || true
+
+        # Wait for the actual process to die, not just launchd deregistration
+        if [ -n "$pid" ]; then
+          while kill -0 "$pid" 2>/dev/null; do
+            sleep 1
+          done
+        fi
+      fi
+    }
+
+    stop_and_wait "com.shinzui.mori-automate"
+  '';
+
   programs.zsh.sessionVariables = {
     MORI_PG_CONNECTION_STRING = connStr;
   };

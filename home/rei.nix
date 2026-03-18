@@ -73,18 +73,20 @@ in
       local label="$1"
       local domain="gui/$(id -u)"
 
-      # Only attempt if the agent is currently loaded
       if /bin/launchctl print "$domain/$label" &>/dev/null; then
-        verboseEcho "Stopping $label..."
+        local pid
+        pid=$(/bin/launchctl print "$domain/$label" 2>/dev/null \
+              | /usr/bin/grep -m1 'pid =' | /usr/bin/awk '{print $NF}')
+
+        verboseEcho "Stopping $label (pid ''${pid:-unknown})..."
         /bin/launchctl bootout "$domain/$label" 2>/dev/null || true
 
-        # Wait for the process to fully exit (up to 30s)
-        for i in $(seq 1 30); do
-          if ! /bin/launchctl print "$domain/$label" &>/dev/null; then
-            break
-          fi
-          sleep 1
-        done
+        # Wait for the actual process to die, not just launchd deregistration
+        if [ -n "$pid" ]; then
+          while kill -0 "$pid" 2>/dev/null; do
+            sleep 1
+          done
+        fi
       fi
     }
 
