@@ -3,6 +3,7 @@ default:
   just --list
 
 # Symlink Claude skills to project-local .claude/skills/
+[group: 'setup']
 symlink-claude-skills:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -27,36 +28,44 @@ symlink-claude-skills:
     done
 
 # Update kizamu flake input to latest
+[group: 'kizamu']
 update-kizamu:
     nix flake update kizamu
 
 # Update mori flake input to latest
+[group: 'mori']
 update-mori:
     nix flake update mori
 
+# Check status of mori launchd agent
+[group: 'mori']
+status-mori:
+    launchctl print gui/$(id -u)/com.shinzui.mori-automate 2>&1 | head -10
+
 # Update seihou flake input to latest
+[group: 'seihou']
 update-seihou:
     nix flake update seihou
 
 # Update rei flake input to latest
+[group: 'rei']
 update-rei:
     nix flake update rei
 
-# Update all personal tool flake inputs (kizamu, mori, seihou, rei)
-update-tools:
-    nix flake update kizamu mori seihou rei
-
-# Check status of mori launchd agent
-status-mori:
-    launchctl print gui/$(id -u)/com.shinzui.mori-automate 2>&1 | head -10
-
 # Check status of rei launchd agents
+[group: 'rei']
 status-rei:
     launchctl print gui/$(id -u)/com.shinzui.rei-worker 2>&1 | head -10
     @echo "---"
     launchctl print gui/$(id -u)/com.shinzui.rei-subscription 2>&1 | head -10
 
+# Update all personal tool flake inputs (kizamu, mori, seihou, rei)
+[group: 'tools']
+update-tools:
+    nix flake update kizamu mori seihou rei
+
 # Check status of all personal tool agents
+[group: 'tools']
 status-tools:
     @just status-mori
     @echo "==="
