@@ -4,31 +4,28 @@ Project identity & automation system. Configured in `home/mori.nix`.
 
 ## Architecture
 
-Two launchd agents run as background services:
+One launchd agent runs as a background service:
 
-- **mori-postgres** — dedicated PostgreSQL instance at `~/.mori/db` (unix socket, no TCP)
 - **mori-automate** — runs `mori automate daemon`, which starts all event subscriptions and the scheduled action worker
 
 The automate daemon handles all read model projections via subscriptions. CLI commands (`mori register`, `mori registry list`, etc.) write events to the event store and query the read model — they never do inline projection.
 
+PostgreSQL is provided by the shared system service (unix socket, no TCP). The wrapper script waits for postgres to be ready before starting the daemon.
+
 ## Services
 
-Both services start on login (`RunAtLoad`) and restart on crash (`KeepAlive`). On `darwin-rebuild switch`, plists are regenerated with updated store paths and launchd reloads them automatically.
+The agent starts on login (`RunAtLoad`) and restarts on crash (`KeepAlive`). On `darwin-rebuild switch`, a pre-activation hook stops the agent and waits for the process to fully exit (by PID) before home-manager re-registers it.
 
 ### Status
 
 ```bash
-launchctl list | grep mori
+just status-mori
 ```
 
 ### Restart
 
 ```bash
-# Restart automate daemon
 launchctl kickstart -k gui/$(id -u)/com.shinzui.mori-automate
-
-# Restart postgres
-launchctl kickstart -k gui/$(id -u)/com.shinzui.mori-postgres
 ```
 
 ## Logs
@@ -36,18 +33,12 @@ launchctl kickstart -k gui/$(id -u)/com.shinzui.mori-postgres
 All logs are in `~/.mori/logs/`:
 
 ```bash
-# Subscription & automation logs
 tail -f ~/.mori/logs/automate.stderr.log
-
-# PostgreSQL logs
-tail -f ~/.mori/logs/postgres.stderr.log
 ```
 
 ## Database
 
-PostgreSQL data lives at `~/.mori/data`, connects via unix socket at `~/.mori/db`.
-
-Connection string is set automatically via `MORI_PG_CONNECTION_STRING` in the shell environment.
+Uses the shared PostgreSQL service. Connection string is set automatically via `MORI_PG_CONNECTION_STRING` in the shell environment.
 
 ### Initial setup
 
