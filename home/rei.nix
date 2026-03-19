@@ -62,10 +62,21 @@ in
   # Stop rei agents and wait for processes to fully exit before home-manager
   # tries to re-register them. Without this, bootout returns before the process
   # terminates, and the subsequent bootstrap fails with I/O error (code 5).
+  #
+  # IMPORTANT: Only bootout if the plist actually changed. setupLaunchAgents
+  # skips unchanged plists, so booting out unconditionally leaves them unloaded.
   home.activation.rei-stop-agents = lib.hm.dag.entryBefore [ "setupLaunchAgents" ] ''
     stop_and_wait() {
       local label="$1"
       local domain="gui/$(id -u)"
+      local newPlist="$newGenPath/LaunchAgents/$label.plist"
+      local curPlist="$HOME/Library/LaunchAgents/$label.plist"
+
+      # Only stop if the plist is actually changing
+      if cmp -s "$newPlist" "$curPlist"; then
+        verboseEcho "$label plist unchanged, skipping stop"
+        return
+      fi
 
       if /bin/launchctl print "$domain/$label" &>/dev/null; then
         local pid
