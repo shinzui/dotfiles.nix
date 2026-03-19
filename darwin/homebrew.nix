@@ -29,6 +29,7 @@ in
     "aider"
     "keyboardSwitcher"
     "steipete/tap/summarize"
+    "redpanda-data/tap/redpanda"
   ];
 
   homebrew.taps = [
@@ -39,6 +40,7 @@ in
     "lutzifer/homebrew-tap"
     "txn2/tap"
     "steipete/tap"
+    "redpanda-data/tap"
   ];
 
   # Prefer installing application from the Mac App Store
