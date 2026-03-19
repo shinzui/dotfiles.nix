@@ -1,4 +1,6 @@
 # Dotfiles management recipes
+default:
+  just --list
 
 # Symlink Claude skills to project-local .claude/skills/
 symlink-claude-skills:
@@ -43,3 +45,19 @@ update-rei:
 # Update all personal tool flake inputs (kizamu, mori, seihou, rei)
 update-tools:
     nix flake update kizamu mori seihou rei
+
+# Check status of mori launchd agent
+status-mori:
+    launchctl print gui/$(id -u)/com.shinzui.mori-automate 2>&1 | head -10
+
+# Check status of rei launchd agents
+status-rei:
+    launchctl print gui/$(id -u)/com.shinzui.rei-worker 2>&1 | head -10
+    @echo "---"
+    launchctl print gui/$(id -u)/com.shinzui.rei-subscription 2>&1 | head -10
+
+# Check status of all personal tool agents
+status-tools:
+    @just status-mori
+    @echo "==="
+    @just status-rei
