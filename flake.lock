@@ -800,11 +800,11 @@
         "typeid-hs-src": "typeid-hs-src"
       },
       "locked": {
-        "lastModified": 1773602532,
-        "narHash": "sha256-JaONhHZaU9xLxH3WGfq0nV9ZqFhxRg3qO5sGCxeikH4=",
+        "lastModified": 1773953684,
+        "narHash": "sha256-azZF//ai40MJaoZ3rSagHm/eHa4isk/6V1FTMrmsiIM=",
         "owner": "shinzui",
         "repo": "mori",
-        "rev": "51877e2d91f5d406b1b7ffaad1ac8622d4be7b7f",
+        "rev": "f0ea83484263fdc6d22de825ce814a6601376b42",
         "type": "github"
       },
       "original": {
@@ -1422,11 +1422,11 @@
         "typeid-hs-src": "typeid-hs-src_2"
       },
       "locked": {
-        "lastModified": 1773610271,
-        "narHash": "sha256-JOuu80JqI/yywvRxaQLZtqr6fB6NI5rN/+c3MxNO+xg=",
+        "lastModified": 1773924953,
+        "narHash": "sha256-/3Q/SY+4WbzzqFG0micwP0GVd82bGoF5/URXRaGEDAY=",
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "f1ea5a3ec9b30236bf87a4212c408ea0f3063132",
+        "rev": "8b0d57e90936926220e31830915317780d8f8a29",
         "type": "github"
       },
       "original": {
