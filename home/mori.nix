@@ -12,15 +12,9 @@ let
     export MORI_PG_CONNECTION_STRING="${connStr}"
 
     # Wait for PostgreSQL to be ready
-    for i in $(seq 1 30); do
-      if ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; then break; fi
-      sleep 1
+    until ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; do
+      sleep 2
     done
-
-    if ! ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; then
-      echo "Error: PostgreSQL not ready after 30s" >&2
-      exit 1
-    fi
 
     exec ${pkgs.mori}/bin/mori automate daemon
   '';
