@@ -163,6 +163,7 @@ in
     sesh # smart session manager for tmux
     tmuxp # tmux session manager
 
+    poppler-utils #PDF rendering library CLI tools (pdftotext, pdfinfo, pdfunite, etc.)
     pandoc
     glow #cli markdown viewer
     presenterm #markdown terminal slideshow tool

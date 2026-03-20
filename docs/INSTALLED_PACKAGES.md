@@ -277,6 +277,7 @@ This document provides a comprehensive overview of all packages installed throug
 
 ### Installed via Nix (nixpkgs)
 
+- **[poppler-utils](https://poppler.freedesktop.org/)** - PDF rendering library command-line utilities (pdftotext, pdfinfo, pdfunite, pdfseparate, etc.)
 - **[pandoc](https://pandoc.org/)** - Universal document converter
 - **[glow](https://github.com/charmbracelet/glow)** - Render markdown on the CLI with style
 - **[presenterm](https://github.com/mfontanini/presenterm)** - Terminal-based presentation tool with markdown support
