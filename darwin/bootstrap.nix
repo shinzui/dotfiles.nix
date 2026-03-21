@@ -28,7 +28,10 @@
     keep-outputs = true;
     keep-derivations = true;
 
-
+    # Fall back to building from source when a substituter fails
+    fallback = true;
+    # Reduce connection timeout for substituters (seconds)
+    connect-timeout = 10;
   };
 
   # Include access tokens from agenix secret into nix.custom.conf
