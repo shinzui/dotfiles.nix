@@ -59,6 +59,21 @@ status-rei:
     @echo "---"
     launchctl print gui/$(id -u)/com.shinzui.rei-subscription 2>&1 | head -10
 
+# Tail rei worker logs (stdout and stderr)
+[group: 'rei']
+logs-rei-worker:
+    tail -f ~/.rei/logs/worker.stdout.log ~/.rei/logs/worker.stderr.log
+
+# Tail rei subscription logs (stdout and stderr)
+[group: 'rei']
+logs-rei-subscription:
+    tail -f ~/.rei/logs/subscription.stdout.log ~/.rei/logs/subscription.stderr.log
+
+# Tail all rei logs
+[group: 'rei']
+logs-rei:
+    tail -f ~/.rei/logs/*.log
+
 # Update all personal tool flake inputs (kizamu, mori, seihou, rei)
 [group: 'tools']
 update-tools:
