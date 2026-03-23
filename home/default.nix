@@ -165,6 +165,7 @@ in
 
     poppler-utils #PDF rendering library CLI tools (pdftotext, pdfinfo, pdfunite, etc.)
     pandoc
+    mdr #terminal markdown renderer
     glow #cli markdown viewer
     presenterm #markdown terminal slideshow tool
     # monolith # CLI tool for saving complete web pages
