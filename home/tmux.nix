@@ -25,6 +25,15 @@
       set -g detach-on-destroy off  # don't exit from tmux when closing a session
       set -gu default-command
       set -g default-shell "$SHELL"
+
+      # Focus on active pane - dim inactive panes
+      # Uses Nord-compatible colors: Nord0 (#2E3440) for active, Nord1 (#3B4252) for inactive
+      set -g window-style 'fg=colour248,bg=#3B4252'
+      set -g window-active-style 'fg=default,bg=#2E3440'
+
+      # Pane borders - Nord3 for inactive, Nord8 (frost blue) for active
+      set -g pane-border-style 'fg=#4C566A,bg=default'
+      set -g pane-active-border-style 'fg=#88C0D0,bg=default'
       bind-key "T" run-shell "sesh connect \"$(
         sesh list --icons | fzf-tmux -p 80%,70% \
           --no-sort --ansi --border-label ' sesh ' --prompt '⚡  ' \
