@@ -8,6 +8,11 @@ require("hs.ipc")
 local focusDelay = 0.3
 local focusTimer = nil
 
+local function pointInsideFrame(point, frame)
+  return point.x >= frame.x and point.x <= frame.x + frame.w
+     and point.y >= frame.y and point.y <= frame.y + frame.h
+end
+
 local mouseMoved = hs.eventtap.new({ hs.eventtap.event.types.mouseMoved }, function()
   if focusTimer then
     focusTimer:stop()
@@ -15,10 +20,10 @@ local mouseMoved = hs.eventtap.new({ hs.eventtap.event.types.mouseMoved }, funct
 
   focusTimer = hs.timer.doAfter(focusDelay, function()
     local mousePoint = hs.mouse.absolutePosition()
-    local win = hs.window.orderedWindows()
+    local wins = hs.window.orderedWindows()
 
-    for _, w in ipairs(win) do
-      if w:frame():inside(mousePoint) then
+    for _, w in ipairs(wins) do
+      if pointInsideFrame(mousePoint, w:frame()) then
         local focused = hs.window.focusedWindow()
         if focused and w:id() ~= focused:id() then
           w:focus()
