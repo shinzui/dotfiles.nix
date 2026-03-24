@@ -67,6 +67,7 @@ in
     "discord"
     "microsoft-teams"
     "anki"
+    "hammerspoon"
     "insomnia"
     "min"
     # "raycast"
