@@ -18,8 +18,7 @@ in
   homebrew.onActivation.upgrade = true;
   homebrew.onActivation.cleanup = "zap";
   homebrew.global.brewfile = true;
-  #https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-homebrew.caskArgs.no_quarantine
-  homebrew.caskArgs.no_quarantine = true;
+  # no_quarantine removed — Homebrew dropped the --[no-]quarantine switch
 
   homebrew.brews = [
     "pam-reattach"
