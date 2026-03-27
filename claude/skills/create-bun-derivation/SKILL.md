@@ -43,14 +43,26 @@ The flake already has `bun2nix` configured as an input with its overlay applied.
    ```
    Check the repo's tags to determine if versions are prefixed with `v` (e.g., `v1.0.0` vs `1.0.0`).
 
-6. **Generate bun.nix**: Clone the repo at the target version, install dependencies, and generate the Nix lockfile:
+6. **Generate bun.nix**: Clone the repo at the target version, install **production dependencies only**, and generate the Nix lockfile:
    ```bash
-   cd /tmp/claude
+   cd $TMPDIR
    git clone --branch <tag> --depth 1 https://github.com/<owner>/<repo>.git
    cd <repo>
+   ```
+
+   **IMPORTANT**: Remove `devDependencies` from `package.json` before installing. DevDependencies (linters, type checkers, test frameworks, etc.) are not needed at runtime, and packages like `@biomejs/biome` have platform-specific postinstall scripts that will hang indefinitely in the Nix sandbox with no network access.
+
+   ```bash
+   # Remove devDependencies section from package.json
+   # (use sed, jq, or similar to delete the "devDependencies" block)
+   # Also remove any existing lockfiles to get a clean native bun lockfile
+   rm -f package-lock.json bun.lock
    bun install
    nix run github:nix-community/bun2nix -- -o bun.nix
    ```
+
+   Verify the generated `bun.nix` does NOT contain devDependencies (e.g., `grep biome bun.nix` should return nothing if biome was a devDep). Also verify no empty hashes (`hash = ""`) exist — empty hashes indicate the lockfile was migrated from `package-lock.json` without integrity data.
+
    Copy the generated `bun.nix` to `derivations/<pname>/bun.nix`.
 
 7. **Create CLI wrapper** (if needed): Create `derivations/<pname>/cli.ts` that wraps the library's API. Key considerations:
@@ -90,6 +102,7 @@ The flake already has `bun2nix` configured as an input with its overlay applied.
      '';
 
      dontUseBunBuild = true;
+     dontRunLifecycleScripts = true;
 
      startScript = ''
        bun run cli.ts "$@"
@@ -111,6 +124,7 @@ The flake already has `bun2nix` configured as an input with its overlay applied.
    **Important notes on the template:**
    - Always use `bun2nix.writeBunApplication`, NOT `bun2nix.mkDerivation` — `bun build --compile` produces 0-byte binaries in the Nix sandbox
    - Always set `dontUseBunBuild = true` — we run the TypeScript source directly with Bun at runtime
+   - Always set `dontRunLifecycleScripts = true` — lifecycle scripts (postinstall) can hang in the Nix sandbox when packages try to download platform binaries with no network access
    - `bunDeps` must use `bun2nix.fetchBunDeps { bunNix = ./bun.nix; }` — do NOT pass `bunNix` directly
    - `postUnpack` copies the CLI wrapper into the source tree before `bun install` runs
    - `startScript` is the shell command that runs the entry point; Bun is automatically on the PATH
@@ -147,3 +161,6 @@ The flake already has `bun2nix` configured as an input with its overlay applied.
 - Top-level `await` does not work in compiled Bun binaries — always wrap async code in an `async function main()` and call `main()` at the end
 - The `bun2nix` overlay must be listed before `my-packages` in the `legacyPackages` overlays list
 - License mapping: use nixpkgs license identifiers (e.g., `mit`, `asl20` for Apache-2.0, `isc`, etc.)
+- **Generate bun.nix from production deps only**: Remove `devDependencies` from `package.json` before running `bun install` and `bun2nix`. DevDependencies like `@biomejs/biome` have postinstall scripts that download platform binaries — these hang indefinitely in the Nix sandbox (no network). Even with `dontRunLifecycleScripts`, including them bloats the closure unnecessarily.
+- **Delete existing lockfiles** (`package-lock.json`, `bun.lock`) before `bun install` so Bun generates a native lockfile (configVersion 1). Migrated lockfiles from npm often produce empty hashes in `bun.nix`, causing build failures.
+- Always set `dontRunLifecycleScripts = true` as a safety net — even if devDeps are stripped, some production packages may have lifecycle scripts that assume network access
