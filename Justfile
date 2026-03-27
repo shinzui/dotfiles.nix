@@ -42,6 +42,21 @@ update-mori:
 status-mori:
     launchctl print gui/$(id -u)/com.shinzui.mori-automate 2>&1 | head -10
 
+# Tail mori automate logs (stdout and stderr)
+[group: 'mori']
+logs-mori-automate:
+    tail -f ~/.mori/logs/automate.stdout.log ~/.mori/logs/automate.stderr.log
+
+# Tail mori postgres logs (stdout and stderr)
+[group: 'mori']
+logs-mori-postgres:
+    tail -f ~/.mori/logs/postgres.stdout.log ~/.mori/logs/postgres.stderr.log
+
+# Tail all mori logs
+[group: 'mori']
+logs-mori:
+    tail -f ~/.mori/logs/*.log
+
 # Update seihou flake input to latest
 [group: 'seihou']
 update-seihou:
