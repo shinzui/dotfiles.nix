@@ -203,6 +203,7 @@
             inherit (final) lib rustPlatform fetchFromGitHub;
           };
           beautiful-mermaid = final.callPackage (self + "/derivations/beautiful-mermaid") { };
+          markit = final.callPackage (self + "/derivations/markit") { };
           pg_rman = final.callPackage (self + "/derivations/pg_rman.nix") {
             postgresql = final.postgresql_18;
           };
@@ -296,6 +297,7 @@
         ck = pkgs.ck;
         parqeye = pkgs.parqeye;
         beautiful-mermaid = pkgs.beautiful-mermaid;
+        markit = pkgs.markit;
         pg_rman = pkgs.pg_rman;
       };
     });

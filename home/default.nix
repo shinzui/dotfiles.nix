@@ -175,6 +175,7 @@ in
     # aider-chat.withPlaywright #AI pair programming
     repomix
     beautiful-mermaid
+    markit
     goose-cli
     tmuxai
 
