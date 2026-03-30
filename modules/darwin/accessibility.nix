@@ -13,9 +13,11 @@ in
         List of application bundle identifiers to grant accessibility access.
         These are added to the system TCC database on each activation.
 
-        Note: the terminal used for `darwin-rebuild switch` may need
-        Full Disk Access for this to work (System Settings → Privacy
-        & Security → Full Disk Access).
+        Prerequisite: the terminal app used for `darwin-rebuild switch`
+        must have Full Disk Access. Grant it once in System Settings →
+        Privacy & Security → Full Disk Access, then restart the terminal.
+        Without this, macOS TCC protections block writes to the
+        accessibility database even as root.
       '';
       example = [ "org.hammerspoon.Hammerspoon" ];
     };
