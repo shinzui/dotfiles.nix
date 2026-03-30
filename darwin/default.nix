@@ -31,6 +31,11 @@
     private-fonts.packages.aarch64-darwin.pragmataPro
   ];
 
+  # Accessibility
+  security.accessibility.apps = [
+    "org.hammerspoon.Hammerspoon"
+  ];
+
   # Keyboard
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;

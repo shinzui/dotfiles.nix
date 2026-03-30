@@ -109,6 +109,7 @@
         # Include extra `nix-darwin`
         self.darwinModules.pam
         self.darwinModules.users
+        self.darwinModules.accessibility
 
         agenix.darwinModules.default
 
@@ -265,6 +266,7 @@
       darwinModules = {
         users = import ./modules/darwin/users.nix;
         pam = import ./modules/darwin/pam.nix;
+        accessibility = import ./modules/darwin/accessibility.nix;
       };
 
       homeManagerModules = {
