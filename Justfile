@@ -89,10 +89,15 @@ logs-rei-subscription:
 logs-rei:
     tail -f ~/.rei/logs/*.log
 
-# Update all personal tool flake inputs (kizamu, mori, seihou, rei)
+# Update notion-cli flake input to latest
+[group: 'notion-cli']
+update-notion-cli:
+    nix flake update notion-cli
+
+# Update all personal tool flake inputs (kizamu, mori, seihou, rei, notion-cli)
 [group: 'tools']
 update-tools:
-    nix flake update kizamu mori seihou rei
+    nix flake update kizamu mori seihou rei notion-cli
 
 # Check status of all personal tool agents
 [group: 'tools']

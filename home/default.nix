@@ -41,6 +41,7 @@ in
     ./rei.nix
     ./seihou.nix
     ./kizamu.nix
+    ./notion-cli.nix
     ./hammerspoon.nix
   ];
 
