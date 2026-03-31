@@ -105,6 +105,7 @@
       ".direnv/"
       ".vim-bookmarks"
       ".devenv/"
+      ".seihou/manifest.json.tmp"
     ];
 
     # Use mergiraf as the merge driver for all files
