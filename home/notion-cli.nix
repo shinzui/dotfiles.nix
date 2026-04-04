@@ -1,8 +1,8 @@
 { pkgs, ... }:
 
 let
-  notion-cli-zsh-completions = pkgs.runCommand "notion-cli-zsh-completions" { } ''
-    ${pkgs.notion-cli}/bin/notion-cli completions zsh > $out
+  ntn-zsh-completions = pkgs.runCommand "ntn-zsh-completions" { } ''
+    ${pkgs.notion-cli}/bin/ntn completions zsh > $out
   '';
 in
 {
@@ -10,5 +10,5 @@ in
     pkgs.notion-cli
   ];
 
-  home.file.".zfunc/_notion-cli".source = notion-cli-zsh-completions;
+  home.file.".zfunc/_ntn".source = ntn-zsh-completions;
 }
