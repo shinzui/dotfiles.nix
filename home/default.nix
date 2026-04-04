@@ -184,6 +184,7 @@ in
     # element-desktop # broken on macOS: requires Xcode 26+ actool (upstream nixpkgs issue)
 
     # Dev packages
+    python3
     angle-grinder #Fast log processor
     git-extras
     git-absorb
