@@ -1544,11 +1544,11 @@
         "typeid-hs-src": "typeid-hs-src_2"
       },
       "locked": {
-        "lastModified": 1775706615,
-        "narHash": "sha256-Jd893hsXP9xWxHOiD/ZT/Yp1YNImeI+8pJlB0ugxm2M=",
+        "lastModified": 1775707577,
+        "narHash": "sha256-wzc5kVLDOv9J5AWlsTKsWAZxzJzicEkBxxgh7xRFUbY=",
         "owner": "shinzui",
         "repo": "notion-hub",
-        "rev": "d4447152350ad49a08b04ebbb7ef42b3efe5711a",
+        "rev": "e3efae65ebff79e53845363f5618a4abc2cc2136",
         "type": "github"
       },
       "original": {
