@@ -55,6 +55,10 @@
       url = "github:shinzui/notion-cli";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    notion-hub = {
+      url = "github:shinzui/notion-hub";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     determinate = {
       url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
     };
@@ -217,6 +221,8 @@
           seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
           kizamu = inputs.kizamu.packages.${prev.stdenv.hostPlatform.system}.default;
           notion-cli = inputs.notion-cli.packages.${prev.stdenv.hostPlatform.system}.default;
+          notion-hub = inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.default;
+          notion-hub-subscriptions = inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.notion-hub-subscriptions;
         };
 
         pkgs-master = final: prev: {

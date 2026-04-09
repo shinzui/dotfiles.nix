@@ -37,6 +37,11 @@ update-kizamu:
 update-mori:
     nix flake update mori
 
+# Restart mori automate daemon
+[group: 'mori']
+restart-mori:
+    launchctl kickstart -k gui/$(id -u)/com.shinzui.mori-automate
+
 # Check status of mori launchd agent
 [group: 'mori']
 status-mori:
@@ -94,10 +99,35 @@ logs-rei:
 update-notion-cli:
     nix flake update notion-cli
 
-# Update all personal tool flake inputs (kizamu, mori, seihou, rei, notion-cli)
+# Update notion-hub flake input to latest
+[group: 'notion-hub']
+update-notion-hub:
+    nix flake update notion-hub
+
+# Restart notion-hub subscription daemon
+[group: 'notion-hub']
+restart-notion-hub:
+    launchctl kickstart -k gui/$(id -u)/com.shinzui.notion-hub-subscription
+
+# Check status of notion-hub launchd agent
+[group: 'notion-hub']
+status-notion-hub:
+    launchctl print gui/$(id -u)/com.shinzui.notion-hub-subscription 2>&1 | head -10
+
+# Tail notion-hub subscription logs (stdout and stderr)
+[group: 'notion-hub']
+logs-notion-hub-subscription:
+    tail -f ~/.notion-hub/logs/subscription.stdout.log ~/.notion-hub/logs/subscription.stderr.log
+
+# Tail all notion-hub logs
+[group: 'notion-hub']
+logs-notion-hub:
+    tail -f ~/.notion-hub/logs/*.log
+
+# Update all personal tool flake inputs (kizamu, mori, seihou, rei, notion-cli, notion-hub)
 [group: 'tools']
 update-tools:
-    nix flake update kizamu mori seihou rei notion-cli
+    nix flake update kizamu mori seihou rei notion-cli notion-hub
 
 # Check status of all personal tool agents
 [group: 'tools']
@@ -105,3 +135,5 @@ status-tools:
     @just status-mori
     @echo "==="
     @just status-rei
+    @echo "==="
+    @just status-notion-hub
