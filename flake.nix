@@ -221,7 +221,13 @@
           seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
           kizamu = inputs.kizamu.packages.${prev.stdenv.hostPlatform.system}.default;
           notion-cli = inputs.notion-cli.packages.${prev.stdenv.hostPlatform.system}.default;
-          notion-hub = inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.default;
+          # Wrap notion-hub to only expose bin/ — the full Haskell output
+          # includes lib/ghc-*/libHSnotion-client-* which conflicts with
+          # notion-cli (both depend on notion-client from different package sets).
+          notion-hub = prev.runCommand "notion-hub" {} ''
+            mkdir -p $out
+            ln -s ${inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
+          '';
           notion-hub-subscriptions = inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.notion-hub-subscriptions;
         };
 
