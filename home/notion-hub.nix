@@ -15,6 +15,7 @@ let
 
   notion-hub-subscription-wrapper = pkgs.writeShellScript "notion-hub-subscription" ''
     set -euo pipefail
+    export HASKELL_ENV=production
     export NOTION_HUB_PG_CONNECTION_STRING="${connStr}"
     export PG_CONNECTION_STRING="${connStr}"
 
@@ -24,7 +25,7 @@ let
   '';
 
   nhub-zsh-completions = pkgs.runCommand "nhub-zsh-completions" { } ''
-    NOTION_HUB_PG_CONNECTION_STRING="host=localhost dbname=notion_hub" ${nhubBin} completions zsh > $out
+    HASKELL_ENV=production NOTION_HUB_PG_CONNECTION_STRING="host=localhost dbname=notion_hub" ${nhubBin} completions zsh > $out
   '';
 
   nhub-db-setup = pkgs.writeShellScriptBin "nhub-db-setup" ''
@@ -103,6 +104,7 @@ in
       StandardOutPath = "${nhubLogDir}/subscription.stdout.log";
       StandardErrorPath = "${nhubLogDir}/subscription.stderr.log";
       EnvironmentVariables = {
+        HASKELL_ENV = "production";
         NOTION_HUB_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
       };
