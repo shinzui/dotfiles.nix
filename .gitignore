@@ -2,7 +2,6 @@ result
 todo.md
 .luarc.json
 .envrc
-.aider*
 .claude/
 # --- seihou:claude-gitignore ---
 .claude/

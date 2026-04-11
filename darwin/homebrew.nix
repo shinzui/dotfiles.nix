@@ -25,7 +25,6 @@ in
     "tidy-html5"
     "xq"
     "duckdb"
-    "aider"
     "keyboardSwitcher"
     "steipete/tap/summarize"
     "redpanda-data/tap/redpanda"

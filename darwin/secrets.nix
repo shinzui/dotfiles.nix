@@ -43,12 +43,6 @@
       mode = "600";
       owner = "shinzui";
     };
-    aider-conf = {
-      file = ../secrets/aider.conf.yml.age;
-      path = "/Users/shinzui/.aider.conf.yml";
-      mode = "600";
-      owner = "shinzui";
-    };
     datasette-llm-keys = {
       file = ../secrets/llm-keys.json.age;
       path = "/Users/shinzui/Library/Application Support/io.datasette.llm/keys.json";

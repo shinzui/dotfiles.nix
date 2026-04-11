@@ -170,12 +170,11 @@ in
     # monolith # CLI tool for saving complete web pages
 
     #人工知能
-    # aider-chat.withPlaywright #AI pair programming
     agent-browser #browser automation CLI for AI agents
     repomix
     beautiful-mermaid
     markit
-    goose-cli
+
     tmuxai
 
     #desktop apps

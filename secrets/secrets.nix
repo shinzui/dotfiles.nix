@@ -12,7 +12,6 @@ in
   "tableplus_gcp_service_account.json.age".publicKeys = shinzuiAtSungkyung;
   "cai_secrets.yaml.age".publicKeys = shinzuiAtSungkyung;
   "pgpass.age".publicKeys = shinzuiAtSungkyung;
-  "aider.conf.yml.age".publicKeys = shinzuiAtSungkyung;
   "llm-keys.json.age".publicKeys = shinzuiAtSungkyung;
   "tmuxai.config.yaml.age".publicKeys = shinzuiAtSungkyung;
   "sesh.toml.age".publicKeys = shinzuiAtSungkyung;
