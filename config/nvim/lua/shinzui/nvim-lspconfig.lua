@@ -94,9 +94,9 @@ vim.lsp.config('rescript_relay_lsp', {
   end,
 })
 
--- ls_emmet support
-vim.lsp.config('ls_emmet', {
-  cmd = { "ls_emmet", "--stdio" },
+-- emmet-ls support
+vim.lsp.config('emmet_ls', {
+  cmd = { "emmet-ls", "--stdio" },
   filetypes = {
     "html", "css", "scss", "javascript", "javascriptreact", 
     "typescript", "typescriptreact", "haml", "xml", "xsl", 
@@ -174,7 +174,7 @@ vim.lsp.config('nickel_ls', nls_opts)
 local lsp_servers = {
   'hls',
   'jsonls',
-  'ls_emmet',
+  'emmet_ls',
   'dhall_lsp_server',
   'graphql',
   'ts_ls',
