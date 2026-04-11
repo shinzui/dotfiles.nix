@@ -61,5 +61,11 @@
       mode = "600";
       owner = "shinzui";
     };
+    mori-rei-app-webhook-secret = {
+      file = ../secrets/mori-rei-app-webhook-secret.age;
+      path = "/Users/shinzui/.config/mori-rei-app/webhook-secret";
+      mode = "600";
+      owner = "shinzui";
+    };
   };
 }

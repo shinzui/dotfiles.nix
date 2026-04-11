@@ -62,6 +62,26 @@ logs-mori-postgres:
 logs-mori:
     tail -f ~/.mori/logs/*.log
 
+# Update mori-rei-app flake input to latest
+[group: 'mori-rei-app']
+update-mori-rei-app:
+    nix flake update mori-rei-app
+
+# Restart mori-rei-app server
+[group: 'mori-rei-app']
+restart-mori-rei-app:
+    launchctl kickstart -k gui/$(id -u)/com.shinzui.mori-rei-app
+
+# Check status of mori-rei-app launchd agent
+[group: 'mori-rei-app']
+status-mori-rei-app:
+    launchctl print gui/$(id -u)/com.shinzui.mori-rei-app 2>&1 | head -10
+
+# Tail mori-rei-app logs (stdout and stderr)
+[group: 'mori-rei-app']
+logs-mori-rei-app:
+    tail -f ~/.mori-rei-app/logs/server.stdout.log ~/.mori-rei-app/logs/server.stderr.log
+
 # Update seihou flake input to latest
 [group: 'seihou']
 update-seihou:
@@ -124,15 +144,17 @@ logs-notion-hub-subscription:
 logs-notion-hub:
     tail -f ~/.notion-hub/logs/*.log
 
-# Update all personal tool flake inputs (kizamu, mori, seihou, rei, notion-cli, notion-hub)
+# Update all personal tool flake inputs (kizamu, mori, mori-rei-app, seihou, rei, notion-cli, notion-hub)
 [group: 'tools']
 update-tools:
-    nix flake update kizamu mori seihou rei notion-cli notion-hub
+    nix flake update kizamu mori mori-rei-app seihou rei notion-cli notion-hub
 
 # Check status of all personal tool agents
 [group: 'tools']
 status-tools:
     @just status-mori
+    @echo "==="
+    @just status-mori-rei-app
     @echo "==="
     @just status-rei
     @echo "==="

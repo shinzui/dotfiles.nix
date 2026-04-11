@@ -55,6 +55,10 @@
       url = "github:shinzui/notion-cli";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    mori-rei-app = {
+      url = "github:shinzui/mori-rei-app";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     notion-hub = {
       url = "github:shinzui/notion-hub";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -220,6 +224,7 @@
           rei = inputs.rei.packages.${prev.stdenv.hostPlatform.system}.default;
           seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
           kizamu = inputs.kizamu.packages.${prev.stdenv.hostPlatform.system}.default;
+          mori-rei-app = inputs.mori-rei-app.packages.${prev.stdenv.hostPlatform.system}.default;
           notion-cli = inputs.notion-cli.packages.${prev.stdenv.hostPlatform.system}.default;
           # Wrap notion-hub to only expose bin/ — the full Haskell output
           # includes lib/ghc-*/libHSnotion-client-* which conflicts with
