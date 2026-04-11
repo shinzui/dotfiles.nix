@@ -1,10 +1,6 @@
 { config, pkgs, lib, ... }:
 
 let
-  myNodePackages = import ../packages/node {
-    inherit pkgs;
-    system = pkgs.stdenv.hostPlatform.system;
-  };
   fzfConfig =
     let fd = "${pkgs.fd}/bin/fd"; in
     rec {
@@ -175,6 +171,7 @@ in
 
     #人工知能
     # aider-chat.withPlaywright #AI pair programming
+    agent-browser #browser automation CLI for AI agents
     repomix
     beautiful-mermaid
     markit
@@ -209,9 +206,9 @@ in
     pgcli
     pg_rman
     harlequin # DB client that supports duckdb and postgresql
-    nodePackages.prettier
-    # nodePackages.graphql-language-service-cli
-    nodePackages.pnpm
+    prettier
+    # graphql-language-service-cli
+    pnpm
     lazygit
     # duckdb
     devenv
@@ -247,7 +244,7 @@ in
     tokei #source code line counter
     nixpkgs-fmt #nix formatter
     stylua #lua formatter
-    nodePackages.typescript
+    typescript
     nodejs_22
     bun
     jq
@@ -273,15 +270,15 @@ in
     haskell-language-server
     dhall-lsp-server
     nls # nickel language server
-    nodePackages.typescript-language-server
+    typescript-language-server
     nil #nix language server
     terraform-ls
     ocamlPackages.ocaml-lsp
     lua-language-server
     yaml-language-server
-    nodePackages.vscode-langservers-extracted
-    myNodePackages."@tailwindcss/language-server"
-    myNodePackages.ls_emmet
+    vscode-langservers-extracted
+    tailwindcss-language-server
+    emmet-ls
 
     #Nix related tools
     cachix

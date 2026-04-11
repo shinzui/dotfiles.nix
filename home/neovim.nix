@@ -118,8 +118,8 @@ in
     gcc # needed for nvim-treesitter
     gccStdenv
     # tree-sitter # needed for nvim-treesitter
-    nodePackages.typescript
-    nodePackages.typescript-language-server
+    typescript
+    typescript-language-server
   ];
 
   # 
