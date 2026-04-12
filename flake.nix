@@ -217,6 +217,7 @@
           };
           beautiful-mermaid = final.callPackage (self + "/derivations/beautiful-mermaid") { };
           markit = final.callPackage (self + "/derivations/markit") { };
+          bootstrap-repos = final.callPackage (self + "/derivations/bootstrap-repos") { };
           pg_rman = final.callPackage (self + "/derivations/pg_rman.nix") {
             postgresql = final.postgresql_18;
           };
@@ -224,7 +225,13 @@
           rei = inputs.rei.packages.${prev.stdenv.hostPlatform.system}.default;
           seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
           kizamu = inputs.kizamu.packages.${prev.stdenv.hostPlatform.system}.default;
-          mori-rei-app = inputs.mori-rei-app.packages.${prev.stdenv.hostPlatform.system}.default;
+          # Wrap mori-rei-app to only expose bin/ — the full Haskell output
+          # includes lib/links/libHStan-commons-config-* which conflicts with
+          # mori (both depend on tan-commons-config from the same package set).
+          mori-rei-app = prev.runCommand "mori-rei-app" {} ''
+            mkdir -p $out
+            ln -s ${inputs.mori-rei-app.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
+          '';
           notion-cli = inputs.notion-cli.packages.${prev.stdenv.hostPlatform.system}.default;
           # Wrap notion-hub to only expose bin/ — the full Haskell output
           # includes lib/ghc-*/libHSnotion-client-* which conflicts with
@@ -323,6 +330,7 @@
         beautiful-mermaid = pkgs.beautiful-mermaid;
         markit = pkgs.markit;
         pg_rman = pkgs.pg_rman;
+        bootstrap-repos = pkgs.bootstrap-repos;
       };
     });
 }

@@ -175,6 +175,7 @@ in
     repomix
     beautiful-mermaid
     markit
+    bootstrap-repos
 
     tmuxai
 
