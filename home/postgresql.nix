@@ -142,6 +142,39 @@ PGCONF
       fi
     '';
 
+    # Stop postgresql and wait for process to fully exit before home-manager
+    # tries to re-register it. Without this, bootout returns before the process
+    # terminates, and the subsequent bootstrap fails with I/O error (code 5).
+    # Also cleans up the stale postmaster.pid that postgres leaves behind when
+    # launchd sends SIGTERM during a rebuild.
+    home.activation.postgresql-stop = lib.hm.dag.entryBefore [ "setupLaunchAgents" ] ''
+      label="com.shinzui.postgresql"
+      domain="gui/$(id -u)"
+      newPlist="$newGenPath/LaunchAgents/$label.plist"
+      curPlist="$HOME/Library/LaunchAgents/$label.plist"
+
+      # Only stop if the plist is actually changing
+      if cmp -s "$newPlist" "$curPlist"; then
+        verboseEcho "$label plist unchanged, skipping stop"
+      elif /bin/launchctl print "$domain/$label" &>/dev/null; then
+        pid=$(/bin/launchctl print "$domain/$label" 2>/dev/null \
+              | /usr/bin/grep -m1 'pid =' | /usr/bin/awk '{print $NF}')
+
+        verboseEcho "Stopping $label (pid ''${pid:-unknown})..."
+        /bin/launchctl bootout "$domain/$label" 2>/dev/null || true
+
+        # Wait for the actual process to die, not just launchd deregistration
+        if [ -n "$pid" ]; then
+          while kill -0 "$pid" 2>/dev/null; do
+            sleep 1
+          done
+        fi
+
+        # Remove stale postmaster.pid left after SIGTERM shutdown
+        rm -f "${pgData}/postmaster.pid"
+      fi
+    '';
+
     launchd.agents.postgresql = {
       enable = true;
       config = {
