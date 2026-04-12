@@ -4,18 +4,30 @@ let
   pg = config.services.postgresql.package;
   pgSocket = config.services.postgresql.socketDir;
   logDir = "${config.home.homeDirectory}/.mori-rei-app/logs";
-  connStr = "host=${pgSocket} dbname=rei";
+  # The rei event store. REI_PG_CONNECTION_STRING is the same env var
+  # the `rei` CLI reads, so both tools share one configuration source.
+  reiConnStr = "host=${pgSocket} dbname=rei";
+  # Separate operational database for mori-rei-app: owns the
+  # public.webhook_delivery idempotency table. Kept out of the rei
+  # event store so rei's schema is not coupled to application state.
+  appConnStr = "host=${pgSocket} dbname=mori_rei_app";
   secretPath = age.secrets.mori-rei-app-webhook-secret.path;
 
   mori-rei-app-wrapper = pkgs.writeShellScript "mori-rei-app" ''
     set -euo pipefail
-    export PG_CONNECTION_STRING="${connStr}"
+    export REI_PG_CONNECTION_STRING="${reiConnStr}"
+    export MORI_REI_APP_PG_CONNECTION_STRING="${appConnStr}"
     export WEBHOOK_SECRET="$(cat ${secretPath})"
 
     # Wait for PostgreSQL to be ready
     until ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; do
       sleep 2
     done
+
+    # Ensure the operational database exists (idempotent). createdb
+    # exits non-zero if the database is already there, which is the
+    # steady state after the first successful startup.
+    ${pg}/bin/createdb -h "${pgSocket}" mori_rei_app 2>/dev/null || true
 
     exec ${pkgs.mori-rei-app}/bin/mori-rei-app
   '';
@@ -78,7 +90,8 @@ in
       StandardOutPath = "${logDir}/server.stdout.log";
       StandardErrorPath = "${logDir}/server.stderr.log";
       EnvironmentVariables = {
-        PG_CONNECTION_STRING = connStr;
+        REI_PG_CONNECTION_STRING = reiConnStr;
+        MORI_REI_APP_PG_CONNECTION_STRING = appConnStr;
       };
     };
   };
