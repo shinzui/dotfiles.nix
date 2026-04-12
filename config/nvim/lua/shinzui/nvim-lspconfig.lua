@@ -163,6 +163,12 @@ vim.lsp.config('oxlint', {
   cmd = { "bunx", "oxc_language_server" }
 })
 
+vim.lsp.config('dhall_lsp_server', {
+  on_init = function(client)
+    client.server_capabilities.semanticTokensProvider = nil
+  end,
+})
+
 -- Configure language servers with custom options
 vim.lsp.config('hls', hls_opts)
 vim.lsp.config('jsonls', json_opts)
