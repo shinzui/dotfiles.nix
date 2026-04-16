@@ -1,0 +1,33 @@
+workspace:
+  path: /Users/shinzui/Keikaku/rei-workspace/
+git:
+  enabled: true
+  commit_notes: true
+  commit_reflections: true
+  commit_docs: true
+  commit_guidance: true
+dashboard:
+  panels:
+    - label: 個人/施策
+      where: "initiative-phase:exists"
+      group_by: "initiative-phase"
+    - label: 個人/施策/開発
+      where: "version-phase:exists"
+      group_by: "version-phase"
+    - label: Work/project
+      where: "project-phase:exists"
+      group_by: "project-phase"
+aliases:
+  t: today -c 私的
+  hr: habit record-action
+  ar: action record
+  it: intention tree -c 私的 --all
+  itt: intention tree -c 私的 --all --tui
+  itj: intention tree --all -c 仕事 --tui
+  isp: intention set-property
+  is: intention show --full
+  nt: note today
+  ise: intention list --all --search
+  japanese-note: note list -c 日本語 -d
+  cl: category list --flat -d
+  lse: link list --query

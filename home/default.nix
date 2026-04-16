@@ -30,6 +30,7 @@ in
     ./pay-respects.nix
     ./carapace.nix
     ./external-configs.nix
+    ./xdg-configs.nix
     ./television.nix
     ./nix-search-tv.nix
     ./postgresql.nix
