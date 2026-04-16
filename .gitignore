@@ -3,7 +3,9 @@ todo.md
 .luarc.json
 .envrc
 .claude/
+!config/xdg/**/.claude/
 # --- seihou:claude-gitignore ---
 .claude/
+!config/xdg/**/.claude/
 CLAUDE.local.md
 # --- /seihou:claude-gitignore ---
