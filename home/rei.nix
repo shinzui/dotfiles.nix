@@ -18,6 +18,9 @@ let
     export REI_PG_CONNECTION_STRING="${connStr}"
     export PG_CONNECTION_STRING="${connStr}"
 
+    exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
+    exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
+
     ${waitForPg}
 
     exec ${reiBin} subscription run all
@@ -27,6 +30,9 @@ let
     set -euo pipefail
     export REI_PG_CONNECTION_STRING="${connStr}"
     export PG_CONNECTION_STRING="${connStr}"
+
+    exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
+    exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
 
     ${waitForPg}
 

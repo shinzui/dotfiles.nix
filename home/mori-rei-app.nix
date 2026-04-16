@@ -19,6 +19,9 @@ let
     export MORI_REI_APP_PG_CONNECTION_STRING="${appConnStr}"
     export WEBHOOK_SECRET="$(cat ${secretPath})"
 
+    exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
+    exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
+
     # Wait for PostgreSQL to be ready
     until ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; do
       sleep 2

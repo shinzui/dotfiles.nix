@@ -11,12 +11,15 @@ let
     set -euo pipefail
     export MORI_PG_CONNECTION_STRING="${connStr}"
 
+    exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
+    exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
+
     # Wait for PostgreSQL to be ready
     until ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; do
       sleep 2
     done
 
-    exec ${pkgs.mori}/bin/mori automate daemon
+    exec ${pkgs.mori}/bin/mori automate daemon --ingest-interval 3600
   '';
 
   mori-db-setup = pkgs.writeShellScriptBin "mori-db-setup" ''
