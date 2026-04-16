@@ -8,6 +8,7 @@ let
   # Each name corresponds to a directory or file under config/xdg/
   # that will be symlinked to ~/.config/<name>.
   trackedConfigs = [
+    "mori"
     "rei"
   ];
 in
