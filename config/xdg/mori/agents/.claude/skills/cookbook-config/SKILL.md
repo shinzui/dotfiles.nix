@@ -214,6 +214,9 @@ All three rules must pass or the entire catalog is rejected:
 ## CLI commands for verification
 
 ```bash
+# Print the cookbook extension Dhall schema (types, entry fields, etc.)
+mori cookbook print-schema
+
 # List all entries (validates the file)
 mori cookbook list
 

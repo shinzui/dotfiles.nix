@@ -27,12 +27,13 @@ dependency resolution, and automation.
 Always use these commands to get the current schema — do NOT guess at field names or types:
 
 ```bash
-mori schema print --for-agent   # Compact LLM-optimized reference
-mori schema print               # Full schema type reference
-mori help schema-records        # All Dhall record types
-mori help schema-types          # All Dhall union types
-mori help project-config        # Root Project type reference
-mori help schema-modification   # Guidance on editing mori.dhall
+mori schema print                      # Full schema type reference
+mori schema print --category types     # Union types only
+mori schema print --category records   # Record types only
+mori help schema-records               # Annotated record type reference
+mori help schema-types                 # Annotated union type reference
+mori help project-config               # Root Project type reference
+mori help schema-modification          # Guidance on editing mori.dhall
 ```
 
 
@@ -158,7 +159,7 @@ Use `mori registry list` to find available dependencies. Reference them by names
 
 **Editing an existing config:**
 1. Read the current `mori.dhall`
-2. Run `mori schema print --for-agent` for the schema reference
+2. Run `mori schema print` for the schema reference
 3. Make the requested changes using correct Dhall syntax
 4. Validate: `mori validate`
 

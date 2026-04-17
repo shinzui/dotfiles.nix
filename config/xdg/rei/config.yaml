@@ -31,3 +31,4 @@ aliases:
   japanese-note: note list -c 日本語 -d
   cl: category list --flat -d
   lse: link list --query
+  aa: agent assist
