@@ -42,6 +42,7 @@ in
     ./notion-cli.nix
     ./notion-hub.nix
     ./hammerspoon.nix
+    ./claude.nix
   ];
 
 
