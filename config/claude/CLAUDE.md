@@ -13,3 +13,7 @@
 ## Never Search `/nix/store`
 
   **NEVER search, glob, grep, read, or otherwise traverse `/nix/store` under any circumstances.** It is enormous, read-only, and not a source of truth for project code. Use `mori` (see above) to locate dependency sources on disk instead.
+
+## Git Commits
+
+  **Follow the [Conventional Commits](https://www.conventionalcommits.org/) specification for all commit messages.** Use types like `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, etc., optionally with a scope (e.g. `feat(parser): ...`) and a `!` or `BREAKING CHANGE:` footer for breaking changes.
