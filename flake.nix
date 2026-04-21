@@ -51,6 +51,10 @@
       url = "github:shinzui/kizamu";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    mina = {
+      url = "github:shinzui/mina";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     notion-cli = {
       url = "github:shinzui/notion-cli";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -225,6 +229,7 @@
           rei = inputs.rei.packages.${prev.stdenv.hostPlatform.system}.default;
           seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
           kizamu = inputs.kizamu.packages.${prev.stdenv.hostPlatform.system}.default;
+          mina = inputs.mina.packages.${prev.stdenv.hostPlatform.system}.default;
           # Wrap mori-rei-app to only expose bin/ — the full Haskell output
           # includes lib/links/libHStan-commons-config-* which conflicts with
           # mori (both depend on tan-commons-config from the same package set).
@@ -331,6 +336,7 @@
         markit = pkgs.markit;
         pg_rman = pkgs.pg_rman;
         bootstrap-repos = pkgs.bootstrap-repos;
+        mina = pkgs.mina;
       };
     });
 }
