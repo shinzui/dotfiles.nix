@@ -62,7 +62,7 @@ This section must always reflect the actual current state of the work.
   - [x] Milestone 4b: `sudo darwin-rebuild switch --flake .#SungkyungM1X` run by the user and completed successfully. (2026-04-21)
   - [x] Milestone 4c: `which mina` → `/Users/shinzui/.nix-profile/bin/mina`; `mina --version` → `mina v0.1.0.0 (516cb9b)`; `mina --help` lists `exec-plan`, `master-plan`, `config`, `completions`; `~/.zfunc/_mina` is a home-manager symlink whose first line is `#compdef mina`. (2026-04-21)
   - [x] Milestone 4d: Tab completion validated by artifact rather than live keypresses — the `#compdef mina` preamble is correct and `~/.zfunc` is on `fpath` (same mechanism as the already-working `_seihou`, `_kizamu`, `_ntn`, `_nhub`). A live `mina <TAB>` test would require an interactive TTY that this automation session cannot drive. (2026-04-21)
-- [ ] Milestone 5: Commit each milestone with `ExecPlan: docs/plans/integrate-mina-cli.md` trailer; record outcomes here and in Outcomes & Retrospective.
+- [x] Milestone 5: Committed in four parts (flake, home, Justfile, plan doc), each with the `ExecPlan:` trailer; Outcomes & Retrospective section filled in below. (2026-04-21)
 
 
 ## Surprises & Discoveries
