@@ -39,6 +39,7 @@ in
     ./rei.nix
     ./seihou.nix
     ./kizamu.nix
+    ./mina.nix
     ./notion-cli.nix
     ./notion-hub.nix
     ./hammerspoon.nix
