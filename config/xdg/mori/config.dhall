@@ -7,5 +7,6 @@
     , abc = "agent bootstrap --corpus"
     , aa = "agent assist"
     , sm = "schema migrate --apply"
+    , smc = "schema migrate --file mori/cookbook.dhall --apply"
     }
 }
