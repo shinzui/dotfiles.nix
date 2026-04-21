@@ -32,6 +32,11 @@ symlink-claude-skills:
 update-kizamu:
     nix flake update kizamu
 
+# Update mina flake input to latest
+[group: 'mina']
+update-mina:
+    nix flake update mina
+
 # Update mori flake input to latest
 [group: 'mori']
 update-mori:
@@ -144,10 +149,10 @@ logs-notion-hub-subscription:
 logs-notion-hub:
     tail -f ~/.notion-hub/logs/*.log
 
-# Update all personal tool flake inputs (kizamu, mori, mori-rei-app, seihou, rei, notion-cli, notion-hub)
+# Update all personal tool flake inputs (kizamu, mina, mori, mori-rei-app, seihou, rei, notion-cli, notion-hub)
 [group: 'tools']
 update-tools:
-    nix flake update kizamu mori mori-rei-app seihou rei notion-cli notion-hub
+    nix flake update kizamu mina mori mori-rei-app seihou rei notion-cli notion-hub
 
 # Check status of all personal tool agents
 [group: 'tools']
