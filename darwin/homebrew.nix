@@ -26,7 +26,6 @@ in
     "xq"
     "duckdb"
     "keyboardSwitcher"
-    "steipete/tap/summarize"
     "redpanda-data/tap/redpanda"
   ];
 
