@@ -843,11 +843,11 @@
         "nixpkgs": "nixpkgs_9"
       },
       "locked": {
-        "lastModified": 1772918991,
-        "narHash": "sha256-L4q0jHsfh0fyIu2LfAUEVvAx6Ifz7gzHiolOWD39Wf8=",
+        "lastModified": 1776871841,
+        "narHash": "sha256-wEJtji7Ne1o8R7n0AmJyY1wzbYoxPcCR6So30GEmWbc=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "f918d452d52ea4405cb002779539262197d72840",
+        "rev": "503598d300d82a3acff1c84107e5f98ff6fecaa2",
         "type": "github"
       },
       "original": {
@@ -1031,17 +1031,17 @@
     "message-db-hs-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1771884793,
-        "narHash": "sha256-3Bse0vogtESsJ7XYSdTqInK99xPLDIL/h+9rRfvUz+c=",
+        "lastModified": 1776870451,
+        "narHash": "sha256-82/7QO2VvAglVRPJwIdrugIeMVRYEey+h09E8r3sM5k=",
         "owner": "topagentnetwork",
         "repo": "message-db-hs",
-        "rev": "2a5b1ac8a3e36078330a266440fc4c521a5be46e",
+        "rev": "059fba11efa83b0bf08117c5875ad2da013bf3c5",
         "type": "github"
       },
       "original": {
         "owner": "topagentnetwork",
         "repo": "message-db-hs",
-        "rev": "2a5b1ac8a3e36078330a266440fc4c521a5be46e",
+        "rev": "059fba11efa83b0bf08117c5875ad2da013bf3c5",
         "type": "github"
       }
     },
@@ -1107,11 +1107,11 @@
         "treefmt-nix": "treefmt-nix_3"
       },
       "locked": {
-        "lastModified": 1776776838,
-        "narHash": "sha256-Q1WW1xnoVwizskYxSlyES3fakOR73lsKm9uOICLcM8g=",
+        "lastModified": 1776994746,
+        "narHash": "sha256-DB7MINd3mKtqJ33Irt7h/w7IozT1eEoiev8heUaFZIk=",
         "owner": "shinzui",
         "repo": "mina",
-        "rev": "f11a2571f9f4c379ae34cb424c89f61a7a462790",
+        "rev": "7b1534b3e5e28af0e541ce1a1d5a975cc300d2e8",
         "type": "github"
       },
       "original": {
@@ -1137,11 +1137,11 @@
         "typeid-hs-src": "typeid-hs-src"
       },
       "locked": {
-        "lastModified": 1776774698,
-        "narHash": "sha256-J39+9cpyEAae6qJrNguJ/Obyg6EkFGUcPIXqjssflM8=",
+        "lastModified": 1776873325,
+        "narHash": "sha256-3cdv15xCer4vS0/dTZPm8h5N7Eq4iUtNJspXxMi16fw=",
         "owner": "shinzui",
         "repo": "mori",
-        "rev": "60a3d574548ea063d19ac9d480b22769b6710705",
+        "rev": "9d5d0917651156f05b6e2b17a5fd77614cf47989",
         "type": "github"
       },
       "original": {
@@ -1184,17 +1184,17 @@
     "mori-schema-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1776554472,
-        "narHash": "sha256-23ubZIOjFGNyOQ7HSI1T6nfHW119UsN4LgWTHFTIh0A=",
+        "lastModified": 1776782380,
+        "narHash": "sha256-olefSxuSHMKuAdxj+OaYPs3KP05pG+BGv1KwNwrHcJc=",
         "owner": "shinzui",
         "repo": "mori-schema",
-        "rev": "d115ca61db86c6127742b78039000dc03c5c9a08",
+        "rev": "02a8a876f6f7074510eb03071116d57f5529378b",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "mori-schema",
-        "rev": "d115ca61db86c6127742b78039000dc03c5c9a08",
+        "rev": "02a8a876f6f7074510eb03071116d57f5529378b",
         "type": "github"
       }
     },
@@ -2185,11 +2185,11 @@
         "typeid-hs-src": "typeid-hs-src_4"
       },
       "locked": {
-        "lastModified": 1776743353,
-        "narHash": "sha256-hyTRfCbIpUlSd/WOjtPa7ia93STW/axleUa2PQU/cgc=",
+        "lastModified": 1776908639,
+        "narHash": "sha256-4r6ZzHIttPqZnYacOIszs6qhwL1annuFTpEXP4TZpDI=",
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "8ce618a97b07eb27cfb847e8c2f8dcbe31e8c471",
+        "rev": "67da2228b6822b9713d573427e1f947904019eb6",
         "type": "github"
       },
       "original": {
@@ -2865,17 +2865,17 @@
     "typeid-hs-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1771082804,
-        "narHash": "sha256-ymF0b2AaRxViPbStrvnqGuj8saQT5sdbvZb3c4y2cxc=",
+        "lastModified": 1776870448,
+        "narHash": "sha256-83cBGDIdngur6BNc9XJAnzAQIsQY/09wAGR9bvF8o4M=",
         "owner": "topagentnetwork",
         "repo": "typeid-hs",
-        "rev": "e77583b6fd2ca756097adb49bb1c4619f14ce376",
+        "rev": "e59e3f29237dcaddfd1faba158302532daf62a2a",
         "type": "github"
       },
       "original": {
         "owner": "topagentnetwork",
         "repo": "typeid-hs",
-        "rev": "e77583b6fd2ca756097adb49bb1c4619f14ce376",
+        "rev": "e59e3f29237dcaddfd1faba158302532daf62a2a",
         "type": "github"
       }
     },
