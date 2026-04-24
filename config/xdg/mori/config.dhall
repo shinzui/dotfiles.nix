@@ -8,5 +8,6 @@
     , aa = "agent assist"
     , sm = "schema migrate --apply"
     , smc = "schema migrate --file mori/cookbook.dhall --apply"
+    , pd = "path --doc --copy"
     }
 }
