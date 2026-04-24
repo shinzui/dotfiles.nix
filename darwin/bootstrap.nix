@@ -57,6 +57,20 @@
   # Install and setup ZSH to work with nix(-darwin) as well
   programs.zsh.enable = true;
 
+  ##################
+  # System limits
+  ##################
+  # Raise the system-wide file descriptor limit. macOS defaults to 256 soft,
+  # which is trivially exhausted by modern dev tooling (language servers,
+  # watchers, containers) and can hang the machine.
+  launchd.daemons."limit.maxfiles" = {
+    serviceConfig = {
+      Label = "limit.maxfiles";
+      ProgramArguments = [ "launchctl" "limit" "maxfiles" "524288" "524288" ];
+      RunAtLoad = true;
+      ServiceIPC = false;
+    };
+  };
 
   system.stateVersion = 4;
 }
