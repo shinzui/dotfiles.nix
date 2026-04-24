@@ -17,10 +17,19 @@ let
     set -euo pipefail
     export REI_PG_CONNECTION_STRING="${reiConnStr}"
     export MORI_REI_APP_PG_CONNECTION_STRING="${appConnStr}"
-    export WEBHOOK_SECRET="$(cat ${secretPath})"
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
     exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
+
+    # Wait for agenix to decrypt the webhook secret. launchd can start this
+    # agent before /run/agenix is populated at login; reading early yields an
+    # empty WEBHOOK_SECRET and silently breaks signature verification because
+    # `export VAR=$(cat …)` hides cat's failure from `set -e`.
+    until [ -r "${secretPath}" ]; do
+      sleep 2
+    done
+    WEBHOOK_SECRET="$(cat ${secretPath})"
+    export WEBHOOK_SECRET
 
     # Wait for PostgreSQL to be ready
     until ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; do
