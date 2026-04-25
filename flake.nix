@@ -204,6 +204,11 @@
         # Patch dateutils to compile under newer clang (K&R yyparse() prototype)
         dateutils-fix = import ./overlays/dateutils-fix.nix;
 
+        # Skip direnv's checkPhase (the zsh test takes ~11 minutes on Darwin
+        # and the resulting path is rarely on cache.nixos.org for aarch64-darwin
+        # because Hydra lags behind nixpkgs-unstable).
+        direnv-skip-checks = import ./overlays/direnv-skip-checks.nix;
+
         my-packages = final: prev: {
           tmuxai = final.callPackage (self + "/derivations/tmuxai.nix") {
             inherit (final) lib buildGoModule fetchFromGitHub tmux;
