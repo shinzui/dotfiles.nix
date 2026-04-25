@@ -228,7 +228,6 @@ in
     ## Haskell
     ghc
     hlint
-    pkgs.hackage-diff
     (lib.lowPrio haskellPackages.cabal-install)
     haskellPackages.hoogle
     # haskellPackages.ormolu

@@ -27,10 +27,6 @@
     };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
     private-fonts = { url = "github:shinzui/fonts";};
-    hackage-diff = {
-      url = "github:MercuryTechnologies/hackage-diff";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
     bun2nix = {
       url = "github:nix-community/bun2nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -270,7 +266,6 @@
             system = prev.stdenv.hostPlatform.system;
             inherit (nixpkgsConfig) config;
           };
-          hackage-diff = inputs.hackage-diff.packages.${prev.stdenv.hostPlatform.system}.default;
         };
 
         # Overlay that adds various additional utility functions to `vimUtils`
