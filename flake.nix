@@ -103,7 +103,7 @@
       #
       # You can update Home Manager without changing this value. See the Home Manager release notes for
       # a list of state version changes in each release.
-      homeManagerStateVersion = "23.05";
+      homeManagerStateVersion = "26.05";
 
       homeManagerCommonConfig = with self.homeManagerModules; {
         imports = attrValues self.homeManagerModules ++ [

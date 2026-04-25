@@ -14,6 +14,7 @@ let
   pluginWithConfigAndExtraConfig = extraConfig: plugin: {
     plugin = plugin;
     optional = true;
+    type = "viml";
     config = ''
       ${extraConfig}
       lua require('shinzui.' .. string.gsub('${plugin.pname}', '%.', '-'))
