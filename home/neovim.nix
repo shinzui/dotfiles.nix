@@ -14,10 +14,10 @@ let
   pluginWithConfigAndExtraConfig = extraConfig: plugin: {
     plugin = plugin;
     optional = true;
-    type = "viml";
+    type = "lua";
     config = ''
       ${extraConfig}
-      lua require('shinzui.' .. string.gsub('${plugin.pname}', '%.', '-'))
+      require('shinzui.' .. string.gsub('${plugin.pname}', '%.', '-'))
     '';
   };
 
@@ -110,7 +110,7 @@ in
     pkgs.vimExtraPlugins.catppuccin-catppuccin
     fff-nvim
   ] ++ [
-    (pluginWithConfigAndExtraConfig "lua vim.api.nvim_set_var('rescript_lsp_path','${vim-rescript}/server/out/server.js')" nvim-lspconfig)
+    (pluginWithConfigAndExtraConfig "vim.g.rescript_lsp_path = '${vim-rescript}/server/out/server.js'" nvim-lspconfig)
   ];
   # 
 
