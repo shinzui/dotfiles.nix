@@ -205,6 +205,9 @@
         # Fix pgspecial to avoid broken postgresql-test-hook dependency (named to apply early)
         aaa-fix-pgspecial = import ./overlays/fix-pgspecial.nix;
 
+        # Patch dateutils to compile under newer clang (K&R yyparse() prototype)
+        dateutils-fix = import ./overlays/dateutils-fix.nix;
+
         my-packages = final: prev: {
           tmuxai = final.callPackage (self + "/derivations/tmuxai.nix") {
             inherit (final) lib buildGoModule fetchFromGitHub tmux;
