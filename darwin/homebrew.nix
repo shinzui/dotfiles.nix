@@ -64,6 +64,7 @@ in
     "discord"
     "microsoft-teams"
     "anki"
+    "codex"
     "hammerspoon"
     "insomnia"
     "min"
