@@ -1,0 +1,89 @@
+{
+  "name": "defuddle",
+  "version": "0.18.1",
+  "description": "Extract article content and metadata from web pages.",
+  "main": "dist/index.js",
+  "bin": {
+    "defuddle": "dist/cli.js"
+  },
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/index.d.ts"
+      ],
+      "full": [
+        "dist/index.full.d.ts"
+      ],
+      "node": [
+        "dist/node.d.ts"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./full": {
+      "types": "./dist/index.full.d.ts",
+      "import": "./dist/index.full.js",
+      "require": "./dist/index.full.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.js"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build:types": "tsc --project tsconfig.declarations.json",
+    "build:js": "webpack",
+    "build:node": "tsc --project tsconfig.node.json",
+    "build": "npm run clean && npm run build:types && npm run build:node && npm run build:js",
+    "prepublishOnly": "npm run build",
+    "dev:types": "tsc --project tsconfig.declarations.json --watch",
+    "dev:js": "webpack --watch --mode development",
+    "dev:node": "tsc --project tsconfig.node.json --watch",
+    "dev": "npm run clean && npm run build:types && concurrently \"npm run dev:types\" \"npm run dev:node\" \"npm run dev:js\"",
+    "test": "TZ=UTC vitest run",
+    "test:jsdom": "TZ=UTC DOM=jsdom vitest run",
+    "playground": "node playground/server.js"
+  },
+  "keywords": [
+    "readability",
+    "content-extraction",
+    "article-extraction",
+    "web-scraping",
+    "html-cleanup",
+    "content-parser",
+    "article-parser",
+    "dom"
+  ],
+  "author": "kepano",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kepano/defuddle.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kepano/defuddle/issues"
+  },
+  "homepage": "https://github.com/kepano/defuddle",
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "optionalDependencies": {
+    "linkedom": "^0.18.12",
+    "mathml-to-latex": "^1.5.0",
+    "temml": "^0.13.1",
+    "turndown": "^7.2.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ]
+}

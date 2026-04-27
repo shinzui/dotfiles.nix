@@ -220,6 +220,7 @@
           };
           beautiful-mermaid = final.callPackage (self + "/derivations/beautiful-mermaid") { };
           markit = final.callPackage (self + "/derivations/markit") { };
+          defuddle = final.callPackage (self + "/derivations/defuddle") { };
           bootstrap-repos = final.callPackage (self + "/derivations/bootstrap-repos") { };
           pg_rman = final.callPackage (self + "/derivations/pg_rman.nix") {
             postgresql = final.postgresql_18;
@@ -332,6 +333,7 @@
         parqeye = pkgs.parqeye;
         beautiful-mermaid = pkgs.beautiful-mermaid;
         markit = pkgs.markit;
+        defuddle = pkgs.defuddle;
         pg_rman = pkgs.pg_rman;
         bootstrap-repos = pkgs.bootstrap-repos;
         mina = pkgs.mina;
