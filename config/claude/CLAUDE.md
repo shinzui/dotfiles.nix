@@ -17,3 +17,7 @@
 ## Git Commits
 
   **Follow the [Conventional Commits](https://www.conventionalcommits.org/) specification for all commit messages.** Use types like `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, etc., optionally with a scope (e.g. `feat(parser): ...`) and a `!` or `BREAKING CHANGE:` footer for breaking changes.
+
+## Git Branches
+
+  **Do not create feature branches by default.** Commit directly to the current branch unless the user explicitly asks for a new branch.
