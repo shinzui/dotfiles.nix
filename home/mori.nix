@@ -11,6 +11,12 @@ let
     set -euo pipefail
     export MORI_PG_CONNECTION_STRING="${connStr}"
 
+    # mori's automate daemon wraps every RunCommand in `nix develop --command`
+    # (mori commit b4310ac). launchd's default PATH does not include the Nix
+    # profile, so spawn fails with `nix: posix_spawnp: does not exist`. Add
+    # the Determinate Nix profile bin so RunCommand reactions can find `nix`.
+    export PATH="/nix/var/nix/profiles/default/bin:$PATH"
+
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
     exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
 
