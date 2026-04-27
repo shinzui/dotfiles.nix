@@ -27,7 +27,6 @@ in
     ./navi.nix
     ./btop.nix
     ./cachix.nix
-    ./pay-respects.nix
     ./carapace.nix
     ./external-configs.nix
     ./xdg-configs.nix

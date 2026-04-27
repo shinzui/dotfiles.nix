@@ -32,15 +32,19 @@ in
   # Configure zsh-vi-mode plugin for Vim keybindings in the shell
   programs.zsh.initContent = lib.mkMerge [
     (lib.mkBefore ''
-      export OPENAI_API_KEY=$(cat ${age.secrets.openapi_secret.path})
+      if [[ -r ${age.secrets.openapi_secret.path} ]]; then
+        export OPENAI_API_KEY=$(< ${age.secrets.openapi_secret.path})
+      fi
     '')
     (lib.mkOrder 550 ''
       fpath=(~/.zfunc $fpath)
     '')
     ''
-      ZVM_INIT_MODE=sourcing
-      source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-      unset ZVM_INIT_MODE
+      if [[ -o interactive ]]; then
+        ZVM_INIT_MODE=sourcing
+        source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+        unset ZVM_INIT_MODE
+      fi
 
       # mori shell integration — enables `mori cd` to change directory
       mori() {
