@@ -68,6 +68,7 @@ in
     "hammerspoon"
     "insomnia"
     "min"
+    "tailscale-app"
     # "raycast"
     #TODO fixme by moving conflicting apps
     #"google-chrome"
