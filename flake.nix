@@ -51,6 +51,10 @@
       url = "github:shinzui/mina";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    nihongo = {
+      url = "github:shinzui/nihongo";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     notion-cli = {
       url = "github:shinzui/notion-cli";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -230,6 +234,7 @@
           seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
           kizamu = inputs.kizamu.packages.${prev.stdenv.hostPlatform.system}.default;
           mina = inputs.mina.packages.${prev.stdenv.hostPlatform.system}.default;
+          nihongo = inputs.nihongo.packages.${prev.stdenv.hostPlatform.system}.default;
           # Wrap mori-rei-app to only expose bin/ — the full Haskell output
           # includes lib/links/libHStan-commons-config-* which conflicts with
           # mori (both depend on tan-commons-config from the same package set).
