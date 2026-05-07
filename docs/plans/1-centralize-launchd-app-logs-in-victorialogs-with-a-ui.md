@@ -81,10 +81,10 @@ This section must always reflect the actual current state of the work.
   - [x] Added `just logs-ui` (opens VLUI), `just logs-query QUERY` (curl + jq), `just status-victorialogs`, `just restart-victorialogs`, and `just logs-victorialogs` under a new `[group: 'logs']`.
   - [x] Bottom of `home/victorialogs.nix` carries a short comment block with useful LogsQL queries (last-5m errors, per-app head, panic detection, etc.).
   - [ ] (skipped) `docs/plans/timestamped-app-logs.md` cross-reference — that plan is already implemented and self-explanatory; no update needed.
-- [ ] Milestone 5 — Decision review on vlagent.
-  - [ ] Re-read this plan's Decision Log entry on vlagent against the implemented setup.
-  - [ ] Either record an explicit "do not install" outcome, or open a follow-up ExecPlan to add vlagent if the user moves to a multi-host setup.
-- [ ] Final commit on `master` with `ExecPlan:` and `Intention:` git trailers.
+- [x] Milestone 5 — Decision review on vlagent. _(2026-05-07)_
+  - [x] Re-read this plan's Decision Log entry on vlagent against the implemented setup. The implemented setup is single-machine, single-VictoriaLogs-instance, with shippers POSTing to `localhost:9428`. Adding vlagent would require pairing it with a separate file-tailing shipper (vlagent has no tail-files mode) and forwarding to a same-host VictoriaLogs — extra hop, extra failure modes, no benefit at this scale.
+  - [x] Outcome recorded below: **deferred indefinitely**. If the user later runs multiple machines or moves to Kubernetes, open a sibling plan `docs/plans/N-add-vlagent-multi-host-shipping.md`.
+- [x] Final commit on `master` with `ExecPlan:` and `Intention:` git trailers.
 
 
 ## Surprises & Discoveries
@@ -186,7 +186,50 @@ This section must always reflect the actual current state of the work.
 
 ## Outcomes & Retrospective
 
-(To be filled during and after implementation.)
+Implemented end-to-end on 2026-05-07, all five milestones in a single
+session. The user can now query every launchd-managed app's logs from a
+single browser tab at `http://localhost:9428/select/vmui/`, with the
+existing per-file `~/.<app>/logs/*.log` workflow fully preserved.
+
+What worked:
+
+- **Read-side shipping was the right call.** Keeping the application
+  modules (`home/mori.nix`, `home/rei.nix`, `home/mori-rei-app.nix`,
+  `home/notion-hub.nix`, `home/postgresql.nix`) untouched meant zero
+  risk of breaking running daemons during the rollout. Each shipper is
+  a stand-alone launchd agent that can crash, restart, or be deleted
+  without affecting the app it watches.
+- **Single Nix list of shipper specs** (`shippers = [ … ]`) drives both
+  the launchd agent generation and the bootout-set in
+  `victorialogs-stop-agents`. Adding a new app log later means adding
+  one line to that list.
+- **`pkgs.victorialogs` v1.49.0** runs cleanly under per-user launchd
+  on `aarch64-darwin`. No native dependencies, no special permissions,
+  no privileged-port issues (TCP 9428 is unprivileged).
+
+What surprised:
+
+- **`jq -Rc` buffers stdout when piped.** This was the only real
+  blocker during implementation — single-line writes never reached
+  VictoriaLogs because they sat in jq's stdio buffer. `jq --unbuffered`
+  is the fix and is now part of the shipper script.
+
+vlagent decision (M5): **deferred indefinitely**. The implemented
+setup is a single VictoriaLogs instance accessed from `localhost`;
+vlagent would require pairing it with a separate file shipper for the
+same machine, then forwarding to the same machine, which adds buffering
+and failure modes for no benefit. If the user later runs multiple
+machines or moves to Kubernetes, open
+`docs/plans/N-add-vlagent-multi-host-shipping.md` and revisit.
+
+Follow-up ideas (not scheduled):
+
+- Parse the embedded `ts` ISO-8601 prefix from each log line and feed
+  it as `_time` instead of using ingest time. Acceptable today because
+  ingest happens within ~1s of write, but would matter if the host
+  ever falls behind on shipping.
+- Batch multiple lines per `curl` POST if a daemon ever floods enough
+  to overwhelm the per-line POST loop. Not observed in normal use.
 
 
 ## Context and Orientation
