@@ -41,7 +41,7 @@ let
     # steady state after the first successful startup.
     ${pg}/bin/createdb -h "${pgSocket}" mori_rei_app 2>/dev/null || true
 
-    exec ${pkgs.mori-rei-app}/bin/mori-rei-app
+    exec ${pkgs.mori-rei-app}/bin/mori-rei-app serve
   '';
 in
 {
@@ -52,6 +52,10 @@ in
   home.activation.mori-rei-app-log-dir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run mkdir -p "${logDir}"
   '';
+
+  programs.zsh.sessionVariables = {
+    MORI_REI_APP_PG_CONNECTION_STRING = appConnStr;
+  };
 
   # Stop mori-rei-app agent and wait for process to fully exit before
   # home-manager tries to re-register it.
@@ -104,6 +108,9 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = reiConnStr;
         MORI_REI_APP_PG_CONNECTION_STRING = appConnStr;
+        # The summariser shells out to `claude`, which is user-installed
+        # under ~/.local/bin and not on launchd's default PATH.
+        PATH = "${config.home.homeDirectory}/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin";
       };
     };
   };
