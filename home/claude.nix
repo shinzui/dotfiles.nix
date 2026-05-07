@@ -6,5 +6,8 @@ let
 in
 {
   home.file.".claude/CLAUDE.md".source =
-    mkOutOfStoreSymlink "${nixConfigDir}/config/claude/CLAUDE.md";
+    mkOutOfStoreSymlink "${nixConfigDir}/config/agents/AGENTS.md";
+
+  home.file.".codex/instructions.md".source =
+    mkOutOfStoreSymlink "${nixConfigDir}/config/agents/AGENTS.md";
 }
