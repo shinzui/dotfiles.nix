@@ -1158,11 +1158,11 @@
         "treefmt-nix": "treefmt-nix_3"
       },
       "locked": {
-        "lastModified": 1778072124,
-        "narHash": "sha256-Ye6trnze9aslBHwUXYMZxfTI0t1WDbiIWhf4S6dXL10=",
+        "lastModified": 1778166092,
+        "narHash": "sha256-GlxHWGFswQbaUrqi0LMk3JEHNFmsaFG112gaK07hvhw=",
         "owner": "shinzui",
         "repo": "mina",
-        "rev": "2c3e308c1a4449bd3e89bd3ee01cf6aa2662820d",
+        "rev": "f1400b90601cb42f8d8ddc511e5bf29e25964ce2",
         "type": "github"
       },
       "original": {
@@ -1219,11 +1219,11 @@
         "typeid-hs-src": "typeid-hs-src_2"
       },
       "locked": {
-        "lastModified": 1777743241,
-        "narHash": "sha256-MUwpqyD44TJBglFgrzwnZxgSiOwE3fBwu8n7qlnjJ0U=",
+        "lastModified": 1778081350,
+        "narHash": "sha256-pKnolFutfjqTlNS8eiSBJfE1hA4UeYKGFB3tpqiyNFs=",
         "owner": "shinzui",
         "repo": "mori-rei-app",
-        "rev": "5f8b588fab6e4d39ad2a5c5ce96feaddd064a513",
+        "rev": "806a80a7251e1972c41995a9d37284a4000de523",
         "type": "github"
       },
       "original": {
@@ -1278,11 +1278,11 @@
         "treefmt-nix": "treefmt-nix_6"
       },
       "locked": {
-        "lastModified": 1778068751,
-        "narHash": "sha256-XzTkOzI55QKYrmxF0ps0TclCLIG+9XkENRGhY2OtiS0=",
+        "lastModified": 1778125687,
+        "narHash": "sha256-DnrqPS3WTSdBTTszAZ4WBKgruY5NyyIdTZSXhqow9SU=",
         "owner": "shinzui",
         "repo": "nihongo",
-        "rev": "b466690a0654083353b7091691a34a1e5a3a5cf5",
+        "rev": "5a83db50ec6c9cd12026d1a5e8bce57605651704",
         "type": "github"
       },
       "original": {
