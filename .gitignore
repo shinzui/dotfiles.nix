@@ -9,3 +9,4 @@ todo.md
 !config/xdg/**/.claude/
 CLAUDE.local.md
 # --- /seihou:claude-gitignore ---
+.agents/
