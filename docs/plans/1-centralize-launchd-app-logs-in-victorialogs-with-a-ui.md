@@ -77,11 +77,10 @@ This section must always reflect the actual current state of the work.
   - [x] Replaced the original "tee from inside each app's wrapper" approach with a simpler **read-side** shipper: 12 dedicated launchd agents, each running `tail -n0 -F` on one of the existing `*.log` files and POSTing every new line to `/insert/jsonline`. The application launchd agents in `home/mori.nix`, `home/rei.nix`, `home/mori-rei-app.nix`, `home/notion-hub.nix`, and `home/postgresql.nix` are **not** modified — the shippers read the same files those agents already write. (See Decision Log entry on read-side shipping.)
   - [x] Added a `shipper-wrapper` shell script in `home/victorialogs.nix` (takes app/stream/file args). Builds the 12 agents from a single `shippers` list via `lib.listToAttrs`, and derives both the agents and the bootout-set from that list.
   - [x] `sudo darwin-rebuild switch --flake .#SungkyungM1X`. Confirmed `launchctl list | grep com.shinzui.victorialogs | wc -l` reports 13 (1 server + 12 shippers). Test lines appended to 6 different `*.log` files all surface in VictoriaLogs within ~1 second; `_time:5m | stats by (app) count()` reports a non-zero count for every app.
-- [ ] Milestone 4 — Ergonomics: `Justfile` recipes and a small runbook.
-  - [ ] Add `just logs-ui` to open `http://localhost:9428/select/vmui/`.
-  - [ ] Add `just logs-query 'QUERY'` that pipes `curl` to `jq` for terminal use.
-  - [ ] Add `just status-victorialogs`, `just restart-victorialogs`, `just logs-victorialogs`.
-  - [ ] Update `docs/plans/timestamped-app-logs.md` cross-reference (optional) and write a short "How to use" paragraph at the bottom of `home/victorialogs.nix`.
+- [x] Milestone 4 — Ergonomics: `Justfile` recipes and a small runbook. _(2026-05-07)_
+  - [x] Added `just logs-ui` (opens VLUI), `just logs-query QUERY` (curl + jq), `just status-victorialogs`, `just restart-victorialogs`, and `just logs-victorialogs` under a new `[group: 'logs']`.
+  - [x] Bottom of `home/victorialogs.nix` carries a short comment block with useful LogsQL queries (last-5m errors, per-app head, panic detection, etc.).
+  - [ ] (skipped) `docs/plans/timestamped-app-logs.md` cross-reference — that plan is already implemented and self-explanatory; no update needed.
 - [ ] Milestone 5 — Decision review on vlagent.
   - [ ] Re-read this plan's Decision Log entry on vlagent against the implemented setup.
   - [ ] Either record an explicit "do not install" outcome, or open a follow-up ExecPlan to add vlagent if the user moves to a multi-host setup.

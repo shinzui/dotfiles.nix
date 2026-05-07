@@ -164,3 +164,29 @@ status-tools:
     @just status-rei
     @echo "==="
     @just status-notion-hub
+
+# Open the VictoriaLogs UI in the default browser
+[group: 'logs']
+logs-ui:
+    open http://localhost:9428/select/vmui/
+
+# Run an ad-hoc LogsQL query and pretty-print the response
+[group: 'logs']
+logs-query QUERY:
+    curl -sS 'http://localhost:9428/select/logsql/query' \
+      --data-urlencode "query={{QUERY}}" | jq
+
+# Check status of the VictoriaLogs launchd agent
+[group: 'logs']
+status-victorialogs:
+    launchctl print gui/$(id -u)/com.shinzui.victorialogs 2>&1 | head -20
+
+# Restart the VictoriaLogs launchd agent
+[group: 'logs']
+restart-victorialogs:
+    launchctl kickstart -k gui/$(id -u)/com.shinzui.victorialogs
+
+# Tail the VictoriaLogs server's own stdout/stderr
+[group: 'logs']
+logs-victorialogs:
+    tail -f ~/.local/share/victoria-logs/logs/victoria-logs.stdout.log ~/.local/share/victoria-logs/logs/victoria-logs.stderr.log
