@@ -69,6 +69,7 @@ in
     cp = "/bin/cp";
 
     #common cli aliases
+    codex-yolo = "codex --sandbox danger-full-access";
     v = "nvim";
     view = "v -R";
     vim = "nvim";
@@ -119,7 +120,7 @@ in
     viewMd = "glow -p -w 200";
 
     ###claude-code
-    dangerous-claude = "SHELL=zsh /Users/shinzui/.local/bin/claude --dangerously-skip-permissions";
+    claude-yolo = "SHELL=zsh /Users/shinzui/.local/bin/claude --dangerously-skip-permissions";
     ccusage = "bunx ccusage@latest";
   };
 }
