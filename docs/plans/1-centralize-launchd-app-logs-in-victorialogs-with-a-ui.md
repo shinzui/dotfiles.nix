@@ -73,10 +73,10 @@ This section must always reflect the actual current state of the work.
   - [x] Added `home.activation.victorialogs-stop-agents` mirroring `home/mori.nix`'s bootout pattern.
   - [x] Ran `sudo darwin-rebuild switch --flake .#SungkyungM1X`. `launchctl print gui/501/com.shinzui.victorialogs` reports `state = running`.
   - [x] `curl http://localhost:9428/health` returns `OK`. Smoke-tested ingest+query on the persistent server with `app:smoke` line — round-tripped successfully.
-- [ ] Milestone 3 — Log shipper that pushes the existing files into VictoriaLogs.
-  - [ ] Add a `vl-pusher` reusable shell function in `home/victorialogs.nix` that takes an `app` label and a list of files and uses `tail -F` to stream them as ndjson to `/insert/jsonline`.
-  - [ ] Replace the bare `StandardOutPath` / `StandardErrorPath` plumbing with a wrapper that does `tee -a $log_file` and additionally pipes through `vl-pusher`. Apply this change in `home/mori.nix`, `home/rei.nix`, `home/mori-rei-app.nix`, `home/notion-hub.nix`, `home/postgresql.nix`. Each existing file path must remain unchanged.
-  - [ ] `darwin-rebuild switch --flake .`; verify the launchd agents restart and that newly written log lines appear in VictoriaLogs (`curl 'http://localhost:9428/select/logsql/query' -d 'query=app:rei-worker | head 5'`).
+- [x] Milestone 3 — Log shipper that pushes the existing files into VictoriaLogs. _(2026-05-07)_
+  - [x] Replaced the original "tee from inside each app's wrapper" approach with a simpler **read-side** shipper: 12 dedicated launchd agents, each running `tail -n0 -F` on one of the existing `*.log` files and POSTing every new line to `/insert/jsonline`. The application launchd agents in `home/mori.nix`, `home/rei.nix`, `home/mori-rei-app.nix`, `home/notion-hub.nix`, and `home/postgresql.nix` are **not** modified — the shippers read the same files those agents already write. (See Decision Log entry on read-side shipping.)
+  - [x] Added a `shipper-wrapper` shell script in `home/victorialogs.nix` (takes app/stream/file args). Builds the 12 agents from a single `shippers` list via `lib.listToAttrs`, and derives both the agents and the bootout-set from that list.
+  - [x] `sudo darwin-rebuild switch --flake .#SungkyungM1X`. Confirmed `launchctl list | grep com.shinzui.victorialogs | wc -l` reports 13 (1 server + 12 shippers). Test lines appended to 6 different `*.log` files all surface in VictoriaLogs within ~1 second; `_time:5m | stats by (app) count()` reports a non-zero count for every app.
 - [ ] Milestone 4 — Ergonomics: `Justfile` recipes and a small runbook.
   - [ ] Add `just logs-ui` to open `http://localhost:9428/select/vmui/`.
   - [ ] Add `just logs-query 'QUERY'` that pipes `curl` to `jq` for terminal use.
@@ -95,6 +95,15 @@ This section must always reflect the actual current state of the work.
   place of `nix shell --command` (slightly cleaner invocation; same result).
   No surprises in the JSON-stream ingest format — request body and query params
   match the docs in the source tree exactly.
+
+- 2026-05-07 — `jq -Rc` buffers its stdout when piped, even though it emits one
+  JSON record per input line. With low-volume daemons that write one line every
+  few seconds, lines sit in jq's 4 KiB stdio buffer indefinitely and never
+  reach VictoriaLogs. Symptom: writing 200 lines at once delivered ~169; writing
+  a single test line delivered nothing for 30+ seconds. Fix: add `--unbuffered`
+  to the jq invocation in the shipper. `tail -n0 -F` itself does line-flush
+  correctly; the buffer was downstream of tail, not in tail. Plan-of-Work
+  shipper snippet updated to include the flag.
 
 
 ## Decision Log
@@ -142,15 +151,23 @@ This section must always reflect the actual current state of the work.
   Date: 2026-05-07.
 
 - Decision: Preserve the existing `~/.<app>/logs/*.log` files unchanged. The shipper
-  is **additive**: it `tee`s lines to the existing file and **also** pushes them to
-  VictoriaLogs.
+  is **read-side, not write-side**: it `tail -n0 -F`s the existing file from a
+  separate launchd agent and pushes lines to VictoriaLogs. The original app's
+  wrapper script is left untouched.
   Rationale: The user's `just logs-mori`, `just logs-rei`, etc. recipes all rely on
   `tail -f ~/.<app>/logs/*.log`. Removing those files would break muscle memory and
-  would also remove the only durable source of truth if VictoriaLogs is down. Since
-  the wrappers already use `exec > >(ts ...)` which is a process substitution that
-  ultimately writes to the launchd-supplied file descriptor, we can stack a second
-  process substitution on top to also send each line to a curl/HTTP push without
-  losing the file behavior.
+  would also remove the only durable source of truth if VictoriaLogs is down.
+  An earlier design considered modifying each app's wrapper to `tee` into a
+  process substitution (running curl) in addition to launchd's stdout file. That
+  was rejected during implementation in favour of read-side shipping because:
+  (a) it keeps `home/mori.nix`, `home/rei.nix`, `home/mori-rei-app.nix`,
+  `home/notion-hub.nix`, and `home/postgresql.nix` unchanged — none of those
+  modules need to know about logging infrastructure; (b) shipping a line cannot
+  break the app — a curl failure in a tee'd process substitution would not crash
+  the wrapper, but a buggy shipper update could still slow it down via pipe
+  back-pressure, while a read-side shipper is fully decoupled; (c) restarting
+  the shipper does not restart the app. The cost is one extra launchd agent per
+  log file (12 in total) — cheap on a single machine.
   Date: 2026-05-07.
 
 - Decision: Use the upstream **default storage path naming and retention** initially:
@@ -391,7 +408,7 @@ Concrete shipper script (lives inside `home/victorialogs.nix`, returned by
     done
 
     exec ${pkgs.coreutils}/bin/tail -n0 -F "$file" \
-      | ${pkgs.jq}/bin/jq -Rc \
+      | ${pkgs.jq}/bin/jq -Rc --unbuffered \
           --arg app "$app" --arg stream "$stream" \
           '{_msg: ., _time: "0", app: $app, stream: $stream}' \
       | while IFS= read -r line; do
