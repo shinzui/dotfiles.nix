@@ -19,16 +19,22 @@ dashboard:
       group_by: "project-phase"
 aliases:
   t: today -c 私的
+  ta: today --actions
   hr: habit record-action
   ar: action record
   it: intention tree -c 私的 --all
-  itt: intention tree -c 私的 --all --tui
-  itj: intention tree --all -c 仕事 --tui
+  itt: intention tree -c 私的 --tui
+  itj: intention tree  -c 仕事 --tui
   isp: intention set-property
   is: intention show --full
   nt: note today
   ise: intention list --all --search
   japanese-note: note list -c 日本語 -d
+  ns: note list --title
   cl: category list --flat -d
   lse: link list --query
   aa: agent assist
+  acn: agent create-note
+  icw: intention create --context 仕事 --category work/project --copy 
+  icp: intention create --context 私的 --category 個人/施策/開発 --copy 
+  ici: intention create --context 私的 --category 個人/施策 --copy 
