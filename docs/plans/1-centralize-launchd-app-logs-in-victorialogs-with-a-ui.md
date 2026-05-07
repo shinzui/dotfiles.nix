@@ -67,12 +67,12 @@ This section must always reflect the actual current state of the work.
   - [x] `GET /select/vmui/` returned HTTP 200 (UI assets reachable).
   - [x] `POST /insert/jsonline` for `{"_msg":"hello from spike",…}` returned HTTP 200; subsequent `query=app:spike` returned the line with `_stream={app="spike",stream="stdout"}` and an ingestion timestamp.
   - [x] Killed `victoria-logs` and removed `/tmp/vl-spike`.
-- [ ] Milestone 2 — Persistent VictoriaLogs launchd agent under home-manager.
-  - [ ] Create `home/victorialogs.nix` defining a `launchd.agents.victorialogs` agent.
-  - [ ] Wire `./victorialogs.nix` into `home/default.nix`'s `imports = [ … ]` list.
-  - [ ] Add `home.activation.victorialogs-stop-agents` mirroring the bootout dance used by `home/mori.nix` so rebuilds restart the agent cleanly.
-  - [ ] `darwin-rebuild switch --flake .` and confirm `launchctl print gui/$(id -u)/com.shinzui.victorialogs` shows it running.
-  - [ ] `curl http://localhost:9428/health` returns `OK`.
+- [x] Milestone 2 — Persistent VictoriaLogs launchd agent under home-manager. _(2026-05-07)_
+  - [x] Created `home/victorialogs.nix` defining `launchd.agents.victorialogs`.
+  - [x] Wired `./victorialogs.nix` into `home/default.nix`'s `imports` immediately after `./postgresql.nix`.
+  - [x] Added `home.activation.victorialogs-stop-agents` mirroring `home/mori.nix`'s bootout pattern.
+  - [x] Ran `sudo darwin-rebuild switch --flake .#SungkyungM1X`. `launchctl print gui/501/com.shinzui.victorialogs` reports `state = running`.
+  - [x] `curl http://localhost:9428/health` returns `OK`. Smoke-tested ingest+query on the persistent server with `app:smoke` line — round-tripped successfully.
 - [ ] Milestone 3 — Log shipper that pushes the existing files into VictoriaLogs.
   - [ ] Add a `vl-pusher` reusable shell function in `home/victorialogs.nix` that takes an `app` label and a list of files and uses `tail -F` to stream them as ndjson to `/insert/jsonline`.
   - [ ] Replace the bare `StandardOutPath` / `StandardErrorPath` plumbing with a wrapper that does `tee -a $log_file` and additionally pipes through `vl-pusher`. Apply this change in `home/mori.nix`, `home/rei.nix`, `home/mori-rei-app.nix`, `home/notion-hub.nix`, `home/postgresql.nix`. Each existing file path must remain unchanged.
