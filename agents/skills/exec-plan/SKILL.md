@@ -128,7 +128,7 @@ If no path is given, scan `docs/plans/` for all `.md` files and show a summary t
 ## ExecPlan Skeleton
 
 The skeleton is owned by `init-plan.ts`; the script writes it into every new plan. Section names and the order they appear in are: Purpose / Big Picture, Progress, Surprises & Discoveries, Decision Log, Outcomes & Retrospective, Context and Orientation, Plan of Work, Concrete Steps, Validation and Acceptance, Idempotence and Recovery, Interfaces and Dependencies. Each generated section carries inline guidance describing what belongs there — read the file after creation and follow the guidance verbatim.
-# --- seihou:exec-plan ---
+# --- seihou:exec-plan#bfa0a336 ---
 
 
 ## Intention Tracking
@@ -158,4 +158,4 @@ When both an ExecPlan and an Intention are active, commits must include both tra
     Intention: INTENT-42
 
 Ask once at the start of a session. Do not ask again on subsequent commits within the same session. If the user skips or declines, proceed without the trailer.
-# --- /seihou:exec-plan ---
+# --- /seihou:exec-plan#bfa0a336 ---
