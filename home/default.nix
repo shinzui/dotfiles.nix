@@ -180,6 +180,7 @@ in
     beautiful-mermaid
     markit
     defuddle
+    hunk
     bootstrap-repos
 
     tmuxai
