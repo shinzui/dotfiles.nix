@@ -43,6 +43,10 @@
     config.age.secrets.netrc.path
   ];
 
+  # Determinate's daemon handles GC itself (targets ~30GB free / 5–20% steady-state).
+  # No interval / retention knobs are exposed — strategy is the only switch.
+  determinateNix.determinateNixd.garbageCollector.strategy = "automatic";
+
   determinateNix.registry.nixpkgs.flake = nixpkgs-unstable;
 
   ##################
