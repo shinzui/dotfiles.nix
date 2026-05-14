@@ -26,6 +26,7 @@ in
     "xq"
     "duckdb"
     "keyboardSwitcher"
+    "mole"
     "redpanda-data/tap/redpanda"
   ];
 
