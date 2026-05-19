@@ -2,7 +2,7 @@
   description = "Shinzui's dotfiles";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/master";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     darwin = {
@@ -143,6 +143,10 @@
             # `home-manager` config
             users.users.${primaryUser}.home = "/Users/${primaryUser}";
             home-manager.useGlobalPkgs = true;
+            # Rename any file home-manager would otherwise clobber to
+            # <name>.backup; preserves manual state without forcing
+            # --force on every individual file option.
+            home-manager.backupFileExtension = "backup";
             home-manager.users.${primaryUser} = homeManagerCommonConfig;
 
             home-manager.extraSpecialArgs = {
