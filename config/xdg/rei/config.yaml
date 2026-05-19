@@ -37,4 +37,5 @@ aliases:
   acn: agent create-note
   icw: intention create --context 仕事 --category work/project --copy 
   icp: intention create --context 私的 --category 個人/施策/開発 --copy 
+  ict: intention create --context 私的 --category 個人/施策/開発/作業 --copy 
   ici: intention create --context 私的 --category 個人/施策 --copy 
