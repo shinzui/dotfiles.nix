@@ -1,3 +1,22 @@
 [install]
 minimumReleaseAge = 604800
-minimumReleaseAgeExcludes = ["@topagentnetwork/*", "@tan/*"]
+# Bun does exact-string matching on this list — no globs. Add packages here as
+# we discover them in their projects.
+minimumReleaseAgeExcludes = [
+  "@topagentnetwork/account-service-v2-ts-client",
+  "@topagentnetwork/activity-report-service-ts-client",
+  "@topagentnetwork/auth-service-client",
+  "@topagentnetwork/chapter-service-ts-client",
+  "@topagentnetwork/client-access-service-ts-client",
+  "@topagentnetwork/client-service-client",
+  "@topagentnetwork/conversation-service-ts-client",
+  "@topagentnetwork/location-service-v2-ts-client",
+  "@topagentnetwork/message-service-client",
+  "@topagentnetwork/mls-service-v2-ts-client",
+  "@topagentnetwork/notification-preference-service-ts-client",
+  "@topagentnetwork/notification-render-service-ts-client",
+  "@topagentnetwork/qualified-agent-service-protos",
+  "@topagentnetwork/registration-service-protos",
+  "@topagentnetwork/registration-service-ts-client",
+  "@topagentnetwork/user-service-client",
+]
