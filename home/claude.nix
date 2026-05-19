@@ -10,4 +10,7 @@ in
 
   home.file.".codex/instructions.md".source =
     mkOutOfStoreSymlink "${nixConfigDir}/config/agents/AGENTS.md";
+
+  home.file.".codex/AGENTS.md".source =
+    mkOutOfStoreSymlink "${nixConfigDir}/config/agents/AGENTS.md";
 }
