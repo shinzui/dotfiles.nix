@@ -45,6 +45,7 @@ in
     ./notion-hub.nix
     ./hammerspoon.nix
     ./claude.nix
+    ./gcp-nix-builder.nix
   ];
 
 

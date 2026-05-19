@@ -50,6 +50,33 @@
   determinateNix.registry.nixpkgs.flake = nixpkgs-unstable;
 
   ##################
+  # Remote builders
+  ##################
+  # On-demand x86_64-linux builder hosted in GCP (tan-nb-exp / us-west1-a).
+  # The wrapper that opens the SSH connection lives in
+  # ~/Keikaku/dotfiles.nix/home/gcp-nix-builder.nix; that wrapper starts
+  # the VM on demand and shuts it back down via an in-guest systemd timer.
+  #
+  # Determinate Nix shadows nix-darwin's `nix.buildMachines` /
+  # `nix.distributedBuilds` with its own `determinateNix.*` equivalents.
+  # Use the Determinate-flavored options so the active daemon picks
+  # them up.
+  determinateNix.distributedBuilds = true;
+  determinateNix.buildMachines = [{
+    hostName = "nix-gcp-builder";
+    systems = [ "x86_64-linux" ];
+    maxJobs = 4;
+    speedFactor = 2;
+    supportedFeatures = [ "kvm" "big-parallel" "nixos-test" ];
+    sshUser = "builder";
+    sshKey = "/etc/nix/builder_ed25519";
+  }];
+
+  # Let the remote builder pull from substituters directly rather than
+  # round-tripping every closure through the darwin host.
+  determinateNix.customSettings.builders-use-substitutes = true;
+
+  ##################
   # Shell
   ##################
   # Add shells installed by nix to /etc/shells file

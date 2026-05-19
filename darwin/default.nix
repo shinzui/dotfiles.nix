@@ -9,6 +9,7 @@
     ./homebrew.nix
     ./secrets.nix
     ./mac-defaults.nix
+    ./gcp-nix-builder.nix
   ];
 
   networking.dns = [
