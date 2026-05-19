@@ -33,20 +33,26 @@ record with a single field `entries` containing a list of cookbook entries.
 Every cookbook.dhall needs these imports:
 
 ```dhall
-let Mori = ../schema/package.dhall
+let Schema =
+      https://raw.githubusercontent.com/shinzui/mori-schema/<commit>/package.dhall
+        sha256:<hash>
 
-let ContentType = ../schema/extensions/cookbook/ContentType.dhall
+let Cookbook =
+      https://raw.githubusercontent.com/shinzui/mori-schema/<commit>/extensions/cookbook/package.dhall
+        sha256:<hash>
 
-let Topic = ../schema/extensions/cookbook/Topic.dhall
-
-in  { entries =
+in  Cookbook.CookbookCatalog::{
+    , entries =
       [ -- entries go here
       ]
     }
 ```
 
-`Mori` re-exports core types: `Mori.Language`, `Mori.DocAudience`, `Mori.DocLocation`.
-`ContentType` and `Topic` are cookbook-specific enums imported from the extension schema.
+`Schema` re-exports the core types used in cookbook fields:
+`Schema.Language`, `Schema.DocAudience`, `Schema.DocLocation`.
+`Cookbook` re-exports the cookbook bundle records
+(`Cookbook.CookbookCatalog`, `Cookbook.CookbookEntry`) and the
+cookbook-specific enums (`Cookbook.ContentType`, `Cookbook.Topic`).
 
 
 ## Entry fields
@@ -61,50 +67,50 @@ Unique identifier for this entry within the catalog. Use kebab-case (e.g., `"eve
 
 Human-readable title. Cannot be empty. Prefer task-oriented phrasing: "How to X" or verb-first (e.g., "Event Sourcing Patterns with Message-DB").
 
-### contentType (ContentType, required)
+### contentType (Cookbook.ContentType, required)
 
 What form the content takes. One of:
 
-- `ContentType.SampleCode` — runnable or copy-pasteable code examples
-- `ContentType.Instructions` — step-by-step procedures to follow
-- `ContentType.Pattern` — reusable design or code patterns to adapt
-- `ContentType.Configuration` — config file templates or environment setup
-- `ContentType.Template` — project or file scaffolding templates
-- `ContentType.Other "custom"` — escape hatch for custom types
+- `Cookbook.ContentType.SampleCode` — runnable or copy-pasteable code examples
+- `Cookbook.ContentType.Instructions` — step-by-step procedures to follow
+- `Cookbook.ContentType.Pattern` — reusable design or code patterns to adapt
+- `Cookbook.ContentType.Configuration` — config file templates or environment setup
+- `Cookbook.ContentType.Template` — project or file scaffolding templates
+- `Cookbook.ContentType.Other "custom"` — escape hatch for custom types
 
-### topics (List Topic, required)
+### topics (List Cookbook.Topic, required)
 
 Domain areas this entry covers. **Must have at least one topic** — an empty list causes a
 validation error. Multiple topics are allowed. Values:
 
-- `Topic.Database`
-- `Topic.API`
-- `Topic.Testing`
-- `Topic.ErrorHandling`
-- `Topic.Deployment`
-- `Topic.Security`
-- `Topic.Performance`
-- `Topic.Streaming`
-- `Topic.Effects`
-- `Topic.Migration`
-- `Topic.Observability`
-- `Topic.Other "custom"` — escape hatch for custom topics
+- `Cookbook.Topic.Database`
+- `Cookbook.Topic.API`
+- `Cookbook.Topic.Testing`
+- `Cookbook.Topic.ErrorHandling`
+- `Cookbook.Topic.Deployment`
+- `Cookbook.Topic.Security`
+- `Cookbook.Topic.Performance`
+- `Cookbook.Topic.Streaming`
+- `Cookbook.Topic.Effects`
+- `Cookbook.Topic.Migration`
+- `Cookbook.Topic.Observability`
+- `Cookbook.Topic.Other "custom"` — escape hatch for custom topics
 
 ### packages (List Text, required)
 
 Related libraries or tools this entry uses (e.g., `["hasql", "hasql-pool"]`). Can be an
 empty list `[] : List Text` if no specific packages apply.
 
-### language (Language, required)
+### language (Schema.Language, required)
 
-Target language or tool. Accessed via `Mori.Language.X`:
+Target language or tool. Accessed via `Schema.Language.X`:
 
 `Haskell`, `TypeScript`, `JavaScript`, `Python`, `Go`, `Rust`, `Java`, `Kotlin`, `Swift`,
 `Ruby`, `Elixir`, `Clojure`, `Scala`, `Dhall`, `Nix`, `SQL`, `Shell`, `Other "custom"`
 
-### audience (DocAudience, required)
+### audience (Schema.DocAudience, required)
 
-Who this entry is for. Accessed via `Mori.DocAudience.X`:
+Who this entry is for. Accessed via `Schema.DocAudience.X`:
 
 - `Module` — module/library developers
 - `User` — end users of the API/library
@@ -112,9 +118,9 @@ Who this entry is for. Accessed via `Mori.DocAudience.X`:
 - `Internal` — internal team members
 - `Other "custom"` — escape hatch
 
-### location (DocLocation, required)
+### location (Schema.DocLocation, required)
 
-Where the cookbook file lives. Accessed via `Mori.DocLocation.X`:
+Where the cookbook file lives. Accessed via `Schema.DocLocation.X`:
 
 - `LocalFile "path"` — relative path to a file from project root
 - `LocalDir "path"` — relative path to a directory
@@ -123,48 +129,55 @@ Where the cookbook file lives. Accessed via `Mori.DocLocation.X`:
 
 ### description (Optional Text, optional)
 
-Brief summary. Use `Some "text"` to provide a description, or `None Text` to omit it.
+Brief summary. `None Text` is the published default, so you can
+omit this line entirely to get no description. Use `Some "text"`
+to provide one.
 
 
 ## Complete example
 
 ```dhall
-let Mori = ../schema/package.dhall
+let Schema =
+      https://raw.githubusercontent.com/shinzui/mori-schema/<commit>/package.dhall
+        sha256:<hash>
 
-let ContentType = ../schema/extensions/cookbook/ContentType.dhall
+let Cookbook =
+      https://raw.githubusercontent.com/shinzui/mori-schema/<commit>/extensions/cookbook/package.dhall
+        sha256:<hash>
 
-let Topic = ../schema/extensions/cookbook/Topic.dhall
-
-in  { entries =
-      [ { key = "event-sourcing-patterns"
+in  Cookbook.CookbookCatalog::{
+    , entries =
+      [ Cookbook.CookbookEntry::{
+        , key = "event-sourcing-patterns"
         , title = "Event Sourcing Patterns with Message-DB"
-        , contentType = ContentType.SampleCode
-        , topics = [ Topic.Database, Topic.Streaming ]
+        , contentType = Cookbook.ContentType.SampleCode
+        , topics = [ Cookbook.Topic.Database, Cookbook.Topic.Streaming ]
         , packages = [ "message-db-hs", "tan-event-source" ]
-        , language = Mori.Language.Haskell
-        , audience = Mori.DocAudience.Module
-        , location = Mori.DocLocation.LocalFile "docs/event-sourcing.md"
+        , language = Schema.Language.Haskell
+        , audience = Schema.DocAudience.Module
+        , location = Schema.DocLocation.LocalFile "docs/event-sourcing.md"
         , description = Some "Event types, stream naming, projections, and subscriptions"
         }
-      , { key = "cli-command-pattern"
+      , Cookbook.CookbookEntry::{
+        , key = "cli-command-pattern"
         , title = "How to Add a CLI Command"
-        , contentType = ContentType.Instructions
-        , topics = [ Topic.API ]
+        , contentType = Cookbook.ContentType.Instructions
+        , topics = [ Cookbook.Topic.API ]
         , packages = [ "optparse-applicative" ]
-        , language = Mori.Language.Haskell
-        , audience = Mori.DocAudience.Module
-        , location = Mori.DocLocation.LocalFile "docs/architecture/CLI.md"
+        , language = Schema.Language.Haskell
+        , audience = Schema.DocAudience.Module
+        , location = Schema.DocLocation.LocalFile "docs/architecture/CLI.md"
         , description = Some "Step-by-step guide to creating a new CLI command"
         }
-      , { key = "nix-dev-setup"
+      , Cookbook.CookbookEntry::{
+        , key = "nix-dev-setup"
         , title = "Development Environment Setup"
-        , contentType = ContentType.Configuration
-        , topics = [ Topic.Deployment ]
+        , contentType = Cookbook.ContentType.Configuration
+        , topics = [ Cookbook.Topic.Deployment ]
         , packages = [] : List Text
-        , language = Mori.Language.Nix
-        , audience = Mori.DocAudience.User
-        , location = Mori.DocLocation.LocalFile "docs/dev-setup.md"
-        , description = None Text
+        , language = Schema.Language.Nix
+        , audience = Schema.DocAudience.User
+        , location = Schema.DocLocation.LocalFile "docs/dev-setup.md"
         }
       ]
     }
@@ -203,12 +216,22 @@ All three rules must pass or the entire catalog is rejected:
 4. If registered, re-register: `mori register`
 
 **Common mistakes and fixes:**
-- **Empty topics list** — most common error. Always include at least one `Topic.*` value.
+- **Empty topics list** — most common error. Always include at least one `Cookbook.Topic.*` value.
 - **Wrong Optional syntax** — use `Some "text"` (not bare `"text"`) for description, and `None Text` (not `None`) to omit.
 - **Duplicate keys** — each entry needs a unique `key`. Check existing entries before adding.
-- **String instead of enum** — use `ContentType.SampleCode` (not `"SampleCode"`), `Topic.Database` (not `"Database"`).
-- **Wrong import paths** — imports must use `../schema/` (relative from the `mori/` subdirectory up to project root, then into `schema/`).
+- **String instead of enum** — use `Cookbook.ContentType.SampleCode` (not `"SampleCode"`), `Cookbook.Topic.Database` (not `"Database"`).
 - **Empty packages list without type annotation** — use `[] : List Text` (not bare `[]`) for an empty packages list, since Dhall needs the type annotation.
+- **Using bare records instead of `::`** — write
+  `Cookbook.CookbookEntry::{ key = "…", … }` and skip any
+  defaulted optional field. Writing `{ key = "…", … }` as a
+  plain record is accepted by Dhall but will break as soon as
+  the upstream `CookbookEntry` bundle adds a new defaulted
+  field.
+- **Wrong schema namespace** — `Schema.ContentType.SampleCode`
+  and `Schema.Topic.Database` are NOT real. Content types live
+  in `Cookbook.ContentType.X` and topics in `Cookbook.Topic.X`;
+  `Language`, `DocAudience`, and `DocLocation` live in
+  `Schema.X`.
 
 
 ## CLI commands for verification

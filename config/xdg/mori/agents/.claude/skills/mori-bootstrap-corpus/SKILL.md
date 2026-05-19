@@ -36,7 +36,7 @@ external code.
 ```
 <corpus-dir>/                     # Named after the upstream ecosystem
   .git/                           # Git repo with subtree history
-  mori.dhall                      # Project config (raw record syntax)
+  mori.dhall                      # Project config (mk-form: Schema.Project::{ … })
   Justfile                        # Subtree management recipes
   mori/                           # Optional extensions
     cookbook.dhall                 # Classified code examples (optional)
@@ -66,12 +66,35 @@ Each subtree gets **both** a `Repo` entry (with `github` and `localPath`) and a 
 
 ## Critical rules
 
-1. **Use raw record syntax** — do NOT use `Schema.Project::{}` completion syntax. It does
-   not work for corpus projects.
-2. **All top-level fields must be present** — `project`, `repos`, `packages`, `bundles`,
-   `dependencies`, `apis`, `agents`, `skills`, `subagents`, `standards`, `docs`.
+1. **Use `Schema.Project::{}` record completion** — since plan 5,
+   every `schema/records/*.dhall` (and `Project.dhall`) exports a
+   `{ Input, Type, default, mk }` bundle. The idiomatic form is
+   `Schema.Project::{ project = Schema.ProjectIdentity::{ … },
+   repos = [ Schema.Repo::{ … } ], packages = [ Schema.Package::{ … } ] }`,
+   skipping any top-level field whose value would be the default
+   (`bundles`, `dependencies`, `apis`, `agents`, `skills`,
+   `subagents`, `standards`, `docs`, `templates` all default to
+   empty lists).
+2. **Only the required Input fields are mandatory** — for the root
+   `Schema.Project`, only `project` is required (everything else
+   has a default). For each nested bundle, see the Input record on
+   `schema/records/<Name>.dhall` for what must be supplied.
+   **Important:** `Schema.ProjectIdentity` is unusual — its `Input`
+   includes `lifecycle`, which has no default. Every
+   `Schema.ProjectIdentity::{ … }` must write
+   `lifecycle = Schema.Lifecycle.Active` (or `Maintained`,
+   `Deprecated`, etc.) explicitly, or `mori validate` will fail with
+   `missing field lifecycle`.
 3. **Schema prefix required** — use `Schema.PackageType.Library` not `PackageType.Library`.
-4. **Empty typed lists** — use `[] : List Schema.Dependency` not `[] : List Dependency`.
+4. **Never type out empty lists or default-valued fields.** The
+   whole point of `Schema.<Name>::{ … }` is that the bundle's
+   `default` supplies every unset field. Writing `packages = [] :
+   List Schema.Package`, `docs = [] : List Schema.DocRef`, or any
+   similar empty-list annotation is both a type error (bundles are
+   no longer bare types) and contrary to the idiom. Omit the
+   field; the default supplies it. The same rule applies to
+   `description = None Text`, `localPath = None Text`, and every
+   other optional that defaults to absent.
 5. **No `--squash`** — full history is needed so agents can see what changed upstream.
 6. **Detect default branch** — run `git ls-remote --symref <url> HEAD`. Do NOT assume
    `main` — many repos use `master`.
@@ -84,70 +107,63 @@ Each subtree gets **both** a `Repo` entry (with `github` and `localPath`) and a 
 
 ## Complete mori.dhall example
 
-Get the current schema URL and hash from `mori schema print` before writing.
+Get the current schema commit and hashes by running `mori schema pin`. Sample
+output:
+
+```text
+commit:                <commit>
+main schema hash:      sha256:<schema-hash>
+agent-plans hash:      sha256:<agent-plans-hash>
+```
+
+Use the commit in the URL and the `main schema hash` value (after `sha256:`)
+in the `let Schema = …` header below.
 
 ```dhall
 let Schema =
       https://raw.githubusercontent.com/shinzui/mori-schema/<commit>/package.dhall
         sha256:<hash>
 
-in  { project =
-        { name = "hasql"
-        , namespace = "nikita-volkov"
-        , type = Schema.PackageType.Library
-        , description = Some "Corpus: hasql ecosystem libraries"
-        , language = Schema.Language.Haskell
-        , lifecycle = Schema.Lifecycle.Active
-        , domains = [ "database" ]
-        , owners = [ "nikita-volkov" ]
-        , origin = Schema.Origin.ThirdParty
-        }
+in  Schema.Project::{
+    , project = Schema.ProjectIdentity::{
+      , name = "hasql"
+      , namespace = "nikita-volkov"
+      , type = Schema.PackageType.Library
+      , description = Some "Corpus: hasql ecosystem libraries"
+      , language = Schema.Language.Haskell
+      , lifecycle = Schema.Lifecycle.Active
+      , domains = [ "database" ]
+      , owners = [ "nikita-volkov" ]
+      , origin = Schema.Origin.ThirdParty
+      }
     , repos =
-      [ { name = "hasql"
+      [ Schema.Repo::{
+        , name = "hasql"
         , github = Some "nikita-volkov/hasql"
-        , gitlab = None Text
-        , git = None Text
         , localPath = Some "hasql"
         }
-      , { name = "hasql-pool"
+      , Schema.Repo::{
+        , name = "hasql-pool"
         , github = Some "nikita-volkov/hasql-pool"
-        , gitlab = None Text
-        , git = None Text
         , localPath = Some "hasql-pool"
         }
       ]
     , packages =
-      [ { name = "hasql"
+      [ Schema.Package::{
+        , name = "hasql"
         , type = Schema.PackageType.Library
         , language = Schema.Language.Haskell
         , path = Some "hasql"
         , description = Some "PostgreSQL driver"
-        , visibility = Schema.Visibility.Public
-        , runtime = { deployable = False, exposesApi = False }
-        , dependencies = [] : List Schema.Dependency
-        , docs = [] : List Schema.DocRef
-        , config = [] : List Schema.ConfigItem
         }
-      , { name = "hasql-pool"
+      , Schema.Package::{
+        , name = "hasql-pool"
         , type = Schema.PackageType.Library
         , language = Schema.Language.Haskell
         , path = Some "hasql-pool"
         , description = Some "Connection pool for hasql"
-        , visibility = Schema.Visibility.Public
-        , runtime = { deployable = False, exposesApi = False }
-        , dependencies = [] : List Schema.Dependency
-        , docs = [] : List Schema.DocRef
-        , config = [] : List Schema.ConfigItem
         }
       ]
-    , bundles = [] : List Schema.PackageBundle
-    , dependencies = [] : List Text
-    , apis = [] : List Schema.Api
-    , agents = [] : List Schema.AgentHint
-    , skills = [] : List Schema.Skill
-    , subagents = [] : List Schema.Subagent
-    , standards = [] : List Text
-    , docs = [] : List Schema.DocRef
     }
 ```
 
@@ -184,16 +200,26 @@ pull-all: pull-hasql pull-hasql-pool
 
 ### Cookbook
 
-If the upstream repos contain useful code examples or patterns, create
-`mori/cookbook.dhall`. Use the `cookbook-config` skill or run `mori cookbook print-schema`
-for the full CookbookEntry type.
+If the upstream repos contain useful code examples or patterns,
+create `mori/cookbook.dhall`. Use the `cookbook-config` skill for
+the full field reference, or run `mori cookbook print-schema`.
 
 ```dhall
-in  { entries =
-      [ { key = "connection-example"
+let Schema =
+      https://raw.githubusercontent.com/shinzui/mori-schema/<commit>/package.dhall
+        sha256:<hash>
+
+let Cookbook =
+      https://raw.githubusercontent.com/shinzui/mori-schema/<commit>/extensions/cookbook/package.dhall
+        sha256:<hash>
+
+in  Cookbook.CookbookCatalog::{
+    , entries =
+      [ Cookbook.CookbookEntry::{
+        , key = "connection-example"
         , title = "How to establish a hasql connection"
-        , contentType = Schema.ContentType.CodeSample
-        , topics = [ Schema.Topic.Database ]
+        , contentType = Cookbook.ContentType.SampleCode
+        , topics = [ Cookbook.Topic.Database ]
         , packages = [ "hasql" ]
         , language = Schema.Language.Haskell
         , audience = Schema.DocAudience.User
@@ -211,7 +237,8 @@ Add DocRef entries to the top-level `docs` field for augmented documentation. Us
 
 ```dhall
     , docs =
-      [ { key = "pool-sizing-guide"
+      [ Schema.DocRef::{
+        , key = "pool-sizing-guide"
         , kind = Schema.DocKind.Guide
         , audience = Schema.DocAudience.User
         , description = Some "Team guidance on hasql connection pool sizing"
@@ -256,10 +283,14 @@ The user provides a repo name (e.g., `hasql`, `nikita-volkov/hasql`). Drive the 
 7. **Read package metadata** — extract descriptions from upstream config files
    (`.cabal`, `package.json`, `Cargo.toml`) for `Package.description` fields
 
-8. **Get the current schema URL and hash** via `mori schema print`
+8. **Get the current schema commit and hashes** via `mori schema pin`
+   (not `mori schema print`, which prints the type reference). Use the
+   `commit` and `main schema hash` lines from its output in the
+   `let Schema = …` header.
 
-9. **Write mori.dhall** — raw record syntax, all fields present, following the
-   corpus conventions and complete example above
+9. **Write mori.dhall** — `Schema.Project::{ … }` mk form, supplying only
+   the fields you need to override, following the corpus conventions and
+   complete example above
 
 10. **Write Justfile** — subtree management recipes per repo plus `pull-all`
 
@@ -284,8 +315,17 @@ The user provides a repo name (e.g., `hasql`, `nikita-volkov/hasql`). Drive the 
 
 ### Debugging
 
-- **Validation fails** → common causes: missing top-level field, wrong Schema prefix,
-  untyped empty list, using `Schema.Project::{}` instead of raw records
+- **Validation fails** → common causes: missing required Input field
+  (most often `lifecycle` on `Schema.ProjectIdentity`), wrong Schema
+  prefix (use `Schema.PackageType.Library`, not `PackageType.Library`),
+  wrong record name (`Schema.Repo` not `Schema.Repository`,
+  `Schema.DocRef` not `Schema.DocReference`).
+- **Validation fails with `Wrong type of function argument — Type vs { … : … }`**
+  → you wrote an empty list annotation as `List Schema.<Record>` when
+  the correct type is `List Schema.<Record>.Type`. `Schema.<Record>`
+  is the `{ Input, Type, default, mk }` bundle, not a type. Easier
+  fix: drop the empty field entirely and let completion supply the
+  default (per Rule 4).
 - **Subtree add fails** → ensure at least one commit exists in the repo
 - **Branch detection fails** → check the GitHub URL is correct and repo is public
 - **Dependency resolution fails** → ensure corpus is registered (`mori registry list`)

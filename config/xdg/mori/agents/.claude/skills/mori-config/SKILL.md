@@ -45,37 +45,49 @@ let Schema =
         sha256:<hash>
 
 in  Schema.Project::{
-    , namespace = "myorg"
-    , name = "my-project"
-    , projectType = Schema.ProjectType.Application
-    , language = Schema.Language.Haskell
-    , lifecycle = Schema.Lifecycle.Active
+    , project = Schema.ProjectIdentity::{
+      , namespace = "myorg"
+      , name = "my-project"
+      , type = Schema.PackageType.Application
+      , language = Schema.Language.Haskell
+      , lifecycle = Schema.Lifecycle.Active
+      }
     }
 ```
 
-The `Schema.Project::{ ... }` syntax uses Dhall defaults — only override fields you need.
+The `Schema.Project::{ ... }` and `Schema.ProjectIdentity::{ ... }` syntax
+uses Dhall defaults — only override fields you need. Every list-valued
+field on `Schema.Project` (`repos`, `packages`, `bundles`, `dependencies`,
+`apis`, `agents`, `skills`, `subagents`, `standards`, `docs`, `templates`)
+defaults to empty, so omit the lines you do not need.
 
 
 ## Key sections
 
 ### Project identity
 
+The identity block is the inner `project = Schema.ProjectIdentity::{ … }`
+field on `Schema.Project`. Required Input fields are `name`, `namespace`,
+`type`, `language`, `lifecycle`; everything else has a default.
+
 ```dhall
-, namespace   = "myorg"                     -- organizational grouping
-, name        = "my-project"                -- project name (unique within namespace)
-, projectType = Schema.ProjectType.Library  -- Library, Application, Service, Tool, Framework, Plugin
-, language    = Schema.Language.Haskell     -- primary language
-, lifecycle   = Schema.Lifecycle.Active     -- Active, Deprecated, Experimental, Archived
-, description = Some "What this project does"
+, project = Schema.ProjectIdentity::{
+  , namespace   = "myorg"                       -- organizational grouping
+  , name        = "my-project"                  -- project name (unique within namespace)
+  , type        = Schema.PackageType.Library    -- Library, Application, Service, Tool, etc.
+  , language    = Schema.Language.Haskell       -- primary language
+  , lifecycle   = Schema.Lifecycle.Active       -- Active, Deprecated, Experimental, Archived
+  , description = Some "What this project does" -- optional; omit to use the default `None Text`
+  }
 ```
 
-### Repositories
+### Repos
 
 ```dhall
-, repositories =
-    [ Schema.Repository::{
-      , url = "https://github.com/myorg/my-project"
-      , kind = Schema.RepositoryKind.Git
+, repos =
+    [ Schema.Repo::{
+      , name = "my-project"
+      , github = Some "myorg/my-project"
       , localPath = Some "/path/to/local/checkout"
       }
     ]
@@ -83,17 +95,21 @@ The `Schema.Project::{ ... }` syntax uses Dhall defaults — only override field
 
 ### Packages
 
+`Schema.Package` requires `name`, `type`, `language` on its Input. Every
+other field (including `dependencies`, `docs`, `config`, `visibility`)
+has a default.
+
 ```dhall
 , packages =
     [ Schema.Package::{
       , name = "my-lib"
-      , packageType = Schema.PackageType.Library
+      , type = Schema.PackageType.Library
       , language = Schema.Language.Haskell
       , path = Some "my-lib/"
       }
     , Schema.Package::{
       , name = "my-cli"
-      , packageType = Schema.PackageType.Executable
+      , type = Schema.PackageType.Executable
       , language = Schema.Language.Haskell
       , path = Some "my-cli/"
       }
@@ -102,26 +118,49 @@ The `Schema.Project::{ ... }` syntax uses Dhall defaults — only override field
 
 ### Dependencies
 
+`Project.dependencies` is a `List Text` — dependencies resolved by
+name via the local registry:
+
 ```dhall
-, dependencies =
-    [ Schema.Dependency::{
-      , name = "some-dependency"
-      , namespace = Some "myorg"      -- matches registry entry
-      , source = Schema.DependencySource.Registry
+, dependencies = [ "hasql", "effectful", "streamly" ]
+```
+
+For fine-grained control over a single dependency (local augmentation,
+path overrides), declare it on a `Package` using the
+`Schema.Dependency` union type's `WithAugmentation` constructor:
+
+```dhall
+, packages =
+    [ Schema.Package::{
+      , name = "my-lib"
+      , type = Schema.PackageType.Library
+      , language = Schema.Language.Haskell
+      , dependencies =
+          [ Schema.Dependency.ByName "effectful"
+          , Schema.Dependency.WithAugmentation
+              { name = "hasql"
+              , extraDocs = [] : List Schema.DocRef.Type
+              , localPathOverride = None Text
+              , kind = Some Schema.DependencyKind.ThirdParty
+              , source = Some Schema.DependencySource.Hackage
+              }
+          ]
       }
     ]
 ```
 
-Use `mori registry list` to find available dependencies. Reference them by namespace/name.
+Use `mori registry list` to find registered dependencies.
 
 ### Documentation
 
 ```dhall
-, documentation =
-    [ Schema.DocReference::{
-      , title = "API Reference"
-      , url = "https://docs.example.com/api"
-      , kind = Schema.DocKind.ApiReference
+, docs =
+    [ Schema.DocRef::{
+      , key = "api-reference"
+      , kind = Schema.DocKind.Reference
+      , audience = Schema.DocAudience.User
+      , description = Some "Main API reference"
+      , location = Schema.DocLocation.Url "https://docs.example.com/api"
       }
     ]
 ```
@@ -132,18 +171,36 @@ Use `mori registry list` to find available dependencies. Reference them by names
 , skills =
     [ Schema.Skill::{
       , name = "my-skill"
-      , description = Some "What this skill does"
+      , description = "What this skill does"
       }
     ]
 , subagents =
     [ Schema.Subagent::{
       , name = "test-runner"
-      , description = Some "Runs project tests"
-      , provider = "claude"
+      , description = "Runs project tests"
+      , provider = Some "claude-code"
       , model = Some "sonnet"
       }
     ]
 ```
+
+### Extensions
+
+Mori supports per-project extension config files alongside
+`mori.dhall`:
+
+- `mori/tech-radar.dhall` — technology recommendations per
+  language/category. Use the `TechRadar.TechRadar::{
+  recommendations = [ TechRadar.Recommendation::{ … } ] }` idiom.
+  Run `mori help extensions` for the template.
+- `mori/cookbook.dhall` — classified code examples, patterns, and
+  guides. Use `Cookbook.CookbookCatalog::{ entries =
+  [ Cookbook.CookbookEntry::{ … } ] }`. The `cookbook-config` skill
+  (`mori kit install cookbook-config`) has the full schema and a
+  complete example. `mori help cookbook` shows the same.
+
+Extension files are migrated alongside `mori.dhall` when you run
+`mori schema migrate --apply` or `mori registry upgrade-schema`.
 
 
 ## How to help the user
@@ -174,4 +231,4 @@ Use `mori registry list` to find available dependencies. Reference them by names
 - `//` for record merge (override defaults)
 - `Some value` for optional present, `None Type` for optional absent
 - `Schema.Type::{ field = value }` uses defaults for unspecified fields
-- Enums: `Schema.Language.Haskell`, `Schema.ProjectType.Library`, etc.
+- Enums: `Schema.Language.Haskell`, `Schema.PackageType.Library`, etc.
