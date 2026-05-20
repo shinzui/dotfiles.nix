@@ -119,6 +119,11 @@ logs-rei-subscription:
 logs-rei:
     tail -f ~/.rei/logs/*.log
 
+# Update reiko flake input to latest
+[group: 'reiko']
+update-reiko:
+    nix flake update reiko
+
 # Update notion-cli flake input to latest
 [group: 'notion-cli']
 update-notion-cli:
@@ -149,10 +154,10 @@ logs-notion-hub-subscription:
 logs-notion-hub:
     tail -f ~/.notion-hub/logs/*.log
 
-# Update all personal tool flake inputs (kizamu, mina, mori, mori-rei-app, seihou, rei, notion-cli, notion-hub)
+# Update all personal tool flake inputs (kizamu, mina, mori, mori-rei-app, seihou, rei, reiko, notion-cli, notion-hub)
 [group: 'tools']
 update-tools:
-    nix flake update kizamu mina mori mori-rei-app seihou rei notion-cli notion-hub
+    nix flake update kizamu mina mori mori-rei-app seihou rei reiko notion-cli notion-hub
 
 # Check status of all personal tool agents
 [group: 'tools']

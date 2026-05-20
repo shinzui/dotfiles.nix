@@ -38,6 +38,7 @@ in
     ./mori-rei-app.nix
     ./rei.nix
     ./rei-doctor.nix
+    ./reiko.nix
     ./seihou.nix
     ./kizamu.nix
     ./mina.nix

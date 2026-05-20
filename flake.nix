@@ -39,6 +39,10 @@
       url = "github:shinzui/rei";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    reiko = {
+      url = "github:shinzui/reiko";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     seihou = {
       url = "github:shinzui/seihou";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -236,6 +240,17 @@
           };
           mori = inputs.mori.packages.${prev.stdenv.hostPlatform.system}.default;
           rei = inputs.rei.packages.${prev.stdenv.hostPlatform.system}.default;
+          # Wrap reiko to expose only bin/ and share/ — the full Haskell output
+          # includes lib/links/libHStan-commons-config-* which conflicts with
+          # mori (both depend on tan-commons-config from the same package set).
+          # share/ is kept because reiko bundles its built SPA under
+          # share/reiko-ui, so `reiko web` finds the viewer (no --dist needed).
+          reiko = prev.runCommand "reiko" {} ''
+            mkdir -p $out
+            src=${inputs.reiko.packages.${prev.stdenv.hostPlatform.system}.default}
+            ln -s $src/bin $out/bin
+            ln -s $src/share $out/share
+          '';
           seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
           kizamu = inputs.kizamu.packages.${prev.stdenv.hostPlatform.system}.default;
           mina = inputs.mina.packages.${prev.stdenv.hostPlatform.system}.default;
