@@ -154,6 +154,31 @@ logs-notion-hub-subscription:
 logs-notion-hub:
     tail -f ~/.notion-hub/logs/*.log
 
+# Run a PostgreSQL backup via pg_rman (full or incremental)
+[group: 'postgres']
+pg-backup mode="full":
+    pg-backup {{mode}}
+
+# Show the pg_rman backup catalog
+[group: 'postgres']
+pg-backup-show:
+    pg-backup-show
+
+# Purge PostgreSQL backups older than N days (default 7)
+[group: 'postgres']
+pg-backup-purge days="7":
+    pg-backup-purge {{days}}
+
+# Check status of the postgresql launchd agent
+[group: 'postgres']
+status-postgres:
+    launchctl print gui/$(id -u)/com.shinzui.postgresql 2>&1 | head -20
+
+# Tail the postgresql server logs (stdout and stderr)
+[group: 'postgres']
+logs-postgres:
+    tail -f ~/.local/state/postgresql/logs/postgres.stdout.log ~/.local/state/postgresql/logs/postgres.stderr.log
+
 # Update all personal tool flake inputs (kizamu, mina, mori, mori-rei-app, seihou, rei, reiko, notion-cli, notion-hub)
 [group: 'tools']
 update-tools:
