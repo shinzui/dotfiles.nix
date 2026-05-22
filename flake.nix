@@ -253,7 +253,13 @@
           '';
           seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
           kizamu = inputs.kizamu.packages.${prev.stdenv.hostPlatform.system}.default;
-          mina = inputs.mina.packages.${prev.stdenv.hostPlatform.system}.default;
+          # Wrap mina to only expose bin/ — the full Haskell output includes
+          # lib/links/libHSmori-schema-pin-* which conflicts with mori (both
+          # now depend on mori-schema-pin from the same package set).
+          mina = prev.runCommand "mina" {} ''
+            mkdir -p $out
+            ln -s ${inputs.mina.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
+          '';
           nihongo = inputs.nihongo.packages.${prev.stdenv.hostPlatform.system}.default;
           # Wrap mori-rei-app to only expose bin/ — the full Haskell output
           # includes lib/links/libHStan-commons-config-* which conflicts with
