@@ -18,6 +18,7 @@ STATE_DIR="$HOME_DIR/.cache/rei-doctor"
 HEAL_COOLDOWN=600   # don't re-kickstart the same set within 10 min
 STALE_INGEST=5400   # 90 min: daemon ingests hourly, so >90m = wedged
 STUCK_QUEUE=7200    # 2h: worker drains hourly, so oldest msg >2h = stuck
+APP_DRAIN_GRACE=3900 # 65 min: mori-rei-app sleeps one interval before first drain
 
 HEAL=0; NOTIFY=0; QUIET=0
 for a in "$@"; do case "$a" in
@@ -137,7 +138,13 @@ qm=$(PGCONNECT_TIMEOUT=3 psql -h "$SOCK" -d mori_rei_app -tAc \
 if [ -n "$qm" ]; then
   IFS='|' read -r qlen qold qtot <<<"$qm"
   if [ "${qold%.*}" -gt "$STUCK_QUEUE" ]; then
-    red "queue stuck: oldest msg $(human "${qold%.*}") (worker not draining)"; heal_targets+=("com.shinzui.mori-rei-app")
+    appstart=$(proc_start_epoch com.shinzui.mori-rei-app) || appstart=0
+    appuptime=$(( now - appstart ))
+    if [ "$appstart" -gt 0 ] && [ "$appuptime" -lt "$APP_DRAIN_GRACE" ]; then
+      info "queue old but mori-rei-app is warming up (up $(human "$appuptime"), first drain pending)"
+    else
+      red "queue stuck: oldest msg $(human "${qold%.*}") (worker not draining)"; heal_targets+=("com.shinzui.mori-rei-app")
+    fi
   else
     green "queue ok: ${qlen} waiting, ${qtot} lifetime"
   fi
