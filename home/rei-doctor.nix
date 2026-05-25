@@ -49,6 +49,25 @@ in
     fi
   '';
 
+  # Self-heal the watchdog's own registration. The watchdog is a StartInterval
+  # agent with NO KeepAlive, so nothing restarts it if it is ever unloaded (a
+  # stray `launchctl bootout`, a partial activation, a crash). And the stop-agent
+  # hook above + home-manager's setupLaunchAgents only (re)bootstrap when the
+  # plist *changed* — so an unloaded-but-unchanged agent stays silently down.
+  # That is exactly what happened on 2026-05-25: the watchdog was unloaded, so a
+  # mori-automate DB-pool exhaustion went undetected/unhealed for ~5h. Re-assert
+  # on every activation: if the plist exists but the agent isn't loaded, load it.
+  # Runs AFTER setupLaunchAgents so it sees the freshly-written plist.
+  home.activation.rei-watchdog-ensure-loaded = lib.hm.dag.entryAfter [ "setupLaunchAgents" ] ''
+    label="com.shinzui.rei-watchdog"
+    domain="gui/$(id -u)"
+    plist="$HOME/Library/LaunchAgents/$label.plist"
+    if [ -f "$plist" ] && ! /bin/launchctl print "$domain/$label" &>/dev/null; then
+      verboseEcho "rei-watchdog not loaded — bootstrapping $plist"
+      /bin/launchctl bootstrap "$domain" "$plist" 2>/dev/null || true
+    fi
+  '';
+
   # Periodic task (NOT KeepAlive — it's a cron-style check, not a daemon).
   launchd.agents.rei-watchdog = {
     enable = true;
