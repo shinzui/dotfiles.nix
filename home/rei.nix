@@ -7,6 +7,17 @@ let
   reiLogDir = "${config.home.homeDirectory}/.rei/logs";
   connStr = "host=${pgSocket} dbname=rei";
 
+  # keiro migration cutover (EP-24, docs/plans/100 in the rei repo): the comma-separated
+  # set of every routed bounded context. When set, the rei CLI and the kiroku worker route
+  # reads/writes to the kiroku event store and message-db is frozen. Unset/"" = message-db.
+  reiKirokuContexts = builtins.concatStringsSep "," [
+    "agent_memory" "agent_schedule" "agent_session" "blocker" "category" "collection"
+    "custom_property" "custom_property_assignment" "cycle" "delegation" "disruption"
+    "disruption_action" "edge" "focus" "guidance" "habit" "habit_blocker" "int_view"
+    "intention" "journal_entry" "knowledge" "link" "note" "playbook_execution"
+    "predicate" "reflection" "reminder" "review" "task"
+  ];
+
   waitForPg = ''
     until ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; do
       sleep 2
@@ -37,6 +48,23 @@ let
     ${waitForPg}
 
     exec ${reiBin} worker all
+  '';
+
+  # keiro migration: hosts the keiro reactive layer (inline+async projections, Routers,
+  # process managers, durable timers, git side-effect legs) for every flipped context.
+  # Replaces the message-db polling subscriber + the conflicting pgmq processors.
+  rei-worker-kiroku-wrapper = pkgs.writeShellScript "rei-worker-kiroku" ''
+    set -euo pipefail
+    export REI_PG_CONNECTION_STRING="${connStr}"
+    export PG_CONNECTION_STRING="${connStr}"
+    export REI_KIROKU_CONTEXTS="${reiKirokuContexts}"
+
+    exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
+    exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
+
+    ${waitForPg}
+
+    exec ${reiBin} worker kiroku
   '';
 
   rei-zsh-completions = pkgs.runCommand "rei-zsh-completions" { } ''
@@ -103,14 +131,21 @@ in
 
     stop_and_wait "com.shinzui.rei-worker"
     stop_and_wait "com.shinzui.rei-subscription"
+    stop_and_wait "com.shinzui.rei-worker-kiroku"
   '';
 
   programs.zsh.sessionVariables = {
     REI_PG_CONNECTION_STRING = connStr;
+    # keiro migration cutover: route the interactive rei CLI to kiroku. Takes effect in
+    # NEW login shells (run `exec zsh` after switching). See EP-24 (rei docs/plans/100).
+    REI_KIROKU_CONTEXTS = reiKirokuContexts;
   };
 
+  # keiro migration cutover (EP-24): the message-db polling subscriber is obsolete once
+  # message-db is frozen — inline keiro projections keep read models current in-transaction.
+  # Disabled (not deleted) so it can be re-enabled for a rollback. Re-home: rei worker kiroku.
   launchd.agents.rei-subscription = {
-    enable = true;
+    enable = false;
     config = {
       Label = "com.shinzui.rei-subscription";
       ProgramArguments = [ "${rei-subscription-wrapper}" ];
@@ -126,8 +161,13 @@ in
     };
   };
 
+  # keiro migration cutover (EP-24): `rei worker all` runs pgmq processors (dormancy,
+  # reminder-trigger) now owned by keiro durable timers — running it post-flip would
+  # double-act and append to the frozen message-db. Disabled (Pure Option A); re-home:
+  # rei worker kiroku. (Reflection-scheduler / agent-work / note→git pgmq processors pause
+  # during the soak — restored by EP-8's keiro-aware worker rework.)
   launchd.agents.rei-worker = {
-    enable = true;
+    enable = false;
     config = {
       Label = "com.shinzui.rei-worker";
       ProgramArguments = [ "${rei-worker-wrapper}" ];
@@ -139,6 +179,28 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
+      };
+    };
+  };
+
+  # keiro migration cutover (EP-24): the keiro reactive-layer host. Runs every flipped
+  # context's inline/async projections, Routers, process managers, durable timers (reminder
+  # fire, dormancy daily-eval), and git side-effect legs. REI_KIROKU_CONTEXTS in the wrapper
+  # env gates which legs activate.
+  launchd.agents.rei-worker-kiroku = {
+    enable = true;
+    config = {
+      Label = "com.shinzui.rei-worker-kiroku";
+      ProgramArguments = [ "${rei-worker-kiroku-wrapper}" ];
+      RunAtLoad = true;
+      KeepAlive = true;
+      ExitTimeOut = 30;
+      StandardOutPath = "${reiLogDir}/worker-kiroku.stdout.log";
+      StandardErrorPath = "${reiLogDir}/worker-kiroku.stderr.log";
+      EnvironmentVariables = {
+        REI_PG_CONNECTION_STRING = connStr;
+        PG_CONNECTION_STRING = connStr;
+        REI_KIROKU_CONTEXTS = reiKirokuContexts;
       };
     };
   };

@@ -17,6 +17,12 @@ let
     set -euo pipefail
     export REI_PG_CONNECTION_STRING="${reiConnStr}"
     export MORI_REI_APP_PG_CONNECTION_STRING="${appConnStr}"
+    # Route mori-rei-app's rei writes to the keiro/kiroku event store, matching rei's own
+    # REI_KIROKU_CONTEXTS gate. mori-rei-app writes two bounded contexts: "intention" (git-commit
+    # actions) and "custom_property_assignment" (lifecycle transitions via setIntentionProperty)
+    # — both must be listed or the binary refuses to start (it validates both at startup). Must be
+    # set BEFORE or AT rei's prod flip so the write-freeze holds (rei EP-24 M3).
+    export REI_KIROKU_CONTEXTS="intention,custom_property_assignment"
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
     exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
@@ -108,6 +114,10 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = reiConnStr;
         MORI_REI_APP_PG_CONNECTION_STRING = appConnStr;
+        # See the wrapper: route mori-rei-app's rei writes to kiroku. Setting it on the agent too
+        # keeps the daemon's environment self-documenting (matches rei.nix's pattern of setting
+        # REI_KIROKU_CONTEXTS in both sessionVariables and each agent's EnvironmentVariables).
+        REI_KIROKU_CONTEXTS = "intention,custom_property_assignment";
         # The summariser shells out to `claude`, which is user-installed
         # under ~/.local/bin and not on launchd's default PATH.
         PATH = "${config.home.homeDirectory}/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin";

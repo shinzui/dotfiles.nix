@@ -65,7 +65,10 @@ proc_start_epoch() {
 INGEST_GRACE=4500   # 75 min: one ingest interval + slack after a (re)start
 
 LOG_AUTOMATE="$HOME_DIR/.mori/logs/automate.stderr.log"
-LOG_SUB="$HOME_DIR/.rei/logs/subscription.stderr.log"
+# keiro migration cutover (EP-24): the FD-pressure check repointed from the retired
+# rei-subscription to rei-worker-kiroku. VALIDATE: confirm the kiroku worker emits the
+# 'Too many open files' marker under FD exhaustion the same way the old poller did.
+LOG_KIROKU="$HOME_DIR/.rei/logs/worker-kiroku.stderr.log"
 LOG_APP="$HOME_DIR/.mori-rei-app/logs/server.stdout.log"
 
 echo "── rei-doctor $(date '+%Y-%m-%d %H:%M:%S') ──"
@@ -74,11 +77,12 @@ echo "── rei-doctor $(date '+%Y-%m-%d %H:%M:%S') ──"
 if pg_isready -h "$SOCK" -q 2>/dev/null; then green "postgres reachable"; else red "postgres not reachable ($SOCK)"; fi
 
 # 2. daemons loaded + have a live pid
+# keiro migration cutover (EP-24): rei-subscription + rei-worker are retired (Pure Option A);
+# the keiro reactive layer runs as rei-worker-kiroku.
 declare -A DAEMON_DB=(
   [com.shinzui.mori-automate]=mori
   [com.shinzui.mori-rei-app]=mori_rei_app
-  [com.shinzui.rei-subscription]=rei
-  [com.shinzui.rei-worker]=rei
+  [com.shinzui.rei-worker-kiroku]=rei
 )
 for label in "${!DAEMON_DB[@]}"; do
   if launchctl print "$DOMAIN/$label" 2>/dev/null | grep -q 'pid = '; then
@@ -119,11 +123,11 @@ if [ -n "$perr" ] && [ "$perr" -lt "$STALE_INGEST" ] && [ $(( now - perr )) -gt 
 fi
 
 # 5. FD pressure (the upstream trigger) — only if seen since the subscription process started
-sstart=$(proc_start_epoch com.shinzui.rei-subscription) || sstart=0
-fderr=$(log_age "$LOG_SUB" 'Too many open files in system') || fderr=""
+sstart=$(proc_start_epoch com.shinzui.rei-worker-kiroku) || sstart=0
+fderr=$(log_age "$LOG_KIROKU" 'Too many open files in system') || fderr=""
 if [ -n "$fderr" ] && [ "$fderr" -lt 3600 ] && [ $(( now - fderr )) -gt "$sstart" ]; then
   red "system FD exhaustion $(human "$fderr") ago — restart leaking app"
-  heal_targets+=("com.shinzui.mori-automate" "com.shinzui.rei-subscription" "com.shinzui.rei-worker")
+  heal_targets+=("com.shinzui.mori-automate" "com.shinzui.rei-worker-kiroku")
 fi
 nf=$(sysctl -n kern.num_files 2>/dev/null || echo 0); mf=$(sysctl -n kern.maxfiles 2>/dev/null || echo 1)
 if [ "$mf" -gt 0 ] && [ $(( nf * 100 / mf )) -ge 80 ]; then
