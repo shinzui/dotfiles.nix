@@ -58,6 +58,8 @@ let
   shippers = [
     { app = "rei-worker";              stream = "stdout"; file = "${homeDir}/.rei/logs/worker.stdout.log"; }
     { app = "rei-worker";              stream = "stderr"; file = "${homeDir}/.rei/logs/worker.stderr.log"; }
+    { app = "rei-worker-git-sync";     stream = "stdout"; file = "${homeDir}/.rei/logs/worker-git-sync.stdout.log"; }
+    { app = "rei-worker-git-sync";     stream = "stderr"; file = "${homeDir}/.rei/logs/worker-git-sync.stderr.log"; }
     { app = "rei-subscription";        stream = "stdout"; file = "${homeDir}/.rei/logs/subscription.stdout.log"; }
     { app = "rei-subscription";        stream = "stderr"; file = "${homeDir}/.rei/logs/subscription.stderr.log"; }
     { app = "mori-automate";           stream = "stdout"; file = "${homeDir}/.mori/logs/automate.stdout.log"; }

@@ -50,6 +50,19 @@ let
     exec ${reiBin} worker all
   '';
 
+  rei-worker-git-sync-wrapper = pkgs.writeShellScript "rei-worker-git-sync" ''
+    set -euo pipefail
+    export REI_PG_CONNECTION_STRING="${connStr}"
+    export PG_CONNECTION_STRING="${connStr}"
+
+    exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
+    exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
+
+    ${waitForPg}
+
+    exec ${reiBin} worker git-sync
+  '';
+
   # keiro migration: hosts the keiro reactive layer (inline+async projections, Routers,
   # process managers, durable timers, git side-effect legs) for every flipped context.
   # Replaces the message-db polling subscriber + the conflicting pgmq processors.
@@ -131,6 +144,7 @@ in
 
     stop_and_wait "com.shinzui.rei-worker"
     stop_and_wait "com.shinzui.rei-subscription"
+    stop_and_wait "com.shinzui.rei-worker-git-sync"
     stop_and_wait "com.shinzui.rei-worker-kiroku"
   '';
 
@@ -161,11 +175,10 @@ in
     };
   };
 
-  # keiro migration cutover (EP-24): `rei worker all` runs pgmq processors (dormancy,
-  # reminder-trigger) now owned by keiro durable timers — running it post-flip would
-  # double-act and append to the frozen message-db. Disabled (Pure Option A); re-home:
-  # rei worker kiroku. (Reflection-scheduler / agent-work / note→git pgmq processors pause
-  # during the soak — restored by EP-8's keiro-aware worker rework.)
+  # keiro migration cutover (EP-24): `rei worker all` runs pgmq processors now owned
+  # or superseded by keiro durable timers/reactors. Running it post-flip would double-act
+  # and append to the frozen message-db. Keep it disabled; host the surviving pgmq
+  # workspace git side-effect via the dedicated git-sync agent below.
   launchd.agents.rei-worker = {
     enable = false;
     config = {
@@ -176,6 +189,26 @@ in
       ExitTimeOut = 30;
       StandardOutPath = "${reiLogDir}/worker.stdout.log";
       StandardErrorPath = "${reiLogDir}/worker.stderr.log";
+      EnvironmentVariables = {
+        REI_PG_CONNECTION_STRING = connStr;
+        PG_CONNECTION_STRING = connStr;
+      };
+    };
+  };
+
+  # Drains workspace_git_sync only. This intentionally runs beside `rei worker kiroku`:
+  # the kiroku worker observes note events and enqueues pgmq payloads, while this worker
+  # commits them asynchronously. Do not replace this with `rei worker all`.
+  launchd.agents.rei-worker-git-sync = {
+    enable = true;
+    config = {
+      Label = "com.shinzui.rei-worker-git-sync";
+      ProgramArguments = [ "${rei-worker-git-sync-wrapper}" ];
+      RunAtLoad = true;
+      KeepAlive = true;
+      ExitTimeOut = 30;
+      StandardOutPath = "${reiLogDir}/worker-git-sync.stdout.log";
+      StandardErrorPath = "${reiLogDir}/worker-git-sync.stderr.log";
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;

@@ -82,6 +82,7 @@ if pg_isready -h "$SOCK" -q 2>/dev/null; then green "postgres reachable"; else r
 declare -A DAEMON_DB=(
   [com.shinzui.mori-automate]=mori
   [com.shinzui.mori-rei-app]=mori_rei_app
+  [com.shinzui.rei-worker-git-sync]=rei
   [com.shinzui.rei-worker-kiroku]=rei
 )
 for label in "${!DAEMON_DB[@]}"; do
@@ -154,6 +155,20 @@ if [ -n "$qm" ]; then
   fi
 else
   yellow "could not read pgmq metrics"
+fi
+
+wqm=$(PGCONNECT_TIMEOUT=3 psql -h "$SOCK" -d rei -tAc \
+  "select queue_length||'|'||coalesce(oldest_msg_age_sec,0)||'|'||total_messages from pgmq.metrics('workspace_git_sync')" 2>/dev/null)
+if [ -n "$wqm" ]; then
+  IFS='|' read -r wqlen wqold wqtot <<<"$wqm"
+  if [ "${wqold%.*}" -gt "$STUCK_QUEUE" ]; then
+    red "workspace git-sync queue stuck: oldest msg $(human "${wqold%.*}") (worker not draining)"
+    heal_targets+=("com.shinzui.rei-worker-git-sync")
+  else
+    green "workspace git-sync queue ok: ${wqlen} waiting, ${wqtot} lifetime"
+  fi
+else
+  yellow "could not read workspace_git_sync pgmq metrics"
 fi
 
 # 7. last recorded action (info; gap is normal when idle)

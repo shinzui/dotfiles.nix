@@ -1002,11 +1002,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779716723,
-        "narHash": "sha256-qe55davSwATrG/7Qhbpl2dEkmY9rIlvSRemDPs/XWfg=",
+        "lastModified": 1779755008,
+        "narHash": "sha256-Cin6MRr+qo7tR8gmQrA/ebyoc5/tBcjhMHLzJ4+G11M=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "0fbd03596623ef42f3e779349ff0cc8d1b07edcd",
+        "rev": "38402d75e07744efaed7e25091d4c3c976c91ee8",
         "type": "github"
       },
       "original": {
@@ -1154,23 +1154,6 @@
     "message-db-hs-src_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1776870451,
-        "narHash": "sha256-82/7QO2VvAglVRPJwIdrugIeMVRYEey+h09E8r3sM5k=",
-        "owner": "topagentnetwork",
-        "repo": "message-db-hs",
-        "rev": "059fba11efa83b0bf08117c5875ad2da013bf3c5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "topagentnetwork",
-        "repo": "message-db-hs",
-        "rev": "059fba11efa83b0bf08117c5875ad2da013bf3c5",
-        "type": "github"
-      }
-    },
-    "message-db-hs-src_3": {
-      "flake": false,
-      "locked": {
         "lastModified": 1772485267,
         "narHash": "sha256-SVqKKnsF3h+mWDLR39Eyn5NacJTSs6VOWl1Znen9/XU=",
         "owner": "topagentnetwork",
@@ -1185,7 +1168,7 @@
         "type": "github"
       }
     },
-    "message-db-hs-src_4": {
+    "message-db-hs-src_3": {
       "flake": false,
       "locked": {
         "lastModified": 1776870451,
@@ -1202,7 +1185,7 @@
         "type": "github"
       }
     },
-    "message-db-hs-src_5": {
+    "message-db-hs-src_4": {
       "flake": false,
       "locked": {
         "lastModified": 1776870451,
@@ -1278,7 +1261,6 @@
       "inputs": {
         "flake-utils": "flake-utils_5",
         "haskell-nix": "haskell-nix_4",
-        "message-db-hs-src": "message-db-hs-src_2",
         "mori-src": "mori-src_2",
         "nixpkgs": [
           "nixpkgs-unstable"
@@ -1287,16 +1269,15 @@
         "rei-src": "rei-src",
         "tan-commons-src": "tan-commons-src_2",
         "tan-effectful-src": "tan-effectful-src_2",
-        "tan-event-source-src": "tan-event-source-src_2",
         "treefmt-nix": "treefmt-nix_5",
         "typeid-hs-src": "typeid-hs-src_2"
       },
       "locked": {
-        "lastModified": 1779743861,
-        "narHash": "sha256-ytPvAFInySieUAQUBXO9X1bA19KxyzFwP05d9Mr+gDE=",
+        "lastModified": 1779846327,
+        "narHash": "sha256-tGHS2fqVUspd1bHRYEDOleIq4Bu5EcJ7csgR9PF6K+o=",
         "owner": "shinzui",
         "repo": "mori-rei-app",
-        "rev": "9c0d1509d295034390388a8eacba3ec54a2998cc",
+        "rev": "5dfb00dd9a402e7bf40b70b0c1e6eeceb7a93eb1",
         "type": "github"
       },
       "original": {
@@ -2015,7 +1996,7 @@
       "inputs": {
         "flake-utils": "flake-utils_9",
         "haskell-nix": "haskell-nix_7",
-        "message-db-hs-src": "message-db-hs-src_3",
+        "message-db-hs-src": "message-db-hs-src_2",
         "nixpkgs": [
           "nixpkgs-unstable"
         ],
@@ -2024,7 +2005,7 @@
         "pre-commit-hooks": "pre-commit-hooks_7",
         "tan-commons-src": "tan-commons-src_3",
         "tan-effectful-src": "tan-effectful-src_3",
-        "tan-event-source-src": "tan-event-source-src_3",
+        "tan-event-source-src": "tan-event-source-src_2",
         "treefmt-nix": "treefmt-nix_8",
         "typeid-hs-src": "typeid-hs-src_3"
       },
@@ -2327,23 +2308,23 @@
       "inputs": {
         "flake-utils": "flake-utils_11",
         "haskell-nix": "haskell-nix_8",
-        "message-db-hs-src": "message-db-hs-src_4",
+        "message-db-hs-src": "message-db-hs-src_3",
         "nixpkgs": [
           "nixpkgs-unstable"
         ],
         "pre-commit-hooks": "pre-commit-hooks_8",
         "tan-commons-src": "tan-commons-src_4",
         "tan-effectful-src": "tan-effectful-src_4",
-        "tan-event-source-src": "tan-event-source-src_4",
+        "tan-event-source-src": "tan-event-source-src_3",
         "treefmt-nix": "treefmt-nix_9",
         "typeid-hs-src": "typeid-hs-src_4"
       },
       "locked": {
-        "lastModified": 1779727891,
-        "narHash": "sha256-m0J3dVYyP/PMWAAimQJ4/rYJYmFX9dK8tHeiF7wJYbE=",
+        "lastModified": 1779910897,
+        "narHash": "sha256-hG4TfL3NKJoZQa0g0/51q4h3clruD5Q2dKVZd2bbtx4=",
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "fdebef0b1430ec2d4576f68e1bc22062954c7c0f",
+        "rev": "e4106c368f58c7225899bc5f72696b3bd4d97ae5",
         "type": "github"
       },
       "original": {
@@ -2355,17 +2336,17 @@
     "rei-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1779727891,
-        "narHash": "sha256-m0J3dVYyP/PMWAAimQJ4/rYJYmFX9dK8tHeiF7wJYbE=",
+        "lastModified": 1779845268,
+        "narHash": "sha256-Xppe0NxABLXqxfwc3NKz3nAgMKysMji7IbcS7kr9IEA=",
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "fdebef0b1430ec2d4576f68e1bc22062954c7c0f",
+        "rev": "246d165585f57644e0a0207c1247cf3eb7379503",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "fdebef0b1430ec2d4576f68e1bc22062954c7c0f",
+        "rev": "246d165585f57644e0a0207c1247cf3eb7379503",
         "type": "github"
       }
     },
@@ -2389,14 +2370,14 @@
       "inputs": {
         "flake-utils": "flake-utils_12",
         "haskell-nix": "haskell-nix_9",
-        "message-db-hs-src": "message-db-hs-src_5",
+        "message-db-hs-src": "message-db-hs-src_4",
         "nixpkgs": [
           "nixpkgs-unstable"
         ],
         "rei-src": "rei-src_2",
         "tan-commons-src": "tan-commons-src_5",
         "tan-effectful-src": "tan-effectful-src_5",
-        "tan-event-source-src": "tan-event-source-src_5",
+        "tan-event-source-src": "tan-event-source-src_4",
         "typeid-hs-src": "typeid-hs-src_5"
       },
       "locked": {
@@ -2899,13 +2880,13 @@
       "locked": {
         "lastModified": 1772391570,
         "narHash": "sha256-92YUMgjBC/WfLood7twKlgC1SH+sTTjmd+fdJ+y7Ncs=",
-        "owner": "shinzui",
+        "owner": "topagentnetwork",
         "repo": "tan-event-source",
         "rev": "90e8d540bd2ebe93b9e64402271a5fd7c1fef089",
         "type": "github"
       },
       "original": {
-        "owner": "shinzui",
+        "owner": "topagentnetwork",
         "repo": "tan-event-source",
         "rev": "90e8d540bd2ebe93b9e64402271a5fd7c1fef089",
         "type": "github"
@@ -2916,36 +2897,19 @@
       "locked": {
         "lastModified": 1772391570,
         "narHash": "sha256-92YUMgjBC/WfLood7twKlgC1SH+sTTjmd+fdJ+y7Ncs=",
-        "owner": "topagentnetwork",
+        "owner": "shinzui",
         "repo": "tan-event-source",
         "rev": "90e8d540bd2ebe93b9e64402271a5fd7c1fef089",
         "type": "github"
       },
       "original": {
-        "owner": "topagentnetwork",
+        "owner": "shinzui",
         "repo": "tan-event-source",
         "rev": "90e8d540bd2ebe93b9e64402271a5fd7c1fef089",
         "type": "github"
       }
     },
     "tan-event-source-src_4": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1772391570,
-        "narHash": "sha256-92YUMgjBC/WfLood7twKlgC1SH+sTTjmd+fdJ+y7Ncs=",
-        "owner": "shinzui",
-        "repo": "tan-event-source",
-        "rev": "90e8d540bd2ebe93b9e64402271a5fd7c1fef089",
-        "type": "github"
-      },
-      "original": {
-        "owner": "shinzui",
-        "repo": "tan-event-source",
-        "rev": "90e8d540bd2ebe93b9e64402271a5fd7c1fef089",
-        "type": "github"
-      }
-    },
-    "tan-event-source-src_5": {
       "flake": false,
       "locked": {
         "lastModified": 1772391570,
