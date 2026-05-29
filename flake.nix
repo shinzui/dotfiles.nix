@@ -234,6 +234,7 @@
           markit = final.callPackage (self + "/derivations/markit") { };
           defuddle = final.callPackage (self + "/derivations/defuddle") { };
           hunk = final.callPackage (self + "/derivations/hunk") { };
+          jaeger-ui = final.callPackage (self + "/derivations/jaeger-ui") { };
           bootstrap-repos = final.callPackage (self + "/derivations/bootstrap-repos") { };
           pg_rman = final.callPackage (self + "/derivations/pg_rman.nix") {
             postgresql = final.postgresql_18;
@@ -366,6 +367,7 @@
         markit = pkgs.markit;
         defuddle = pkgs.defuddle;
         hunk = pkgs.hunk;
+        jaeger-ui = pkgs.jaeger-ui;
         pg_rman = pkgs.pg_rman;
         bootstrap-repos = pkgs.bootstrap-repos;
         mina = pkgs.mina;

@@ -34,6 +34,7 @@ in
     ./nix-search-tv.nix
     ./postgresql.nix
     ./victorialogs.nix
+    ./victoriatraces.nix
     ./mori.nix
     ./mori-rei-app.nix
     ./rei.nix

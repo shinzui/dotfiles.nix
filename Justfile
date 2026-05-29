@@ -220,3 +220,31 @@ restart-victorialogs:
 [group: 'logs']
 logs-victorialogs:
     tail -f ~/.local/share/victoria-logs/logs/victoria-logs.stdout.log ~/.local/share/victoria-logs/logs/victoria-logs.stderr.log
+
+# Open the Jaeger UI backed by VictoriaTraces
+[group: 'traces']
+traces-ui:
+    open http://localhost:16686/
+
+# Open the VictoriaTraces built-in UI
+[group: 'traces']
+traces-vmui:
+    open http://localhost:10428/select/vmui/
+
+# Check status of the VictoriaTraces launchd agents
+[group: 'traces']
+status-victoriatraces:
+    launchctl print gui/$(id -u)/com.shinzui.victoriatraces 2>&1 | head -20
+    @echo "==="
+    launchctl print gui/$(id -u)/com.shinzui.victoriatraces-jaeger-ui 2>&1 | head -20
+
+# Restart the VictoriaTraces launchd agents
+[group: 'traces']
+restart-victoriatraces:
+    launchctl kickstart -k gui/$(id -u)/com.shinzui.victoriatraces
+    launchctl kickstart -k gui/$(id -u)/com.shinzui.victoriatraces-jaeger-ui
+
+# Tail the VictoriaTraces server and Jaeger UI nginx logs
+[group: 'traces']
+logs-victoriatraces:
+    tail -f ~/.local/share/victoria-traces/logs/*.log
