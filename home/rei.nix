@@ -6,6 +6,20 @@ let
   reiBin = "${pkgs.rei}/bin/rei";
   reiLogDir = "${config.home.homeDirectory}/.rei/logs";
   connStr = "host=${pgSocket} dbname=rei";
+  otelEnv = serviceName: {
+    OTEL_SDK_DISABLED = "false";
+    OTEL_TRACES_EXPORTER = "otlp";
+    OTEL_SERVICE_NAME = serviceName;
+    OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = "http://localhost:10428/insert/opentelemetry/v1/traces";
+    OTEL_EXPORTER_OTLP_TRACES_PROTOCOL = "http/protobuf";
+    REI_DEPLOYMENT_ENVIRONMENT = "local";
+  };
+  otelExports = serviceName:
+    lib.concatStringsSep "\n" (lib.mapAttrsToList
+      (name: value: ''
+        export ${name}="${value}"
+      '')
+      (otelEnv serviceName));
 
   # keiro migration cutover (EP-24, docs/plans/100 in the rei repo): the comma-separated
   # set of every routed bounded context. When set, the rei CLI and the kiroku worker route
@@ -28,6 +42,7 @@ let
     set -euo pipefail
     export REI_PG_CONNECTION_STRING="${connStr}"
     export PG_CONNECTION_STRING="${connStr}"
+    ${otelExports "rei-subscription"}
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
     exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
@@ -41,6 +56,7 @@ let
     set -euo pipefail
     export REI_PG_CONNECTION_STRING="${connStr}"
     export PG_CONNECTION_STRING="${connStr}"
+    ${otelExports "rei-worker"}
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
     exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
@@ -54,6 +70,7 @@ let
     set -euo pipefail
     export REI_PG_CONNECTION_STRING="${connStr}"
     export PG_CONNECTION_STRING="${connStr}"
+    ${otelExports "rei-worker-git-sync"}
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
     exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
@@ -71,6 +88,7 @@ let
     export REI_PG_CONNECTION_STRING="${connStr}"
     export PG_CONNECTION_STRING="${connStr}"
     export REI_KIROKU_CONTEXTS="${reiKirokuContexts}"
+    ${otelExports "rei-worker-kiroku"}
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
     exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
@@ -153,7 +171,7 @@ in
     # keiro migration cutover: route the interactive rei CLI to kiroku. Takes effect in
     # NEW login shells (run `exec zsh` after switching). See EP-24 (rei docs/plans/100).
     REI_KIROKU_CONTEXTS = reiKirokuContexts;
-  };
+  } // otelEnv "rei";
 
   # keiro migration cutover (EP-24): the message-db polling subscriber is obsolete once
   # message-db is frozen — inline keiro projections keep read models current in-transaction.
@@ -171,7 +189,7 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
-      };
+      } // otelEnv "rei-subscription";
     };
   };
 
@@ -192,7 +210,7 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
-      };
+      } // otelEnv "rei-worker";
     };
   };
 
@@ -212,7 +230,7 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
-      };
+      } // otelEnv "rei-worker-git-sync";
     };
   };
 
@@ -234,7 +252,7 @@ in
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
         REI_KIROKU_CONTEXTS = reiKirokuContexts;
-      };
+      } // otelEnv "rei-worker-kiroku";
     };
   };
 }
