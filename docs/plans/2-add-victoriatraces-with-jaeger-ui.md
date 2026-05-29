@@ -54,8 +54,10 @@ This section must always reflect the actual current state of the work.
   - [x] Added endpoint comments at the bottom of `home/victoriatraces.nix`.
 - [ ] Milestone 5 - Apply the home-manager configuration and validate ingest plus query.
   - [x] `nix build .#darwinConfigurations.SungkyungM1X.system` succeeded, building the VictoriaTraces wrapper, Jaeger UI nginx wrapper, both launchd plists, and the darwin system closure.
-  - [ ] Run `sudo darwin-rebuild switch --flake .#SungkyungM1X`.
-  - [ ] Confirm both launchd agents are running, ingest a smoke trace, and query it through the Jaeger-compatible API.
+  - [ ] Run `sudo darwin-rebuild switch --flake .#SungkyungM1X`. An attempted run was blocked because sudo required an interactive password prompt; no switch was applied.
+  - [x] Manually smoke-tested the same runtime shape with temporary foreground VictoriaTraces and nginx processes on ports `10428` and `16686`.
+  - [x] Ingested a smoke OTLP trace into the temporary VictoriaTraces process and confirmed `http://localhost:16686/api/services` returned `codex-smoke`.
+  - [ ] Confirm both launchd agents are running after the real darwin switch.
 
 
 ## Surprises & Discoveries
@@ -84,6 +86,17 @@ implementation. Provide concise evidence.
   module. Evidence: `nix build .#darwinConfigurations.SungkyungM1X.system` built
   `com.shinzui.victoriatraces.plist`, `com.shinzui.victoriatraces-jaeger-ui.plist`,
   `victoriatraces-jaeger-ui-nginx.conf`, and `darwin-system-26.05.06648f4`.
+
+- 2026-05-29 - VictoriaTraces's Jaeger services endpoint may return an empty service
+  list immediately after ingest, even though `/select/logsql/query` already shows the
+  span. Re-querying shortly afterwards returned `{"data":["codex-smoke"],...}` from
+  both `http://localhost:10428/select/jaeger/api/services` and the nginx-proxied
+  `http://localhost:16686/api/services`.
+
+- 2026-05-29 - The first `sudo darwin-rebuild switch --flake .#SungkyungM1X` attempt
+  could not proceed in this session because sudo required an interactive password. The
+  build and manual foreground runtime smoke passed, but launchd installation remains
+  pending until the switch is run with credentials.
 
 
 ## Decision Log
@@ -131,6 +144,12 @@ Summarize outcomes, gaps, and lessons learned at major milestones or at completi
 Compare the result against the original purpose.
 
 (To be filled during and after implementation.)
+
+Partial runtime outcome on 2026-05-29: the package and generated darwin system build
+successfully, and a temporary foreground smoke test proves the VictoriaTraces plus
+Jaeger UI proxy topology works on ports `10428` and `16686`. The real launchd rollout
+is still pending because `sudo darwin-rebuild switch --flake .#SungkyungM1X` could not
+receive the sudo password in this session.
 
 
 ## Context and Orientation
