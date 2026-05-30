@@ -10,8 +10,12 @@ let
     OTEL_SDK_DISABLED = "false";
     OTEL_TRACES_EXPORTER = "otlp";
     OTEL_SERVICE_NAME = serviceName;
-    OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = "http://localhost:10428/insert/opentelemetry/v1/traces";
-    OTEL_EXPORTER_OTLP_TRACES_PROTOCOL = "http/protobuf";
+    # hs-opentelemetry's HTTP exporter appends /v1/traces to
+    # OTEL_EXPORTER_OTLP_ENDPOINT. Point the base endpoint at VictoriaTraces'
+    # OpenTelemetry insert prefix so the final request goes to
+    # /insert/opentelemetry/v1/traces.
+    OTEL_EXPORTER_OTLP_ENDPOINT = "http://localhost:10428/insert/opentelemetry";
+    OTEL_EXPORTER_OTLP_PROTOCOL = "http/protobuf";
     REI_DEPLOYMENT_ENVIRONMENT = "local";
   };
   otelExports = serviceName:
