@@ -6,17 +6,17 @@
 
 buildNpmPackage rec {
   pname = "jaeger-ui";
-  version = "2.18.0";
+  version = "1.76.0";
 
   src = fetchFromGitHub {
     owner = "jaegertracing";
     repo = "jaeger-ui";
     rev = "v${version}";
-    hash = "sha256-iklLNRl1+aWLZ4lNybptNDJ4mKkSfPa/1MzLXeVFyZw=";
+    hash = "sha256-OSwz8xymYenPMcCQZ5ePP7PSvhtsKl916+0pl90VYfo=";
   };
 
   nodejs = nodejs_24;
-  npmDepsHash = "sha256-pAnzsJNmmLmzpJhv0whIdDc+NSuswlsOpd2RhCVWSvs=";
+  npmDepsHash = "sha256-3RsERTE1coBfck0r0yXl2JjyzxKATvXoVtWKqYsowQI=";
 
   npmBuildScript = "build";
 
