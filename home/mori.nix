@@ -74,8 +74,11 @@ in
 
       if /bin/launchctl print "$domain/$label" &>/dev/null; then
         local pid
+        # awk-only (exits 0 on no match) + `|| true`: a loaded-but-not-running
+        # agent (crash-looping / mid-restart, no `pid = ` line) makes grep exit 1,
+        # which home-manager's `set -euo pipefail` would turn into an aborted switch.
         pid=$(/bin/launchctl print "$domain/$label" 2>/dev/null \
-              | /usr/bin/grep -m1 'pid =' | /usr/bin/awk '{print $NF}')
+              | /usr/bin/awk '/[[:space:]]pid = /{print $NF; exit}') || true
 
         verboseEcho "Stopping $label (pid ''${pid:-unknown})..."
         /bin/launchctl bootout "$domain/$label" 2>/dev/null || true

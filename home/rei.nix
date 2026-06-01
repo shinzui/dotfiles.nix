@@ -149,8 +149,14 @@ in
 
       if /bin/launchctl print "$domain/$label" &>/dev/null; then
         local pid
+        # NOTE: home-manager runs activation blocks under `set -euo pipefail`.
+        # A loaded-but-not-running agent (e.g. one crash-looping in "spawn
+        # scheduled", with no `pid = ` line) makes a `grep 'pid ='` exit 1,
+        # which pipefail propagates and set -e turns into an aborted switch —
+        # leaving the profile bumped but launchd plists + current-system stale.
+        # Use awk alone (exits 0 on no match) and guard with `|| true`.
         pid=$(/bin/launchctl print "$domain/$label" 2>/dev/null \
-              | /usr/bin/grep -m1 'pid =' | /usr/bin/awk '{print $NF}')
+              | /usr/bin/awk '/[[:space:]]pid = /{print $NF; exit}') || true
 
         verboseEcho "Stopping $label (pid ''${pid:-unknown})..."
         /bin/launchctl bootout "$domain/$label" 2>/dev/null || true
