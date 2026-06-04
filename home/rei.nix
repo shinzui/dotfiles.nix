@@ -6,6 +6,67 @@ let
   reiBin = "${pkgs.rei}/bin/rei";
   reiLogDir = "${config.home.homeDirectory}/.rei/logs";
   connStr = "host=${pgSocket} dbname=rei";
+  kirokuMetricsPort = "9091";
+  kirokuRemoteUrl = "http://localhost:${kirokuMetricsPort}";
+  rei-cli-wrapper = pkgs.writeShellScriptBin "rei" ''
+    set -euo pipefail
+
+    if [ "$#" -ge 3 ] \
+      && [ "$1" = "kiroku" ] \
+      && { [ "$2" = "subscriptions" ] || [ "$2" = "subscription" ]; } \
+      && [ "$3" = "status" ]; then
+      shift 3
+
+      format="table"
+      remoteUrl="''${KIROKU_REMOTE_URL:-${kirokuRemoteUrl}}"
+
+      while [ "$#" -gt 0 ]; do
+        case "$1" in
+          --format)
+            format="$2"
+            shift 2
+            ;;
+          --format=*)
+            format="''${1#--format=}"
+            shift
+            ;;
+          --remote-url)
+            remoteUrl="$2"
+            shift 2
+            ;;
+          --remote-url=*)
+            remoteUrl="''${1#--remote-url=}"
+            shift
+            ;;
+          -h|--help)
+            exec ${reiBin} kiroku subscriptions status --help
+            ;;
+          *)
+            exec ${reiBin} kiroku subscriptions status "$@"
+            ;;
+        esac
+      done
+
+      json="$(${pkgs.curl}/bin/curl -fsS "$remoteUrl/subscriptions")"
+      case "$format" in
+        json)
+          printf '%s\n' "$json"
+          ;;
+        table)
+          printf 'SUBSCRIPTION\tPHASE\tGLOBAL_POSITION\tMEMBER\n'
+          printf '%s\n' "$json" \
+            | ${pkgs.jq}/bin/jq -r '.[] | [.subscription, .phase, (.global_position | tostring), (.member | tostring)] | @tsv'
+          ;;
+        *)
+          printf 'rei: invalid --format %s (expected table or json)\n' "$format" >&2
+          exit 1
+          ;;
+      esac
+      exit 0
+    fi
+
+    exec ${reiBin} "$@"
+  '';
   otelEnv = serviceName: {
     OTEL_SDK_DISABLED = "false";
     OTEL_TRACES_EXPORTER = "otlp";
@@ -92,6 +153,7 @@ let
     export REI_PG_CONNECTION_STRING="${connStr}"
     export PG_CONNECTION_STRING="${connStr}"
     export REI_KIROKU_CONTEXTS="${reiKirokuContexts}"
+    export REI_KIROKU_METRICS_PORT="${kirokuMetricsPort}"
     ${otelExports "rei-worker-kiroku"}
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
@@ -118,6 +180,7 @@ let
 in
 {
   home.packages = [
+    rei-cli-wrapper
     (lib.meta.lowPrio pkgs.rei)
     rei-db-setup
   ];
@@ -178,6 +241,7 @@ in
 
   programs.zsh.sessionVariables = {
     REI_PG_CONNECTION_STRING = connStr;
+    KIROKU_REMOTE_URL = kirokuRemoteUrl;
     # keiro migration cutover: route the interactive rei CLI to kiroku. Takes effect in
     # NEW login shells (run `exec zsh` after switching). See EP-24 (rei docs/plans/100).
     REI_KIROKU_CONTEXTS = reiKirokuContexts;
@@ -262,6 +326,7 @@ in
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
         REI_KIROKU_CONTEXTS = reiKirokuContexts;
+        REI_KIROKU_METRICS_PORT = kirokuMetricsPort;
       } // otelEnv "rei-worker-kiroku";
     };
   };
