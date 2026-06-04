@@ -17,6 +17,9 @@ in
   homebrew.onActivation.autoUpdate = true;
   homebrew.onActivation.upgrade = true;
   homebrew.onActivation.cleanup = "zap";
+  # Homebrew now requires explicit confirmation before `brew bundle --cleanup`
+  # removes unlisted packages. `--force-cleanup` performs it non-interactively.
+  homebrew.onActivation.extraFlags = [ "--force-cleanup" ];
   homebrew.global.brewfile = true;
   # no_quarantine removed — Homebrew dropped the --[no-]quarantine switch
 
