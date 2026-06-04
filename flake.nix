@@ -5,6 +5,13 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
+    # Shared Haskell toolchain base flake. Every shinzui Haskell project below
+    # follows this single input (and its pinned nixpkgs), so they all build
+    # against one GHC 9.12.4 toolchain and one nixpkgs revision — maximizing
+    # binary-cache sharing across the projects and avoiding toolchain rebuilds
+    # when nixpkgs-unstable moves.
+    haskell-nix-dev.url = "github:shinzui/haskell-nix-dev";
+
     darwin = {
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -33,43 +40,53 @@
     };
     mori = {
       url = "github:shinzui/mori";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     rei = {
       url = "github:shinzui/rei";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     reiko = {
       url = "github:shinzui/reiko";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     seihou = {
       url = "github:shinzui/seihou";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     kizamu = {
       url = "github:shinzui/kizamu";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     mina = {
       url = "github:shinzui/mina";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     nihongo = {
       url = "github:shinzui/nihongo";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     notion-cli = {
       url = "github:shinzui/notion-cli";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     mori-rei-app = {
       url = "github:shinzui/mori-rei-app";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     notion-hub = {
       url = "github:shinzui/notion-hub";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     determinate = {
       url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
