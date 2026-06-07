@@ -10,6 +10,9 @@
     ./secrets.nix
     ./mac-defaults.nix
     ./gcp-nix-builder.nix
+
+    # Caddy reverse proxy for named local web tools (*.localhost)
+    ./local-web-proxy.nix
   ];
 
   networking.dns = [

@@ -271,12 +271,16 @@
           '';
           seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
           kizamu = inputs.kizamu.packages.${prev.stdenv.hostPlatform.system}.default;
-          # Wrap mina to only expose bin/ — the full Haskell output includes
-          # lib/links/libHSmori-schema-pin-* which conflicts with mori (both
-          # now depend on mori-schema-pin from the same package set).
+          # Wrap mina to expose bin/ and share/ — the full Haskell output
+          # includes lib/links/libHSmori-schema-pin-* which conflicts with mori
+          # (both now depend on mori-schema-pin from the same package set).
+          # share/ is kept because mina bundles its built SPA under
+          # share/mina-ui, so `mina web` finds the viewer (no --dist needed).
           mina = prev.runCommand "mina" {} ''
             mkdir -p $out
-            ln -s ${inputs.mina.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
+            src=${inputs.mina.packages.${prev.stdenv.hostPlatform.system}.default}
+            ln -s $src/bin $out/bin
+            ln -s $src/share $out/share
           '';
           nihongo = inputs.nihongo.packages.${prev.stdenv.hostPlatform.system}.default;
           # Wrap mori-rei-app to only expose bin/ — the full Haskell output
