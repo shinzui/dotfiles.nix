@@ -5,9 +5,13 @@ let
   pgSocket = config.services.postgresql.socketDir;
   reiBin = "${pkgs.rei}/bin/rei";
   reiLogDir = "${config.home.homeDirectory}/.rei/logs";
-  connStr = "host=${pgSocket} dbname=rei";
-  kirokuMetricsPort = "9091";
-  kirokuRemoteUrl = "http://localhost:${kirokuMetricsPort}";
+
+  # Shared rei CLI runtime environment (connection string + keiro routing),
+  # also consumed by home/mina.nix so mina's spawned `rei` reads current data.
+  reiCli = import ./rei-cli-env.nix { inherit pkgs lib pgSocket; };
+  connStr = reiCli.connStr;
+  kirokuMetricsPort = reiCli.kirokuMetricsPort;
+  kirokuRemoteUrl = reiCli.kirokuRemoteUrl;
   rei-cli-wrapper = pkgs.writeShellScriptBin "rei" ''
     set -euo pipefail
 
@@ -86,16 +90,9 @@ let
       '')
       (otelEnv serviceName));
 
-  # keiro migration cutover (EP-24, docs/plans/100 in the rei repo): the comma-separated
-  # set of every routed bounded context. When set, the rei CLI and the kiroku worker route
-  # reads/writes to the kiroku event store and message-db is frozen. Unset/"" = message-db.
-  reiKirokuContexts = builtins.concatStringsSep "," [
-    "agent_memory" "agent_schedule" "agent_session" "blocker" "category" "collection"
-    "custom_property" "custom_property_assignment" "cycle" "delegation" "disruption"
-    "disruption_action" "edge" "focus" "guidance" "habit" "habit_blocker" "int_view"
-    "intention" "journal_entry" "knowledge" "link" "note" "playbook_execution"
-    "predicate" "reflection" "reminder" "review" "task"
-  ];
+  # keiro migration cutover (EP-24): the comma-separated set of every routed
+  # bounded context. Sourced from ./rei-cli-env.nix (shared with home/mina.nix).
+  reiKirokuContexts = reiCli.reiKirokuContexts;
 
   waitForPg = ''
     until ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; do

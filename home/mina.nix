@@ -3,14 +3,22 @@
 let
   logDir = "${config.home.homeDirectory}/.mina/logs";
 
-  # mina web --global lists projects by shelling out to the `mori` binary,
-  # which reads the registry from PostgreSQL via MORI_PG_CONNECTION_STRING.
-  # launchd does not inherit the interactive shell's session variables or the
-  # Nix profile PATH, so without these the spawned `mori` fails with
-  # "MORI_PG_CONNECTION_STRING environment variable not set" and every
-  # /api/mori/* endpoint returns 503 (empty project picker). Mirror the
-  # connection string used by home/mori.nix.
-  connStr = "host=${config.services.postgresql.socketDir} dbname=mori";
+  # mina web --global drives its UI by shelling out to sibling CLIs: `mori`
+  # (project registry, read from PostgreSQL via MORI_PG_CONNECTION_STRING) and
+  # `rei` (intention details, read via REI_PG_CONNECTION_STRING + keiro routing).
+  # launchd inherits neither the interactive shell's session variables nor the
+  # Nix profile PATH, so without these the spawned tools fail — `mori` with
+  # "MORI_PG_CONNECTION_STRING environment variable not set" (every /api/mori/*
+  # returns 503, empty project picker) and `rei` with
+  # "createProcess: posix_spawnp: does not exist" (ReiBinaryUnavailable).
+  moriConnStr = "host=${config.services.postgresql.socketDir} dbname=mori";
+
+  # Shared rei CLI environment (connection string + keiro routing), kept in sync
+  # with home/rei.nix via the common import.
+  reiCli = import ./rei-cli-env.nix {
+    inherit pkgs lib;
+    pgSocket = config.services.postgresql.socketDir;
+  };
 
   mina-zsh-completions = pkgs.runCommand "mina-zsh-completions" { } ''
     ${pkgs.mina}/bin/mina completions zsh > $out
@@ -20,8 +28,11 @@ let
     set -euo pipefail
     mkdir -p "${logDir}"
 
-    export MORI_PG_CONNECTION_STRING="${connStr}"
-    export PATH="${pkgs.mori}/bin:$PATH"
+    export MORI_PG_CONNECTION_STRING="${moriConnStr}"
+    export REI_PG_CONNECTION_STRING="${reiCli.connStr}"
+    export KIROKU_REMOTE_URL="${reiCli.kirokuRemoteUrl}"
+    export REI_KIROKU_CONTEXTS="${reiCli.reiKirokuContexts}"
+    export PATH="${pkgs.mori}/bin:${reiCli.binDir}:$PATH"
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
     exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
@@ -51,8 +62,8 @@ in
       StandardOutPath = "${logDir}/web.stdout.log";
       StandardErrorPath = "${logDir}/web.stderr.log";
       EnvironmentVariables = {
-        MORI_PG_CONNECTION_STRING = connStr;
-      };
+        MORI_PG_CONNECTION_STRING = moriConnStr;
+      } // reiCli.cliEnv;
     };
   };
 }
