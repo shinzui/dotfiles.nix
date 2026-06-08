@@ -34,13 +34,16 @@ The implementation uses Caddy as a small reverse proxy. A reverse proxy is a loc
 - [x] (2026-06-07) Add a per-user Reiko launchd agent in `home/reiko.nix` that runs `reiko web --host 127.0.0.1 --port 8770 --no-open`. Done — `launchd.agents.reiko-web` (Label `com.shinzui.reiko-web`); verified generated wrapper invokes the exact command.
 - [x] (2026-06-07) Add a nix-darwin Caddy LaunchDaemon module, import it from `darwin/default.nix`, and configure `mina.localhost`, `reiko.localhost`, `logs.localhost`, and `traces.localhost`. Done — `darwin/local-web-proxy.nix` defines `launchd.daemons."shinzui-local-web-proxy"`; verified generated Caddyfile and daemon plist `ProgramArguments`.
 - [x] (2026-06-07) Run Nix evaluation/build validation. Done — `nix build .#darwinConfigurations.SungkyungM1X.system` exits 0 and realizes `darwin-system-26.05`.
-- [ ] Rebuild the machine profile and verify all four named URLs with `curl`. (Requires `sudo darwin-rebuild switch`; pending user-driven apply.)
+- [x] (2026-06-08) Rebuild the machine profile and verify all four named URLs with `curl`. Done — after the switch, `GET` to `mina.localhost`, `reiko.localhost`, `logs.localhost/select/vmui/`, and `traces.localhost/select/vmui/` all return `200`. Title tags confirm the right backend behind each name (`민아` for Mina, `reiko` for Reiko). Caddy daemon (pid 12181) and both agents confirmed serving.
 
 
 ## Surprises & Discoveries
 
 - 2026-06-07 (plan validation): The upstream Mina package **does** ship its built UI at `share/mina-ui`. Verified by resolving the wrapper's `bin` symlink to `/nix/store/...-mina-cli-0.1.0.0` and listing `share/mina-ui` there. However, the `flake.nix` wrapper (`mina = prev.runCommand "mina" ...`) links only `bin`, not `share`. `mina web` resolves installed assets via `installedDistCandidates` in `mina-cli/src/Mina/CLI/Web.hs`, which checks `<prefix>/share/mina-ui` where `<prefix>` is derived from the executable path. Linking `share/` into the wrapper (like Reiko already does) makes this robust regardless of how `getExecutablePath` treats the symlinked `bin`. This turns the first Progress item from a conditional check into a definite edit.
 - 2026-06-07 (plan validation): macOS resolves `*.localhost` natively. `dscacheutil -q host -a name mina.localhost` returns `::1` and `127.0.0.1`, and `socket.getaddrinfo('mina.localhost', 80)` returns `::1`. This confirms the decision to skip `/etc/hosts` / `networking.hosts` entries. Note: resolution prefers IPv6 (`::1`) first. A Caddy `http://name.localhost { ... }` site binds port `80` on all interfaces (v4 and v6) and matches on the `Host` header, so `::1`-first resolution is handled — no IPv4/IPv6 mismatch is expected.
+- 2026-06-08 (implementation): The pinned `mina` rev predated the `--global` flag, so the `mina-web` agent crash-looped with `Invalid option '--global'`. Root cause: during the validation pass the `flake.lock` was reverted to keep changes focused, which rolled `mina` back from the rev that adds `--global` to the older one. Fixed by `nix flake update mina` (→ `91acade`). Lesson: when a launchd command uses a flag, confirm the *pinned* binary supports it, not just the source checkout on disk.
+- 2026-06-08 (implementation): `curl -I` (HEAD) against Mina returns `405 Method Not Allowed` because Mina's static file server only handles GET — this looks like a failure but is not. Acceptance must use GET (`curl -s -o /dev/null -w '%{http_code}'` or `curl -fsSL`), not HEAD. The plan's `curl -fsSI` examples in Validation and Acceptance are misleading for Mina/Reiko and were noted for correction.
+- 2026-06-08 (implementation): Stale launchd stderr logs caused a false "mina is broken" reading. After the fixing switch, `~/.mina/logs/web.stderr.log` still contained the pre-switch `--global` crash-loop lines; the live process (pid listening on `:8765`) was healthy. Always cross-check the log against the actually-listening process (`lsof -nP -iTCP:<port> -sTCP:LISTEN`) before trusting an old log tail.
 - 2026-06-07 (plan validation): Confirmed default ports from source — Mina `value 8765` in `mina-cli/src/Mina/CLI/Web.hs:251`, Reiko `value 8770` in `reiko-cli/src/Reiko/Cli/Web.hs:164`. Confirmed `mina web` flags `--host/--port/--dist/--no-open/--global` and `reiko web` flags `--host/--port/--dist/--no-open` (Reiko has no `--global`). Confirmed `flake.nix` import list, `darwin/default.nix` import list, and that `pkgs.caddy` is already installed via `home/default.nix:118`.
 
 
@@ -64,7 +67,22 @@ Record every decision made while working on the plan.
 
 ## Outcomes & Retrospective
 
-(To be filled during and after implementation.)
+Implemented and verified end-to-end on 2026-06-08. All four named hosts proxy through Caddy on port 80 and return `200` to a browser GET:
+
+```text
+http://mina.localhost/                  -> 200 (Mina global UI, <title>민아</title>)
+http://reiko.localhost/                 -> 200 (Reiko viewer, <title>reiko</title>)
+http://logs.localhost/select/vmui/      -> 200 (VictoriaLogs VMUI)
+http://traces.localhost/select/vmui/    -> 200 (VictoriaTraces VMUI)
+```
+
+Caddy runs as the system LaunchDaemon `shinzui.local-web-proxy` (verified pid listening on `:80`); Mina and Reiko run as user agents `com.shinzui.mina-web` / `com.shinzui.reiko-web`. macOS resolved `*.localhost` natively, so no `/etc/hosts` / `networking.hosts` entries were needed.
+
+What went smoothly: the Caddy daemon, the Reiko agent, and the `logs`/`traces` routes worked on the first switch with no adjustment. macOS `*.localhost` resolution behaved exactly as validation predicted.
+
+What bit us: the pinned `mina` rev lacked `--global` (see Surprises & Discoveries), causing a crash-loop that a stale stderr log and a HEAD-based `curl -I` (405) made look worse than it was. Three process notes for next time: (1) confirm the *pinned* binary supports a flag before wiring it into launchd; (2) use GET, not HEAD, for SPA acceptance checks; (3) cross-check a "service down" log against the actually-listening process before concluding it is broken.
+
+Out of scope / deferred: shipping the new services' logs into VictoriaLogs (the `mina-web`/`reiko-web` log files are not yet in `home/victorialogs.nix` shippers, and the Caddy daemon logs to root-owned `/var/log`), and Caddy OTLP tracing. These were discussed but intentionally left as a follow-up.
 
 
 ## Context and Orientation
@@ -326,19 +344,22 @@ nix build .#darwinConfigurations.SungkyungM1X.system
 
 The command exits 0.
 
-The runtime acceptance is:
+The runtime acceptance is (use GET, not HEAD — Mina's and Reiko's static file servers return `405 Method Not Allowed` for HEAD, so `curl -I` is misleading here):
 
 ```bash
-curl -fsSI http://mina.localhost/ | sed -n '1,5p'
-curl -fsSI http://reiko.localhost/ | sed -n '1,5p'
-curl -fsSI http://logs.localhost/select/vmui/ | sed -n '1,5p'
-curl -fsSI http://traces.localhost/select/vmui/ | sed -n '1,5p'
+for h in mina reiko; do
+  printf "%-7s " "$h"; curl -s -o /dev/null -w "GET / -> %{http_code}\n" "http://$h.localhost/"
+done
+for h in logs traces; do
+  printf "%-7s " "$h"; curl -s -o /dev/null -w "GET /select/vmui/ -> %{http_code}\n" "http://$h.localhost/select/vmui/"
+done
 ```
 
-Each command should print an HTTP status line such as:
+Each line should print `-> 200`. Confirm the right backend sits behind each name via its title tag:
 
-```text
-HTTP/1.1 200 OK
+```bash
+curl -fsS http://mina.localhost/  | grep -oE '<title>[^<]*</title>'   # <title>민아</title>
+curl -fsS http://reiko.localhost/ | grep -oiE '<title>[^<]*</title>'  # <title>reiko</title>
 ```
 
 Some single-page applications may return `302` or another successful redirect for a path. That is acceptable if following the redirect with `curl -fsSL` returns HTML.
