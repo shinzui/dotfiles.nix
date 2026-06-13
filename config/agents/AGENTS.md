@@ -6,6 +6,7 @@
   - Run mori registry search <package_name> to find packages in a project.
   - Run `mori registry show <project> --full` to get source paths, packages, and metadata.
   - Run `mori registry docs <project>` for curated guides, references, and cookbooks in local corpus repos.
+  - Run `mori registry dependents <project>` to find which registered projects/packages depend on a given project or library (reverse dependency / "who uses X"). Add `--packages` for per-package detail, `--scope` to filter by dependency scope, `--json` for scripting.
   - Read the dependency's source code and docs directly on disk to understand APIs, types, and behavior.
 
   If the current project has a `mori.dhall`, run `mori show --full` to understand its identity, structure, and declared dependencies before planning changes.
