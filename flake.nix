@@ -73,6 +73,11 @@
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
+    shiki = {
+      url = "github:shinzui/shiki";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
+    };
     notion-cli = {
       url = "github:shinzui/notion-cli";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
@@ -283,6 +288,7 @@
             ln -s $src/share $out/share
           '';
           nihongo = inputs.nihongo.packages.${prev.stdenv.hostPlatform.system}.default;
+          shiki = inputs.shiki.packages.${prev.stdenv.hostPlatform.system}.default;
           # Wrap mori-rei-app to only expose bin/ — the full Haskell output
           # includes lib/links/libHStan-commons-config-* which conflicts with
           # mori (both depend on tan-commons-config from the same package set).
@@ -392,6 +398,7 @@
         pg_rman = pkgs.pg_rman;
         bootstrap-repos = pkgs.bootstrap-repos;
         mina = pkgs.mina;
+        shiki = pkgs.shiki;
       };
     });
 }

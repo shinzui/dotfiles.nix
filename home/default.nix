@@ -188,6 +188,7 @@ in
     bootstrap-repos
 
     tmuxai
+    shiki
 
     #desktop apps
     # element-desktop # broken on macOS: requires Xcode 26+ actool (upstream nixpkgs issue)
