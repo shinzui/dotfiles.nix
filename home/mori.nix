@@ -7,9 +7,16 @@ let
 
   connStr = "host=${pgSocket} dbname=mori";
 
+  # MasterPlan #16 cutover gate: contexts whose writes/reactors route to the
+  # kiroku event store (everything else routes to the legacy message-db). All
+  # seven contexts flipped 2026-06-13 (runbook: mori repo docs/plans/117).
+  # To roll back, set this to "" and `darwin-rebuild switch`.
+  moriKirokuContexts = "app,automation_registration,workflow,group,reaction,repository,project";
+
   mori-automate-wrapper = pkgs.writeShellScript "mori-automate" ''
     set -euo pipefail
     export MORI_PG_CONNECTION_STRING="${connStr}"
+    export MORI_KIROKU_CONTEXTS="${moriKirokuContexts}"
 
     # mori's automate daemon wraps every RunCommand in `nix develop --command`
     # (mori commit b4310ac). launchd's default PATH does not include the Nix
@@ -97,6 +104,7 @@ in
 
   programs.zsh.sessionVariables = {
     MORI_PG_CONNECTION_STRING = connStr;
+    MORI_KIROKU_CONTEXTS = moriKirokuContexts;
   };
 
   launchd.agents.mori-automate = {
@@ -110,6 +118,7 @@ in
       StandardErrorPath = "${moriLogDir}/automate.stderr.log";
       EnvironmentVariables = {
         MORI_PG_CONNECTION_STRING = connStr;
+        MORI_KIROKU_CONTEXTS = moriKirokuContexts;
       };
     };
   };
