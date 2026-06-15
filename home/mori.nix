@@ -32,7 +32,7 @@ let
       sleep 2
     done
 
-    exec ${pkgs.mori}/bin/mori automate daemon --ingest-interval 3600
+    exec ${pkgs.mori}/bin/mori automate daemon --ingest-interval 600
   '';
 
   mori-db-setup = pkgs.writeShellScriptBin "mori-db-setup" ''
