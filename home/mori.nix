@@ -19,10 +19,15 @@ let
     export MORI_KIROKU_CONTEXTS="${moriKirokuContexts}"
 
     # mori's automate daemon wraps every RunCommand in `nix develop --command`
-    # (mori commit b4310ac). launchd's default PATH does not include the Nix
-    # profile, so spawn fails with `nix: posix_spawnp: does not exist`. Add
-    # the Determinate Nix profile bin so RunCommand reactions can find `nix`.
-    export PATH="/nix/var/nix/profiles/default/bin:$PATH"
+    # (mori commit b4310ac), which inherits this ambient PATH and prepends the
+    # project devshell. launchd's default PATH is bare (/usr/bin:/bin:...), so
+    # without these entries reaction scripts fail to spawn their tools:
+    #   - nix default profile -> `nix` itself (to run `nix develop`; otherwise
+    #     `nix: posix_spawnp: does not exist`)
+    #   - the mori package bin -> `mori` (reactions call `mori path`/`cd`)
+    #   - ~/.local/bin         -> `claude` (mls-schema-sync runs `claude -p`)
+    #   - /opt/homebrew/bin    -> `codex` (used by some reactions)
+    export PATH="/nix/var/nix/profiles/default/bin:${pkgs.mori}/bin:${config.home.homeDirectory}/.local/bin:/opt/homebrew/bin:$PATH"
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
     exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
