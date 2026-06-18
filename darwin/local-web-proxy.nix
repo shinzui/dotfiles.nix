@@ -9,6 +9,7 @@ let
   #   reiko.localhost  -> 127.0.0.1:8770   (reiko web, home/reiko.nix)
   #   logs.localhost   -> 127.0.0.1:9428   (VictoriaLogs, home/victorialogs.nix)
   #   traces.localhost -> 127.0.0.1:10428  (VictoriaTraces, home/victoriatraces.nix)
+  #   jaeger.localhost -> 127.0.0.1:16686  (Jaeger UI, home/victoriatraces.nix)
   #
   # macOS resolves *.localhost to ::1/127.0.0.1 natively, so no /etc/hosts
   # wiring is needed. Plain HTTP on :80 avoids local CA trust for .localhost.
@@ -27,6 +28,10 @@ let
 
     http://traces.localhost {
       reverse_proxy 127.0.0.1:10428
+    }
+
+    http://jaeger.localhost {
+      reverse_proxy 127.0.0.1:16686
     }
   '';
 in
