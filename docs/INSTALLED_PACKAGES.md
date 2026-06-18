@@ -306,7 +306,6 @@ This document provides a comprehensive overview of all packages installed throug
 
 ### Installed via Homebrew (Casks)
 
-- **[tuple](https://tuple.app/)** - Remote pair programming app
 - **[zoom](https://zoom.us/)** - Video conferencing platform
 - **[visual-studio-code](https://code.visualstudio.com/)** - Source code editor
 - **[discord](https://discord.com/)** - Voice, video, and text communication platform
