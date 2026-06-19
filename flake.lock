@@ -1506,6 +1506,22 @@
       "original": {
         "owner": "shinzui",
         "repo": "keiro-syntax",
+        "type": "github"
+      }
+    },
+    "keiro-syntax_2": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781126160,
+        "narHash": "sha256-oiPMsI26qZvGN6mmMKBRmUHoSjBT/Gy0KJh8F5iUgW0=",
+        "owner": "shinzui",
+        "repo": "keiro-syntax",
+        "rev": "b0462f0ecddf9bbe32eef293d8ea349b39ae7a20",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiro-syntax",
         "rev": "b0462f0ecddf9bbe32eef293d8ea349b39ae7a20",
         "type": "github"
       }
@@ -1670,7 +1686,7 @@
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
-        "keiro-syntax": "keiro-syntax",
+        "keiro-syntax": "keiro-syntax_2",
         "mori-src": "mori-src",
         "nixpkgs": [
           "haskell-nix-dev",
@@ -2681,6 +2697,7 @@
         "flake-utils": "flake-utils",
         "haskell-nix-dev": "haskell-nix-dev",
         "home-manager": "home-manager_2",
+        "keiro-syntax": "keiro-syntax",
         "kizamu": "kizamu",
         "mina": "mina",
         "mori": "mori",

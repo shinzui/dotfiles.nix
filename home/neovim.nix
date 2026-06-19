@@ -52,6 +52,7 @@ in
     vim-just
     vim-nickel
     dhall-vim
+    keiro-vim
   ] ++ map optionalPlugin [
     telescope-symbols-nvim
     cmp-nvim-lua

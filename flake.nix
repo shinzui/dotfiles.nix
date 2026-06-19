@@ -33,6 +33,7 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
+    keiro-syntax = { url = "github:shinzui/keiro-syntax"; flake = false; };
     private-fonts = { url = "github:shinzui/fonts";};
     bun2nix = {
       url = "github:nix-community/bun2nix";
@@ -343,6 +344,11 @@
               (vimUtils.buildVimPluginsFromFlakeInputs inputs [
                 "vim-rescript"
               ]) // {
+                keiro-vim = prev.vimUtils.buildVimPlugin {
+                  pname = "keiro-vim";
+                  version = inputs.keiro-syntax.shortRev or inputs.keiro-syntax.lastModifiedDate or "unstable";
+                  src = inputs.keiro-syntax + "/packages/keiro-vim";
+                };
               }
             );
           };
