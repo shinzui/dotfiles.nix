@@ -2,6 +2,9 @@
 
 let
   logDir = "${config.home.homeDirectory}/.reiko/logs";
+  pgSocket = config.services.postgresql.socketDir;
+  reiCli = import ./rei-cli-env.nix { inherit pkgs lib pgSocket; };
+  connStr = reiCli.connStr;
 
   reiko-zsh-completions = pkgs.runCommand "reiko-zsh-completions" { } ''
     ${pkgs.reiko}/bin/reiko completions zsh > $out
@@ -9,6 +12,10 @@ let
 
   reiko-web-wrapper = pkgs.writeShellScript "reiko-web" ''
     set -euo pipefail
+    export REI_PG_CONNECTION_STRING="${connStr}"
+    export KIROKU_REMOTE_URL="${reiCli.kirokuRemoteUrl}"
+    export REI_KIROKU_CONTEXTS="${reiCli.reiKirokuContexts}"
+
     mkdir -p "${logDir}"
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
@@ -33,9 +40,15 @@ in
     config = {
       Label = "com.shinzui.reiko-web";
       ProgramArguments = [ "${reiko-web-wrapper}" ];
+      WorkingDirectory = config.home.homeDirectory;
       RunAtLoad = true;
       KeepAlive = true;
       ExitTimeOut = 15;
+      EnvironmentVariables = {
+        REI_PG_CONNECTION_STRING = connStr;
+        KIROKU_REMOTE_URL = reiCli.kirokuRemoteUrl;
+        REI_KIROKU_CONTEXTS = reiCli.reiKirokuContexts;
+      };
       StandardOutPath = "${logDir}/web.stdout.log";
       StandardErrorPath = "${logDir}/web.stderr.log";
     };
