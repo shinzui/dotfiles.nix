@@ -103,19 +103,35 @@ for db in mori rei mori_rei_app; do
 done
 
 # 4. ingest freshness — THE signal for the recurring wedge.
-#    Gate on uptime so a freshly (re)started daemon isn't flagged before its first cycle,
-#    and only count pool errors emitted by the *current* process (after it started).
+#    Source of truth is mori.repository_ingest_status, which the daemon updates on
+#    EVERY tick (recordIngestSuccess) regardless of whether the tick found new commits.
+#    The old check scraped the stderr log for '[INGEST] ... events written', but that
+#    line is only emitted when a tick writes NEW events — so any quiet commit period
+#    (overnight, weekends, non-commit work) looked "wedged" and triggered a needless
+#    kickstart + "auto-healed" notification on a perfectly healthy daemon. Gate on
+#    uptime so a freshly (re)started daemon isn't flagged before its first cycle.
 astart=$(proc_start_epoch com.shinzui.mori-automate) || astart=0
 auptime=$(( now - astart ))
-age=$(log_age "$LOG_AUTOMATE" '\[INGEST\].*events written') || age=""
+ingstat=$(PGCONNECT_TIMEOUT=3 psql -h "$SOCK" -d mori -tAc \
+  "select coalesce(extract(epoch from (now()-max(last_ingest_attempt_at)))::bigint,-1)||'|'||coalesce(max(consecutive_ingest_failures),0) from mori.repository_ingest_status" 2>/dev/null)
+IFS='|' read -r ingage ingfail <<<"${ingstat:-}"
+# informational only: last time a tick actually wrote new events (gap is normal when idle)
+logage=$(log_age "$LOG_AUTOMATE" '\[INGEST\].*events written') || logage=""
 if [ "$astart" -gt 0 ] && [ "$auptime" -lt "$INGEST_GRACE" ]; then
   info "ingest: mori-automate warming up (up $(human "$auptime"), first cycle pending)"
-elif [ -z "$age" ]; then
-  yellow "no successful ingest line found in automate log"
-elif [ "$age" -gt "$STALE_INGEST" ]; then
-  red "ingest STALE: last success $(human "$age") ago (daemon wedged)"; heal_targets+=("com.shinzui.mori-automate")
+elif [ -z "${ingage:-}" ]; then
+  yellow "could not read mori.repository_ingest_status"
+elif [ "$ingage" -lt 0 ]; then
+  yellow "no ingest attempts recorded yet in mori.repository_ingest_status"
+elif [ "$ingage" -gt "$STALE_INGEST" ]; then
+  red "ingest STALE: last tick $(human "$ingage") ago (daemon wedged)"; heal_targets+=("com.shinzui.mori-automate")
 else
-  green "ingest fresh: last success $(human "$age") ago"
+  green "ingest fresh: last tick $(human "$ingage") ago${logage:+, last new events $(human "$logage") ago}"
+fi
+# real ingest errors (per-repo failure counter, reset to 0 on the next success): warn,
+# don't heal — a missing repo path or one bad repo shouldn't restart the daemon.
+if [ -n "${ingfail:-}" ] && [ "$ingfail" -gt 0 ]; then
+  yellow "ingest: $ingfail consecutive failure(s) on at least one repo"
 fi
 # pool errors emitted since the current process started
 perr=$(log_age "$LOG_AUTOMATE" 'AcquisitionTimeoutUsageError|Error querying projects') || perr=""
