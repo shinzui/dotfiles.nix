@@ -44,6 +44,7 @@ in
     ./kizamu.nix
     ./mina.nix
     ./nihongo.nix
+    ./okf.nix
     ./notion-cli.nix
     ./notion-hub.nix
     ./hammerspoon.nix
