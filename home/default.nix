@@ -33,6 +33,7 @@ in
     ./television.nix
     ./nix-search-tv.nix
     ./postgresql.nix
+    ./local-web-proxy.nix
     ./victorialogs.nix
     ./victoriatraces.nix
     ./mori.nix
