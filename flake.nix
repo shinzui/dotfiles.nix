@@ -280,7 +280,13 @@
             ln -s $src/bin $out/bin
             ln -s $src/share $out/share
           '';
-          seihou = inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default;
+          # Wrap seihou to only expose bin/ — the full Haskell output
+          # includes lib/links/libHSbaikai-* which conflicts with mori
+          # (both now depend on baikai from the same package set).
+          seihou = prev.runCommand "seihou" {} ''
+            mkdir -p $out
+            ln -s ${inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
+          '';
           # Wrap kizamu to only expose bin/ — the full Haskell output
           # includes lib/links/libHSblake3-* which conflicts with mori
           # (both depend on blake3 from the same package set).
