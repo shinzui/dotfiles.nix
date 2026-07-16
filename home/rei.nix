@@ -264,18 +264,20 @@ in
     };
   };
 
-  # keiro migration cutover (EP-24): `rei worker all` runs pgmq processors now owned
-  # or superseded by keiro durable timers/reactors. Running it post-flip would double-act
-  # and append to the frozen message-db. Keep it disabled; host the surviving pgmq
-  # workspace git side-effect via the dedicated git-sync agent below.
+  # pg-migrate cutover (Rei EP-170): the current `rei worker all` is Kiroku-aware and
+  # owns the surviving PGMQ queues plus their 60-second scheduler. Run it beside the
+  # Kiroku reactive-layer host so reflection, reminder, agent-schedule, agent-work, and
+  # workspace Git jobs remain live after the cutover.
   launchd.agents.rei-worker = {
-    enable = false;
+    enable = true;
     config = {
       Label = "com.shinzui.rei-worker";
       ProgramArguments = [ "${rei-worker-wrapper}" ];
       RunAtLoad = true;
       KeepAlive = true;
-      ExitTimeOut = 30;
+      # Rei's default drain budget is 30 seconds; leave launchd enough time to report
+      # a forced drain rather than terminating the process at the same boundary.
+      ExitTimeOut = 45;
       StandardOutPath = "${reiLogDir}/worker.stdout.log";
       StandardErrorPath = "${reiLogDir}/worker.stderr.log";
       EnvironmentVariables = {
@@ -285,11 +287,11 @@ in
     };
   };
 
-  # Drains workspace_git_sync only. This intentionally runs beside `rei worker kiroku`:
-  # the kiroku worker observes note events and enqueues pgmq payloads, while this worker
-  # commits them asynchronously. Do not replace this with `rei worker all`.
+  # Retained as a rollback option for deployments that intentionally host only the Git
+  # side-effect queue. The consolidated worker above now owns workspace_git_sync too, so
+  # running both would create redundant competing consumers.
   launchd.agents.rei-worker-git-sync = {
-    enable = true;
+    enable = false;
     config = {
       Label = "com.shinzui.rei-worker-git-sync";
       ProgramArguments = [ "${rei-worker-git-sync-wrapper}" ];

@@ -77,12 +77,12 @@ echo "── rei-doctor $(date '+%Y-%m-%d %H:%M:%S') ──"
 if pg_isready -h "$SOCK" -q 2>/dev/null; then green "postgres reachable"; else red "postgres not reachable ($SOCK)"; fi
 
 # 2. daemons loaded + have a live pid
-# keiro migration cutover (EP-24): rei-subscription + rei-worker are retired (Pure Option A);
-# the keiro reactive layer runs as rei-worker-kiroku.
+# pg-migrate cutover (Rei EP-170): the Kiroku host owns the reactive layer and the
+# consolidated worker owns the four surviving PGMQ queues and periodic scheduler.
 declare -A DAEMON_DB=(
   [com.shinzui.mori-automate]=mori
   [com.shinzui.mori-rei-app]=mori_rei_app
-  [com.shinzui.rei-worker-git-sync]=rei
+  [com.shinzui.rei-worker]=rei
   [com.shinzui.rei-worker-kiroku]=rei
 )
 for label in "${!DAEMON_DB[@]}"; do
@@ -173,19 +173,21 @@ else
   yellow "could not read pgmq metrics"
 fi
 
-wqm=$(PGCONNECT_TIMEOUT=3 psql -h "$SOCK" -d rei -tAc \
-  "select queue_length||'|'||coalesce(oldest_msg_age_sec,0)||'|'||total_messages from pgmq.metrics('workspace_git_sync')" 2>/dev/null)
-if [ -n "$wqm" ]; then
-  IFS='|' read -r wqlen wqold wqtot <<<"$wqm"
-  if [ "${wqold%.*}" -gt "$STUCK_QUEUE" ]; then
-    red "workspace git-sync queue stuck: oldest msg $(human "${wqold%.*}") (worker not draining)"
-    heal_targets+=("com.shinzui.rei-worker-git-sync")
+for queue in workspace_git_sync reminder_triggers reflection_scheduler agent_work; do
+  wqm=$(PGCONNECT_TIMEOUT=3 psql -h "$SOCK" -d rei -tAc \
+    "select queue_length||'|'||coalesce(oldest_msg_age_sec,0)||'|'||total_messages from pgmq.metrics('$queue')" 2>/dev/null)
+  if [ -n "$wqm" ]; then
+    IFS='|' read -r wqlen wqold wqtot <<<"$wqm"
+    if [ "${wqold%.*}" -gt "$STUCK_QUEUE" ]; then
+      red "$queue queue stuck: oldest msg $(human "${wqold%.*}") (worker not draining)"
+      heal_targets+=("com.shinzui.rei-worker")
+    else
+      green "$queue queue ok: ${wqlen} waiting, ${wqtot} lifetime"
+    fi
   else
-    green "workspace git-sync queue ok: ${wqlen} waiting, ${wqtot} lifetime"
+    yellow "could not read $queue pgmq metrics"
   fi
-else
-  yellow "could not read workspace_git_sync pgmq metrics"
-fi
+done
 
 # 7. last recorded action (info; gap is normal when idle)
 la=$(PGCONNECT_TIMEOUT=3 psql -h "$SOCK" -d rei -tAc \
