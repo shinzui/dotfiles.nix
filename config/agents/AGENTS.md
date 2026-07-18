@@ -2,6 +2,7 @@
 
   **Always use `mori` to find dependency source code and documentation before guessing at APIs or relying on memory.**
 
+  - Use Mori to locate source code and documentation, but verify the current released version against the authoritative package registry and upstream release tags before choosing dependency bounds, pins, or compatibility workarounds; the local corpus may lag upstream.
   - Run `mori registry list` to discover registered projects by qualified name.
   - Run mori registry search <package_name> to find packages in a project.
   - Run `mori registry show <project> --full` to get source paths, packages, and metadata.
