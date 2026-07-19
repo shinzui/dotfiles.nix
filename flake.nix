@@ -64,6 +64,11 @@
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
+    kazuha = {
+      url = "github:shinzui/kazuha";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
+    };
     mina = {
       url = "github:shinzui/mina";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
@@ -293,6 +298,13 @@
           kizamu = prev.runCommand "kizamu" {} ''
             mkdir -p $out
             ln -s ${inputs.kizamu.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
+          '';
+          # Wrap kazuha to only expose bin/ — the full Haskell output
+          # includes lib/links/libHSbaikai-* which conflicts with mori
+          # (both depend on baikai from the same package set).
+          kazuha = prev.runCommand "kazuha" {} ''
+            mkdir -p $out
+            ln -s ${inputs.kazuha.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
           '';
           # Wrap mina to expose bin/ and share/ — the full Haskell output
           # includes lib/links/libHSmori-schema-pin-* which conflicts with mori

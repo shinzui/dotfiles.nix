@@ -43,6 +43,7 @@ in
     ./reiko.nix
     ./seihou.nix
     ./kizamu.nix
+    ./kazuha.nix
     ./mina.nix
     ./nihongo.nix
     ./okf.nix
