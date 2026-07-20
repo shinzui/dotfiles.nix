@@ -26,6 +26,22 @@
     "baikai-src": {
       "flake": false,
       "locked": {
+        "lastModified": 1784124485,
+        "narHash": "sha256-AnLFoSyZ7voNyq323dAWHlGBPBPqMZ9e4lZZcQ5kytw=",
+        "owner": "shinzui",
+        "repo": "baikai",
+        "rev": "4bce32b934c8be302f06e835a72df9a5c9627535",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "baikai",
+        "type": "github"
+      }
+    },
+    "baikai-src_2": {
+      "flake": false,
+      "locked": {
         "lastModified": 1783106726,
         "narHash": "sha256-5DHBZzhmPLEcH0XjbrIdHLT+BAgytpBspk//SyrnkZ8=",
         "owner": "shinzui",
@@ -40,7 +56,7 @@
         "type": "github"
       }
     },
-    "baikai-src_2": {
+    "baikai-src_3": {
       "flake": false,
       "locked": {
         "lastModified": 1782273275,
@@ -57,7 +73,7 @@
         "type": "github"
       }
     },
-    "baikai-src_3": {
+    "baikai-src_4": {
       "flake": false,
       "locked": {
         "lastModified": 1784124485,
@@ -1217,17 +1233,25 @@
     },
     "haskell-nix": {
       "inputs": {
+        "baikai-src": "baikai-src",
+        "keiro-src": "keiro-src",
+        "kioku-src": "kioku-src",
+        "kiroku-src": "kiroku-src",
         "nixpkgs": [
-          "kizamu",
+          "kazuha",
           "nixpkgs"
-        ]
+        ],
+        "pg-migrate-src": "pg-migrate-src",
+        "pgmq-hs-src": "pgmq-hs-src",
+        "shibuya-src": "shibuya-src",
+        "shikumi-src": "shikumi-src"
       },
       "locked": {
-        "lastModified": 1777072531,
-        "narHash": "sha256-9U3S5NjsR8peai7ZxKB3k5TepIY3aTmm54aI7zg3XRw=",
+        "lastModified": 1784160462,
+        "narHash": "sha256-TgQHHD/t7SwtY5+uKjVuEhDUjPuaptCdlF8Kojk1p7M=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "4747cb8b0137b0d8e4e3d5d159c58e9097928943",
+        "rev": "526928caf923a738fa87e3caff7c6a879e043bb6",
         "type": "github"
       },
       "original": {
@@ -1259,6 +1283,27 @@
     "haskell-nix_10": {
       "inputs": {
         "nixpkgs": [
+          "reiko",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1780542874,
+        "narHash": "sha256-LRNK8qsBZ2R0UV2tOcByflXAPv+Y8LV5m2VYJHugC1M=",
+        "owner": "shinzui",
+        "repo": "haskell-nix",
+        "rev": "41f642385a5b9205a11d3e0340d9076210e48aee",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "haskell-nix",
+        "type": "github"
+      }
+    },
+    "haskell-nix_11": {
+      "inputs": {
+        "nixpkgs": [
           "seihou",
           "nixpkgs"
         ]
@@ -1277,7 +1322,7 @@
         "type": "github"
       }
     },
-    "haskell-nix_11": {
+    "haskell-nix_12": {
       "inputs": {
         "nixpkgs": [
           "shiki",
@@ -1301,6 +1346,27 @@
     "haskell-nix_2": {
       "inputs": {
         "nixpkgs": [
+          "kizamu",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1777072531,
+        "narHash": "sha256-9U3S5NjsR8peai7ZxKB3k5TepIY3aTmm54aI7zg3XRw=",
+        "owner": "shinzui",
+        "repo": "haskell-nix",
+        "rev": "4747cb8b0137b0d8e4e3d5d159c58e9097928943",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "haskell-nix",
+        "type": "github"
+      }
+    },
+    "haskell-nix_3": {
+      "inputs": {
+        "nixpkgs": [
           "mina",
           "nixpkgs"
         ]
@@ -1319,7 +1385,7 @@
         "type": "github"
       }
     },
-    "haskell-nix_3": {
+    "haskell-nix_4": {
       "inputs": {
         "nixpkgs": [
           "mori",
@@ -1340,7 +1406,7 @@
         "type": "github"
       }
     },
-    "haskell-nix_4": {
+    "haskell-nix_5": {
       "inputs": {
         "nixpkgs": [
           "mori-rei-app",
@@ -1362,7 +1428,7 @@
         "type": "github"
       }
     },
-    "haskell-nix_5": {
+    "haskell-nix_6": {
       "inputs": {
         "nixpkgs": [
           "nihongo",
@@ -1383,7 +1449,7 @@
         "type": "github"
       }
     },
-    "haskell-nix_6": {
+    "haskell-nix_7": {
       "inputs": {
         "nixpkgs": [
           "notion-cli",
@@ -1404,7 +1470,7 @@
         "type": "github"
       }
     },
-    "haskell-nix_7": {
+    "haskell-nix_8": {
       "inputs": {
         "nixpkgs": [
           "notion-hub",
@@ -1425,20 +1491,20 @@
         "type": "github"
       }
     },
-    "haskell-nix_8": {
+    "haskell-nix_9": {
       "inputs": {
-        "baikai-src": "baikai-src_3",
-        "keiro-src": "keiro-src",
-        "kioku-src": "kioku-src",
-        "kiroku-src": "kiroku-src",
+        "baikai-src": "baikai-src_4",
+        "keiro-src": "keiro-src_2",
+        "kioku-src": "kioku-src_2",
+        "kiroku-src": "kiroku-src_2",
         "nixpkgs": [
           "rei",
           "nixpkgs"
         ],
-        "pg-migrate-src": "pg-migrate-src",
-        "pgmq-hs-src": "pgmq-hs-src",
-        "shibuya-src": "shibuya-src",
-        "shikumi-src": "shikumi-src"
+        "pg-migrate-src": "pg-migrate-src_2",
+        "pgmq-hs-src": "pgmq-hs-src_2",
+        "shibuya-src": "shibuya-src_2",
+        "shikumi-src": "shikumi-src_2"
       },
       "locked": {
         "lastModified": 1784160462,
@@ -1446,27 +1512,6 @@
         "owner": "shinzui",
         "repo": "haskell-nix",
         "rev": "526928caf923a738fa87e3caff7c6a879e043bb6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "shinzui",
-        "repo": "haskell-nix",
-        "type": "github"
-      }
-    },
-    "haskell-nix_9": {
-      "inputs": {
-        "nixpkgs": [
-          "reiko",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1780542874,
-        "narHash": "sha256-LRNK8qsBZ2R0UV2tOcByflXAPv+Y8LV5m2VYJHugC1M=",
-        "owner": "shinzui",
-        "repo": "haskell-nix",
-        "rev": "41f642385a5b9205a11d3e0340d9076210e48aee",
         "type": "github"
       },
       "original": {
@@ -1570,6 +1615,7 @@
     "kazuha": {
       "inputs": {
         "flake-parts": "flake-parts_3",
+        "haskell-nix": "haskell-nix",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -1585,11 +1631,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784503976,
-        "narHash": "sha256-J856dFgqsUSVLwzmcHHb17AdS/Wp26tYGthtcufRQYM=",
+        "lastModified": 1784505616,
+        "narHash": "sha256-4x20mg09QrmJ9Vl6JWiCCUSf5VPkgfmq3zP9dlEoP4g=",
         "owner": "shinzui",
         "repo": "kazuha",
-        "rev": "6bbb07e98d7cf81dc26bf1180e093f09fc5b7196",
+        "rev": "69bcd67d11680ac08ecde2790833a6bf68182362",
         "type": "github"
       },
       "original": {
@@ -1599,6 +1645,22 @@
       }
     },
     "keiro-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784079325,
+        "narHash": "sha256-OzayfuZCyOW6KCndP75BN+koRDdMXWiDqoUET0wYVXo=",
+        "owner": "shinzui",
+        "repo": "keiro",
+        "rev": "29bd7952fa5201adf789bbb21427b2cffe228d4b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiro",
+        "type": "github"
+      }
+    },
+    "keiro-src_2": {
       "flake": false,
       "locked": {
         "lastModified": 1784079325,
@@ -1663,7 +1725,39 @@
         "type": "github"
       }
     },
+    "kioku-src_2": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784050025,
+        "narHash": "sha256-yBu8wQ0H5J58i2gyZI7ZQctDg5Mc78UE3iqw+gptJyE=",
+        "owner": "shinzui",
+        "repo": "kioku",
+        "rev": "a99aa369701a76278ca33d83f8416dee443fa645",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kioku",
+        "type": "github"
+      }
+    },
     "kiroku-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784038159,
+        "narHash": "sha256-XAFfhYHPcv/wbYxxXO77A5My7/saha289HsJO5/QnqQ=",
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "rev": "58aff77b3a6d6093e3613753a0543aab62db9fac",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "type": "github"
+      }
+    },
+    "kiroku-src_2": {
       "flake": false,
       "locked": {
         "lastModified": 1784038159,
@@ -1683,7 +1777,7 @@
       "inputs": {
         "flake-parts": "flake-parts_4",
         "fsrs-hs-src": "fsrs-hs-src",
-        "haskell-nix": "haskell-nix",
+        "haskell-nix": "haskell-nix_2",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -1784,7 +1878,7 @@
       "inputs": {
         "bun2nix": "bun2nix_2",
         "flake-parts": "flake-parts_6",
-        "haskell-nix": "haskell-nix_2",
+        "haskell-nix": "haskell-nix_3",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -1817,9 +1911,9 @@
     },
     "mori": {
       "inputs": {
-        "baikai-src": "baikai-src",
+        "baikai-src": "baikai-src_2",
         "flake-parts": "flake-parts_7",
-        "haskell-nix": "haskell-nix_3",
+        "haskell-nix": "haskell-nix_4",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -1858,7 +1952,7 @@
     "mori-rei-app": {
       "inputs": {
         "flake-parts": "flake-parts_8",
-        "haskell-nix": "haskell-nix_4",
+        "haskell-nix": "haskell-nix_5",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -1946,7 +2040,7 @@
     "nihongo": {
       "inputs": {
         "flake-parts": "flake-parts_9",
-        "haskell-nix": "haskell-nix_5",
+        "haskell-nix": "haskell-nix_6",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -2198,7 +2292,7 @@
     "notion-cli": {
       "inputs": {
         "flake-parts": "flake-parts_10",
-        "haskell-nix": "haskell-nix_6",
+        "haskell-nix": "haskell-nix_7",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -2281,9 +2375,9 @@
     },
     "notion-hub": {
       "inputs": {
-        "baikai-src": "baikai-src_2",
+        "baikai-src": "baikai-src_3",
         "flake-parts": "flake-parts_11",
-        "haskell-nix": "haskell-nix_7",
+        "haskell-nix": "haskell-nix_8",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -2457,7 +2551,39 @@
         "type": "github"
       }
     },
+    "pg-migrate-src_2": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783976259,
+        "narHash": "sha256-gtSy0iWe+pe6wEHqm8OgvwMI13jNVul+5p7q36LV64E=",
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "rev": "f39d64e354818999667d345a1452f33eb4857fc1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "type": "github"
+      }
+    },
     "pgmq-hs-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784054261,
+        "narHash": "sha256-2UEv+L7kMLrAojU9yNf7FGxgeffPrZnwyZ1YJ9M9gvI=",
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "rev": "f4a101843ea6f5c055277fd84859ece02865eff4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "type": "github"
+      }
+    },
+    "pgmq-hs-src_2": {
       "flake": false,
       "locked": {
         "lastModified": 1784054261,
@@ -2821,7 +2947,7 @@
       "inputs": {
         "codd-extras-src": "codd-extras-src",
         "flake-parts": "flake-parts_13",
-        "haskell-nix": "haskell-nix_8",
+        "haskell-nix": "haskell-nix_9",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -2889,7 +3015,7 @@
     "reiko": {
       "inputs": {
         "flake-parts": "flake-parts_14",
-        "haskell-nix": "haskell-nix_9",
+        "haskell-nix": "haskell-nix_10",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -2959,7 +3085,7 @@
     "seihou": {
       "inputs": {
         "flake-parts": "flake-parts_15",
-        "haskell-nix": "haskell-nix_10",
+        "haskell-nix": "haskell-nix_11",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -3021,10 +3147,26 @@
         "type": "github"
       }
     },
+    "shibuya-src_2": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783204727,
+        "narHash": "sha256-b1NoMQDlz876+H8zJ/KUgb+9cWWZXy04jGgXX3GfDpA=",
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "rev": "172df245f40a454af46dd7f4cde855eaa4414c5a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "type": "github"
+      }
+    },
     "shiki": {
       "inputs": {
         "flake-parts": "flake-parts_16",
-        "haskell-nix": "haskell-nix_11",
+        "haskell-nix": "haskell-nix_12",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -3057,6 +3199,22 @@
       }
     },
     "shikumi-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783222763,
+        "narHash": "sha256-NhsJUfH8Zw0VHL9xZQUGJOJ1CQhibvi9BCuqULEUrbs=",
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "rev": "0df4d85928c79cbfe78d7880a263fc0b9696ddc2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "type": "github"
+      }
+    },
+    "shikumi-src_2": {
       "flake": false,
       "locked": {
         "lastModified": 1783222763,
