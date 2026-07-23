@@ -2001,7 +2001,9 @@
           "nixpkgs"
         ],
         "okf-core-src": "okf-core-src",
+        "openapi-hs-src": "openapi-hs-src",
         "pre-commit-hooks": "pre-commit-hooks_4",
+        "servant-openapi-hs-src": "servant-openapi-hs-src",
         "tan-commons-src": "tan-commons-src",
         "tan-effectful-src": "tan-effectful-src",
         "tan-event-source-src": "tan-event-source-src",
@@ -2013,11 +2015,11 @@
         "typeid-hs-src": "typeid-hs-src"
       },
       "locked": {
-        "lastModified": 1784071262,
-        "narHash": "sha256-Bq37hDLp3eCAV+Yy6d3KWRtf/5ABT3x81LowYaSXrVM=",
+        "lastModified": 1784651067,
+        "narHash": "sha256-Zo9D2JT/zlzS6ooCgMN9WQzdwrMcVuwtc8YLl1La5gA=",
         "owner": "shinzui",
         "repo": "mori",
-        "rev": "d39cae1d8321ae5916152ac17cf3732ad0344f8b",
+        "rev": "021ff665ddd5e376748288352cc5ad3fc91955aa",
         "type": "github"
       },
       "original": {
@@ -2066,17 +2068,17 @@
     "mori-schema-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1782170658,
-        "narHash": "sha256-ruiDWKGvCHWcJv9ojziwYoh/uiDMBBjib12CC7umTss=",
+        "lastModified": 1784644547,
+        "narHash": "sha256-TsCoJZDmgxe+NiQUVZa+OX39Yne+MZ35B+JVea7jFKw=",
         "owner": "shinzui",
         "repo": "mori-schema",
-        "rev": "143b3138e697e211249f094eddaf8248c590a5a0",
+        "rev": "93104153ecf8817547229a867302a70a25c4b3d8",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "mori-schema",
-        "rev": "143b3138e697e211249f094eddaf8248c590a5a0",
+        "rev": "93104153ecf8817547229a867302a70a25c4b3d8",
         "type": "github"
       }
     },
@@ -2641,6 +2643,23 @@
       "original": {
         "owner": "shinzui",
         "repo": "okf",
+        "type": "github"
+      }
+    },
+    "openapi-hs-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783136261,
+        "narHash": "sha256-Eih2hPG6XqhHJdwsrkTh8W7+PqAB7REXjf6jn0gmxzM=",
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "rev": "965340a30fad0782f2c964ab97b4ab0f12fa044d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "rev": "965340a30fad0782f2c964ab97b4ab0f12fa044d",
         "type": "github"
       }
     },
@@ -3270,6 +3289,23 @@
       "original": {
         "type": "git",
         "url": "file:./schema"
+      }
+    },
+    "servant-openapi-hs-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783137354,
+        "narHash": "sha256-DoY2v+zeCdDU4df+7DpnrHS5mqFUNP4xyPJ/gP5LthY=",
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "rev": "7cbbc234cb7c0e900495b2f676e2912a7f456ff0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "rev": "7cbbc234cb7c0e900495b2f676e2912a7f456ff0",
+        "type": "github"
       }
     },
     "settei-src": {
