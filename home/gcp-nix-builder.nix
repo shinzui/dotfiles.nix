@@ -10,6 +10,6 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks."*".extraOptions.Include = "/Users/shinzui/.colima/ssh_config";
+    settings."*".Include = "/Users/shinzui/.colima/ssh_config";
   };
 }
