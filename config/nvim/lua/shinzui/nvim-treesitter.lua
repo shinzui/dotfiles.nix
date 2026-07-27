@@ -5,9 +5,14 @@
 vim.cmd "packadd nvim-treesitter"
 
 -- Ensure nvim-treesitter query files take priority over Neovim's built-in
--- runtime queries. The grammar parsers from nvim-treesitter-main are newer
--- than Neovim 0.11.6's bundled queries, which reference removed node types
--- (e.g. string_content in lua, latex_block in markdown_inline).
+-- runtime queries. The nvim-treesitter grammars are newer than Neovim's
+-- bundled queries, which reference removed node types (e.g. string_content
+-- in lua, latex_block in markdown_inline).
+--
+-- Note: nixpkgs ships the parsers and queries in a separate `start` plugin
+-- (pack/hm/start/nvim-treesitter-grammars), which already sorts ahead of
+-- $VIMRUNTIME in 'runtimepath'. This prepend is kept as a belt-and-braces
+-- guard for the plugin's own runtime files.
 local ts_path = vim.fn.globpath(vim.o.packpath, "pack/hm/opt/nvim-treesitter", false)
 if ts_path ~= "" then
   vim.opt.runtimepath:prepend(ts_path)
