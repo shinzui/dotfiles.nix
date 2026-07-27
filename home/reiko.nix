@@ -10,11 +10,20 @@ let
     ${pkgs.reiko}/bin/reiko completions zsh > $out
   '';
 
+  # reiko shells out to the `rei` CLI for ALL collection reads (the project's
+  # isolation constraint), resolving it via AppConfig.reiCommand, which defaults
+  # to the bare name "rei". launchd hands the agent only
+  # /usr/bin:/bin:/usr/sbin:/sbin — not the Nix profile PATH — so without
+  # binDir here every shell-out dies with "createProcess: posix_spawnp: does not
+  # exist". reiko swallows that into a warning and returns an empty list, so the
+  # UI silently shows no data rather than an error. Same failure mode documented
+  # in home/mina.nix; keep the two in sync.
   reiko-web-wrapper = pkgs.writeShellScript "reiko-web" ''
     set -euo pipefail
     export REI_PG_CONNECTION_STRING="${connStr}"
     export KIROKU_REMOTE_URL="${reiCli.kirokuRemoteUrl}"
     export REI_KIROKU_CONTEXTS="${reiCli.reiKirokuContexts}"
+    export PATH="${reiCli.binDir}:$PATH"
 
     mkdir -p "${logDir}"
 
