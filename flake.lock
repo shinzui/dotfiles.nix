@@ -1693,11 +1693,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784911762,
-        "narHash": "sha256-35qyOzyJwGlTatW/bh3w8ckv244e5HW7CSibA8lE67A=",
+        "lastModified": 1785172942,
+        "narHash": "sha256-zKyNPx6W0b3BaqrLI/WANSObLHd1tcZN7hUJykLM7ho=",
         "owner": "shinzui",
         "repo": "kazuha",
-        "rev": "eb8c2ac45aa9a561765f0708a3819baac4e4cb0c",
+        "rev": "6d86affc7114b499410d60d7570831416e916dd6",
         "type": "github"
       },
       "original": {
