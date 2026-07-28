@@ -5,12 +5,21 @@ This guide explains how to add neovim plugins to this nix-based setup. Plugins a
 ## Architecture Overview
 
 ```
-flake.nix                              # Plugin sources (vimExtraPlugins overlay)
+flake-modules/overlays.nix             # Plugin sources (vimExtraPlugins overlay)
     ↓
 home/neovim.nix                        # Plugin declarations
     ↓
 config/nvim/lua/shinzui/<plugin>.lua   # Plugin configuration (Lua)
 ```
+
+`config/nvim/` is deployed as an out-of-store symlink, so Lua changes take
+effect on the next `nvim` launch — only the first two steps need a rebuild.
+
+A plugin from `vimExtraPlugins` may fail nixpkgs' `neovimRequireCheckHook`,
+which `require()`s every Lua module. If the failing modules are optional
+integrations with plugins you don't have, add an entry to
+`overlays/vimExtraPlugins-require-check-exemptions.nix` rather than disabling
+the check globally.
 
 ## Plugin Categories
 

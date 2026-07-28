@@ -9,6 +9,7 @@ This guide documents how to identify and fix broken transitive dependencies in N
 4. [Solution Strategies](#solution-strategies)
 5. [Testing Fixes](#testing-fixes)
 6. [Common Commands Reference](#common-commands-reference)
+7. [Suspect your own overlays first](#suspect-your-own-overlays-first)
 
 ## Identifying the Problem
 
@@ -107,43 +108,53 @@ git diff HEAD flake.lock | grep -A2 -B2 'nixpkgs-unstable'
 
 ## Solution Strategies
 
-### Strategy 1: Pin the package to a working nixpkgs revision
+### Strategy 1 (preferred): Take the package from `pkgs-stable`
 
-Create an overlay that uses the package from a known working nixpkgs revision:
+The `nixpkgs-stable` input is pinned to a release channel and exposed as
+`pkgs.pkgs-stable` by the `pkgs-stable` overlay. Pull just the broken package
+— or just the toolchain it needs — from there:
 
 ```nix
-# overlays/fix-pgspecial.nix
+# overlays/harlequin-pin.nix
 final: prev: {
-  # Pin pgcli to last working nixpkgs-unstable revision
-  pgcli = let
-    workingNixpkgs = import (builtins.fetchTarball {
-      url = "https://github.com/NixOS/nixpkgs/archive/COMMIT_HASH.tar.gz";
-      sha256 = "HASH_HERE"; # Will error and show correct hash on first run
-    }) {
-      system = prev.stdenv.system;
-      config = { allowUnfree = true; };
-    };
-  in workingNixpkgs.pgcli;
+  harlequin = final.pkgs-stable.harlequin;
 }
 ```
 
-To get the correct hash, run the overlay with a dummy hash first:
-```bash
-# Use a dummy hash - it will error and show the correct one
-sha256 = "0000000000000000000000000000000000000000000000000000";
-
-# The error will show:
-# hash mismatch in file downloaded from 'https://...':
-#   specified: sha256:0000000000000000000000000000000000000000000000000000
-#   got:       sha256:1z4ga87qla5300qwib3dnjnkaywwh8y1qqsb8w2mrsrw78k9xmlw
+```nix
+# or only the toolchain, leaving the rest of the package on unstable
+parqeye = final.callPackage ../derivations/parqeye.nix {
+  inherit (final) lib fetchFromGitHub;
+  rustPlatform = final.pkgs-stable.rustPlatform;
+};
 ```
+
+This is lock-tracked, so `nix flake update` moves it, and it comes from the
+binary cache.
+
+### Anti-pattern: `builtins.fetchTarball` to a hardcoded revision
+
+This repo used to pin packages like so. **Don't.**
+
+```nix
+# DON'T: outside flake.lock, never updated, instantiates a whole extra nixpkgs
+pgcli = (import (builtins.fetchTarball {
+  url = "https://github.com/NixOS/nixpkgs/archive/COMMIT_HASH.tar.gz";
+  sha256 = "...";
+}) { system = prev.stdenv.system; config.allowUnfree = true; }).pgcli;
+```
+
+`nix flake update` cannot move it, so it drifts silently — the harlequin pin sat
+on 2.1.2 long after the stable channel had 2.4.1 — and each one pulls an entire
+parallel package set into the closure. Removing two such pins in July 2026 cut
+~600 MB. Use `pkgs-stable` instead.
 
 ### Strategy 2: Override the broken dependency
 
 Override the package to disable tests or remove the broken dependency:
 
 ```nix
-# overlays/fix-pgspecial.nix
+# historical example -- this overlay has since been retired
 final: prev: {
   pgcli = prev.pgcli.override {
     pgspecial = prev.python3Packages.pgspecial.overrideAttrs (oldAttrs: {
@@ -155,35 +166,55 @@ final: prev: {
 }
 ```
 
-### Strategy 3: Use package from different channel
+### Strategy 3: Patch the package
 
-If you have multiple nixpkgs channels configured:
+Often the cleanest fix is a small `overrideAttrs` rather than a pin:
 
 ```nix
-# overlays/fix-pgspecial.nix
+# overlays/httpstat-fix.nix -- setup.py uses ast.Str.s, removed in Python 3.12
 final: prev: {
-  # Use pgcli from nixpkgs-unstable instead of master
-  pgcli = final.pkgs-unstable.pgcli;
+  httpstat = prev.httpstat.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace setup.py \
+        --replace-fail 'ast.parse(line).body[0].value.s' \
+                       'ast.parse(line).body[0].value.value'
+    '';
+  });
 }
+```
+
+Prefer `--replace-fail` over `--replace`: it errors when the pattern stops
+matching, which is how you find out nixpkgs fixed the problem upstream and the
+overlay can go. (It will break the build when that happens — that's the point.
+See the `dateutils-fix` entry below.)
+
+If the failure is a test that can't pass in the sandbox, skip that test rather
+than disabling the whole suite:
+
+```nix
+# overlays/worktrunk-skip-proc-tests.nix
+checkFlags = (old.checkFlags or [ ]) ++ [ "--skip=some::failing::test" ];
 ```
 
 ### Adding the overlay to your flake
 
-1. Add the overlay to your flake.nix:
+1. Add the overlay to `flake-modules/overlays.nix`:
 ```nix
-overlays = {
+flake.overlays = {
   # ... other overlays ...
-  
-  # Fix for broken package - prefix with 'aaa-' to apply early
-  aaa-fix-pgspecial = import ./overlays/fix-pgspecial.nix;
+
+  # Fix httpstat's setup.py to build under Python 3.12+
+  httpstat-fix = import ../overlays/httpstat-fix.nix;
 };
 ```
 
-Note: Overlays are applied alphabetically, so prefix with 'aaa-' if you need it to apply before other overlays.
+Note: overlays are applied in **alphabetical order of attribute name**, so the
+name is load-bearing when one overlay must see another's output. Today
+`vimExtraPlugins-require-check-exemptions` must sort after `nix-neovimplugins`.
 
 2. Make sure to stage the overlay file for flakes:
 ```bash
-git add overlays/fix-pgspecial.nix
+git add overlays/httpstat-fix.nix
 ```
 
 ## Testing Fixes
@@ -279,7 +310,12 @@ nix hash to-sri --type sha256 HASH
 
 ## Real-World Example: Fixing pgcli with broken postgresql-test-hook
 
-This is a complete example from an actual debugging session:
+> **Historical.** This walkthrough is kept for the technique, not the fix. The
+> `fix-pgspecial` overlay it produces was retired in July 2026 — `postgresql-test-hook`
+> was un-broken upstream long before that, and stock `pgcli` builds fine. Note
+> also that it reaches for a `fetchTarball` pin, which this repo no longer does;
+> see the anti-pattern above. Read it as "how to trace a broken transitive
+> dependency", then apply a current strategy.
 
 ### 1. Problem Identification
 ```bash
@@ -337,12 +373,12 @@ final: prev: {
 
 ### 5. Apply Fix
 ```nix
-# In flake.nix
-overlays = {
+# In flake-modules/overlays.nix (this was flake.nix at the time)
+flake.overlays = {
   # ... other overlays ...
-  
+
   # Fix pgspecial to avoid broken postgresql-test-hook dependency (named to apply early)
-  aaa-fix-pgspecial = import ./overlays/fix-pgspecial.nix;
+  aaa-fix-pgspecial = import ../overlays/fix-pgspecial.nix;
 };
 ```
 
@@ -361,24 +397,51 @@ $ sudo ./bin/darwin-rebuild-sungkyung.sh
 $ pgcli --version
 ```
 
+## Suspect your own overlays first
+
+A bump often breaks the *workaround*, not the package. Check whether an existing
+overlay is the cause before writing a new one. Both of these happened here:
+
+- **`dateutils-fix`** patched a K&R `yyparse()` prototype. nixpkgs later shipped
+  the same upstream patch, so the overlay's `--replace-fail` matched nothing and
+  aborted the build. The fix was to delete the overlay — the stock package was
+  already correct. This was the first error in a bump that turned out to have
+  seven unrelated breakages behind it.
+- **`tmux-extrakto-darwin-fix`** existed to keep Linux-only dependencies off
+  Darwin. nixpkgs fixed that upstream, and the overlay was left unconditionally
+  adding `xclip` — an X11 tool — to the Darwin closure. It had inverted into
+  causing the problem it was named after.
+
+When a bump breaks something, test the stock package first:
+
+```bash
+nix build github:nixos/nixpkgs/<locked-rev>#<package>
+```
+
+If it builds, your overlay is the problem.
+
 ## Tips
 
-1. **Always check if the package is still broken upstream** - Sometimes packages are quickly fixed in nixpkgs
-2. **Consider reporting the issue** - If a package is broken, consider opening an issue on the nixpkgs repository
-3. **Document your overlays** - Add comments explaining why the overlay exists and when it can be removed
-4. **Regularly review overlays** - Periodically check if overlays are still needed
-5. **Use temporary allows for debugging** - `NIXPKGS_ALLOW_BROKEN=1` is useful for debugging but never commit it
-6. **Check multiple nixpkgs channels** - Sometimes a package is broken in master but works in nixpkgs-unstable or stable
+1. **Test the stock package before writing an overlay** - the workaround may be the bug
+2. **Always check if the package is still broken upstream** - Sometimes packages are quickly fixed in nixpkgs
+3. **Consider reporting the issue** - Fixes like `httpstat-fix` are real upstream bugs worth a nixpkgs PR
+4. **Document your overlays** - Add comments explaining why the overlay exists and when it can be removed
+5. **Regularly review overlays** - Periodically check if overlays are still needed
+6. **Use temporary allows for debugging** - `NIXPKGS_ALLOW_BROKEN=1` is useful for debugging but never commit it
+7. **Check multiple nixpkgs channels** - Sometimes a package is broken in unstable but works in stable
 
 ## Example Overlay File Structure
 
 ```
 dotfiles.nix/
-├── flake.nix
+├── flake-modules/
+│   └── overlays.nix                 # declares the overlay set
 ├── overlays/
-│   ├── fix-pgspecial.nix     # Pin pgcli to working version
-│   ├── harlequin-pin.nix     # Pin harlequin to avoid textual issues
-│   └── tmux-extrakto-darwin-fix.nix  # Platform-specific fixes
+│   ├── harlequin-pin.nix            # takes harlequin from pkgs-stable
+│   ├── httpstat-fix.nix             # patches setup.py for Python 3.12+
+│   ├── worktrunk-skip-proc-tests.nix  # skips sandbox-incompatible tests
+│   ├── vimExtraPlugins-require-check-exemptions.nix
+│   └── vimUtils.nix                 # helper functions, not a fix
 ```
 
 Each overlay should be self-contained and well-documented with comments explaining:
