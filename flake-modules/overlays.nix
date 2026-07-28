@@ -1,8 +1,7 @@
 # Flake-level `overlays` output.
 #
 # Note: these are applied via `attrValues self.overlays`, so they are applied in
-# *alphabetical* order of their attribute names. Two overlays rely on that:
-#   - `aaa-fix-pgspecial` is named to sort first, so it applies early.
+# *alphabetical* order of their attribute names, which one relies on:
 #   - `vimExtraPlugins-no-require-check` must sort after `nix-neovimplugins`,
 #     which is what introduces `vimExtraPlugins`.
 # Renaming either one will silently change behaviour.
@@ -15,14 +14,8 @@ in
     nix-neovimplugins = inputs.nix-neovimplugins.overlays.default;
     bun2nix = inputs.bun2nix.overlays.default;
 
-    # Fix tmux-extrakto to not pull in Linux-only dependencies on Darwin
-    tmux-extrakto-darwin-fix = import ../overlays/tmux-extrakto-darwin-fix.nix;
-
     # Pin harlequin to avoid broken textual dependency
     harlequin-pin = import ../overlays/harlequin-pin.nix;
-
-    # Fix pgspecial to avoid broken postgresql-test-hook dependency (named to apply early)
-    aaa-fix-pgspecial = import ../overlays/fix-pgspecial.nix;
 
     # Fix httpstat's setup.py to build under Python 3.12+ (ast.Str removal)
     httpstat-fix = import ../overlays/httpstat-fix.nix;
