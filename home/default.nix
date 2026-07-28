@@ -6,14 +6,20 @@ let
     rec {
       defaultCommand = "${fd} --type f";
       defaultOptions = [ "--height 50%" ];
-      fileWidgetCommand = "${defaultCommand}";
-      fileWidgetOptions = [
-        "--preview '${pkgs.bat}/bin/bat --color=always --plain --line-range=:200 {}'"
-      ];
-      changeDirWidgetCommand = "${fd} --type d";
-      changeDirWidgetOptions =
-        [ "--preview '${pkgs.tree}/bin/tree -C {} | head -200'" ];
-      historyWidgetOptions = [ ];
+      fileWidget = {
+        command = "${defaultCommand}";
+        options = [
+          "--preview '${pkgs.bat}/bin/bat --color=always --plain --line-range=:200 {}'"
+        ];
+      };
+      changeDirWidget = {
+        command = "${fd} --type d";
+        options = [ "--preview '${pkgs.tree}/bin/tree -C {} | head -200'" ];
+      };
+      # Atuin owns Ctrl-R. Its zsh integration is sourced after fzf's, so it
+      # already won at runtime; saying so explicitly keeps that behaviour and
+      # silences home-manager's Ctrl-R conflict warning.
+      historyWidget.command = "";
     };
 in
 {
