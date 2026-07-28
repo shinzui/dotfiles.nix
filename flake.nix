@@ -2,7 +2,6 @@
   description = "Shinzui's dotfiles";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # Escape hatch for packages that don't build against current unstable —
     # e.g. crates needing an older rustc. The `pkgs-stable` overlay exposes it
