@@ -1,6 +1,19 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
+  # Consumers of the secrets below. These live here rather than in
+  # bootstrap.nix so that `darwinConfigurations.bootstrap-arm`, which imports
+  # bootstrap.nix alone, can evaluate on a machine with no secrets yet.
+
+  # Include access tokens from agenix secret into nix.custom.conf
+  environment.etc."nix/nix.custom.conf".text = lib.mkAfter ''
+    !include ${config.age.secrets.access_token.path}
+  '';
+
+  determinateNix.determinateNixd.authentication.additionalNetrcSources = [
+    config.age.secrets.netrc.path
+  ];
+
   age.identityPaths = [ "/Users/shinzui/.ssh/id_ed25519" ];
   age.secrets = {
     netrc = {

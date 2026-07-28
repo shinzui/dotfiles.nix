@@ -1,4 +1,4 @@
-{ config, pkgs, nixpkgs-unstable, lib, ... }:
+{ pkgs, nixpkgs-unstable, ... }:
 
 {
   system.primaryUser = "shinzui";
@@ -32,14 +32,10 @@
     connect-timeout = 10;
   };
 
-  # Include access tokens from agenix secret into nix.custom.conf
-  environment.etc."nix/nix.custom.conf".text = lib.mkAfter ''
-    !include ${config.age.secrets.access_token.path}
-  '';
-
-  determinateNix.determinateNixd.authentication.additionalNetrcSources = [
-    config.age.secrets.netrc.path
-  ];
+  # NOTE: this file must stay free of agenix secrets. It is the sole module of
+  # `darwinConfigurations.bootstrap-arm`, which exists to bring up a machine
+  # that has no decryptable secrets yet. Anything depending on
+  # `config.age.secrets` belongs in darwin/secrets.nix instead.
 
   # Determinate's daemon handles GC itself (targets ~30GB free / 5–20% steady-state).
   # No interval / retention knobs are exposed — strategy is the only switch.
