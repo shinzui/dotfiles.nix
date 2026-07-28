@@ -33,7 +33,8 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs-unstable";
     };
-    flake-utils.url = "github:numtide/flake-utils";
+    # Consumed by default.nix (legacy non-flake entry point), which reads its
+    # rev straight out of flake.lock — not referenced from flake.nix itself.
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
     nix-neovimplugins = { url = "github:NixNeovim/NixNeovimPlugins"; };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };

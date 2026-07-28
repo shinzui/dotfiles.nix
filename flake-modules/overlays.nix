@@ -136,22 +136,10 @@ in
           inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.notion-hub-subscriptions;
       };
 
-    pkgs-master = final: prev: {
-      pkgs-master = import inputs.nixpkgs {
-        system = prev.stdenv.hostPlatform.system;
-        inherit (nixpkgsConfig) config;
-      };
-    };
-
+    # Escape hatch for packages that don't build against current unstable —
+    # currently parqeye, which needs an older rustc.
     pkgs-stable = final: prev: {
       pkgs-stable = import inputs.nixpkgs-stable {
-        system = prev.stdenv.hostPlatform.system;
-        inherit (nixpkgsConfig) config;
-      };
-    };
-
-    pkgs-unstable = final: prev: {
-      pkgs-unstable = import inputs.nixpkgs-unstable {
         system = prev.stdenv.hostPlatform.system;
         inherit (nixpkgsConfig) config;
       };

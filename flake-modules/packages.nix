@@ -13,7 +13,6 @@
         inherit system;
         inherit (nixpkgsConfig) config;
         overlays = with self.overlays; [
-          pkgs-master
           pkgs-stable
           bun2nix
           my-packages
