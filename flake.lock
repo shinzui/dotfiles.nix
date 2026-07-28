@@ -163,7 +163,7 @@
     },
     "bun2nix_2": {
       "inputs": {
-        "flake-parts": "flake-parts_5",
+        "flake-parts": "flake-parts_6",
         "nixpkgs": [
           "mina",
           "nixpkgs"
@@ -549,7 +549,7 @@
     "flake-parts_10": {
       "inputs": {
         "nixpkgs-lib": [
-          "notion-cli",
+          "nihongo",
           "nixpkgs"
         ]
       },
@@ -570,7 +570,7 @@
     "flake-parts_11": {
       "inputs": {
         "nixpkgs-lib": [
-          "notion-hub",
+          "notion-cli",
           "nixpkgs"
         ]
       },
@@ -591,7 +591,7 @@
     "flake-parts_12": {
       "inputs": {
         "nixpkgs-lib": [
-          "okf",
+          "notion-hub",
           "nixpkgs"
         ]
       },
@@ -612,7 +612,7 @@
     "flake-parts_13": {
       "inputs": {
         "nixpkgs-lib": [
-          "rei",
+          "okf",
           "nixpkgs"
         ]
       },
@@ -633,7 +633,7 @@
     "flake-parts_14": {
       "inputs": {
         "nixpkgs-lib": [
-          "reiko",
+          "rei",
           "nixpkgs"
         ]
       },
@@ -654,7 +654,7 @@
     "flake-parts_15": {
       "inputs": {
         "nixpkgs-lib": [
-          "seihou",
+          "reiko",
           "nixpkgs"
         ]
       },
@@ -673,6 +673,27 @@
       }
     },
     "flake-parts_16": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "seihou",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1778716662,
+        "narHash": "sha256-m1Yf0wZ8j1OHjTc2UwHwyQRSnNeSgLJOd7q5Y45hzi4=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "f7c1a2d347e4c52d5fb8d10cb4d94b5884e546fb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_17": {
       "inputs": {
         "nixpkgs-lib": [
           "shiki",
@@ -717,6 +738,26 @@
     "flake-parts_3": {
       "inputs": {
         "nixpkgs-lib": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782949081,
+        "narHash": "sha256-vp6Y/Grm98ESt6ceOkWiHWyZRDV3J1RID4w+6NWK9yA=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "17c9d6cdfc60c64f4ee8d306f9bc0b4ccb51481e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_4": {
+      "inputs": {
+        "nixpkgs-lib": [
           "kazuha",
           "nixpkgs"
         ]
@@ -735,7 +776,7 @@
         "type": "github"
       }
     },
-    "flake-parts_4": {
+    "flake-parts_5": {
       "inputs": {
         "nixpkgs-lib": [
           "kizamu",
@@ -756,7 +797,7 @@
         "type": "github"
       }
     },
-    "flake-parts_5": {
+    "flake-parts_6": {
       "inputs": {
         "nixpkgs-lib": [
           "mina",
@@ -778,7 +819,7 @@
         "type": "github"
       }
     },
-    "flake-parts_6": {
+    "flake-parts_7": {
       "inputs": {
         "nixpkgs-lib": [
           "mina",
@@ -799,7 +840,7 @@
         "type": "github"
       }
     },
-    "flake-parts_7": {
+    "flake-parts_8": {
       "inputs": {
         "nixpkgs-lib": [
           "mori",
@@ -820,31 +861,10 @@
         "type": "github"
       }
     },
-    "flake-parts_8": {
-      "inputs": {
-        "nixpkgs-lib": [
-          "mori-rei-app",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1778716662,
-        "narHash": "sha256-m1Yf0wZ8j1OHjTc2UwHwyQRSnNeSgLJOd7q5Y45hzi4=",
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "rev": "f7c1a2d347e4c52d5fb8d10cb4d94b5884e546fb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "type": "github"
-      }
-    },
     "flake-parts_9": {
       "inputs": {
         "nixpkgs-lib": [
-          "nihongo",
+          "mori-rei-app",
           "nixpkgs"
         ]
       },
@@ -1676,7 +1696,7 @@
     },
     "kazuha": {
       "inputs": {
-        "flake-parts": "flake-parts_3",
+        "flake-parts": "flake-parts_4",
         "haskell-nix": "haskell-nix",
         "haskell-nix-dev": [
           "haskell-nix-dev"
@@ -1933,7 +1953,7 @@
     },
     "kizamu": {
       "inputs": {
-        "flake-parts": "flake-parts_4",
+        "flake-parts": "flake-parts_5",
         "fsrs-hs-src": "fsrs-hs-src",
         "haskell-nix": "haskell-nix_2",
         "haskell-nix-dev": [
@@ -2035,7 +2055,7 @@
     "mina": {
       "inputs": {
         "bun2nix": "bun2nix_2",
-        "flake-parts": "flake-parts_6",
+        "flake-parts": "flake-parts_7",
         "haskell-nix": "haskell-nix_3",
         "haskell-nix-dev": [
           "haskell-nix-dev"
@@ -2070,7 +2090,7 @@
     "mori": {
       "inputs": {
         "baikai-src": "baikai-src_3",
-        "flake-parts": "flake-parts_7",
+        "flake-parts": "flake-parts_8",
         "haskell-nix": "haskell-nix_4",
         "haskell-nix-dev": [
           "haskell-nix-dev"
@@ -2112,7 +2132,7 @@
     },
     "mori-rei-app": {
       "inputs": {
-        "flake-parts": "flake-parts_8",
+        "flake-parts": "flake-parts_9",
         "haskell-nix": "haskell-nix_5",
         "haskell-nix-dev": [
           "haskell-nix-dev"
@@ -2200,7 +2220,7 @@
     },
     "nihongo": {
       "inputs": {
-        "flake-parts": "flake-parts_9",
+        "flake-parts": "flake-parts_10",
         "haskell-nix": "haskell-nix_6",
         "haskell-nix-dev": [
           "haskell-nix-dev"
@@ -2468,7 +2488,7 @@
     },
     "notion-cli": {
       "inputs": {
-        "flake-parts": "flake-parts_10",
+        "flake-parts": "flake-parts_11",
         "haskell-nix": "haskell-nix_7",
         "haskell-nix-dev": [
           "haskell-nix-dev"
@@ -2553,7 +2573,7 @@
     "notion-hub": {
       "inputs": {
         "baikai-src": "baikai-src_4",
-        "flake-parts": "flake-parts_11",
+        "flake-parts": "flake-parts_12",
         "haskell-nix": "haskell-nix_8",
         "haskell-nix-dev": [
           "haskell-nix-dev"
@@ -2594,7 +2614,7 @@
     "okf": {
       "inputs": {
         "baikai-src": "baikai-src_5",
-        "flake-parts": "flake-parts_12",
+        "flake-parts": "flake-parts_13",
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
@@ -3244,7 +3264,7 @@
     },
     "rei": {
       "inputs": {
-        "flake-parts": "flake-parts_13",
+        "flake-parts": "flake-parts_14",
         "haskell-nix": "haskell-nix_9",
         "haskell-nix-dev": [
           "haskell-nix-dev"
@@ -3312,7 +3332,7 @@
     },
     "reiko": {
       "inputs": {
-        "flake-parts": "flake-parts_14",
+        "flake-parts": "flake-parts_15",
         "haskell-nix": "haskell-nix_10",
         "haskell-nix-dev": [
           "haskell-nix-dev"
@@ -3387,6 +3407,7 @@
         "darwin": "darwin_2",
         "determinate": "determinate",
         "flake-compat": "flake-compat_2",
+        "flake-parts": "flake-parts_3",
         "flake-utils": "flake-utils",
         "haskell-nix-dev": "haskell-nix-dev",
         "home-manager": "home-manager_2",
@@ -3414,7 +3435,7 @@
     },
     "seihou": {
       "inputs": {
-        "flake-parts": "flake-parts_15",
+        "flake-parts": "flake-parts_16",
         "haskell-nix": "haskell-nix_11",
         "haskell-nix-dev": [
           "haskell-nix-dev"
@@ -3657,7 +3678,7 @@
     },
     "shiki": {
       "inputs": {
-        "flake-parts": "flake-parts_16",
+        "flake-parts": "flake-parts_17",
         "haskell-nix": "haskell-nix_12",
         "haskell-nix-dev": [
           "haskell-nix-dev"
