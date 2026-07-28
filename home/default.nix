@@ -151,7 +151,7 @@ in
     jacinda # functional data processing
     ast-grep 
     hwatch
-    biff
+    bttf
     ffmpeg
     exiftool
     silicon # Create beautiful image of your source code
