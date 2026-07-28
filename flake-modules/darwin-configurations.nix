@@ -70,10 +70,28 @@ let
 in
 {
   flake.darwinConfigurations = {
-    # Mininal configuration to bootstrap systems
+    # Mininal configuration to bootstrap systems.
+    #
+    # bootstrap.nix is normally reached via ../darwin/default.nix, which also
+    # pulls in secrets.nix and sits under the common module list. On its own it
+    # still needs everything it references: `determinateNix.*` options, the
+    # `nixpkgs-unstable` module arg, and `config.age.secrets` (it includes the
+    # access-token conf and the netrc source), whose definitions live in
+    # secrets.nix. Without these it fails to evaluate.
     bootstrap-arm = darwinSystem {
       system = "aarch64-darwin";
-      modules = [ ../darwin/bootstrap.nix { nixpkgs = nixpkgsConfig; } ];
+      modules = [
+        {
+          config._module.args = {
+            inherit (inputs) nixpkgs-unstable;
+          };
+        }
+        inputs.agenix.darwinModules.default
+        inputs.determinate.darwinModules.default
+        ../darwin/bootstrap.nix
+        ../darwin/secrets.nix
+        { nixpkgs = nixpkgsConfig; }
+      ];
     };
 
     #MacBook Pro M1X
