@@ -97,9 +97,10 @@ in
       };
     };
 
-    # Disable nixpkgs' neovim require-check for NixNeovimPlugins' generated set
+    # Exempt the few NixNeovimPlugins that fail nixpkgs' neovim require-check
     # (named to sort after `nix-neovimplugins`, which provides vimExtraPlugins)
-    vimExtraPlugins-no-require-check = import ../overlays/vimExtraPlugins-no-require-check.nix;
+    vimExtraPlugins-require-check-exemptions =
+      import ../overlays/vimExtraPlugins-require-check-exemptions.nix;
 
     # Overlay that adds various additional utility functions to `vimUtils`
     vimUtils = import ../overlays/vimUtils.nix;
