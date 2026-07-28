@@ -4,6 +4,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    # Escape hatch for packages that don't build against current unstable —
+    # e.g. crates needing an older rustc. The `pkgs-stable` overlay exposes it
+    # as `pkgs.pkgs-stable`.
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
     # Shared Haskell toolchain base flake. Every shinzui Haskell project below
     # follows this single input (and its pinned nixpkgs), so they all build
@@ -241,10 +245,25 @@
         # Fix pgspecial to avoid broken postgresql-test-hook dependency (named to apply early)
         aaa-fix-pgspecial = import ./overlays/fix-pgspecial.nix;
 
-        # Patch dateutils to compile under newer clang (K&R yyparse() prototype)
-        dateutils-fix = import ./overlays/dateutils-fix.nix;
+        # Fix httpstat's setup.py to build under Python 3.12+ (ast.Str removal)
+        httpstat-fix = import ./overlays/httpstat-fix.nix;
 
-        my-packages = final: prev: {
+        # Skip worktrunk tests that need the OS process table (blocked in the sandbox)
+        worktrunk-skip-proc-tests = import ./overlays/worktrunk-skip-proc-tests.nix;
+
+        my-packages = final: prev:
+          let
+            # Every Haskell flake output here ships lib/links/*.dylib (e.g.
+            # libgmpxx.4.dylib). Two of them in the same buildEnv — or one of
+            # them alongside nixpkgs' hoogle — collide when home-manager
+            # assembles the profile. None of these need anything but bin/.
+            hsBin = name: drv: prev.runCommand name { } ''
+              mkdir -p $out
+              ln -s ${drv}/bin $out/bin
+            '';
+            hsPkg = input: inputs.${input}.packages.${prev.stdenv.hostPlatform.system}.default;
+          in
+          {
           tmuxai = final.callPackage (self + "/derivations/tmuxai.nix") {
             inherit (final) lib buildGoModule fetchFromGitHub tmux;
           };
@@ -256,7 +275,11 @@
           };
           ck = final.callPackage (self + "/derivations/ck.nix") { };
           parqeye = final.callPackage (self + "/derivations/parqeye.nix") {
-            inherit (final) lib rustPlatform fetchFromGitHub;
+            inherit (final) lib fetchFromGitHub;
+            # parqeye v0.0.2 pins an `ethnum` that transmutes between `()` and
+            # `TryFromIntError`; rustc >= ~1.95 rejects that (E0512). No newer
+            # parqeye release exists, so build it with nixos-25.11's rustc 1.91.
+            rustPlatform = final.pkgs-stable.rustPlatform;
           };
           beautiful-mermaid = final.callPackage (self + "/derivations/beautiful-mermaid") { };
           markit = final.callPackage (self + "/derivations/markit") { };
@@ -267,8 +290,8 @@
           pg_rman = final.callPackage (self + "/derivations/pg_rman.nix") {
             postgresql = final.postgresql_18;
           };
-          mori = inputs.mori.packages.${prev.stdenv.hostPlatform.system}.default;
-          rei = inputs.rei.packages.${prev.stdenv.hostPlatform.system}.default;
+          mori = hsBin "mori" (hsPkg "mori");
+          rei = hsBin "rei" (hsPkg "rei");
           # Wrap reiko to expose only bin/ and share/ — the full Haskell output
           # includes lib/links/libHStan-commons-config-* which conflicts with
           # mori (both depend on tan-commons-config from the same package set).
@@ -312,9 +335,9 @@
             ln -s $src/bin $out/bin
             ln -s $src/share $out/share
           '';
-          nihongo = inputs.nihongo.packages.${prev.stdenv.hostPlatform.system}.default;
-          shiki = inputs.shiki.packages.${prev.stdenv.hostPlatform.system}.default;
-          okf = inputs.okf.packages.${prev.stdenv.hostPlatform.system}.default;
+          nihongo = hsBin "nihongo" (hsPkg "nihongo");
+          shiki = hsBin "shiki" (hsPkg "shiki");
+          okf = hsBin "okf" (hsPkg "okf");
           # Wrap mori-rei-app to only expose bin/ — the full Haskell output
           # includes lib/links/libHStan-commons-config-* which conflicts with
           # mori (both depend on tan-commons-config from the same package set).
@@ -322,7 +345,7 @@
             mkdir -p $out
             ln -s ${inputs.mori-rei-app.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
           '';
-          notion-cli = inputs.notion-cli.packages.${prev.stdenv.hostPlatform.system}.default;
+          notion-cli = hsBin "notion-cli" (hsPkg "notion-cli");
           # Wrap notion-hub to only expose bin/ — the full Haskell output
           # includes lib/ghc-*/libHSnotion-client-* which conflicts with
           # notion-cli (both depend on notion-client from different package sets).
@@ -330,7 +353,8 @@
             mkdir -p $out
             ln -s ${inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
           '';
-          notion-hub-subscriptions = inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.notion-hub-subscriptions;
+          notion-hub-subscriptions = hsBin "notion-hub-subscriptions"
+            inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.notion-hub-subscriptions;
         };
 
         pkgs-master = final: prev: {
@@ -353,6 +377,10 @@
             inherit (nixpkgsConfig) config;
           };
         };
+
+        # Disable nixpkgs' neovim require-check for NixNeovimPlugins' generated set
+        # (named to sort after `nix-neovimplugins`, which provides vimExtraPlugins)
+        vimExtraPlugins-no-require-check = import ./overlays/vimExtraPlugins-no-require-check.nix;
 
         # Overlay that adds various additional utility functions to `vimUtils`
         vimUtils = import ./overlays/vimUtils.nix;
