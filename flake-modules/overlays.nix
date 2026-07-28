@@ -32,13 +32,22 @@ in
 
     my-packages = final: prev:
       let
-        # Every Haskell flake output here ships lib/links/*.dylib (e.g.
-        # libgmpxx.4.dylib). Two of them in the same buildEnv — or one of
-        # them alongside nixpkgs' hoogle — collide when home-manager
-        # assembles the profile. None of these need anything but bin/.
+        # Every Haskell flake output here ships lib/, which collides in the
+        # home-manager profile's buildEnv: either against another of these
+        # (shared deps like tan-commons-config, baikai, blake3, notion-client,
+        # mori-schema-pin) or against nixpkgs' hoogle (lib/links/libgmpxx).
+        # None of them need anything from lib/, so expose only bin/.
         hsBin = name: drv: prev.runCommand name { } ''
           mkdir -p $out
           ln -s ${drv}/bin $out/bin
+        '';
+        # Same, plus share/ — reiko and mina bundle their built SPA under
+        # share/<tool>-ui, so `<tool> web` finds the viewer without --dist.
+        hsBinShare = name: drv: prev.runCommand name { } ''
+          mkdir -p $out
+          src=${drv}
+          ln -s $src/bin $out/bin
+          ln -s $src/share $out/share
         '';
         hsPkg = input: inputs.${input}.packages.${prev.stdenv.hostPlatform.system}.default;
       in
@@ -71,67 +80,17 @@ in
         };
         mori = hsBin "mori" (hsPkg "mori");
         rei = hsBin "rei" (hsPkg "rei");
-        # Wrap reiko to expose only bin/ and share/ — the full Haskell output
-        # includes lib/links/libHStan-commons-config-* which conflicts with
-        # mori (both depend on tan-commons-config from the same package set).
-        # share/ is kept because reiko bundles its built SPA under
-        # share/reiko-ui, so `reiko web` finds the viewer (no --dist needed).
-        reiko = prev.runCommand "reiko" { } ''
-          mkdir -p $out
-          src=${inputs.reiko.packages.${prev.stdenv.hostPlatform.system}.default}
-          ln -s $src/bin $out/bin
-          ln -s $src/share $out/share
-        '';
-        # Wrap seihou to only expose bin/ — the full Haskell output
-        # includes lib/links/libHSbaikai-* which conflicts with mori
-        # (both now depend on baikai from the same package set).
-        seihou = prev.runCommand "seihou" { } ''
-          mkdir -p $out
-          ln -s ${inputs.seihou.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
-        '';
-        # Wrap kizamu to only expose bin/ — the full Haskell output
-        # includes lib/links/libHSblake3-* which conflicts with mori
-        # (both depend on blake3 from the same package set).
-        kizamu = prev.runCommand "kizamu" { } ''
-          mkdir -p $out
-          ln -s ${inputs.kizamu.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
-        '';
-        # Wrap kazuha to only expose bin/ — the full Haskell output
-        # includes lib/links/libHSbaikai-* which conflicts with mori
-        # (both depend on baikai from the same package set).
-        kazuha = prev.runCommand "kazuha" { } ''
-          mkdir -p $out
-          ln -s ${inputs.kazuha.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
-        '';
-        # Wrap mina to expose bin/ and share/ — the full Haskell output
-        # includes lib/links/libHSmori-schema-pin-* which conflicts with mori
-        # (both now depend on mori-schema-pin from the same package set).
-        # share/ is kept because mina bundles its built SPA under
-        # share/mina-ui, so `mina web` finds the viewer (no --dist needed).
-        mina = prev.runCommand "mina" { } ''
-          mkdir -p $out
-          src=${inputs.mina.packages.${prev.stdenv.hostPlatform.system}.default}
-          ln -s $src/bin $out/bin
-          ln -s $src/share $out/share
-        '';
+        reiko = hsBinShare "reiko" (hsPkg "reiko");
+        seihou = hsBin "seihou" (hsPkg "seihou");
+        kizamu = hsBin "kizamu" (hsPkg "kizamu");
+        kazuha = hsBin "kazuha" (hsPkg "kazuha");
+        mina = hsBinShare "mina" (hsPkg "mina");
         nihongo = hsBin "nihongo" (hsPkg "nihongo");
         shiki = hsBin "shiki" (hsPkg "shiki");
         okf = hsBin "okf" (hsPkg "okf");
-        # Wrap mori-rei-app to only expose bin/ — the full Haskell output
-        # includes lib/links/libHStan-commons-config-* which conflicts with
-        # mori (both depend on tan-commons-config from the same package set).
-        mori-rei-app = prev.runCommand "mori-rei-app" { } ''
-          mkdir -p $out
-          ln -s ${inputs.mori-rei-app.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
-        '';
+        mori-rei-app = hsBin "mori-rei-app" (hsPkg "mori-rei-app");
         notion-cli = hsBin "notion-cli" (hsPkg "notion-cli");
-        # Wrap notion-hub to only expose bin/ — the full Haskell output
-        # includes lib/ghc-*/libHSnotion-client-* which conflicts with
-        # notion-cli (both depend on notion-client from different package sets).
-        notion-hub = prev.runCommand "notion-hub" { } ''
-          mkdir -p $out
-          ln -s ${inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.default}/bin $out/bin
-        '';
+        notion-hub = hsBin "notion-hub" (hsPkg "notion-hub");
         notion-hub-subscriptions = hsBin "notion-hub-subscriptions"
           inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.notion-hub-subscriptions;
       };
