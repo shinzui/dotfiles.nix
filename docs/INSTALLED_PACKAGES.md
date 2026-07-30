@@ -307,7 +307,6 @@ This document provides a comprehensive overview of all packages installed throug
 ### Installed via Homebrew (Casks)
 
 - **[zoom](https://zoom.us/)** - Video conferencing platform
-- **[visual-studio-code](https://code.visualstudio.com/)** - Source code editor
 - **[discord](https://discord.com/)** - Voice, video, and text communication platform
 - **[microsoft-teams](https://www.microsoft.com/microsoft-teams/)** - Business communication platform
 - **[anki](https://apps.ankiweb.net/)** - Spaced repetition flashcard program

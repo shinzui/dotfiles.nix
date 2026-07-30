@@ -102,7 +102,6 @@ in
     "steipete/tap/repobar"
     "ghostty"
     "zoom"
-    "visual-studio-code"
     "discord"
     "microsoft-teams"
     "anki"
