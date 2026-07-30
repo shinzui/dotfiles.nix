@@ -1791,17 +1791,17 @@
     "keiro-syntax_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1781126160,
-        "narHash": "sha256-oiPMsI26qZvGN6mmMKBRmUHoSjBT/Gy0KJh8F5iUgW0=",
+        "lastModified": 1785384871,
+        "narHash": "sha256-e69in4NGgqf00Kk+yOZPnvbT7IP7NKFE71bg4yt9Xno=",
         "owner": "shinzui",
         "repo": "keiro-syntax",
-        "rev": "b0462f0ecddf9bbe32eef293d8ea349b39ae7a20",
+        "rev": "0b70dcce13aa460906d52e8aa40632a8997a6a51",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "keiro-syntax",
-        "rev": "b0462f0ecddf9bbe32eef293d8ea349b39ae7a20",
+        "rev": "0b70dcce13aa460906d52e8aa40632a8997a6a51",
         "type": "github"
       }
     },
@@ -2056,11 +2056,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785244813,
-        "narHash": "sha256-ckEdisZELl3mDjo96QiWBd5wf2mXJJ1qaWslT2lVGeA=",
+        "lastModified": 1785414915,
+        "narHash": "sha256-8zJiw/eLdN7YHPOU29ubIzZ+oNECeqPpf9kaMmRxt5A=",
         "owner": "shinzui",
         "repo": "mina",
-        "rev": "5745095a036298928b379b2491fae3c903608989",
+        "rev": "f3720ce94f04dfb83e2544f1d0e0f2e1aa92c41a",
         "type": "github"
       },
       "original": {
@@ -2596,11 +2596,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784995510,
-        "narHash": "sha256-Voi/Gk94vmlVx4yMiHb2aCD3VqY9PKXLhlswDdBwwcE=",
+        "lastModified": 1785382236,
+        "narHash": "sha256-vW6JmwbER6/+kXS4In3+O9FEfvrhSXQcGLehPHiBEBw=",
         "owner": "shinzui",
         "repo": "okf",
-        "rev": "179efd728b111e78845071184c873757ecc9bc86",
+        "rev": "88ceed847f8578fe1584e9290e60c82b28e4f0d2",
         "type": "github"
       },
       "original": {
@@ -3417,11 +3417,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785164546,
-        "narHash": "sha256-h9Z7pZJt9kzaveqoyI/CCL4M4rnjVCIZz0MpDlnq1vA=",
+        "lastModified": 1785239215,
+        "narHash": "sha256-qN1wb5vVVYIo3YA2ru08dxfJrFxrfNNvSsSYR5HfPGc=",
         "owner": "shinzui",
         "repo": "seihou",
-        "rev": "d763548612c1211b32189acb2383349fa5ad3e9d",
+        "rev": "8db30e3d27cb9983bc0e97c55b96b5eb16f90670",
         "type": "github"
       },
       "original": {
