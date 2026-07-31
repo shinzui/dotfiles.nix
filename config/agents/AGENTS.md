@@ -1,4 +1,6 @@
- ## Dependency Lookup (IMPORTANT)
+# Global Agent Instructions
+
+## Dependency Lookup (IMPORTANT)
 
   **Always use `mori` to find dependency source code and documentation before guessing at APIs or relying on memory.**
 
@@ -10,6 +12,35 @@
   - Run `mori registry dependents <project>` to find which registered projects/packages depend on a given project or library (reverse dependency / "who uses X"). Add `--packages` for per-package detail, `--scope` to filter by dependency scope, `--json` for scripting.
   - Read the dependency's source code and docs directly on disk to understand APIs, types, and behavior.
 
+## Cross-Repository References (IMPORTANT)
+
+**Always use canonical `mori://` URIs for cross-repository references.** This applies everywhere durable references appear, including:
+
+- Git commit messages and trailers
+- Documentation
+- ExecPlans and MasterPlans
+- OKF bundles and concepts
+- Code comments
+
+Use the most specific canonical artifact URI:
+
+```text
+mori://<namespace>/<project>/<artifact-kind>/<artifact-key>
+```
+
+For example:
+
+```text
+mori://shinzui/mori/masterplans/22-model-first-class-schema-and-extension-domain-events
+mori://shinzui/mori/plans/172-replace-the-project-mirror-with-functional-event-sourced-aggregates
+mori://shinzui/keiro/okf/improvement-requests/concepts/IR-1
+```
+
+Do not identify an artifact in another repository with only a repo-relative path, bare filename, plan number, concept ID, package name, or other context-dependent shorthand. Repository-local references may remain relative paths or Markdown links.
+
+Mori is being expanded to support URIs for every artifact. Use the intended `mori://` URI even when the currently released CLI cannot yet resolve that artifact kind or the local registry is behind the producing repository. A current resolution failure is not a reason to write an ambiguous path instead. If the intended artifact URI shape is not yet defined, use the canonical project URI together with the project-relative path and state that the artifact-level URI is pending; never use the path alone.
+
+Use `mori registry list`, `mori registry search`, `mori registry show --full`, and `mori registry docs` to discover the owning project's qualified name, artifacts, and current URI conventions. Verify a reference with `mori path <mori-uri>` when possible, while recognizing that resolution may depend on ongoing Mori URI coverage work or refreshed registry data.
 
 ## Never Search `/nix/store`
 
