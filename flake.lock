@@ -2000,23 +2000,6 @@
         "type": "github"
       }
     },
-    "message-db-hs-src_2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1780499607,
-        "narHash": "sha256-XUrg1QFToRZ7FV1a8j0sGTr43IS4oSx54dxojA8xjQk=",
-        "owner": "topagentnetwork",
-        "repo": "message-db-hs",
-        "rev": "8db65db221343c23fec49f5288ee6716b9d4e7bc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "topagentnetwork",
-        "repo": "message-db-hs",
-        "rev": "8db65db221343c23fec49f5288ee6716b9d4e7bc",
-        "type": "github"
-      }
-    },
     "mina": {
       "inputs": {
         "bun2nix": "bun2nix_2",
@@ -2575,11 +2558,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785455465,
-        "narHash": "sha256-zTE7rPlZJ/hT85+HdrylH0w21RHwhx4UEesshhJ8AIw=",
+        "lastModified": 1785626767,
+        "narHash": "sha256-R+wLvI6xHuMxJBaBPLOpGQysAu7hPhBcXLuccvhfj7Q=",
         "owner": "shinzui",
         "repo": "okf",
-        "rev": "774379a09ba13d23a6b0747ae2078fd3b6d78c4d",
+        "rev": "2e34d3042f0a919ed4f2c9d2db5fb89a139e25ee",
         "type": "github"
       },
       "original": {
@@ -3242,22 +3225,6 @@
         "type": "github"
       }
     },
-    "rei-src_2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1779213440,
-        "narHash": "sha256-TwdcB2X5Jjml55vpdlqqV8vKChvt8V7LC2k4ZC76fLA=",
-        "owner": "shinzui",
-        "repo": "rei",
-        "rev": "30bbc0bda5b5dd935575a38e507e0d7e2a7d8d01",
-        "type": "github"
-      },
-      "original": {
-        "owner": "shinzui",
-        "repo": "rei",
-        "type": "github"
-      }
-    },
     "reiko": {
       "inputs": {
         "flake-parts": "flake-parts_15",
@@ -3265,29 +3232,23 @@
         "haskell-nix-dev": [
           "haskell-nix-dev"
         ],
-        "message-db-hs-src": "message-db-hs-src_2",
         "nixpkgs": [
           "haskell-nix-dev",
           "nixpkgs"
         ],
         "pre-commit-hooks": "pre-commit-hooks_11",
-        "rei-src": "rei-src_2",
-        "tan-commons-src": "tan-commons-src_4",
-        "tan-effectful-src": "tan-effectful-src_5",
-        "tan-event-source-src": "tan-event-source-src_2",
         "treefmt-nix": [
           "reiko",
           "haskell-nix-dev",
           "treefmt-nix"
-        ],
-        "typeid-hs-src": "typeid-hs-src_5"
+        ]
       },
       "locked": {
-        "lastModified": 1780544198,
-        "narHash": "sha256-snKeNNC/ZtafceM1QofBni12sPMnUJQexhgKjeeF0hY=",
+        "lastModified": 1785696835,
+        "narHash": "sha256-4CuCc6ofMFAIOq1LK5byIDUGs71wnS/d2ZRuFHjdEvE=",
         "owner": "shinzui",
         "repo": "reiko",
-        "rev": "9281b33dbed1ae977bfd1f2dd4d2956dcaf27921",
+        "rev": "2b183c9d6d59ddeaed551b240f8d130ae55aa123",
         "type": "github"
       },
       "original": {
@@ -3842,23 +3803,6 @@
         "type": "github"
       }
     },
-    "tan-commons-src_4": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1772110068,
-        "narHash": "sha256-hu0JTHnyKtMexaO8yYhDpSKfzhWOHWvFFMExKKzLMoA=",
-        "owner": "topagentnetwork",
-        "repo": "tan-commons",
-        "rev": "aa235e9a6e94eb8f33167579b4e43887573fbb14",
-        "type": "github"
-      },
-      "original": {
-        "owner": "topagentnetwork",
-        "repo": "tan-commons",
-        "rev": "aa235e9a6e94eb8f33167579b4e43887573fbb14",
-        "type": "github"
-      }
-    },
     "tan-effectful-src": {
       "flake": false,
       "locked": {
@@ -3927,23 +3871,6 @@
         "type": "github"
       }
     },
-    "tan-effectful-src_5": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1771080622,
-        "narHash": "sha256-QSZWvKm0UVGB7OI6WdNO48On8PWcSlBeAAL2tzJvQ3E=",
-        "owner": "topagentnetwork",
-        "repo": "tan-effectful",
-        "rev": "5e081ad8019b4731d1da37003c80aaaac6ccb5b5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "topagentnetwork",
-        "repo": "tan-effectful",
-        "rev": "5e081ad8019b4731d1da37003c80aaaac6ccb5b5",
-        "type": "github"
-      }
-    },
     "tan-event-source-src": {
       "flake": false,
       "locked": {
@@ -3958,23 +3885,6 @@
         "owner": "topagentnetwork",
         "repo": "tan-event-source",
         "rev": "3c0a6b508ca928cc259c8eea8f3273018e04734a",
-        "type": "github"
-      }
-    },
-    "tan-event-source-src_2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1772391570,
-        "narHash": "sha256-92YUMgjBC/WfLood7twKlgC1SH+sTTjmd+fdJ+y7Ncs=",
-        "owner": "shinzui",
-        "repo": "tan-event-source",
-        "rev": "90e8d540bd2ebe93b9e64402271a5fd7c1fef089",
-        "type": "github"
-      },
-      "original": {
-        "owner": "shinzui",
-        "repo": "tan-event-source",
-        "rev": "90e8d540bd2ebe93b9e64402271a5fd7c1fef089",
         "type": "github"
       }
     },
@@ -4091,23 +4001,6 @@
       }
     },
     "typeid-hs-src_4": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1776870448,
-        "narHash": "sha256-83cBGDIdngur6BNc9XJAnzAQIsQY/09wAGR9bvF8o4M=",
-        "owner": "topagentnetwork",
-        "repo": "typeid-hs",
-        "rev": "e59e3f29237dcaddfd1faba158302532daf62a2a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "topagentnetwork",
-        "repo": "typeid-hs",
-        "rev": "e59e3f29237dcaddfd1faba158302532daf62a2a",
-        "type": "github"
-      }
-    },
-    "typeid-hs-src_5": {
       "flake": false,
       "locked": {
         "lastModified": 1776870448,
