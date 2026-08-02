@@ -1,5 +1,6 @@
 ---
 name: cookbook-config
+version: "0.1.0"
 description: >
   Help author, validate, and edit mori/cookbook.dhall cookbook extension catalogs. Covers
   entry fields, content types, topics, imports, and validation rules. TRIGGER when: user

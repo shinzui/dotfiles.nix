@@ -33,7 +33,7 @@ aliases:
   ns: note list --title
   cl: category list --flat -d
   lse: link list --query
-  aa: agent assist
+  aa: agent assist --model claude-opus-4-8 --effort medium
   acn: agent create-note --model claude-opus-4-8 --effort medium
   icw: intention create --context 仕事 --category work/project --copy 
   icwt: intention create --context 仕事 --category work/project/task --copy

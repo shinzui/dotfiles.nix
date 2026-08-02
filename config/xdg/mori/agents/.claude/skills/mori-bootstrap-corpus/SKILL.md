@@ -1,5 +1,6 @@
 ---
 name: mori-bootstrap-corpus
+version: "0.1.0"
 description: >
   Bootstrap a complete corpus project from a repo name — initializes git, adds upstream
   subtrees, writes mori.dhall and Justfile, validates, registers, and optionally sets up

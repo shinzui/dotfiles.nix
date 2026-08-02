@@ -1,5 +1,6 @@
 ---
 name: mori-config
+version: "0.1.0"
 description: >
   Help author, validate, and edit mori.dhall project configuration files. Covers project
   identity, packages, dependencies, repositories, documentation, skills, and subagents.
