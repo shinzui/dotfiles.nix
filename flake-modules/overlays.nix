@@ -62,6 +62,9 @@ in
           # parqeye release exists, so build it with nixos-25.11's rustc 1.91.
           rustPlatform = final.pkgs-stable.rustPlatform;
         };
+        # Shadows nixpkgs' own `container` (1.1.0) with a local copy pinned to
+        # the latest upstream release. See derivations/apple-container.nix.
+        container = final.callPackage (self + "/derivations/apple-container.nix") { };
         beautiful-mermaid = final.callPackage (self + "/derivations/beautiful-mermaid") { };
         markit = final.callPackage (self + "/derivations/markit") { };
         defuddle = final.callPackage (self + "/derivations/defuddle") { };

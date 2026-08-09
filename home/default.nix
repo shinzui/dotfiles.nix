@@ -219,6 +219,7 @@ in
     nickel
     docker
     colima #containers in Lima
+    container #Apple Container: Linux containers as lightweight VMs, no daemon VM
     hadolint #dockerfile linter
     sops
     just
