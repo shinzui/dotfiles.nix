@@ -43,6 +43,13 @@
       url = "github:nix-community/bun2nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    # A home-manager module running a local Redpanda cluster on Apple Container.
+    # Not a Haskell project, so it follows nixpkgs-unstable rather than the
+    # shared Haskell toolchain flake the tools below use.
+    redpanda-container = {
+      url = "github:shinzui/redpanda-container";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     mori = {
       url = "github:shinzui/mori";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";

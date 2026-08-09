@@ -41,6 +41,7 @@ in
     ./postgresql.nix
     ./local-web-proxy.nix
     ./apple-container.nix
+    ./redpanda.nix
     ./victorialogs.nix
     ./victoriatraces.nix
     ./mori.nix

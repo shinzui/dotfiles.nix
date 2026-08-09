@@ -1673,6 +1673,28 @@
         "type": "github"
       }
     },
+    "home-manager_3": {
+      "inputs": {
+        "nixpkgs": [
+          "redpanda-container",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1786031233,
+        "narHash": "sha256-TIDlLTLI1/pB7IqgjzcKQjpODQsZE2oII4XGG9B6KjI=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "7834e82588860aaf780cec1366524456a70898d7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "ref": "master",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "jose-jwt-src": {
       "flake": false,
       "locked": {
@@ -3331,6 +3353,27 @@
         "type": "github"
       }
     },
+    "redpanda-container": {
+      "inputs": {
+        "home-manager": "home-manager_3",
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1786245063,
+        "narHash": "sha256-TriVbROnOUK7ZLWhEjoAVkRWj/FgxSVMMFlKCuLZx4Q=",
+        "owner": "shinzui",
+        "repo": "redpanda-container",
+        "rev": "e9d419de5d32d2942e9f9952417ccb3890e33699",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "redpanda-container",
+        "type": "github"
+      }
+    },
     "rei": {
       "inputs": {
         "flake-parts": "flake-parts_14",
@@ -3487,6 +3530,7 @@
         "notion-hub": "notion-hub",
         "okf": "okf",
         "private-fonts": "private-fonts",
+        "redpanda-container": "redpanda-container",
         "rei": "rei",
         "reiko": "reiko",
         "seihou": "seihou",

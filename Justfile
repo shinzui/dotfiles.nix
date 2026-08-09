@@ -179,6 +179,36 @@ status-postgres:
 logs-postgres:
     tail -f ~/.local/state/postgresql/logs/postgres.stdout.log ~/.local/state/postgresql/logs/postgres.stderr.log
 
+# Check the local Redpanda cluster (containers and broker readiness)
+[group: 'redpanda']
+status-redpanda:
+    redpanda-status
+
+# Restart the Redpanda cluster (stops containers, then brings them back up)
+[group: 'redpanda']
+restart-redpanda:
+    redpanda-down
+    redpanda-up
+
+# Tail the Redpanda broker logs (pass a container name for console)
+[group: 'redpanda']
+logs-redpanda:
+    redpanda-logs -f
+
+# Tail the launchd agent's own output, i.e. what redpanda-up printed at login
+[group: 'redpanda']
+logs-redpanda-agent:
+    tail -f ~/.local/state/redpanda/logs/redpanda-up.stdout.log ~/.local/state/redpanda/logs/redpanda-up.stderr.log
+
+# Open Redpanda Console in the default browser
+[group: 'redpanda']
+redpanda-ui:
+    open http://redpanda.localhost
+
+# NOTE: there is deliberately no `purge-redpanda` recipe. `redpanda-purge`
+# deletes the data volume and every topic in it; a one-word just recipe is too
+# easy to run by accident. Run the command directly if you mean it.
+
 # Update all personal tool flake inputs (kizamu, mina, mori, mori-rei-app, seihou, rei, reiko, notion-cli, notion-hub)
 [group: 'tools']
 update-tools:

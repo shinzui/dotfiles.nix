@@ -9,9 +9,10 @@ let
   #
   #   mina.localhost   -> 127.0.0.1:8765   (mina web --global, home/mina.nix)
   #   reiko.localhost  -> 127.0.0.1:8770   (reiko web, home/reiko.nix)
-  #   logs.localhost   -> 127.0.0.1:9428   (VictoriaLogs, home/victorialogs.nix)
-  #   traces.localhost -> 127.0.0.1:10428  (VictoriaTraces, home/victoriatraces.nix)
-  #   jaeger.localhost -> 127.0.0.1:16686  (Jaeger UI, home/victoriatraces.nix)
+  #   logs.localhost     -> 127.0.0.1:9428   (VictoriaLogs, home/victorialogs.nix)
+  #   traces.localhost   -> 127.0.0.1:10428  (VictoriaTraces, home/victoriatraces.nix)
+  #   jaeger.localhost   -> 127.0.0.1:16686  (Jaeger UI, home/victoriatraces.nix)
+  #   redpanda.localhost -> 127.0.0.1:8080   (Redpanda Console, home/redpanda.nix)
   #
   # macOS resolves *.localhost to ::1/127.0.0.1 natively, so no /etc/hosts
   # wiring is needed. Plain HTTP on :80 avoids local CA trust for .localhost.
@@ -42,6 +43,10 @@ let
 
     http://jaeger.localhost {
       reverse_proxy 127.0.0.1:16686
+    }
+
+    http://redpanda.localhost {
+      reverse_proxy 127.0.0.1:8080
     }
   '';
 

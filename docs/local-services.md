@@ -1,9 +1,13 @@
 # Local Services
 
 Everything this machine runs in the background, defined declaratively in this
-repo and wired up on `darwin-rebuild switch`. Most are per-user **launchd
-agents** (`gui/$(id -u)/com.shinzui.*`); the web proxy is a system **launchd
-daemon**.
+repo and wired up on `darwin-rebuild switch`. They are per-user **launchd
+agents** (`gui/$(id -u)/com.shinzui.*`), including the web proxy — macOS does
+not reserve ports below 1024, so an unprivileged agent binds `:80` fine.
+
+One exception to the naming rule: Apple Container's own API server registers
+itself as `com.apple.container.apiserver` in the `user/$(id -u)` domain, not
+`gui/$(id -u)`. See the Redpanda section.
 
 All services start on login (`RunAtLoad`) and restart on crash (`KeepAlive`,
 except the cron-style ones). On `darwin-rebuild switch`, each module's
@@ -23,8 +27,10 @@ and it's plain HTTP on `:80` so there's no local CA to trust.
 | http://jaeger.localhost | `127.0.0.1:16686` | Jaeger UI |
 | http://mina.localhost | `127.0.0.1:8765` | mina web |
 | http://reiko.localhost | `127.0.0.1:8770` | reiko web |
+| http://redpanda.localhost | `127.0.0.1:8080` | Redpanda Console |
 
-Defined in `darwin/local-web-proxy.nix` (Caddy, system daemon on port 80).
+Defined in `home/local-web-proxy.nix` (Caddy, user agent
+`com.shinzui.local-web-proxy`, on port 80).
 
 ## Observability
 
@@ -70,6 +76,39 @@ Shared database for every app service. Primary access is via a **unix socket**
 Status: `just status-postgres` · Logs: `just logs-postgres` · Backups: see
 [`pg-backup.md`](pg-backup.md).
 
+### Redpanda — `home/redpanda.nix`
+
+A single-broker Kafka-compatible cluster plus its web console, running as **Apple
+Container** containers rather than in Colima. Colima is not needed and does not
+have to be running. Data lives on a named container volume (`redpanda-0-data`)
+and survives restarts.
+
+- **redpanda** (`com.shinzui.redpanda`) — a one-shot agent that runs
+  `redpanda-up` at login and exits; the containers themselves are supervised by
+  Apple Container. Unlike the long-running services above it uses
+  `KeepAlive = { SuccessfulExit = false; }`, so a failed bring-up is retried and
+  a successful one is not restarted in a loop.
+
+| Endpoint | Address |
+| --- | --- |
+| Kafka API | `127.0.0.1:9092` |
+| Admin API | `127.0.0.1:9644` |
+| Schema Registry | `127.0.0.1:8081` |
+| HTTP Proxy | `127.0.0.1:8082` |
+| Console | http://redpanda.localhost (`127.0.0.1:8080`) |
+
+`rpk` reaches it from any directory with no flags via the `local` profile in
+`~/Library/Application Support/rpk/rpk.yaml`, created by an activation hook in
+`home/redpanda.nix`.
+
+Status: `just status-redpanda` · Logs: `just logs-redpanda` · Full runbook:
+[`redpanda.md`](redpanda.md).
+
+The module comes from a separate flake (`github:shinzui/redpanda-container`),
+registered in `flake-modules/modules.nix`. Apple Container itself is packaged in
+`derivations/apple-container.nix` and its service is kept running by
+`home/apple-container.nix`.
+
 ## Application services
 
 | Service | Module | Label | What it does |
@@ -100,8 +139,10 @@ Common `just` recipes (see `justfile`, grouped by `tools` / `logs` / `traces`):
 just status-tools          # status of mori, mori-rei-app, rei, notion-hub
 just status-mori           # / status-rei / status-notion-hub / status-postgres
 just status-victorialogs   # / status-victoriatraces
+just status-redpanda       # containers + broker readiness
 just restart-mori          # / restart-victorialogs / restart-victoriatraces / ...
 just logs-rei              # / logs-mori / logs-notion-hub / logs-victoriatraces / ...
+just logs-redpanda         # broker logs; logs-redpanda-agent for the login output
 ```
 
 Manual launchctl, for anything without a recipe:
@@ -111,9 +152,18 @@ launchctl print     gui/$(id -u)/com.shinzui.<label>   # inspect
 launchctl kickstart -k gui/$(id -u)/com.shinzui.<label> # restart
 ```
 
-System web proxy (Caddy) is a daemon, not a per-user agent:
+The web proxy (Caddy) is a per-user agent like everything else:
 
 ```bash
-sudo launchctl print system/shinzui.local-web-proxy
-tail -f /var/log/shinzui-local-web-proxy.stderr.log
+launchctl print gui/$(id -u)/com.shinzui.local-web-proxy
+tail -f ~/.local/state/local-web-proxy/*.log
+```
+
+Apple Container's API server is the one service not registered by home-manager,
+and it lives in a different launchd domain — `user/`, not `gui/`:
+
+```bash
+launchctl print user/$(id -u)/com.apple.container.apiserver
+container system status          # simpler: exits 0 when healthy
+container system stop && container system start   # the fix when it wedges
 ```
