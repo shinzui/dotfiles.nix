@@ -40,6 +40,7 @@ in
     ./nix-search-tv.nix
     ./postgresql.nix
     ./local-web-proxy.nix
+    ./apple-container.nix
     ./victorialogs.nix
     ./victoriatraces.nix
     ./mori.nix
