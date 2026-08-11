@@ -42,7 +42,18 @@ in
           ln -s $src/bin $out/bin
           ln -s $src/share $out/share
         '';
-        hsPkg = input: inputs.${input}.packages.${prev.stdenv.hostPlatform.system}.default;
+        # These flakes ship developer tools, not libraries anyone reads Haddock
+        # for, so drop the `doc` output and the haddock pass from every
+        # darwin-rebuild. Scope: this reaches only each flake's *top-level*
+        # package. The dependency closure is built inside the project's own
+        # flake against its own pkgs, which no overlay here can influence — to
+        # cut haddock (and library profiling) for those, the project overlays
+        # and mori://shinzui/haskell-nix have to opt out themselves.
+        # `seihou`'s default output is not a Cabal derivation, hence the guard.
+        noHaddock = drv:
+          if drv ? override then prev.haskell.lib.compose.dontHaddock drv else drv;
+        hsPkg = input:
+          noHaddock inputs.${input}.packages.${prev.stdenv.hostPlatform.system}.default;
       in
       {
         tmuxai = final.callPackage (self + "/derivations/tmuxai.nix") {
@@ -88,7 +99,7 @@ in
         notion-cli = hsBin "notion-cli" (hsPkg "notion-cli");
         notion-hub = hsBin "notion-hub" (hsPkg "notion-hub");
         notion-hub-subscriptions = hsBin "notion-hub-subscriptions"
-          inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.notion-hub-subscriptions;
+          (noHaddock inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.notion-hub-subscriptions);
       };
 
     # Escape hatch for packages that don't build against current unstable —
