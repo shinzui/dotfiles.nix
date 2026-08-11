@@ -26,6 +26,34 @@ pg-backup
 pg-backup incremental
 ```
 
+Each run also applies retention (see below), pruning the WAL archive and old
+backup generations.
+
+## Retention
+
+`pg-backup` passes `--keep-arclog-days` and `--keep-data-generations` to
+`pg_rman`, so the WAL archive and the backup catalog prune themselves on every
+run. Override per-invocation with environment variables:
+
+| Variable | Default | Effect |
+|----------|---------|--------|
+| `PG_KEEP_ARCLOG_DAYS` | `7` | Discard archived WAL older than N days |
+| `PG_KEEP_DATA_GENERATIONS` | `3` | Keep N generations of full data backup |
+
+```bash
+# Keep 30 days of WAL for this run (costs ~31GB at current write rates)
+PG_KEEP_ARCLOG_DAYS=30 pg-backup
+```
+
+This matters more than it looks: a full backup copies the entire WAL archive
+into itself. With no retention the archive grows without bound and every backup
+grows with it — in Aug 2026 a backup was 32GB, of which 30GB was archived WAL
+and only 922MB was actual database content.
+
+The 7-day default is sized to this instance's write rate of roughly 1.2GB of WAL
+per day. Raising it trades disk for a longer point-in-time recovery window;
+measure before picking a bigger number.
+
 ### `pg-backup-show`
 
 List all backups in the catalog.

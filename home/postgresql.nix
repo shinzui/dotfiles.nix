@@ -40,6 +40,14 @@ let
     PGHOST="${pgSocket}"
     BACKUP_MODE="''${1:-full}"
 
+    # Retention. Without these, pg_rman never prunes the WAL archive, and since a
+    # full backup copies the whole archive into itself, every backup grows without
+    # bound (6.7GB in Jul 2026 -> 32GB in Aug, of which 30GB was archived WAL).
+    # 7 days, not 30: this instance writes ~1.2GB/day of WAL, so a 30-day window
+    # would keep ~31GB and leave full backups as large as the problem being fixed.
+    KEEP_ARCLOG_DAYS="''${PG_KEEP_ARCLOG_DAYS:-7}"
+    KEEP_DATA_GENERATIONS="''${PG_KEEP_DATA_GENERATIONS:-3}"
+
     if [[ "$BACKUP_MODE" != "full" && "$BACKUP_MODE" != "incremental" ]]; then
       echo "Usage: pg-backup [full|incremental]"
       echo "  full         - Full backup (default)"
@@ -69,6 +77,8 @@ let
       -b "$BACKUP_MODE" \
       -d postgres \
       -h "${pgSocket}" \
+      --keep-arclog-days="$KEEP_ARCLOG_DAYS" \
+      --keep-data-generations="$KEEP_DATA_GENERATIONS" \
       --progress
 
     echo "Validating backup..."
@@ -92,9 +102,11 @@ let
     set -euo pipefail
     KEEP_DAYS="''${1:-7}"
     echo "Deleting backups older than $KEEP_DAYS days..."
+    # Pinned coreutils: `date -v-Nd` is BSD syntax, but PATH here resolves to GNU
+    # coreutils, where it fails outright and takes the script down via pipefail.
     ${pkgs.pg_rman}/bin/pg_rman delete \
       -B "${pgBackupDir}" \
-      $(date -v-"''${KEEP_DAYS}"d +%Y-%m-%d)
+      $(${pkgs.coreutils}/bin/date -d "''${KEEP_DAYS} days ago" +%Y-%m-%d)
     echo "Done."
   '';
 in
