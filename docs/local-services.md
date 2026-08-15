@@ -16,9 +16,10 @@ home-manager re-registers it — but only when the plist actually changed.
 
 ## Friendly URLs (Caddy proxy)
 
-Instead of memorizing ports, named `*.localhost` hosts forward to loopback
-services. macOS resolves `*.localhost` to loopback natively (no `/etc/hosts`),
-and it's plain HTTP on `:80` so there's no local CA to trust.
+Instead of memorizing ports, named hosts forward to loopback services. Caddy
+routes on the **first label** of the `Host` header rather than on a fixed site
+address, so the domain suffix is irrelevant — `mina.<anything>` reaches mina.
+It's plain HTTP on `:80`, so there's no local CA to trust.
 
 | URL | Target | Service |
 | --- | --- | --- |
@@ -29,8 +30,55 @@ and it's plain HTTP on `:80` so there's no local CA to trust.
 | http://reiko.localhost | `127.0.0.1:8770` | reiko web |
 | http://redpanda.localhost | `127.0.0.1:8080` | Redpanda Console |
 
-Defined in `home/local-web-proxy.nix` (Caddy, user agent
-`com.shinzui.local-web-proxy`, on port 80).
+On this machine the `.localhost` suffix needs no `/etc/hosts` wiring — macOS
+resolves `*.localhost` to loopback natively. An unrecognized first label gets a
+404 naming the host Caddy saw, rather than falling through to a default service.
+
+Routes are generated from a `name -> port` attrset in `home/local-web-proxy.nix`
+(Caddy, user agent `com.shinzui.local-web-proxy`, on port 80); adding a service
+is one line in that attrset.
+
+### From another device on the LAN
+
+Caddy binds `0.0.0.0:80`, so every route above is *already* reachable from the
+network — only the name has to change. `.localhost` can never work off-machine:
+RFC 6761 pins `*.localhost` to the client's own loopback, so a phone asking for
+`mina.localhost` resolves to itself, and no DNS wiring can change that. Swap in
+a suffix that real DNS answers with this Mac's LAN address:
+
+| Suffix | Example | Client setup |
+| --- | --- | --- |
+| [sslip.io](https://sslip.io) | `mina.192-168-1-115.sslip.io` | none — public DNS reflects the IP encoded in the name |
+| Router static DNS | `mina.home.arpa` | none, once the record and a DHCP reservation exist |
+| `/etc/hosts` | `mina.lan` | per device; not possible on iOS |
+
+sslip.io is the quickest to try and needs nothing configured anywhere, at the
+cost of two caveats: it needs working internet DNS, and the address is baked
+into the name, so a new DHCP lease breaks every URL. Router-level DNS plus a
+DHCP reservation for this Mac is the stable version. Use `.home.arpa` (RFC 8375),
+`.lan`, or `.internal` for those records — **not** `.local`, which collides with
+mDNS.
+
+```bash
+ipconfig getifaddr en0                      # this Mac's current LAN address
+dig +short mina.192-168-1-115.sslip.io      # should echo that same address back
+```
+
+If the `dig` comes back empty, the router is likely applying DNS rebinding
+protection, which drops public DNS answers pointing at private IPs and breaks
+sslip.io specifically; use router DNS or `/etc/hosts` instead. If the name
+resolves but the connection hangs, check the macOS application firewall — it is
+currently off, and enabling it would block Caddy until it's allowed explicitly.
+
+**None of these UIs have authentication.** VictoriaLogs, VictoriaTraces, Jaeger,
+and the Redpanda Console are all unauthenticated, and LAN reachability means any
+device on the network — guest devices included, unless the Wi-Fi isolates them.
+To pin one back to this machine, replace its first-label matcher in
+`home/local-web-proxy.nix` with an explicit host list:
+
+```
+@jaeger host jaeger.localhost
+```
 
 ## Observability
 
