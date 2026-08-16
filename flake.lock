@@ -2142,11 +2142,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1786569308,
-        "narHash": "sha256-o56LDbbCH2gkB7lt9qx4s/39hVDC6Tcf4BeQZJaNmPs=",
+        "lastModified": 1786828086,
+        "narHash": "sha256-8nfiKO0ARFsSG5PqHGcKtx0rQAWlndd/OHUuYyUhmTs=",
         "owner": "shinzui",
         "repo": "mina",
-        "rev": "b52acba9c1de240502bb9ae762686333110399e3",
+        "rev": "be03c83162339005269707eb90752a35b44b9e24",
         "type": "github"
       },
       "original": {
@@ -2181,11 +2181,11 @@
         "typeid-hs-src": "typeid-hs-src"
       },
       "locked": {
-        "lastModified": 1786418960,
-        "narHash": "sha256-GC11KTvH6Had5QlTCzNmkoWrPrSDcNLUfak2Cu7Umaw=",
+        "lastModified": 1786837525,
+        "narHash": "sha256-JcgOfi4YgJ/UREywGWumiJgdh68witHQWdwbFHsO7yM=",
         "owner": "shinzui",
         "repo": "mori",
-        "rev": "6b53e7c9dfcb26f2cf84dad7e072c859d0d12476",
+        "rev": "186f1717b4948b3a8042a59ffc23a5a1737423d1",
         "type": "github"
       },
       "original": {
