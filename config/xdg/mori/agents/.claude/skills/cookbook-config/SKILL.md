@@ -1,6 +1,6 @@
 ---
 name: cookbook-config
-version: "0.1.0"
+version: "0.1.1"
 description: >
   Help author, validate, and edit mori/cookbook.dhall cookbook extension catalogs. Covers
   entry fields, content types, topics, imports, and validation rules. TRIGGER when: user
@@ -66,7 +66,7 @@ Unique identifier for this entry within the catalog. Use kebab-case (e.g., `"eve
 
 ### title (Text, required)
 
-Human-readable title. Cannot be empty. Prefer task-oriented phrasing: "How to X" or verb-first (e.g., "Event Sourcing Patterns with Message-DB").
+Human-readable title. Cannot be empty. Prefer task-oriented phrasing: "How to X" or verb-first (e.g., "Event Sourcing Patterns with Kiroku").
 
 ### contentType (Cookbook.ContentType, required)
 
@@ -150,10 +150,10 @@ in  Cookbook.CookbookCatalog::{
     , entries =
       [ Cookbook.CookbookEntry::{
         , key = "event-sourcing-patterns"
-        , title = "Event Sourcing Patterns with Message-DB"
+        , title = "Event Sourcing Patterns with Kiroku"
         , contentType = Cookbook.ContentType.SampleCode
         , topics = [ Cookbook.Topic.Database, Cookbook.Topic.Streaming ]
-        , packages = [ "message-db-hs", "tan-event-source" ]
+        , packages = [ "kiroku", "keiro" ]
         , language = Schema.Language.Haskell
         , audience = Schema.DocAudience.Module
         , location = Schema.DocLocation.LocalFile "docs/event-sourcing.md"

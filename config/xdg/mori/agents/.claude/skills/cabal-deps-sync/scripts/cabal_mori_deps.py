@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Map Haskell cabal build-depends onto mori registry qualified names.
+"""Map Haskell cabal build-depends onto mori registry dependency names.
 
 Usage:
     python3 cabal_mori_deps.py [ROOT] [--json]
@@ -7,10 +7,16 @@ Usage:
 ROOT defaults to the current directory. Every *.cabal file under ROOT is parsed
 (skipping build output directories) and each dependency is classified:
 
-    namespace/project  -- resolved to a registered mori project
-    INTERNAL           -- another cabal package in this same project
-    BOOT               -- GHC boot library; never declared in mori.dhall
-    UNREGISTERED       -- real third-party dep with no registry entry yet
+    namespace/project          -- the cabal name IS a registered mori project
+    namespace/project:package  -- the cabal name is one package of that project
+    INTERNAL                   -- another cabal package in this same project
+    BOOT                       -- GHC boot library; never declared in mori.dhall
+    UNREGISTERED               -- real third-party dep with no registry entry yet
+
+The package-qualified form is deliberate, not noise. Mori resolves a dependency
+to a project and, when the name identifies one, to a package inside it; keeping
+that grain is what lets `mori registry dependents 'ns/project:package'` answer
+about the package actually consumed rather than the whole project.
 
 `cabal.project` is parsed too. Its `source-repository-package` stanzas name
 upstream git repos that are real, deliberate dependencies -- often *transitive*
@@ -18,7 +24,14 @@ ones pinned to a fork (a patched `crypton`, a `memory`->`ram` swap) that never
 appear in any `build-depends`. They belong in mori.dhall just as much as direct
 deps, so they are reported under the pseudo-package `cabal.project`.
 
-Default output is TSV: cabal-package<TAB>scope<TAB>cabal-dep<TAB>classification
+Default output is TSV:
+    cabal-package<TAB>scope<TAB>cabal-dep<TAB>classification<TAB>version-constraint
+
+The last column is the cabal version bound verbatim, ready to become a
+`versionConstraint` in mori.dhall (empty when the dep declares no bound). Where
+stanzas disagree, every distinct bound is reported joined by " | " -- mori holds
+one single-line value, so a human resolves it.
+
 With --json: {"packages": {name: {"path": ..., "deps": [{...}]}}}
 """
 
@@ -58,8 +71,34 @@ STANZA_SCOPE = {
 }
 
 
+DEP_NAME = re.compile(r"^([A-Za-z][A-Za-z0-9_-]*)")
+
+
+def split_dep(item):
+    """'hasql:core >=1.6 && <1.7' -> ('hasql', '>=1.6 && <1.7').
+
+    The version bound is returned verbatim (whitespace normalized) because it is
+    exactly what mori.dhall's `versionConstraint` carries: ecosystem-native text
+    mori stores and displays but never parses. Sublibrary and tool qualifiers
+    (`pkg:lib`, `pkg:{a,b}`) are not constraints and are dropped.
+    """
+    m = DEP_NAME.match(item)
+    if not m:
+        return None, ""
+    name = m.group(1)
+    rest = item[m.end():].strip()
+    if rest.startswith(":"):  # pkg:sublib or pkg:{a,b} -- skip the qualifier
+        rest = rest[1:].lstrip()
+        if rest.startswith("{"):
+            rest = rest.partition("}")[2]
+        else:
+            rest = rest.partition(" ")[2]
+        rest = rest.strip()
+    return name, " ".join(rest.split())
+
+
 def parse_cabal(path):
-    """Parse one .cabal file into {dep_name: {scope, ...}}."""
+    """Parse one .cabal file into {dep_name: {"scopes": set, "constraints": set}}."""
     deps, stanza, field, buf = {}, "library", None, []
 
     def flush():
@@ -69,11 +108,13 @@ def parse_cabal(path):
                 item = item.strip()
                 if not item or item.startswith("--"):
                     continue
-                # strip version bounds, sublibrary suffixes, tool qualifiers
-                name = re.split(r"[\s><=^:{(]", item, maxsplit=1)[0].strip()
+                name, constraint = split_dep(item)
                 # conditional keywords can trail a dep list before the next field
                 if name and name.lower() not in ("if", "else", "elif"):
-                    deps.setdefault(name, set()).add(scope)
+                    entry = deps.setdefault(name, {"scopes": set(), "constraints": set()})
+                    entry["scopes"].add(scope)
+                    if constraint:
+                        entry["constraints"].add(constraint)
 
     for raw in pathlib.Path(path).read_text(errors="replace").splitlines():
         if not raw.strip() or raw.lstrip().startswith("--"):
@@ -166,7 +207,14 @@ def resolve_repo(repo, owner):
 
 @functools.lru_cache(maxsize=None)
 def resolve(dep):
-    """Cabal package name -> 'namespace/project' in the mori registry, or None.
+    """Cabal package name -> a mori dependency name, or None.
+
+    Returns 'namespace/project' when the cabal name IS the project, and the
+    package-qualified 'namespace/project:package' when it is one package inside
+    a project. Keeping that grain matters: a project-grained name is a strictly
+    wider claim, and it is what makes `mori registry dependents
+    'ns/project:package'` report everyone who touches any part of the project
+    instead of the packages actually consumed here.
 
     `mori registry search` matches substrings, so only exact name matches count:
     searching "text" otherwise hits "text-iso8601" and TypeScript packages.
@@ -184,7 +232,7 @@ def resolve(dep):
     for h in hits:  # otherwise a package inside a project (usually a corpus)
         for m in h.get("matchedPackages") or []:
             if m["name"] == dep and m.get("language") in (None, "haskell"):
-                return f'{h["namespace"]}/{h["name"]}'
+                return f'{h["namespace"]}/{h["name"]}:{m["name"]}'
     return None
 
 
@@ -205,7 +253,8 @@ def main(argv):
     result = {}
     for cab in cabals:
         entries = []
-        for dep, scopes in sorted(parse_cabal(cab).items()):
+        for dep, info in sorted(parse_cabal(cab).items()):
+            scopes = info["scopes"]
             # a dep used by both the library and its tests is Regular
             scope = "Test" if scopes == {"Test"} else ("Build" if scopes == {"Build"} else "Regular")
             if dep in local:
@@ -214,7 +263,13 @@ def main(argv):
                 target = "BOOT"
             else:
                 target = resolve(dep) or "UNREGISTERED"
-            entries.append({"dep": dep, "scope": scope, "target": target})
+            # One stanza's bound is the constraint. Several disagreeing bounds
+            # are reported joined by " | " -- mori's versionConstraint holds one
+            # single-line value, so a human picks.
+            constraint = " | ".join(sorted(info["constraints"]))
+            entries.append(
+                {"dep": dep, "scope": scope, "target": target, "constraint": constraint}
+            )
         result[str(cab.relative_to(root))] = {
             "name": cab.stem,
             "path": str(cab.parent.relative_to(root)) or ".",
@@ -229,7 +284,15 @@ def main(argv):
                 target = "INTERNAL"
             else:
                 target = resolve_repo(repo, owner) or "UNREGISTERED"
-            entries.append({"dep": repo, "scope": "Regular", "target": target, "url": url})
+            entries.append(
+                {
+                    "dep": repo,
+                    "scope": "Regular",
+                    "target": target,
+                    "constraint": "",  # a pinned repo has a commit, not a range
+                    "url": url,
+                }
+            )
         if entries:
             result["cabal.project"] = {
                 "name": "cabal.project",
@@ -242,7 +305,10 @@ def main(argv):
     else:
         for info in result.values():
             for e in info["deps"]:
-                print(f'{info["name"]}\t{e["scope"]}\t{e["dep"]}\t{e["target"]}')
+                print(
+                    f'{info["name"]}\t{e["scope"]}\t{e["dep"]}\t{e["target"]}'
+                    f'\t{e.get("constraint", "")}'
+                )
     return 0
 
 

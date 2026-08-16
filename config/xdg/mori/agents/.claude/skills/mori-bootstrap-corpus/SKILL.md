@@ -1,6 +1,6 @@
 ---
 name: mori-bootstrap-corpus
-version: "0.1.0"
+version: "0.2.0"
 description: >
   Bootstrap a complete corpus project from a repo name — initializes git, adds upstream
   subtrees, writes mori.dhall and Justfile, validates, registers, and optionally sets up
@@ -63,6 +63,19 @@ These are corpus-specific conventions — for general schema types and records, 
 Each subtree gets **both** a `Repo` entry (with `github` and `localPath`) and a matching
 `Package` entry (with the same `path`). Packages in a corpus typically have
 `runtime = { deployable = False, exposesApi = False }` and empty dependency/config lists.
+
+### Do not set `upstream` on a corpus
+
+`ProjectIdentity.upstream` and `Repo.upstream` name a **registered mori project** that a
+`Fork` or `Vendored` project tracks. A corpus is neither: its `origin` is `ThirdParty`,
+its `namespace` is already the upstream owner, and each `Repo.github` already names the
+source repository. An `upstream` on a `ThirdParty` project is retained but produces a
+validation warning, so setting one here buys nothing and costs a warning on every
+`mori validate`.
+
+Use it only in the genuine vendoring case — your own repository carrying a modified copy
+of a project that *is* separately registered, where per-repo `upstream` disambiguates
+which source each vendored directory came from.
 
 
 ## Critical rules

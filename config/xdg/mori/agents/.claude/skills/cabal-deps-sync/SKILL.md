@@ -1,6 +1,6 @@
 ---
 name: cabal-deps-sync
-version: "0.1.0"
+version: "1.0.0"
 description: >
   Inspect a Haskell project's .cabal files and sync the dependency declarations in its
   mori.dhall against the local mori registry — mapping cabal build-depends to registered
@@ -19,18 +19,52 @@ You are syncing a Haskell project's `mori.dhall` dependency declarations with wh
 registry.
 
 `mori.dhall` dependencies are **not** cabal dependencies. Cabal names Hackage packages;
-mori names *registered projects* by qualified name (`namespace/project`). One mori
-dependency usually covers several cabal packages — `hasql`, `hasql-pool`, and
-`hasql-transaction` all resolve to the single project `hasql/hasql`. Your job is that
-mapping, not a one-to-one copy.
+mori names a registered *project*, or one *package* inside it. Your job is that mapping,
+not a one-to-one copy.
+
+
+## The package grain (read before you collapse anything)
+
+A dependency name resolves to a project and, when the name identifies one, to a specific
+**package** inside that project. These are the rules, in the order mori tries them:
+
+| Resolution | The name | Resolves to |
+|------------|----------|-------------|
+| `qualified-project` | `namespace/name` matching a registered project | that project |
+| `project` | a bare name matching exactly one project | that project |
+| `package` | a bare name matching packages in exactly one project | that project **and** that package |
+| `bundle` | a bare name matching a bundle | that project and the bundle's primary package |
+| `qualified-package` | `project:package`, and the project declares it | that project **and** that package |
+| `unknown-package` | `project:package`, but no such package | nothing — an error |
+| `ambiguous-project` / `ambiguous-package` | a bare name matching more than one | nothing — an error |
+
+So `hasql`, `hasql-pool`, and `hasql-transaction` do **not** all mean `hasql/hasql`. Each
+bare name matches a package of that project and resolves to `hasql/hasql:<that-package>`.
+
+**Do not collapse several cabal packages of one project into a single project-grained
+entry.** A project-grained entry is a strictly wider claim, and it is what makes
+`mori registry dependents 'hasql/hasql:hasql-pool'` return everyone who touches any part
+of hasql instead of the right subset. Keep the grain the `.cabal` file actually states.
+Write `namespace/name:package` when a bare name would be ambiguous across projects, or
+when you want the qualification to be explicit and to fail loudly if the package
+disappears upstream.
+
+Check your work with `mori deps explain <name>`, which prints the rule that fired:
+
+```text
+mori deps explain hasql-pool
+hasql-pool
+  Resolution: bare name matched the package 'hasql-pool' of project hasql/hasql
+```
 
 
 ## What "in sync" means
 
-For each `Schema.Package` in `mori.dhall`, its `dependencies` list holds the qualified
-names of the registered projects that the matching `.cabal` file's `build-depends`
-resolve to. The top-level `Project.dependencies` (a `List Text`) is the union of those,
-**plus** every project pinned by a `source-repository-package` stanza in `cabal.project`.
+For each `Schema.Package` in `mori.dhall`, its `dependencies` list holds the names that
+the matching `.cabal` file's `build-depends` resolve to, at the grain those
+`build-depends` state. The top-level `Project.dependencies` (a `List Text`) is the union
+of those, **plus** every project pinned by a `source-repository-package` stanza in
+`cabal.project`.
 
 `cabal.project` is a second, independent source of dependencies, and skipping it is the
 easiest way to get this wrong. Its `source-repository-package` stanzas pin upstream git
@@ -79,18 +113,24 @@ python3 <dir-of-this-SKILL.md>/scripts/cabal_mori_deps.py .          # TSV repor
 python3 <dir-of-this-SKILL.md>/scripts/cabal_mori_deps.py . --json   # structured
 ```
 
-Columns are `cabal-package`, `scope`, `cabal-dep`, `classification`:
+Columns are `cabal-package`, `scope`, `cabal-dep`, `classification`,
+`version-constraint`:
 
 ```text
-hasql-opentelemetry	Regular	hasql                  hasql/hasql
-hasql-opentelemetry	Regular	hasql-pool             hasql/hasql
-hasql-opentelemetry	Regular	text                   BOOT
+hasql-opentelemetry	Regular	hasql                  hasql/hasql              ^>=1.9
+hasql-opentelemetry	Regular	hasql-pool             hasql/hasql              ^>=1.3
+hasql-opentelemetry	Regular	text                   BOOT                     ^>=2.1
 hasql-opentelemetry	Regular	unliftio-core          UNREGISTERED
 jitsurei            	Regular	hasql-opentelemetry    INTERNAL
-jitsurei            	Test  	tasty                  UnkindPartition/tasty
+jitsurei            	Test  	tasty                  UnkindPartition/tasty    >=1.4 && <1.6
 cabal.project       	Regular	crypton                kazu-yamamoto/crypton
 cabal.project       	Regular	streamly-project       composewell/streamly
 ```
+
+The last column is the cabal bound verbatim, empty when the dep declares none.
+Where stanzas disagree about a bound, the script reports every distinct value
+joined by ` | ` — mori holds one single-line value, so you pick. `cabal.project`
+rows never carry one: a pinned repo has a commit, not a range.
 
 Rows whose first column is the literal `cabal.project` come from
 `source-repository-package` stanzas, keyed by the repo name in the `location:` URL.
@@ -168,7 +208,8 @@ Plain dependencies use `ByName` with the qualified name:
   [ "hasql/hasql", "iand675/hs-opentelemetry", "haskell-hvr/uuid" ]
 ```
 
-A non-`Regular` scope needs the `WithAugmentation` form:
+A non-`Regular` scope — or a version constraint you want to record — needs the
+`WithAugmentation` form:
 
 ```dhall
       , Schema.Dependency.WithAugmentation
@@ -178,25 +219,67 @@ A non-`Regular` scope needs the `WithAugmentation` form:
           , kind = Some Schema.DependencyKind.ThirdParty
           , source = Some Schema.DependencySource.Hackage
           , scope = Some Schema.DependencyScope.Test
+          , versionConstraint = Some ">=1.4 && <1.6"
           }
 ```
 
 Rules that bite here:
 
 1. **Qualified names, always** — `"hasql/hasql"`, not `"hasql"`. Bare names may resolve
-   today and break the moment a second namespace registers the same name.
+   today and break the moment a second namespace registers the same name. When the
+   `build-depends` entry names one package of a multi-package project, qualify to the
+   package: `"hasql/hasql:hasql-pool"`. Mori rejects a `project:package` name whose
+   target declares no such package, which is the failure you want.
 2. **`WithAugmentation` is a union alternative, not a `::{ … }` bundle** — it has no
    defaults, so you must write *every* field, including `extraDocs = [] : List
-   Schema.DocRef.Type` and `localPathOverride = None Text`. This is the one place the
+   Schema.DocRef.Type`, `localPathOverride = None Text`, and
+   `versionConstraint = None Text` when there is no bound. This is the one place the
    "never write empty lists or defaults" rule of the mk form does not apply.
 3. **`extraDocs` is typed `List Schema.DocRef.Type`**, not `List Schema.DocRef` —
    `Schema.DocRef` is the `{ Input, Type, default, mk }` bundle, not a type.
 4. **Keep the top-level `dependencies` list a deduplicated union** of the per-package
    lists. Scope information lives on the package entries; the top-level list is plain
-   `Text`.
+   `Text`. If the project also declares `dependencyRefs` — the typed `MoriRef`
+   companion — keep it in step with the untyped list; validation fails when the two
+   disagree. A package-grained companion sets `kind` and `key`:
+
+   ```dhall
+   , dependencyRefs =
+     [ Schema.MoriRef::{ namespace = "hasql", name = "hasql" }
+     , Schema.MoriRef::{
+       , namespace = "hasql"
+       , name = "hasql"
+       , kind = Some Schema.MoriArtifactKind.Package
+       , key = Some "hasql-pool"
+       }
+     ]
+   ```
 5. **Only mention a package in `mori.dhall` that has a `Package` entry.** If a `.cabal`
    file has no matching `Schema.Package::{ … }`, add it (with `path`, `type`, `language`)
    rather than folding its deps into a sibling.
+6. **A `versionConstraint` is opaque to mori** — it validates only that the value is
+   non-blank and single-line, and never parses or compares it. Copy the cabal bound
+   verbatim rather than normalizing it into some other syntax; the point is that a reader
+   can compare it against the `.cabal` file. A multi-line or empty string fails
+   `mori validate`.
+
+
+## Step 4b — Version constraints (optional, ask first)
+
+Recording bounds converts every constrained dependency from `ByName` to
+`WithAugmentation`, which is a large and noisy diff on a project with many deps. Do not
+do it unsolicited. Ask, and if the user wants it, prefer scoping it to the dependencies
+that matter — the ones whose bounds are load-bearing — over a blanket rewrite.
+
+When you do record them:
+
+- Copy the bound from the report's last column verbatim.
+- A ` | ` in that column means stanzas disagreed. Do not invent a merged bound; show the
+  user the alternatives and let them choose, or leave `versionConstraint = None Text`.
+- Leave `cabal.project` pins unconstrained. They pin a commit, not a range, and a
+  fabricated range would be worse than no claim.
+- Nothing keeps this in sync afterwards. Mori will not notice when the `.cabal` file
+  moves and the manifest does not — re-running this skill is the only check.
 
 
 ## Step 5 — Validate, resolve, register
@@ -204,12 +287,19 @@ Rules that bite here:
 ```bash
 mori validate                     # Dhall type + schema check
 mori deps resolve                 # every declared dep must resolve against the registry
+mori deps explain <name>          # which rule fired, and at what grain
 mori deps tree --scope all        # optional: see the resulting graph
 mori register --local             # publish the updated identity
 ```
 
 `mori validate` passing does **not** mean the names resolve — it only type-checks. Always
 run `mori deps resolve` and confirm every line is a ✓ before registering.
+
+Resolving is also not the same as resolving *at the right grain*. Spot-check a few
+multi-package targets with `mori deps explain <name>` and confirm the rule is the one you
+intended — a `project` where you meant `package` is a silent widening, not an error.
+After registering, `mori registry dependents '<ns>/<name>:<package>' --packages` should
+name this project for the packages it actually consumes.
 
 Finally, report to the user: what was added, what was removed, and the unregistered deps
 with your recommendation for each.
@@ -218,12 +308,21 @@ with your recommendation for each.
 ## Debugging
 
 - **`mori deps resolve` shows ✗ for a name you just added** → the qualified name is wrong.
-  Re-check with `mori registry search <cabal-dep> --json`; the answer is
-  `namespace + "/" + name` of the *project*, not the matched package name.
+  Re-check with `mori registry search <cabal-dep> --json`. `namespace + "/" + name` of the
+  *project* always works; add `:` plus the matched package name when you mean that one
+  package.
+- **`unknown-package`** → you wrote `project:package` and the target project declares no
+  such package. Mori lists the packages it *does* declare. Either the package name is
+  wrong or the target's `mori.dhall` is missing a `Package` entry — fix it there.
+- **`ambiguous-project` / `ambiguous-package`** → a bare name matched more than one
+  registered project. Qualify it; mori refuses to guess.
 - **`Wrong type of function argument — Type vs { … : … }`** → you wrote
   `List Schema.DocRef` where `List Schema.DocRef.Type` is required.
-- **`missing field scope` / `missing field extraDocs`** → an incomplete
-  `WithAugmentation` record. All six fields are mandatory.
+- **`missing field scope` / `missing field extraDocs` / `missing field versionConstraint`**
+  → an incomplete `WithAugmentation` record. All **seven** fields are mandatory; a config
+  written against the pre-3.0.0.0 six-field shape no longer type-checks.
+- **`has an empty version constraint` / `has a multi-line version constraint`** → you
+  passed `Some ""` or a bound containing a newline. Use `None Text` for "no bound".
 - **A dep resolves to a surprising project** → this is usually correct: corpus projects
   vendor several upstream repos, so `generic-lens` legitimately resolves to `ekmett/lens`
   if that corpus carries it. Confirm with
