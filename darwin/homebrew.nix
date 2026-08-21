@@ -110,6 +110,7 @@ in
     "insomnia"
     "min"
     "tailscale-app"
+    "orchard"
     # "raycast"
     #TODO fixme by moving conflicting apps
     #"google-chrome"

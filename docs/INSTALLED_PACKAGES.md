@@ -312,6 +312,7 @@ This document provides a comprehensive overview of all packages installed throug
 - **[anki](https://apps.ankiweb.net/)** - Spaced repetition flashcard program
 - **[insomnia](https://insomnia.rest/)** - API design and testing tool
 - **[min](https://minbrowser.org/)** - Minimal web browser
+- **[orchard](https://github.com/andrew-waters/orchard)** - Native GUI for Apple Containers (requires macOS 26+)
 
 ---
 
