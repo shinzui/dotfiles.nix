@@ -1472,11 +1472,11 @@
         "shikumi-src": "shikumi-src_3"
       },
       "locked": {
-        "lastModified": 1786993730,
-        "narHash": "sha256-zxfTIcpREFAH4d4U8VTcLLTWIysjFqOvcpGM1aIPpQQ=",
+        "lastModified": 1787265485,
+        "narHash": "sha256-9K2sfML6//8lbWw+2BMUgkYb/ccmj2+xpJxjqRPKzPg=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "8af42737c9f675865885eab8a542426eca087b0e",
+        "rev": "1f13d7db1c770d4c69df822ac78bc11b44eff637",
         "type": "github"
       },
       "original": {
@@ -2181,11 +2181,11 @@
         "typeid-hs-src": "typeid-hs-src"
       },
       "locked": {
-        "lastModified": 1787010150,
-        "narHash": "sha256-moaOLm9Qex06fpxb/3UjQ20af2d/EHWaGRcGO41B+yo=",
+        "lastModified": 1787961447,
+        "narHash": "sha256-ifYKGhtzA5QkRSUrcDvxnFrFTDX3Oo5cB/1jL3Q6cNA=",
         "owner": "shinzui",
         "repo": "mori",
-        "rev": "7a04f197d69c90d3c3d120c72cf21182e1376377",
+        "rev": "275702976d49d8dda2bc1459b326870fa2b2139d",
         "type": "github"
       },
       "original": {
@@ -2234,17 +2234,17 @@
     "mori-schema-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1786398735,
-        "narHash": "sha256-/mn3NsW0jTUjUaJZ31Wacv4BaS/x3+zJq7E144Og07Y=",
+        "lastModified": 1787337962,
+        "narHash": "sha256-+AsTflGES5qYjV9B95tHrDuSKOY29llLfZJt72zHMfo=",
         "owner": "shinzui",
         "repo": "mori-schema",
-        "rev": "e4899c15b6a7c36f5d6f2619c8a36ceabe58fc41",
+        "rev": "9899d4544790da7120e8150c73e56cb53fe35191",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "mori-schema",
-        "rev": "e4899c15b6a7c36f5d6f2619c8a36ceabe58fc41",
+        "rev": "9899d4544790da7120e8150c73e56cb53fe35191",
         "type": "github"
       }
     },
@@ -2677,11 +2677,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787091703,
-        "narHash": "sha256-zO8qLEhFv6hGM+vfMgvqp/V5C69dx8pG6/INAy05wbc=",
+        "lastModified": 1787182556,
+        "narHash": "sha256-viGj/gO+qjGpBJdrzXkr7iOInxRL7j8CXIeytxW2Zt8=",
         "owner": "shinzui",
         "repo": "okf",
-        "rev": "fb5b1811b359db7aa295aa4f3d3f81ed319905d5",
+        "rev": "3ee33e7f07d78405c88601b9df8ab0ae562e8ced",
         "type": "github"
       },
       "original": {
