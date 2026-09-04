@@ -32,6 +32,55 @@ let
     redpanda = 8080;
   };
 
+  # Documentation sites (fumadocs + Vite) under ~/Keikaku/bokuno/<name>-docs.
+  # Unlike the services above these are not long-running; each is started by
+  # hand with `bun dev` in its repo and the route just sits here waiting.
+  #
+  # Every site runs `vite dev --host 127.0.0.1 --port <n> --strictPort`:
+  #
+  #   --host 127.0.0.1  Vite's default host is `localhost`, which on macOS
+  #                     binds [::1] ONLY. The routes below dial 127.0.0.1, so
+  #                     without this the proxy cannot reach the dev server.
+  #   --port <n>        the name here must always reach the same site.
+  #   --strictPort      without it Vite walks up from its default when a port
+  #                     is busy, and two sites open at once silently swap.
+  #
+  # To add a site: give it the next free port here, then set the repo's "dev"
+  # script to `vite dev --host 127.0.0.1 --port <n> --strictPort`.
+  #
+  # Vite accepts any *.localhost Host header with no configuration. Reaching a
+  # doc site from another device (<name>.lan, <name>.192-168-1-115.sslip.io)
+  # additionally needs that hostname in `server.allowedHosts` in the site's
+  # vite.config.ts, or Vite answers 403.
+  devSites = {
+    danwa = 5210;
+    en = 5211;
+    kawa = 5212;
+    keiki = 5213;
+    keiro-runtime = 5214;
+    kikan = 5215;
+    kizashi = 5216;
+    kotei = 5217;
+    nagare = 5218;
+    shikigami = 5219;
+    shikumi = 5220;
+    shomei = 5221;
+  };
+
+  # One namespace for both kinds of route: a name may not be claimed twice, and
+  # two upstreams may not share a port, or one route silently shadows the other.
+  allRoutes =
+    let
+      clashingNames = lib.intersectLists (lib.attrNames services) (lib.attrNames devSites);
+      merged = services // devSites;
+      ports = lib.attrValues merged;
+    in
+    assert lib.assertMsg (clashingNames == [ ])
+      "local-web-proxy: name claimed by both services and devSites: ${lib.concatStringsSep ", " clashingNames}";
+    assert lib.assertMsg (lib.length (lib.unique ports) == lib.length ports)
+      "local-web-proxy: two routes share a port";
+    merged;
+
   # Each service matches on the FIRST LABEL of the Host header rather than on a
   # fixed site address, so the domain suffix does not matter: mina.localhost
   # from this machine and mina.lan or mina.192-168-1-115.sslip.io from a phone
@@ -57,9 +106,23 @@ let
 
   caddyfile = pkgs.writeText "local-web-proxy.Caddyfile" ''
     :80 {
-    ${lib.concatStringsSep "\n" (lib.mapAttrsToList route services)}
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList route allRoutes)}
       handle {
         respond "local-web-proxy: no service for host {host}" 404
+      }
+
+      # A route whose upstream is not listening fails to dial and Caddy returns
+      # a bodyless 502. For a doc site that is the normal state -- the dev
+      # server simply is not started -- so say that rather than leaving a blank
+      # page to debug.
+      handle_errors {
+        @dial expression {err.status_code} == 502
+        handle @dial {
+          respond "local-web-proxy: nothing listening for {host}. Start its dev server." 502
+        }
+        handle {
+          respond "local-web-proxy: {err.status_code} for {host}" {err.status_code}
+        }
       }
     }
   '';
