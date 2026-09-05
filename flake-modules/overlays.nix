@@ -45,10 +45,17 @@ in
         # These flakes ship developer tools, not libraries anyone reads Haddock
         # for, so drop the `doc` output and the haddock pass from every
         # darwin-rebuild. Scope: this reaches only each flake's *top-level*
-        # package. The dependency closure is built inside the project's own
-        # flake against its own pkgs, which no overlay here can influence — to
-        # cut haddock (and library profiling) for those, the project overlays
-        # and mori://shinzui/haskell-nix have to opt out themselves.
+        # package. The rest of the closure is built inside the project's own
+        # flake against its own pkgs, which no overlay here can influence, so
+        # each project now wraps its own packages in `dontHaddock` in its
+        # nix/haskell-overlay.nix (nix/haskell.nix for okf) — see
+        # mori://shinzui/mori and mori://shinzui/rei. That leaves this a
+        # belt-and-braces default for any flake that has not done so yet.
+        #
+        # Third-party dependency Haddock is still built (once, then cached).
+        # Cutting that too means `disableHaddock = true` on
+        # mori://shinzui/haskell-nix's `mkChannelExtension`, which re-hashes the
+        # whole ~315-derivation closure for a one-time full rebuild.
         # `seihou`'s default output is not a Cabal derivation, hence the guard.
         noHaddock = drv:
           if drv ? override then prev.haskell.lib.compose.dontHaddock drv else drv;
