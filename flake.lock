@@ -26,11 +26,59 @@
     "baikai-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1784580485,
-        "narHash": "sha256-nn2hJ+xZx3sCGt3wbS9nn8fY6TKo0Cdfievvz5NYitE=",
+        "lastModified": 1788148741,
+        "narHash": "sha256-osXVUKrwQzKkrxyxOjJTH/T1NbeuvzYVCRHXN8lATJ8=",
         "owner": "shinzui",
         "repo": "baikai",
-        "rev": "62e1d919def1c02023b14dfba567922347bbfe83",
+        "rev": "f71bfd7afa49bb78f77d2eef378792fb9a624ecd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "baikai",
+        "type": "github"
+      }
+    },
+    "baikai-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788148741,
+        "narHash": "sha256-osXVUKrwQzKkrxyxOjJTH/T1NbeuvzYVCRHXN8lATJ8=",
+        "owner": "shinzui",
+        "repo": "baikai",
+        "rev": "f71bfd7afa49bb78f77d2eef378792fb9a624ecd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "baikai",
+        "type": "github"
+      }
+    },
+    "baikai-src_11": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788148741,
+        "narHash": "sha256-osXVUKrwQzKkrxyxOjJTH/T1NbeuvzYVCRHXN8lATJ8=",
+        "owner": "shinzui",
+        "repo": "baikai",
+        "rev": "f71bfd7afa49bb78f77d2eef378792fb9a624ecd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "baikai",
+        "type": "github"
+      }
+    },
+    "baikai-src_12": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788148741,
+        "narHash": "sha256-osXVUKrwQzKkrxyxOjJTH/T1NbeuvzYVCRHXN8lATJ8=",
+        "owner": "shinzui",
+        "repo": "baikai",
+        "rev": "f71bfd7afa49bb78f77d2eef378792fb9a624ecd",
         "type": "github"
       },
       "original": {
@@ -42,11 +90,11 @@
     "baikai-src_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1786416009,
-        "narHash": "sha256-ObgOQGzJDydAKLYntFYNRsZo7UckWL/ZlEYYnRVm/6U=",
+        "lastModified": 1788148741,
+        "narHash": "sha256-osXVUKrwQzKkrxyxOjJTH/T1NbeuvzYVCRHXN8lATJ8=",
         "owner": "shinzui",
         "repo": "baikai",
-        "rev": "768048f7e0e4524bf203f1eb7d6947de1231740d",
+        "rev": "f71bfd7afa49bb78f77d2eef378792fb9a624ecd",
         "type": "github"
       },
       "original": {
@@ -74,6 +122,54 @@
     "baikai-src_4": {
       "flake": false,
       "locked": {
+        "lastModified": 1788148741,
+        "narHash": "sha256-osXVUKrwQzKkrxyxOjJTH/T1NbeuvzYVCRHXN8lATJ8=",
+        "owner": "shinzui",
+        "repo": "baikai",
+        "rev": "f71bfd7afa49bb78f77d2eef378792fb9a624ecd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "baikai",
+        "type": "github"
+      }
+    },
+    "baikai-src_5": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788148741,
+        "narHash": "sha256-osXVUKrwQzKkrxyxOjJTH/T1NbeuvzYVCRHXN8lATJ8=",
+        "owner": "shinzui",
+        "repo": "baikai",
+        "rev": "f71bfd7afa49bb78f77d2eef378792fb9a624ecd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "baikai",
+        "type": "github"
+      }
+    },
+    "baikai-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788148741,
+        "narHash": "sha256-osXVUKrwQzKkrxyxOjJTH/T1NbeuvzYVCRHXN8lATJ8=",
+        "owner": "shinzui",
+        "repo": "baikai",
+        "rev": "f71bfd7afa49bb78f77d2eef378792fb9a624ecd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "baikai",
+        "type": "github"
+      }
+    },
+    "baikai-src_7": {
+      "flake": false,
+      "locked": {
         "lastModified": 1782273275,
         "narHash": "sha256-Dgy6WTxEJviIU8PWwu1iMZFRgS41uzHvdXhwJ7K23zw=",
         "owner": "shinzui",
@@ -88,14 +184,14 @@
         "type": "github"
       }
     },
-    "baikai-src_5": {
+    "baikai-src_8": {
       "flake": false,
       "locked": {
-        "lastModified": 1786416009,
-        "narHash": "sha256-ObgOQGzJDydAKLYntFYNRsZo7UckWL/ZlEYYnRVm/6U=",
+        "lastModified": 1788148741,
+        "narHash": "sha256-osXVUKrwQzKkrxyxOjJTH/T1NbeuvzYVCRHXN8lATJ8=",
         "owner": "shinzui",
         "repo": "baikai",
-        "rev": "768048f7e0e4524bf203f1eb7d6947de1231740d",
+        "rev": "f71bfd7afa49bb78f77d2eef378792fb9a624ecd",
         "type": "github"
       },
       "original": {
@@ -104,14 +200,14 @@
         "type": "github"
       }
     },
-    "baikai-src_6": {
+    "baikai-src_9": {
       "flake": false,
       "locked": {
-        "lastModified": 1784593450,
-        "narHash": "sha256-KrKZUdRiymrVJ2kfSNcHeZR1agi1/gG6Uxi0xPHTahI=",
+        "lastModified": 1786416009,
+        "narHash": "sha256-ObgOQGzJDydAKLYntFYNRsZo7UckWL/ZlEYYnRVm/6U=",
         "owner": "shinzui",
         "repo": "baikai",
-        "rev": "4b2c991246b246c061a62112ce94a96bf2ee76b6",
+        "rev": "768048f7e0e4524bf203f1eb7d6947de1231740d",
         "type": "github"
       },
       "original": {
@@ -1250,6 +1346,7 @@
     "haskell-nix": {
       "inputs": {
         "baikai-src": "baikai-src",
+        "keiki-src": "keiki-src",
         "keiro-src": "keiro-src",
         "kioku-src": "kioku-src",
         "kiroku-src": "kiroku-src",
@@ -1258,18 +1355,21 @@
           "nixpkgs"
         ],
         "okf-src": "okf-src",
+        "openapi-hs-src": "openapi-hs-src",
         "pg-migrate-src": "pg-migrate-src",
         "pgmq-hs-src": "pgmq-hs-src",
+        "relay-pagination-src": "relay-pagination-src",
+        "servant-openapi-hs-src": "servant-openapi-hs-src",
         "settei-src": "settei-src",
         "shibuya-src": "shibuya-src",
         "shikumi-src": "shikumi-src"
       },
       "locked": {
-        "lastModified": 1784584691,
-        "narHash": "sha256-FQf0rM6kZ9afMxHC7Li0izsb3/MNMQnWWBBBANiXaeU=",
+        "lastModified": 1788710186,
+        "narHash": "sha256-dS4+uZCtvnfM0BwUKzE5DZKJoK1NZQddpWXfYslxRdI=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "ff860a7d8d198aacdee2e7365fd42c5117bd7458",
+        "rev": "b88d317396e4787e2ee01ff3c7e9849446bd0ea5",
         "type": "github"
       },
       "original": {
@@ -1300,17 +1400,31 @@
     },
     "haskell-nix_10": {
       "inputs": {
+        "baikai-src": "baikai-src_10",
+        "keiki-src": "keiki-src_9",
+        "keiro-src": "keiro-src_9",
+        "kioku-src": "kioku-src_9",
+        "kiroku-src": "kiroku-src_9",
         "nixpkgs": [
           "reiko",
           "nixpkgs"
-        ]
+        ],
+        "okf-src": "okf-src_10",
+        "openapi-hs-src": "openapi-hs-src_10",
+        "pg-migrate-src": "pg-migrate-src_9",
+        "pgmq-hs-src": "pgmq-hs-src_9",
+        "relay-pagination-src": "relay-pagination-src_9",
+        "servant-openapi-hs-src": "servant-openapi-hs-src_10",
+        "settei-src": "settei-src_9",
+        "shibuya-src": "shibuya-src_9",
+        "shikumi-src": "shikumi-src_9"
       },
       "locked": {
-        "lastModified": 1780542874,
-        "narHash": "sha256-LRNK8qsBZ2R0UV2tOcByflXAPv+Y8LV5m2VYJHugC1M=",
+        "lastModified": 1788710186,
+        "narHash": "sha256-dS4+uZCtvnfM0BwUKzE5DZKJoK1NZQddpWXfYslxRdI=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "41f642385a5b9205a11d3e0340d9076210e48aee",
+        "rev": "b88d317396e4787e2ee01ff3c7e9849446bd0ea5",
         "type": "github"
       },
       "original": {
@@ -1321,30 +1435,31 @@
     },
     "haskell-nix_11": {
       "inputs": {
-        "baikai-src": "baikai-src_6",
-        "keiro-src": "keiro-src_5",
-        "kioku-src": "kioku-src_5",
-        "kiroku-src": "kiroku-src_5",
+        "baikai-src": "baikai-src_11",
+        "keiki-src": "keiki-src_10",
+        "keiro-src": "keiro-src_10",
+        "kioku-src": "kioku-src_10",
+        "kiroku-src": "kiroku-src_10",
         "nixpkgs": [
           "seihou",
           "nixpkgs"
         ],
-        "okf-src": "okf-src_6",
-        "openapi-hs-src": "openapi-hs-src_5",
-        "pg-migrate-src": "pg-migrate-src_5",
-        "pgmq-hs-src": "pgmq-hs-src_5",
-        "relay-pagination-src": "relay-pagination-src_4",
-        "servant-openapi-hs-src": "servant-openapi-hs-src_5",
-        "settei-src": "settei-src_5",
-        "shibuya-src": "shibuya-src_5",
-        "shikumi-src": "shikumi-src_5"
+        "okf-src": "okf-src_11",
+        "openapi-hs-src": "openapi-hs-src_11",
+        "pg-migrate-src": "pg-migrate-src_10",
+        "pgmq-hs-src": "pgmq-hs-src_10",
+        "relay-pagination-src": "relay-pagination-src_10",
+        "servant-openapi-hs-src": "servant-openapi-hs-src_11",
+        "settei-src": "settei-src_10",
+        "shibuya-src": "shibuya-src_10",
+        "shikumi-src": "shikumi-src_10"
       },
       "locked": {
-        "lastModified": 1785088513,
-        "narHash": "sha256-5EgQ7BG0ny3mVS+kocKnkz213l5QrFhAeSRKpCxeAcA=",
+        "lastModified": 1788710186,
+        "narHash": "sha256-dS4+uZCtvnfM0BwUKzE5DZKJoK1NZQddpWXfYslxRdI=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "999e6addda204a4ee435773463eb0e6023c09e26",
+        "rev": "b88d317396e4787e2ee01ff3c7e9849446bd0ea5",
         "type": "github"
       },
       "original": {
@@ -1355,17 +1470,31 @@
     },
     "haskell-nix_12": {
       "inputs": {
+        "baikai-src": "baikai-src_12",
+        "keiki-src": "keiki-src_11",
+        "keiro-src": "keiro-src_11",
+        "kioku-src": "kioku-src_11",
+        "kiroku-src": "kiroku-src_11",
         "nixpkgs": [
           "shiki",
           "nixpkgs"
-        ]
+        ],
+        "okf-src": "okf-src_12",
+        "openapi-hs-src": "openapi-hs-src_12",
+        "pg-migrate-src": "pg-migrate-src_11",
+        "pgmq-hs-src": "pgmq-hs-src_11",
+        "relay-pagination-src": "relay-pagination-src_11",
+        "servant-openapi-hs-src": "servant-openapi-hs-src_12",
+        "settei-src": "settei-src_11",
+        "shibuya-src": "shibuya-src_11",
+        "shikumi-src": "shikumi-src_11"
       },
       "locked": {
-        "lastModified": 1781129898,
-        "narHash": "sha256-+EEzdgeqP8zSjHjRWbM5w1spZEHfnp1APHKc44lGF6U=",
+        "lastModified": 1788710186,
+        "narHash": "sha256-dS4+uZCtvnfM0BwUKzE5DZKJoK1NZQddpWXfYslxRdI=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "3efa91d0c6abc34daacec2e10aa0b4f9b2748da6",
+        "rev": "b88d317396e4787e2ee01ff3c7e9849446bd0ea5",
         "type": "github"
       },
       "original": {
@@ -1376,17 +1505,31 @@
     },
     "haskell-nix_2": {
       "inputs": {
+        "baikai-src": "baikai-src_2",
+        "keiki-src": "keiki-src_2",
+        "keiro-src": "keiro-src_2",
+        "kioku-src": "kioku-src_2",
+        "kiroku-src": "kiroku-src_2",
         "nixpkgs": [
           "kizamu",
           "nixpkgs"
-        ]
+        ],
+        "okf-src": "okf-src_2",
+        "openapi-hs-src": "openapi-hs-src_2",
+        "pg-migrate-src": "pg-migrate-src_2",
+        "pgmq-hs-src": "pgmq-hs-src_2",
+        "relay-pagination-src": "relay-pagination-src_2",
+        "servant-openapi-hs-src": "servant-openapi-hs-src_2",
+        "settei-src": "settei-src_2",
+        "shibuya-src": "shibuya-src_2",
+        "shikumi-src": "shikumi-src_2"
       },
       "locked": {
-        "lastModified": 1777072531,
-        "narHash": "sha256-9U3S5NjsR8peai7ZxKB3k5TepIY3aTmm54aI7zg3XRw=",
+        "lastModified": 1788710186,
+        "narHash": "sha256-dS4+uZCtvnfM0BwUKzE5DZKJoK1NZQddpWXfYslxRdI=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "4747cb8b0137b0d8e4e3d5d159c58e9097928943",
+        "rev": "b88d317396e4787e2ee01ff3c7e9849446bd0ea5",
         "type": "github"
       },
       "original": {
@@ -1397,11 +1540,11 @@
     },
     "haskell-nix_3": {
       "inputs": {
-        "baikai-src": "baikai-src_2",
-        "keiki-src": "keiki-src",
-        "keiro-src": "keiro-src_2",
-        "kioku-src": "kioku-src_2",
-        "kiroku-src": "kiroku-src_2",
+        "baikai-src": "baikai-src_3",
+        "keiki-src": "keiki-src_3",
+        "keiro-src": "keiro-src_3",
+        "kioku-src": "kioku-src_3",
+        "kiroku-src": "kiroku-src_3",
         "nixpkgs": [
           "mina",
           "nixpkgs"
@@ -1410,21 +1553,21 @@
           "mina",
           "okf-src"
         ],
-        "openapi-hs-src": "openapi-hs-src",
-        "pg-migrate-src": "pg-migrate-src_2",
-        "pgmq-hs-src": "pgmq-hs-src_2",
-        "relay-pagination-src": "relay-pagination-src",
-        "servant-openapi-hs-src": "servant-openapi-hs-src",
-        "settei-src": "settei-src_2",
-        "shibuya-src": "shibuya-src_2",
-        "shikumi-src": "shikumi-src_2"
+        "openapi-hs-src": "openapi-hs-src_3",
+        "pg-migrate-src": "pg-migrate-src_3",
+        "pgmq-hs-src": "pgmq-hs-src_3",
+        "relay-pagination-src": "relay-pagination-src_3",
+        "servant-openapi-hs-src": "servant-openapi-hs-src_3",
+        "settei-src": "settei-src_3",
+        "shibuya-src": "shibuya-src_3",
+        "shikumi-src": "shikumi-src_3"
       },
       "locked": {
-        "lastModified": 1786564511,
-        "narHash": "sha256-doU6hIIkAxy6Vwh2uAGjJhk7EmKqf6kaiaTNW86rISs=",
+        "lastModified": 1788710186,
+        "narHash": "sha256-dS4+uZCtvnfM0BwUKzE5DZKJoK1NZQddpWXfYslxRdI=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "9eee57a5d2f2dafca12cf8d8e01f0e44627d38c9",
+        "rev": "b88d317396e4787e2ee01ff3c7e9849446bd0ea5",
         "type": "github"
       },
       "original": {
@@ -1435,31 +1578,31 @@
     },
     "haskell-nix_4": {
       "inputs": {
-        "baikai-src": "baikai-src_3",
-        "keiki-src": "keiki-src_2",
-        "keiro-src": "keiro-src_3",
-        "kioku-src": "kioku-src_3",
-        "kiroku-src": "kiroku-src_3",
+        "baikai-src": "baikai-src_4",
+        "keiki-src": "keiki-src_4",
+        "keiro-src": "keiro-src_4",
+        "kioku-src": "kioku-src_4",
+        "kiroku-src": "kiroku-src_4",
         "nixpkgs": [
           "mori",
           "nixpkgs"
         ],
-        "okf-src": "okf-src_3",
-        "openapi-hs-src": "openapi-hs-src_2",
-        "pg-migrate-src": "pg-migrate-src_3",
-        "pgmq-hs-src": "pgmq-hs-src_3",
-        "relay-pagination-src": "relay-pagination-src_2",
-        "servant-openapi-hs-src": "servant-openapi-hs-src_2",
-        "settei-src": "settei-src_3",
-        "shibuya-src": "shibuya-src_3",
-        "shikumi-src": "shikumi-src_3"
+        "okf-src": "okf-src_4",
+        "openapi-hs-src": "openapi-hs-src_4",
+        "pg-migrate-src": "pg-migrate-src_4",
+        "pgmq-hs-src": "pgmq-hs-src_4",
+        "relay-pagination-src": "relay-pagination-src_4",
+        "servant-openapi-hs-src": "servant-openapi-hs-src_4",
+        "settei-src": "settei-src_4",
+        "shibuya-src": "shibuya-src_4",
+        "shikumi-src": "shikumi-src_4"
       },
       "locked": {
-        "lastModified": 1788460190,
-        "narHash": "sha256-hCTJcI1SzqN2oj3UO2lGhaBepyG0ty43K0zTnU0ov/w=",
+        "lastModified": 1788710186,
+        "narHash": "sha256-dS4+uZCtvnfM0BwUKzE5DZKJoK1NZQddpWXfYslxRdI=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "c91865afc47a8c9dca7d2bfec5f2fe581391cba1",
+        "rev": "b88d317396e4787e2ee01ff3c7e9849446bd0ea5",
         "type": "github"
       },
       "original": {
@@ -1492,17 +1635,31 @@
     },
     "haskell-nix_6": {
       "inputs": {
+        "baikai-src": "baikai-src_5",
+        "keiki-src": "keiki-src_5",
+        "keiro-src": "keiro-src_5",
+        "kioku-src": "kioku-src_5",
+        "kiroku-src": "kiroku-src_5",
         "nixpkgs": [
           "nihongo",
           "nixpkgs"
-        ]
+        ],
+        "okf-src": "okf-src_5",
+        "openapi-hs-src": "openapi-hs-src_6",
+        "pg-migrate-src": "pg-migrate-src_5",
+        "pgmq-hs-src": "pgmq-hs-src_5",
+        "relay-pagination-src": "relay-pagination-src_5",
+        "servant-openapi-hs-src": "servant-openapi-hs-src_6",
+        "settei-src": "settei-src_5",
+        "shibuya-src": "shibuya-src_5",
+        "shikumi-src": "shikumi-src_5"
       },
       "locked": {
-        "lastModified": 1777072531,
-        "narHash": "sha256-9U3S5NjsR8peai7ZxKB3k5TepIY3aTmm54aI7zg3XRw=",
+        "lastModified": 1788710186,
+        "narHash": "sha256-dS4+uZCtvnfM0BwUKzE5DZKJoK1NZQddpWXfYslxRdI=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "4747cb8b0137b0d8e4e3d5d159c58e9097928943",
+        "rev": "b88d317396e4787e2ee01ff3c7e9849446bd0ea5",
         "type": "github"
       },
       "original": {
@@ -1513,17 +1670,31 @@
     },
     "haskell-nix_7": {
       "inputs": {
+        "baikai-src": "baikai-src_6",
+        "keiki-src": "keiki-src_6",
+        "keiro-src": "keiro-src_6",
+        "kioku-src": "kioku-src_6",
+        "kiroku-src": "kiroku-src_6",
         "nixpkgs": [
           "notion-cli",
           "nixpkgs"
-        ]
+        ],
+        "okf-src": "okf-src_6",
+        "openapi-hs-src": "openapi-hs-src_7",
+        "pg-migrate-src": "pg-migrate-src_6",
+        "pgmq-hs-src": "pgmq-hs-src_6",
+        "relay-pagination-src": "relay-pagination-src_6",
+        "servant-openapi-hs-src": "servant-openapi-hs-src_7",
+        "settei-src": "settei-src_6",
+        "shibuya-src": "shibuya-src_6",
+        "shikumi-src": "shikumi-src_6"
       },
       "locked": {
-        "lastModified": 1780008640,
-        "narHash": "sha256-5fpxAx/3bg9uSEucK4SQe3ozp2D9jlkhuQxiwLs1zW0=",
+        "lastModified": 1788710186,
+        "narHash": "sha256-dS4+uZCtvnfM0BwUKzE5DZKJoK1NZQddpWXfYslxRdI=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "02f4cb32831fccd0caad4075d8755f08d48a9736",
+        "rev": "b88d317396e4787e2ee01ff3c7e9849446bd0ea5",
         "type": "github"
       },
       "original": {
@@ -1534,17 +1705,31 @@
     },
     "haskell-nix_8": {
       "inputs": {
+        "baikai-src": "baikai-src_8",
+        "keiki-src": "keiki-src_7",
+        "keiro-src": "keiro-src_7",
+        "kioku-src": "kioku-src_7",
+        "kiroku-src": "kiroku-src_7",
         "nixpkgs": [
           "notion-hub",
           "nixpkgs"
-        ]
+        ],
+        "okf-src": "okf-src_7",
+        "openapi-hs-src": "openapi-hs-src_8",
+        "pg-migrate-src": "pg-migrate-src_7",
+        "pgmq-hs-src": "pgmq-hs-src_7",
+        "relay-pagination-src": "relay-pagination-src_7",
+        "servant-openapi-hs-src": "servant-openapi-hs-src_8",
+        "settei-src": "settei-src_7",
+        "shibuya-src": "shibuya-src_7",
+        "shikumi-src": "shikumi-src_7"
       },
       "locked": {
-        "lastModified": 1781742888,
-        "narHash": "sha256-qjZl+1K8YXVfWnhdiBcpIACMwXLt2U6wJ65oFiw1S/E=",
+        "lastModified": 1788710186,
+        "narHash": "sha256-dS4+uZCtvnfM0BwUKzE5DZKJoK1NZQddpWXfYslxRdI=",
         "owner": "shinzui",
         "repo": "haskell-nix",
-        "rev": "92a0b051f169d2dfe166cae891330a916d5b6cad",
+        "rev": "b88d317396e4787e2ee01ff3c7e9849446bd0ea5",
         "type": "github"
       },
       "original": {
@@ -1555,24 +1740,24 @@
     },
     "haskell-nix_9": {
       "inputs": {
-        "baikai-src": "baikai-src_5",
-        "keiki-src": "keiki-src_3",
-        "keiro-src": "keiro-src_4",
-        "kioku-src": "kioku-src_4",
-        "kiroku-src": "kiroku-src_4",
+        "baikai-src": "baikai-src_9",
+        "keiki-src": "keiki-src_8",
+        "keiro-src": "keiro-src_8",
+        "kioku-src": "kioku-src_8",
+        "kiroku-src": "kiroku-src_8",
         "nixpkgs": [
           "rei",
           "nixpkgs"
         ],
-        "okf-src": "okf-src_5",
-        "openapi-hs-src": "openapi-hs-src_4",
-        "pg-migrate-src": "pg-migrate-src_4",
-        "pgmq-hs-src": "pgmq-hs-src_4",
-        "relay-pagination-src": "relay-pagination-src_3",
-        "servant-openapi-hs-src": "servant-openapi-hs-src_4",
-        "settei-src": "settei-src_4",
-        "shibuya-src": "shibuya-src_4",
-        "shikumi-src": "shikumi-src_4"
+        "okf-src": "okf-src_9",
+        "openapi-hs-src": "openapi-hs-src_9",
+        "pg-migrate-src": "pg-migrate-src_8",
+        "pgmq-hs-src": "pgmq-hs-src_8",
+        "relay-pagination-src": "relay-pagination-src_8",
+        "servant-openapi-hs-src": "servant-openapi-hs-src_9",
+        "settei-src": "settei-src_8",
+        "shibuya-src": "shibuya-src_8",
+        "shikumi-src": "shikumi-src_8"
       },
       "locked": {
         "lastModified": 1787442163,
@@ -1721,11 +1906,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788649025,
-        "narHash": "sha256-vzhfHJYBEwXOBGQ3mUmdSwuKHxK/EnWx5ejF3FgiDqM=",
+        "lastModified": 1788710485,
+        "narHash": "sha256-9HxKjbZhf3a1nCMeZNozNnRoz8Xg1VFkKMYN6LcyfMo=",
         "owner": "shinzui",
         "repo": "kazuha",
-        "rev": "93910e5195fb8332c3381af8f3833329c48d32cf",
+        "rev": "d779b6f090a84f07920ee9c781620971bc1f9b1f",
         "type": "github"
       },
       "original": {
@@ -1737,11 +1922,43 @@
     "keiki-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1785900948,
-        "narHash": "sha256-VJ2NRVoIrXjdj1YaEPKdB+7Jid7UeQ9Dx95ODg2pbBk=",
+        "lastModified": 1787288082,
+        "narHash": "sha256-Vn0+26xZR6gQ5o61NGgtXicYpHULgfDlA4mH/JdxIfA=",
         "owner": "shinzui",
         "repo": "keiki",
-        "rev": "9714d37033c37595e3aaa3319ca0ca77466782e0",
+        "rev": "15bc83b1eb38d78488862f24bb1d873aa32a919a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiki",
+        "type": "github"
+      }
+    },
+    "keiki-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787288082,
+        "narHash": "sha256-Vn0+26xZR6gQ5o61NGgtXicYpHULgfDlA4mH/JdxIfA=",
+        "owner": "shinzui",
+        "repo": "keiki",
+        "rev": "15bc83b1eb38d78488862f24bb1d873aa32a919a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiki",
+        "type": "github"
+      }
+    },
+    "keiki-src_11": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787288082,
+        "narHash": "sha256-Vn0+26xZR6gQ5o61NGgtXicYpHULgfDlA4mH/JdxIfA=",
+        "owner": "shinzui",
+        "repo": "keiki",
+        "rev": "15bc83b1eb38d78488862f24bb1d873aa32a919a",
         "type": "github"
       },
       "original": {
@@ -1782,14 +1999,142 @@
         "type": "github"
       }
     },
+    "keiki-src_4": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787288082,
+        "narHash": "sha256-Vn0+26xZR6gQ5o61NGgtXicYpHULgfDlA4mH/JdxIfA=",
+        "owner": "shinzui",
+        "repo": "keiki",
+        "rev": "15bc83b1eb38d78488862f24bb1d873aa32a919a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiki",
+        "type": "github"
+      }
+    },
+    "keiki-src_5": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787288082,
+        "narHash": "sha256-Vn0+26xZR6gQ5o61NGgtXicYpHULgfDlA4mH/JdxIfA=",
+        "owner": "shinzui",
+        "repo": "keiki",
+        "rev": "15bc83b1eb38d78488862f24bb1d873aa32a919a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiki",
+        "type": "github"
+      }
+    },
+    "keiki-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787288082,
+        "narHash": "sha256-Vn0+26xZR6gQ5o61NGgtXicYpHULgfDlA4mH/JdxIfA=",
+        "owner": "shinzui",
+        "repo": "keiki",
+        "rev": "15bc83b1eb38d78488862f24bb1d873aa32a919a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiki",
+        "type": "github"
+      }
+    },
+    "keiki-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787288082,
+        "narHash": "sha256-Vn0+26xZR6gQ5o61NGgtXicYpHULgfDlA4mH/JdxIfA=",
+        "owner": "shinzui",
+        "repo": "keiki",
+        "rev": "15bc83b1eb38d78488862f24bb1d873aa32a919a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiki",
+        "type": "github"
+      }
+    },
+    "keiki-src_8": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787288082,
+        "narHash": "sha256-Vn0+26xZR6gQ5o61NGgtXicYpHULgfDlA4mH/JdxIfA=",
+        "owner": "shinzui",
+        "repo": "keiki",
+        "rev": "15bc83b1eb38d78488862f24bb1d873aa32a919a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiki",
+        "type": "github"
+      }
+    },
+    "keiki-src_9": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787288082,
+        "narHash": "sha256-Vn0+26xZR6gQ5o61NGgtXicYpHULgfDlA4mH/JdxIfA=",
+        "owner": "shinzui",
+        "repo": "keiki",
+        "rev": "15bc83b1eb38d78488862f24bb1d873aa32a919a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiki",
+        "type": "github"
+      }
+    },
     "keiro-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1784079325,
-        "narHash": "sha256-OzayfuZCyOW6KCndP75BN+koRDdMXWiDqoUET0wYVXo=",
+        "lastModified": 1788147275,
+        "narHash": "sha256-+L6PLRHWGaAL1zfGf6A3ZwNZ9Jo/3/pxnVLxeUCGYjo=",
         "owner": "shinzui",
         "repo": "keiro",
-        "rev": "29bd7952fa5201adf789bbb21427b2cffe228d4b",
+        "rev": "de574cdcb0add3fefbb0fdd96d820258d15f8997",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiro",
+        "type": "github"
+      }
+    },
+    "keiro-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788147275,
+        "narHash": "sha256-+L6PLRHWGaAL1zfGf6A3ZwNZ9Jo/3/pxnVLxeUCGYjo=",
+        "owner": "shinzui",
+        "repo": "keiro",
+        "rev": "de574cdcb0add3fefbb0fdd96d820258d15f8997",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiro",
+        "type": "github"
+      }
+    },
+    "keiro-src_11": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788147275,
+        "narHash": "sha256-+L6PLRHWGaAL1zfGf6A3ZwNZ9Jo/3/pxnVLxeUCGYjo=",
+        "owner": "shinzui",
+        "repo": "keiro",
+        "rev": "de574cdcb0add3fefbb0fdd96d820258d15f8997",
         "type": "github"
       },
       "original": {
@@ -1801,11 +2146,11 @@
     "keiro-src_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1784079325,
-        "narHash": "sha256-OzayfuZCyOW6KCndP75BN+koRDdMXWiDqoUET0wYVXo=",
+        "lastModified": 1788147275,
+        "narHash": "sha256-+L6PLRHWGaAL1zfGf6A3ZwNZ9Jo/3/pxnVLxeUCGYjo=",
         "owner": "shinzui",
         "repo": "keiro",
-        "rev": "29bd7952fa5201adf789bbb21427b2cffe228d4b",
+        "rev": "de574cdcb0add3fefbb0fdd96d820258d15f8997",
         "type": "github"
       },
       "original": {
@@ -1833,6 +2178,70 @@
     "keiro-src_4": {
       "flake": false,
       "locked": {
+        "lastModified": 1788147275,
+        "narHash": "sha256-+L6PLRHWGaAL1zfGf6A3ZwNZ9Jo/3/pxnVLxeUCGYjo=",
+        "owner": "shinzui",
+        "repo": "keiro",
+        "rev": "de574cdcb0add3fefbb0fdd96d820258d15f8997",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiro",
+        "type": "github"
+      }
+    },
+    "keiro-src_5": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788147275,
+        "narHash": "sha256-+L6PLRHWGaAL1zfGf6A3ZwNZ9Jo/3/pxnVLxeUCGYjo=",
+        "owner": "shinzui",
+        "repo": "keiro",
+        "rev": "de574cdcb0add3fefbb0fdd96d820258d15f8997",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiro",
+        "type": "github"
+      }
+    },
+    "keiro-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788147275,
+        "narHash": "sha256-+L6PLRHWGaAL1zfGf6A3ZwNZ9Jo/3/pxnVLxeUCGYjo=",
+        "owner": "shinzui",
+        "repo": "keiro",
+        "rev": "de574cdcb0add3fefbb0fdd96d820258d15f8997",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiro",
+        "type": "github"
+      }
+    },
+    "keiro-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788147275,
+        "narHash": "sha256-+L6PLRHWGaAL1zfGf6A3ZwNZ9Jo/3/pxnVLxeUCGYjo=",
+        "owner": "shinzui",
+        "repo": "keiro",
+        "rev": "de574cdcb0add3fefbb0fdd96d820258d15f8997",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "keiro",
+        "type": "github"
+      }
+    },
+    "keiro-src_8": {
+      "flake": false,
+      "locked": {
         "lastModified": 1787374470,
         "narHash": "sha256-wdh7/dkzOpYOJAWvi/+aSRgXseo0okRvAydYREOtDf4=",
         "owner": "shinzui",
@@ -1846,14 +2255,14 @@
         "type": "github"
       }
     },
-    "keiro-src_5": {
+    "keiro-src_9": {
       "flake": false,
       "locked": {
-        "lastModified": 1784079325,
-        "narHash": "sha256-OzayfuZCyOW6KCndP75BN+koRDdMXWiDqoUET0wYVXo=",
+        "lastModified": 1788147275,
+        "narHash": "sha256-+L6PLRHWGaAL1zfGf6A3ZwNZ9Jo/3/pxnVLxeUCGYjo=",
         "owner": "shinzui",
         "repo": "keiro",
-        "rev": "29bd7952fa5201adf789bbb21427b2cffe228d4b",
+        "rev": "de574cdcb0add3fefbb0fdd96d820258d15f8997",
         "type": "github"
       },
       "original": {
@@ -1898,11 +2307,43 @@
     "kioku-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1784050025,
-        "narHash": "sha256-yBu8wQ0H5J58i2gyZI7ZQctDg5Mc78UE3iqw+gptJyE=",
+        "lastModified": 1788234857,
+        "narHash": "sha256-Iv4doYaQqGX/ULlNktEg9EdwHVBqvRVMuZJTeQMCLAY=",
         "owner": "shinzui",
         "repo": "kioku",
-        "rev": "a99aa369701a76278ca33d83f8416dee443fa645",
+        "rev": "14a7543f508a7d8110296383aa0500ab9e3b6a5d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kioku",
+        "type": "github"
+      }
+    },
+    "kioku-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788234857,
+        "narHash": "sha256-Iv4doYaQqGX/ULlNktEg9EdwHVBqvRVMuZJTeQMCLAY=",
+        "owner": "shinzui",
+        "repo": "kioku",
+        "rev": "14a7543f508a7d8110296383aa0500ab9e3b6a5d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kioku",
+        "type": "github"
+      }
+    },
+    "kioku-src_11": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788234857,
+        "narHash": "sha256-Iv4doYaQqGX/ULlNktEg9EdwHVBqvRVMuZJTeQMCLAY=",
+        "owner": "shinzui",
+        "repo": "kioku",
+        "rev": "14a7543f508a7d8110296383aa0500ab9e3b6a5d",
         "type": "github"
       },
       "original": {
@@ -1914,11 +2355,11 @@
     "kioku-src_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1784050025,
-        "narHash": "sha256-yBu8wQ0H5J58i2gyZI7ZQctDg5Mc78UE3iqw+gptJyE=",
+        "lastModified": 1788234857,
+        "narHash": "sha256-Iv4doYaQqGX/ULlNktEg9EdwHVBqvRVMuZJTeQMCLAY=",
         "owner": "shinzui",
         "repo": "kioku",
-        "rev": "a99aa369701a76278ca33d83f8416dee443fa645",
+        "rev": "14a7543f508a7d8110296383aa0500ab9e3b6a5d",
         "type": "github"
       },
       "original": {
@@ -1946,6 +2387,70 @@
     "kioku-src_4": {
       "flake": false,
       "locked": {
+        "lastModified": 1788234857,
+        "narHash": "sha256-Iv4doYaQqGX/ULlNktEg9EdwHVBqvRVMuZJTeQMCLAY=",
+        "owner": "shinzui",
+        "repo": "kioku",
+        "rev": "14a7543f508a7d8110296383aa0500ab9e3b6a5d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kioku",
+        "type": "github"
+      }
+    },
+    "kioku-src_5": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788234857,
+        "narHash": "sha256-Iv4doYaQqGX/ULlNktEg9EdwHVBqvRVMuZJTeQMCLAY=",
+        "owner": "shinzui",
+        "repo": "kioku",
+        "rev": "14a7543f508a7d8110296383aa0500ab9e3b6a5d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kioku",
+        "type": "github"
+      }
+    },
+    "kioku-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788234857,
+        "narHash": "sha256-Iv4doYaQqGX/ULlNktEg9EdwHVBqvRVMuZJTeQMCLAY=",
+        "owner": "shinzui",
+        "repo": "kioku",
+        "rev": "14a7543f508a7d8110296383aa0500ab9e3b6a5d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kioku",
+        "type": "github"
+      }
+    },
+    "kioku-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788234857,
+        "narHash": "sha256-Iv4doYaQqGX/ULlNktEg9EdwHVBqvRVMuZJTeQMCLAY=",
+        "owner": "shinzui",
+        "repo": "kioku",
+        "rev": "14a7543f508a7d8110296383aa0500ab9e3b6a5d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kioku",
+        "type": "github"
+      }
+    },
+    "kioku-src_8": {
+      "flake": false,
+      "locked": {
         "lastModified": 1787431237,
         "narHash": "sha256-efR4b7e7tICqObVWaZ3gsq8onS49DvGfZLsGCh2K/uc=",
         "owner": "shinzui",
@@ -1959,14 +2464,14 @@
         "type": "github"
       }
     },
-    "kioku-src_5": {
+    "kioku-src_9": {
       "flake": false,
       "locked": {
-        "lastModified": 1784050025,
-        "narHash": "sha256-yBu8wQ0H5J58i2gyZI7ZQctDg5Mc78UE3iqw+gptJyE=",
+        "lastModified": 1788234857,
+        "narHash": "sha256-Iv4doYaQqGX/ULlNktEg9EdwHVBqvRVMuZJTeQMCLAY=",
         "owner": "shinzui",
         "repo": "kioku",
-        "rev": "a99aa369701a76278ca33d83f8416dee443fa645",
+        "rev": "14a7543f508a7d8110296383aa0500ab9e3b6a5d",
         "type": "github"
       },
       "original": {
@@ -1978,11 +2483,43 @@
     "kiroku-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1784038159,
-        "narHash": "sha256-XAFfhYHPcv/wbYxxXO77A5My7/saha289HsJO5/QnqQ=",
+        "lastModified": 1786969385,
+        "narHash": "sha256-1A0jlVac+49RPc6jtLnPQFCrn3LOj0uyXw6Nq3WM4TI=",
         "owner": "shinzui",
         "repo": "kiroku",
-        "rev": "58aff77b3a6d6093e3613753a0543aab62db9fac",
+        "rev": "b89670c34f0fdd6aab866d1cbb069404c00f4d63",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "type": "github"
+      }
+    },
+    "kiroku-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786969385,
+        "narHash": "sha256-1A0jlVac+49RPc6jtLnPQFCrn3LOj0uyXw6Nq3WM4TI=",
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "rev": "b89670c34f0fdd6aab866d1cbb069404c00f4d63",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "type": "github"
+      }
+    },
+    "kiroku-src_11": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786969385,
+        "narHash": "sha256-1A0jlVac+49RPc6jtLnPQFCrn3LOj0uyXw6Nq3WM4TI=",
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "rev": "b89670c34f0fdd6aab866d1cbb069404c00f4d63",
         "type": "github"
       },
       "original": {
@@ -1994,11 +2531,11 @@
     "kiroku-src_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1784038159,
-        "narHash": "sha256-XAFfhYHPcv/wbYxxXO77A5My7/saha289HsJO5/QnqQ=",
+        "lastModified": 1786969385,
+        "narHash": "sha256-1A0jlVac+49RPc6jtLnPQFCrn3LOj0uyXw6Nq3WM4TI=",
         "owner": "shinzui",
         "repo": "kiroku",
-        "rev": "58aff77b3a6d6093e3613753a0543aab62db9fac",
+        "rev": "b89670c34f0fdd6aab866d1cbb069404c00f4d63",
         "type": "github"
       },
       "original": {
@@ -2042,11 +2579,75 @@
     "kiroku-src_5": {
       "flake": false,
       "locked": {
-        "lastModified": 1784038159,
-        "narHash": "sha256-XAFfhYHPcv/wbYxxXO77A5My7/saha289HsJO5/QnqQ=",
+        "lastModified": 1786969385,
+        "narHash": "sha256-1A0jlVac+49RPc6jtLnPQFCrn3LOj0uyXw6Nq3WM4TI=",
         "owner": "shinzui",
         "repo": "kiroku",
-        "rev": "58aff77b3a6d6093e3613753a0543aab62db9fac",
+        "rev": "b89670c34f0fdd6aab866d1cbb069404c00f4d63",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "type": "github"
+      }
+    },
+    "kiroku-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786969385,
+        "narHash": "sha256-1A0jlVac+49RPc6jtLnPQFCrn3LOj0uyXw6Nq3WM4TI=",
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "rev": "b89670c34f0fdd6aab866d1cbb069404c00f4d63",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "type": "github"
+      }
+    },
+    "kiroku-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786969385,
+        "narHash": "sha256-1A0jlVac+49RPc6jtLnPQFCrn3LOj0uyXw6Nq3WM4TI=",
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "rev": "b89670c34f0fdd6aab866d1cbb069404c00f4d63",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "type": "github"
+      }
+    },
+    "kiroku-src_8": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786969385,
+        "narHash": "sha256-1A0jlVac+49RPc6jtLnPQFCrn3LOj0uyXw6Nq3WM4TI=",
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "rev": "b89670c34f0fdd6aab866d1cbb069404c00f4d63",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "type": "github"
+      }
+    },
+    "kiroku-src_9": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786969385,
+        "narHash": "sha256-1A0jlVac+49RPc6jtLnPQFCrn3LOj0uyXw6Nq3WM4TI=",
+        "owner": "shinzui",
+        "repo": "kiroku",
+        "rev": "b89670c34f0fdd6aab866d1cbb069404c00f4d63",
         "type": "github"
       },
       "original": {
@@ -2075,11 +2676,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788649024,
-        "narHash": "sha256-QMHA6ykBmLARAZ+Rm4rGMmwERSVk2bVnpWdb309sU2s=",
+        "lastModified": 1788710485,
+        "narHash": "sha256-eU2Ikrj3UTQt6YbT5aCTm0XPe57+JlC808zHTO9EBrg=",
         "owner": "shinzui",
         "repo": "kizamu",
-        "rev": "b4a62e5781e420ac8b539932f2542e74b17aa703",
+        "rev": "7eb9905e0f23bcc98394ba837c0340858da055d6",
         "type": "github"
       },
       "original": {
@@ -2136,7 +2737,7 @@
           "haskell-nix-dev",
           "nixpkgs"
         ],
-        "okf-src": "okf-src_2",
+        "okf-src": "okf-src_3",
         "pre-commit-hooks": "pre-commit-hooks_3",
         "treefmt-nix": [
           "mina",
@@ -2145,11 +2746,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787164116,
-        "narHash": "sha256-yE5EeYrDLafWCBVPi45uw6f8jgOo7BvdK3t5N2xKok8=",
+        "lastModified": 1788710486,
+        "narHash": "sha256-j2XVlVM1BDoPmZDHCLWk79RboTjV+dS9jw3yHAP3yJw=",
         "owner": "shinzui",
         "repo": "mina",
-        "rev": "1f2f64ee2aed36ad08553a9bf7edc763dcbaa119",
+        "rev": "288a4c9a5c8f2154a97732bfdaf17b6a2983f1dc",
         "type": "github"
       },
       "original": {
@@ -2170,10 +2771,10 @@
           "haskell-nix-dev",
           "nixpkgs"
         ],
-        "openapi-hs-src": "openapi-hs-src_3",
+        "openapi-hs-src": "openapi-hs-src_5",
         "pre-commit-hooks": "pre-commit-hooks_4",
         "servant-health-src": "servant-health-src",
-        "servant-openapi-hs-src": "servant-openapi-hs-src_3",
+        "servant-openapi-hs-src": "servant-openapi-hs-src_5",
         "tan-effectful-src": "tan-effectful-src",
         "treefmt-nix": [
           "mori",
@@ -2183,11 +2784,11 @@
         "typeid-hs-src": "typeid-hs-src"
       },
       "locked": {
-        "lastModified": 1788649013,
-        "narHash": "sha256-FMlKnMPFrpHcRCALqW9DwjSLj9WTIF4FqCWdZe/U+Qc=",
+        "lastModified": 1788710475,
+        "narHash": "sha256-ni6E2ybFfOBNtcKuz3rA67pTyoWOGxcYPcBYY9gDt8Q=",
         "owner": "shinzui",
         "repo": "mori",
-        "rev": "dd2de3f851a9418b591091a80047345477816bd1",
+        "rev": "68a2e19589402b71af1c673f2d2419fc98266f07",
         "type": "github"
       },
       "original": {
@@ -2304,11 +2905,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788649025,
-        "narHash": "sha256-4kkpGJOTO0AWBDidaiQdmlX71RH6lFlxdzSupaneQk0=",
+        "lastModified": 1788710486,
+        "narHash": "sha256-id1lQ/W4fM5169AwZXWRUM5QPi8WBWL0B3M5lh6wGFs=",
         "owner": "shinzui",
         "repo": "nihongo",
-        "rev": "0d89b89e6e58da197fd2ca74d6efc5a2bc426437",
+        "rev": "25b23928d51d0b25fe8e3b8d8ab665a87ff42c7b",
         "type": "github"
       },
       "original": {
@@ -2556,11 +3157,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788649026,
-        "narHash": "sha256-Vat6uqSza8n07qzhrZdxfynzCaLB4ytXf7WjMutx80c=",
+        "lastModified": 1788710487,
+        "narHash": "sha256-la3mCoAROkOjWYvg4ZZstJKBZuf5xuCdkSXcn7BGV2Y=",
         "owner": "shinzui",
         "repo": "notion-cli",
-        "rev": "40fd8b46f12e612bddecbd7101f9296660540f39",
+        "rev": "8e5e11be689e5bed4b5ef361e1f649d8b8e035b4",
         "type": "github"
       },
       "original": {
@@ -2622,7 +3223,7 @@
     },
     "notion-hub": {
       "inputs": {
-        "baikai-src": "baikai-src_4",
+        "baikai-src": "baikai-src_7",
         "flake-parts": "flake-parts_12",
         "haskell-nix": "haskell-nix_8",
         "haskell-nix-dev": [
@@ -2635,7 +3236,7 @@
         ],
         "notion-cli-src": "notion-cli-src",
         "notion-client-src": "notion-client-src_2",
-        "okf-src": "okf-src_4",
+        "okf-src": "okf-src_8",
         "pre-commit-hooks": "pre-commit-hooks_8",
         "tan-commons-src": "tan-commons-src_2",
         "tan-effectful-src": "tan-effectful-src_3",
@@ -2648,11 +3249,11 @@
         "typeid-hs-src": "typeid-hs-src_3"
       },
       "locked": {
-        "lastModified": 1788649027,
-        "narHash": "sha256-3fGBQGoim53+PHVrXGxgwsrE2zwgWBavydxEL9BO0IM=",
+        "lastModified": 1788710494,
+        "narHash": "sha256-wsC6MvX3etxYyE5Sa3kO4333Ufv4BqHI2Rkhd2QbZ2I=",
         "owner": "shinzui",
         "repo": "notion-hub",
-        "rev": "48a27084f2d7b9e773e9871bd5e83ce9af0a7777",
+        "rev": "e26bbd3dbcbf3cef8adc676c28f92d1a2b2be650",
         "type": "github"
       },
       "original": {
@@ -2695,11 +3296,59 @@
     "okf-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1784088999,
-        "narHash": "sha256-oJgcCeLMg0ZUQdL36uNUrFKU0pPtlhqQS5omf4Z5CVw=",
+        "lastModified": 1787182556,
+        "narHash": "sha256-viGj/gO+qjGpBJdrzXkr7iOInxRL7j8CXIeytxW2Zt8=",
         "owner": "shinzui",
         "repo": "okf",
-        "rev": "3c4f06399832b01690007da482e06b07ae884671",
+        "rev": "3ee33e7f07d78405c88601b9df8ab0ae562e8ced",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "okf",
+        "type": "github"
+      }
+    },
+    "okf-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787182556,
+        "narHash": "sha256-viGj/gO+qjGpBJdrzXkr7iOInxRL7j8CXIeytxW2Zt8=",
+        "owner": "shinzui",
+        "repo": "okf",
+        "rev": "3ee33e7f07d78405c88601b9df8ab0ae562e8ced",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "okf",
+        "type": "github"
+      }
+    },
+    "okf-src_11": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787182556,
+        "narHash": "sha256-viGj/gO+qjGpBJdrzXkr7iOInxRL7j8CXIeytxW2Zt8=",
+        "owner": "shinzui",
+        "repo": "okf",
+        "rev": "3ee33e7f07d78405c88601b9df8ab0ae562e8ced",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "okf",
+        "type": "github"
+      }
+    },
+    "okf-src_12": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787182556,
+        "narHash": "sha256-viGj/gO+qjGpBJdrzXkr7iOInxRL7j8CXIeytxW2Zt8=",
+        "owner": "shinzui",
+        "repo": "okf",
+        "rev": "3ee33e7f07d78405c88601b9df8ab0ae562e8ced",
         "type": "github"
       },
       "original": {
@@ -2711,17 +3360,16 @@
     "okf-src_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1786479615,
-        "narHash": "sha256-S7d3MMTniX1CzacmUlqTFb5/do9/8QO3E+APyRsaNAI=",
+        "lastModified": 1787182556,
+        "narHash": "sha256-viGj/gO+qjGpBJdrzXkr7iOInxRL7j8CXIeytxW2Zt8=",
         "owner": "shinzui",
         "repo": "okf",
-        "rev": "faddbe9ca366481d4c6faaf1181c882fae35abb7",
+        "rev": "3ee33e7f07d78405c88601b9df8ab0ae562e8ced",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "okf",
-        "rev": "faddbe9ca366481d4c6faaf1181c882fae35abb7",
         "type": "github"
       }
     },
@@ -2738,10 +3386,75 @@
       "original": {
         "owner": "shinzui",
         "repo": "okf",
+        "rev": "3ee33e7f07d78405c88601b9df8ab0ae562e8ced",
         "type": "github"
       }
     },
     "okf-src_4": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787182556,
+        "narHash": "sha256-viGj/gO+qjGpBJdrzXkr7iOInxRL7j8CXIeytxW2Zt8=",
+        "owner": "shinzui",
+        "repo": "okf",
+        "rev": "3ee33e7f07d78405c88601b9df8ab0ae562e8ced",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "okf",
+        "type": "github"
+      }
+    },
+    "okf-src_5": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787182556,
+        "narHash": "sha256-viGj/gO+qjGpBJdrzXkr7iOInxRL7j8CXIeytxW2Zt8=",
+        "owner": "shinzui",
+        "repo": "okf",
+        "rev": "3ee33e7f07d78405c88601b9df8ab0ae562e8ced",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "okf",
+        "type": "github"
+      }
+    },
+    "okf-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787182556,
+        "narHash": "sha256-viGj/gO+qjGpBJdrzXkr7iOInxRL7j8CXIeytxW2Zt8=",
+        "owner": "shinzui",
+        "repo": "okf",
+        "rev": "3ee33e7f07d78405c88601b9df8ab0ae562e8ced",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "okf",
+        "type": "github"
+      }
+    },
+    "okf-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787182556,
+        "narHash": "sha256-viGj/gO+qjGpBJdrzXkr7iOInxRL7j8CXIeytxW2Zt8=",
+        "owner": "shinzui",
+        "repo": "okf",
+        "rev": "3ee33e7f07d78405c88601b9df8ab0ae562e8ced",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "okf",
+        "type": "github"
+      }
+    },
+    "okf-src_8": {
       "flake": false,
       "locked": {
         "lastModified": 1782258125,
@@ -2758,7 +3471,7 @@
         "type": "github"
       }
     },
-    "okf-src_5": {
+    "okf-src_9": {
       "flake": false,
       "locked": {
         "lastModified": 1786479615,
@@ -2774,23 +3487,55 @@
         "type": "github"
       }
     },
-    "okf-src_6": {
+    "openapi-hs-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1785074902,
-        "narHash": "sha256-t8jWKH6Eg3G77ttingan46fKVvTpqsKTgeKvMWfvlr0=",
+        "lastModified": 1784666864,
+        "narHash": "sha256-2dgC1aL4L3W5ABzsvaBIT7KLSypZpGihZbdFHFfMrhs=",
         "owner": "shinzui",
-        "repo": "okf",
-        "rev": "18bcd46b26b79f72f2b2e2becd4582d7e19ccc37",
+        "repo": "openapi-hs",
+        "rev": "06fc11713094bf39ac00353b052f4ded5a534567",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
-        "repo": "okf",
+        "repo": "openapi-hs",
         "type": "github"
       }
     },
-    "openapi-hs-src": {
+    "openapi-hs-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784666864,
+        "narHash": "sha256-2dgC1aL4L3W5ABzsvaBIT7KLSypZpGihZbdFHFfMrhs=",
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "rev": "06fc11713094bf39ac00353b052f4ded5a534567",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "type": "github"
+      }
+    },
+    "openapi-hs-src_11": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784666864,
+        "narHash": "sha256-2dgC1aL4L3W5ABzsvaBIT7KLSypZpGihZbdFHFfMrhs=",
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "rev": "06fc11713094bf39ac00353b052f4ded5a534567",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "type": "github"
+      }
+    },
+    "openapi-hs-src_12": {
       "flake": false,
       "locked": {
         "lastModified": 1784666864,
@@ -2835,7 +3580,6 @@
       "original": {
         "owner": "shinzui",
         "repo": "openapi-hs",
-        "rev": "06fc11713094bf39ac00353b052f4ded5a534567",
         "type": "github"
       }
     },
@@ -2868,10 +3612,107 @@
       "original": {
         "owner": "shinzui",
         "repo": "openapi-hs",
+        "rev": "06fc11713094bf39ac00353b052f4ded5a534567",
+        "type": "github"
+      }
+    },
+    "openapi-hs-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784666864,
+        "narHash": "sha256-2dgC1aL4L3W5ABzsvaBIT7KLSypZpGihZbdFHFfMrhs=",
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "rev": "06fc11713094bf39ac00353b052f4ded5a534567",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "type": "github"
+      }
+    },
+    "openapi-hs-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784666864,
+        "narHash": "sha256-2dgC1aL4L3W5ABzsvaBIT7KLSypZpGihZbdFHFfMrhs=",
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "rev": "06fc11713094bf39ac00353b052f4ded5a534567",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "type": "github"
+      }
+    },
+    "openapi-hs-src_8": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784666864,
+        "narHash": "sha256-2dgC1aL4L3W5ABzsvaBIT7KLSypZpGihZbdFHFfMrhs=",
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "rev": "06fc11713094bf39ac00353b052f4ded5a534567",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "type": "github"
+      }
+    },
+    "openapi-hs-src_9": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784666864,
+        "narHash": "sha256-2dgC1aL4L3W5ABzsvaBIT7KLSypZpGihZbdFHFfMrhs=",
+        "owner": "shinzui",
+        "repo": "openapi-hs",
+        "rev": "06fc11713094bf39ac00353b052f4ded5a534567",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "openapi-hs",
         "type": "github"
       }
     },
     "pg-migrate-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783976259,
+        "narHash": "sha256-gtSy0iWe+pe6wEHqm8OgvwMI13jNVul+5p7q36LV64E=",
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "rev": "f39d64e354818999667d345a1452f33eb4857fc1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "type": "github"
+      }
+    },
+    "pg-migrate-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783976259,
+        "narHash": "sha256-gtSy0iWe+pe6wEHqm8OgvwMI13jNVul+5p7q36LV64E=",
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "rev": "f39d64e354818999667d345a1452f33eb4857fc1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "type": "github"
+      }
+    },
+    "pg-migrate-src_11": {
       "flake": false,
       "locked": {
         "lastModified": 1783976259,
@@ -2951,14 +3792,110 @@
         "type": "github"
       }
     },
+    "pg-migrate-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783976259,
+        "narHash": "sha256-gtSy0iWe+pe6wEHqm8OgvwMI13jNVul+5p7q36LV64E=",
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "rev": "f39d64e354818999667d345a1452f33eb4857fc1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "type": "github"
+      }
+    },
+    "pg-migrate-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783976259,
+        "narHash": "sha256-gtSy0iWe+pe6wEHqm8OgvwMI13jNVul+5p7q36LV64E=",
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "rev": "f39d64e354818999667d345a1452f33eb4857fc1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "type": "github"
+      }
+    },
+    "pg-migrate-src_8": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783976259,
+        "narHash": "sha256-gtSy0iWe+pe6wEHqm8OgvwMI13jNVul+5p7q36LV64E=",
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "rev": "f39d64e354818999667d345a1452f33eb4857fc1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "type": "github"
+      }
+    },
+    "pg-migrate-src_9": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783976259,
+        "narHash": "sha256-gtSy0iWe+pe6wEHqm8OgvwMI13jNVul+5p7q36LV64E=",
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "rev": "f39d64e354818999667d345a1452f33eb4857fc1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pg-migrate",
+        "type": "github"
+      }
+    },
     "pgmq-hs-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1784054261,
-        "narHash": "sha256-2UEv+L7kMLrAojU9yNf7FGxgeffPrZnwyZ1YJ9M9gvI=",
+        "lastModified": 1786224691,
+        "narHash": "sha256-9nB0ASeoNyQCn8AoQJEhSbLaz9zsfGM/acXU+id7Qc0=",
         "owner": "shinzui",
         "repo": "pgmq-hs",
-        "rev": "f4a101843ea6f5c055277fd84859ece02865eff4",
+        "rev": "9ee9a2f30fc461244ed7539fbfe2165d9f80df91",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "type": "github"
+      }
+    },
+    "pgmq-hs-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786224691,
+        "narHash": "sha256-9nB0ASeoNyQCn8AoQJEhSbLaz9zsfGM/acXU+id7Qc0=",
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "rev": "9ee9a2f30fc461244ed7539fbfe2165d9f80df91",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "type": "github"
+      }
+    },
+    "pgmq-hs-src_11": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786224691,
+        "narHash": "sha256-9nB0ASeoNyQCn8AoQJEhSbLaz9zsfGM/acXU+id7Qc0=",
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "rev": "9ee9a2f30fc461244ed7539fbfe2165d9f80df91",
         "type": "github"
       },
       "original": {
@@ -2970,11 +3907,11 @@
     "pgmq-hs-src_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1784054261,
-        "narHash": "sha256-2UEv+L7kMLrAojU9yNf7FGxgeffPrZnwyZ1YJ9M9gvI=",
+        "lastModified": 1786224691,
+        "narHash": "sha256-9nB0ASeoNyQCn8AoQJEhSbLaz9zsfGM/acXU+id7Qc0=",
         "owner": "shinzui",
         "repo": "pgmq-hs",
-        "rev": "f4a101843ea6f5c055277fd84859ece02865eff4",
+        "rev": "9ee9a2f30fc461244ed7539fbfe2165d9f80df91",
         "type": "github"
       },
       "original": {
@@ -3018,11 +3955,75 @@
     "pgmq-hs-src_5": {
       "flake": false,
       "locked": {
-        "lastModified": 1784054261,
-        "narHash": "sha256-2UEv+L7kMLrAojU9yNf7FGxgeffPrZnwyZ1YJ9M9gvI=",
+        "lastModified": 1786224691,
+        "narHash": "sha256-9nB0ASeoNyQCn8AoQJEhSbLaz9zsfGM/acXU+id7Qc0=",
         "owner": "shinzui",
         "repo": "pgmq-hs",
-        "rev": "f4a101843ea6f5c055277fd84859ece02865eff4",
+        "rev": "9ee9a2f30fc461244ed7539fbfe2165d9f80df91",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "type": "github"
+      }
+    },
+    "pgmq-hs-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786224691,
+        "narHash": "sha256-9nB0ASeoNyQCn8AoQJEhSbLaz9zsfGM/acXU+id7Qc0=",
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "rev": "9ee9a2f30fc461244ed7539fbfe2165d9f80df91",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "type": "github"
+      }
+    },
+    "pgmq-hs-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786224691,
+        "narHash": "sha256-9nB0ASeoNyQCn8AoQJEhSbLaz9zsfGM/acXU+id7Qc0=",
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "rev": "9ee9a2f30fc461244ed7539fbfe2165d9f80df91",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "type": "github"
+      }
+    },
+    "pgmq-hs-src_8": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786224691,
+        "narHash": "sha256-9nB0ASeoNyQCn8AoQJEhSbLaz9zsfGM/acXU+id7Qc0=",
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "rev": "9ee9a2f30fc461244ed7539fbfe2165d9f80df91",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "type": "github"
+      }
+    },
+    "pgmq-hs-src_9": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786224691,
+        "narHash": "sha256-9nB0ASeoNyQCn8AoQJEhSbLaz9zsfGM/acXU+id7Qc0=",
+        "owner": "shinzui",
+        "repo": "pgmq-hs",
+        "rev": "9ee9a2f30fc461244ed7539fbfe2165d9f80df91",
         "type": "github"
       },
       "original": {
@@ -3467,11 +4468,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785696835,
-        "narHash": "sha256-4CuCc6ofMFAIOq1LK5byIDUGs71wnS/d2ZRuFHjdEvE=",
+        "lastModified": 1788710476,
+        "narHash": "sha256-AmiNgSdRht+2A3UE2pBWVnh/i8pxk4YB0IW1wMSPvoQ=",
         "owner": "shinzui",
         "repo": "reiko",
-        "rev": "2b183c9d6d59ddeaed551b240f8d130ae55aa123",
+        "rev": "4f98ba912060776a0d7ae5276e963e34dad447bb",
         "type": "github"
       },
       "original": {
@@ -3481,6 +4482,38 @@
       }
     },
     "relay-pagination-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784243082,
+        "narHash": "sha256-kprMYSNZiexZz7AlBg3srITq6o4QagyrzNZH+OmbQwE=",
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "rev": "634ef07eaa27676be0edda330209f0710abb145b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "type": "github"
+      }
+    },
+    "relay-pagination-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784243082,
+        "narHash": "sha256-kprMYSNZiexZz7AlBg3srITq6o4QagyrzNZH+OmbQwE=",
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "rev": "634ef07eaa27676be0edda330209f0710abb145b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "type": "github"
+      }
+    },
+    "relay-pagination-src_11": {
       "flake": false,
       "locked": {
         "lastModified": 1784243082,
@@ -3529,6 +4562,86 @@
       }
     },
     "relay-pagination-src_4": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784243082,
+        "narHash": "sha256-kprMYSNZiexZz7AlBg3srITq6o4QagyrzNZH+OmbQwE=",
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "rev": "634ef07eaa27676be0edda330209f0710abb145b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "type": "github"
+      }
+    },
+    "relay-pagination-src_5": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784243082,
+        "narHash": "sha256-kprMYSNZiexZz7AlBg3srITq6o4QagyrzNZH+OmbQwE=",
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "rev": "634ef07eaa27676be0edda330209f0710abb145b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "type": "github"
+      }
+    },
+    "relay-pagination-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784243082,
+        "narHash": "sha256-kprMYSNZiexZz7AlBg3srITq6o4QagyrzNZH+OmbQwE=",
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "rev": "634ef07eaa27676be0edda330209f0710abb145b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "type": "github"
+      }
+    },
+    "relay-pagination-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784243082,
+        "narHash": "sha256-kprMYSNZiexZz7AlBg3srITq6o4QagyrzNZH+OmbQwE=",
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "rev": "634ef07eaa27676be0edda330209f0710abb145b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "type": "github"
+      }
+    },
+    "relay-pagination-src_8": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784243082,
+        "narHash": "sha256-kprMYSNZiexZz7AlBg3srITq6o4QagyrzNZH+OmbQwE=",
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "rev": "634ef07eaa27676be0edda330209f0710abb145b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "relay-pagination",
+        "type": "github"
+      }
+    },
+    "relay-pagination-src_9": {
       "flake": false,
       "locked": {
         "lastModified": 1784243082,
@@ -3596,11 +4709,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788649016,
-        "narHash": "sha256-teZfby0/JN0D6szuP1GlMabEE5JmtJ02TiFLw/gGCm0=",
+        "lastModified": 1788710476,
+        "narHash": "sha256-cfVKl3OyLDlOF6RPIDQLE9Xq1RRbS8pnDVJzOpyjxh8=",
         "owner": "shinzui",
         "repo": "seihou",
-        "rev": "633db68a7e7f57188449b40698d10581dd289b2c",
+        "rev": "9f9f93455912c4a3d2f0b2775ac04cb5cc2f3677",
         "type": "github"
       },
       "original": {
@@ -3658,6 +4771,54 @@
         "type": "github"
       }
     },
+    "servant-openapi-hs-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784670356,
+        "narHash": "sha256-4U2GKooWZyJQlCBPqrbzVrEAFdNStQPoI7ne8M8iwFY=",
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "rev": "5eef3d48fc9c6efb5eeae1877e031bbc4e1b7190",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "type": "github"
+      }
+    },
+    "servant-openapi-hs-src_11": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784670356,
+        "narHash": "sha256-4U2GKooWZyJQlCBPqrbzVrEAFdNStQPoI7ne8M8iwFY=",
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "rev": "5eef3d48fc9c6efb5eeae1877e031bbc4e1b7190",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "type": "github"
+      }
+    },
+    "servant-openapi-hs-src_12": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784670356,
+        "narHash": "sha256-4U2GKooWZyJQlCBPqrbzVrEAFdNStQPoI7ne8M8iwFY=",
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "rev": "5eef3d48fc9c6efb5eeae1877e031bbc4e1b7190",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "type": "github"
+      }
+    },
     "servant-openapi-hs-src_2": {
       "flake": false,
       "locked": {
@@ -3677,17 +4838,16 @@
     "servant-openapi-hs-src_3": {
       "flake": false,
       "locked": {
-        "lastModified": 1784742636,
-        "narHash": "sha256-GgK9nkn1SpncCqyO06x9JKw9w4qj3zaL0U7TWMWFXAM=",
+        "lastModified": 1784670356,
+        "narHash": "sha256-4U2GKooWZyJQlCBPqrbzVrEAFdNStQPoI7ne8M8iwFY=",
         "owner": "shinzui",
         "repo": "servant-openapi-hs",
-        "rev": "181ca609688af3cad994a73988492605c71bc2d0",
+        "rev": "5eef3d48fc9c6efb5eeae1877e031bbc4e1b7190",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "servant-openapi-hs",
-        "rev": "181ca609688af3cad994a73988492605c71bc2d0",
         "type": "github"
       }
     },
@@ -3710,6 +4870,71 @@
     "servant-openapi-hs-src_5": {
       "flake": false,
       "locked": {
+        "lastModified": 1784742636,
+        "narHash": "sha256-GgK9nkn1SpncCqyO06x9JKw9w4qj3zaL0U7TWMWFXAM=",
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "rev": "181ca609688af3cad994a73988492605c71bc2d0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "rev": "181ca609688af3cad994a73988492605c71bc2d0",
+        "type": "github"
+      }
+    },
+    "servant-openapi-hs-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784670356,
+        "narHash": "sha256-4U2GKooWZyJQlCBPqrbzVrEAFdNStQPoI7ne8M8iwFY=",
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "rev": "5eef3d48fc9c6efb5eeae1877e031bbc4e1b7190",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "type": "github"
+      }
+    },
+    "servant-openapi-hs-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784670356,
+        "narHash": "sha256-4U2GKooWZyJQlCBPqrbzVrEAFdNStQPoI7ne8M8iwFY=",
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "rev": "5eef3d48fc9c6efb5eeae1877e031bbc4e1b7190",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "type": "github"
+      }
+    },
+    "servant-openapi-hs-src_8": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784670356,
+        "narHash": "sha256-4U2GKooWZyJQlCBPqrbzVrEAFdNStQPoI7ne8M8iwFY=",
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "rev": "5eef3d48fc9c6efb5eeae1877e031bbc4e1b7190",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "servant-openapi-hs",
+        "type": "github"
+      }
+    },
+    "servant-openapi-hs-src_9": {
+      "flake": false,
+      "locked": {
         "lastModified": 1784670356,
         "narHash": "sha256-4U2GKooWZyJQlCBPqrbzVrEAFdNStQPoI7ne8M8iwFY=",
         "owner": "shinzui",
@@ -3724,6 +4949,38 @@
       }
     },
     "settei-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784521789,
+        "narHash": "sha256-bXMbbCerfobJHs45KQrjyp2H9VS4tKuK7EEFySYgJqQ=",
+        "owner": "shinzui",
+        "repo": "settei",
+        "rev": "1bf62b0af110b4f42fe2528e9d459e0ccf12d626",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "settei",
+        "type": "github"
+      }
+    },
+    "settei-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784521789,
+        "narHash": "sha256-bXMbbCerfobJHs45KQrjyp2H9VS4tKuK7EEFySYgJqQ=",
+        "owner": "shinzui",
+        "repo": "settei",
+        "rev": "1bf62b0af110b4f42fe2528e9d459e0ccf12d626",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "settei",
+        "type": "github"
+      }
+    },
+    "settei-src_11": {
       "flake": false,
       "locked": {
         "lastModified": 1784521789,
@@ -3803,14 +5060,110 @@
         "type": "github"
       }
     },
+    "settei-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784521789,
+        "narHash": "sha256-bXMbbCerfobJHs45KQrjyp2H9VS4tKuK7EEFySYgJqQ=",
+        "owner": "shinzui",
+        "repo": "settei",
+        "rev": "1bf62b0af110b4f42fe2528e9d459e0ccf12d626",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "settei",
+        "type": "github"
+      }
+    },
+    "settei-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784521789,
+        "narHash": "sha256-bXMbbCerfobJHs45KQrjyp2H9VS4tKuK7EEFySYgJqQ=",
+        "owner": "shinzui",
+        "repo": "settei",
+        "rev": "1bf62b0af110b4f42fe2528e9d459e0ccf12d626",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "settei",
+        "type": "github"
+      }
+    },
+    "settei-src_8": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784521789,
+        "narHash": "sha256-bXMbbCerfobJHs45KQrjyp2H9VS4tKuK7EEFySYgJqQ=",
+        "owner": "shinzui",
+        "repo": "settei",
+        "rev": "1bf62b0af110b4f42fe2528e9d459e0ccf12d626",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "settei",
+        "type": "github"
+      }
+    },
+    "settei-src_9": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784521789,
+        "narHash": "sha256-bXMbbCerfobJHs45KQrjyp2H9VS4tKuK7EEFySYgJqQ=",
+        "owner": "shinzui",
+        "repo": "settei",
+        "rev": "1bf62b0af110b4f42fe2528e9d459e0ccf12d626",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "settei",
+        "type": "github"
+      }
+    },
     "shibuya-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1783204727,
-        "narHash": "sha256-b1NoMQDlz876+H8zJ/KUgb+9cWWZXy04jGgXX3GfDpA=",
+        "lastModified": 1786391485,
+        "narHash": "sha256-DqjTOmDS4lMkougeDhyyFIER/Etyp6nulz2NGD9I0do=",
         "owner": "shinzui",
         "repo": "shibuya",
-        "rev": "172df245f40a454af46dd7f4cde855eaa4414c5a",
+        "rev": "daa1e0c8726bd407288bbeb065146e01a63a4046",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "type": "github"
+      }
+    },
+    "shibuya-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786391485,
+        "narHash": "sha256-DqjTOmDS4lMkougeDhyyFIER/Etyp6nulz2NGD9I0do=",
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "rev": "daa1e0c8726bd407288bbeb065146e01a63a4046",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "type": "github"
+      }
+    },
+    "shibuya-src_11": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786391485,
+        "narHash": "sha256-DqjTOmDS4lMkougeDhyyFIER/Etyp6nulz2NGD9I0do=",
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "rev": "daa1e0c8726bd407288bbeb065146e01a63a4046",
         "type": "github"
       },
       "original": {
@@ -3822,11 +5175,11 @@
     "shibuya-src_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1783204727,
-        "narHash": "sha256-b1NoMQDlz876+H8zJ/KUgb+9cWWZXy04jGgXX3GfDpA=",
+        "lastModified": 1786391485,
+        "narHash": "sha256-DqjTOmDS4lMkougeDhyyFIER/Etyp6nulz2NGD9I0do=",
         "owner": "shinzui",
         "repo": "shibuya",
-        "rev": "172df245f40a454af46dd7f4cde855eaa4414c5a",
+        "rev": "daa1e0c8726bd407288bbeb065146e01a63a4046",
         "type": "github"
       },
       "original": {
@@ -3870,11 +5223,75 @@
     "shibuya-src_5": {
       "flake": false,
       "locked": {
-        "lastModified": 1783204727,
-        "narHash": "sha256-b1NoMQDlz876+H8zJ/KUgb+9cWWZXy04jGgXX3GfDpA=",
+        "lastModified": 1786391485,
+        "narHash": "sha256-DqjTOmDS4lMkougeDhyyFIER/Etyp6nulz2NGD9I0do=",
         "owner": "shinzui",
         "repo": "shibuya",
-        "rev": "172df245f40a454af46dd7f4cde855eaa4414c5a",
+        "rev": "daa1e0c8726bd407288bbeb065146e01a63a4046",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "type": "github"
+      }
+    },
+    "shibuya-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786391485,
+        "narHash": "sha256-DqjTOmDS4lMkougeDhyyFIER/Etyp6nulz2NGD9I0do=",
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "rev": "daa1e0c8726bd407288bbeb065146e01a63a4046",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "type": "github"
+      }
+    },
+    "shibuya-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786391485,
+        "narHash": "sha256-DqjTOmDS4lMkougeDhyyFIER/Etyp6nulz2NGD9I0do=",
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "rev": "daa1e0c8726bd407288bbeb065146e01a63a4046",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "type": "github"
+      }
+    },
+    "shibuya-src_8": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786391485,
+        "narHash": "sha256-DqjTOmDS4lMkougeDhyyFIER/Etyp6nulz2NGD9I0do=",
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "rev": "daa1e0c8726bd407288bbeb065146e01a63a4046",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "type": "github"
+      }
+    },
+    "shibuya-src_9": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786391485,
+        "narHash": "sha256-DqjTOmDS4lMkougeDhyyFIER/Etyp6nulz2NGD9I0do=",
+        "owner": "shinzui",
+        "repo": "shibuya",
+        "rev": "daa1e0c8726bd407288bbeb065146e01a63a4046",
         "type": "github"
       },
       "original": {
@@ -3905,11 +5322,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788649025,
-        "narHash": "sha256-dMAS52h5lB/bfV/0EK+nZ2dOuYatNvQaJ7mBC13R5B8=",
+        "lastModified": 1788710487,
+        "narHash": "sha256-wF73gnC71FeinSj5BPSTjGprkeiXYJfRXIy7iP/eqrc=",
         "owner": "shinzui",
         "repo": "shiki",
-        "rev": "f71dfac5d721b81a2d425784fe014c63f3e2684b",
+        "rev": "a7fe454135d622b756ae7d875ac041a389662565",
         "type": "github"
       },
       "original": {
@@ -3921,11 +5338,43 @@
     "shikumi-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1783222763,
-        "narHash": "sha256-NhsJUfH8Zw0VHL9xZQUGJOJ1CQhibvi9BCuqULEUrbs=",
+        "lastModified": 1788123851,
+        "narHash": "sha256-t6RvFCDyfONhJBV+MAedl8+NbC9sF3eJtb4a8fAzbac=",
         "owner": "shinzui",
         "repo": "shikumi",
-        "rev": "0df4d85928c79cbfe78d7880a263fc0b9696ddc2",
+        "rev": "1a9edcce84ab0aef40e4505c3f3b563ec994bbbc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "type": "github"
+      }
+    },
+    "shikumi-src_10": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788123851,
+        "narHash": "sha256-t6RvFCDyfONhJBV+MAedl8+NbC9sF3eJtb4a8fAzbac=",
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "rev": "1a9edcce84ab0aef40e4505c3f3b563ec994bbbc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "type": "github"
+      }
+    },
+    "shikumi-src_11": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788123851,
+        "narHash": "sha256-t6RvFCDyfONhJBV+MAedl8+NbC9sF3eJtb4a8fAzbac=",
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "rev": "1a9edcce84ab0aef40e4505c3f3b563ec994bbbc",
         "type": "github"
       },
       "original": {
@@ -3937,11 +5386,11 @@
     "shikumi-src_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1786198021,
-        "narHash": "sha256-rC8/QNm6MZxNEEUrmjd39BepD8TRLkYR6qPBw3VF6wU=",
+        "lastModified": 1788123851,
+        "narHash": "sha256-t6RvFCDyfONhJBV+MAedl8+NbC9sF3eJtb4a8fAzbac=",
         "owner": "shinzui",
         "repo": "shikumi",
-        "rev": "11ba97d51fd1a97fd90857193eb8f3869fb181c8",
+        "rev": "1a9edcce84ab0aef40e4505c3f3b563ec994bbbc",
         "type": "github"
       },
       "original": {
@@ -3969,6 +5418,70 @@
     "shikumi-src_4": {
       "flake": false,
       "locked": {
+        "lastModified": 1788123851,
+        "narHash": "sha256-t6RvFCDyfONhJBV+MAedl8+NbC9sF3eJtb4a8fAzbac=",
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "rev": "1a9edcce84ab0aef40e4505c3f3b563ec994bbbc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "type": "github"
+      }
+    },
+    "shikumi-src_5": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788123851,
+        "narHash": "sha256-t6RvFCDyfONhJBV+MAedl8+NbC9sF3eJtb4a8fAzbac=",
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "rev": "1a9edcce84ab0aef40e4505c3f3b563ec994bbbc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "type": "github"
+      }
+    },
+    "shikumi-src_6": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788123851,
+        "narHash": "sha256-t6RvFCDyfONhJBV+MAedl8+NbC9sF3eJtb4a8fAzbac=",
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "rev": "1a9edcce84ab0aef40e4505c3f3b563ec994bbbc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "type": "github"
+      }
+    },
+    "shikumi-src_7": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788123851,
+        "narHash": "sha256-t6RvFCDyfONhJBV+MAedl8+NbC9sF3eJtb4a8fAzbac=",
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "rev": "1a9edcce84ab0aef40e4505c3f3b563ec994bbbc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shinzui",
+        "repo": "shikumi",
+        "type": "github"
+      }
+    },
+    "shikumi-src_8": {
+      "flake": false,
+      "locked": {
         "lastModified": 1786198021,
         "narHash": "sha256-rC8/QNm6MZxNEEUrmjd39BepD8TRLkYR6qPBw3VF6wU=",
         "owner": "shinzui",
@@ -3982,14 +5495,14 @@
         "type": "github"
       }
     },
-    "shikumi-src_5": {
+    "shikumi-src_9": {
       "flake": false,
       "locked": {
-        "lastModified": 1784597799,
-        "narHash": "sha256-DC9T4xifsc/i0wMZPTLRwPDUzR0wGGjALKAWqUGLjqg=",
+        "lastModified": 1788123851,
+        "narHash": "sha256-t6RvFCDyfONhJBV+MAedl8+NbC9sF3eJtb4a8fAzbac=",
         "owner": "shinzui",
         "repo": "shikumi",
-        "rev": "580b6c70a58bc96a8d52502c2e7c9376d2c46a15",
+        "rev": "1a9edcce84ab0aef40e4505c3f3b563ec994bbbc",
         "type": "github"
       },
       "original": {
