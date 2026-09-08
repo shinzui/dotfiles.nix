@@ -2,6 +2,8 @@
     { rs = "registry show --full"
     , rl = "registry list"
     , rlo = "registry list --observed"
+    , rr = "registry releases"
+    , rrl = "registry releases --latest"
     , s = "show --full"
     , od = "registry open-doc"
     , abc = "agent bootstrap --corpus"
