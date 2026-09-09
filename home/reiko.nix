@@ -22,7 +22,6 @@ let
     set -euo pipefail
     export REI_PG_CONNECTION_STRING="${connStr}"
     export KIROKU_REMOTE_URL="${reiCli.kirokuRemoteUrl}"
-    export REI_KIROKU_CONTEXTS="${reiCli.reiKirokuContexts}"
     export PATH="${reiCli.binDir}:$PATH"
 
     mkdir -p "${logDir}"
@@ -56,7 +55,6 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = connStr;
         KIROKU_REMOTE_URL = reiCli.kirokuRemoteUrl;
-        REI_KIROKU_CONTEXTS = reiCli.reiKirokuContexts;
       };
       StandardOutPath = "${logDir}/web.stdout.log";
       StandardErrorPath = "${logDir}/web.stderr.log";

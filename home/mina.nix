@@ -52,7 +52,6 @@ let
     export MORI_PG_CONNECTION_STRING="${moriConnStr}"
     export REI_PG_CONNECTION_STRING="${reiCli.connStr}"
     export KIROKU_REMOTE_URL="${reiCli.kirokuRemoteUrl}"
-    export REI_KIROKU_CONTEXTS="${reiCli.reiKirokuContexts}"
     export PATH="${pkgs.mori}/bin:${reiCli.binDir}:$PATH"
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')

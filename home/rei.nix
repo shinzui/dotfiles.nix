@@ -90,10 +90,6 @@ let
       '')
       (otelEnv serviceName));
 
-  # keiro migration cutover (EP-24): the comma-separated set of every routed
-  # bounded context. Sourced from ./rei-cli-env.nix (shared with home/mina.nix).
-  reiKirokuContexts = reiCli.reiKirokuContexts;
-
   waitForPg = ''
     until ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; do
       sleep 2
@@ -149,7 +145,6 @@ let
     set -euo pipefail
     export REI_PG_CONNECTION_STRING="${connStr}"
     export PG_CONNECTION_STRING="${connStr}"
-    export REI_KIROKU_CONTEXTS="${reiKirokuContexts}"
     export REI_KIROKU_METRICS_PORT="${kirokuMetricsPort}"
     ${otelExports "rei-worker-kiroku"}
 
@@ -239,9 +234,6 @@ in
   programs.zsh.sessionVariables = {
     REI_PG_CONNECTION_STRING = connStr;
     KIROKU_REMOTE_URL = kirokuRemoteUrl;
-    # keiro migration cutover: route the interactive rei CLI to kiroku. Takes effect in
-    # NEW login shells (run `exec zsh` after switching). See EP-24 (rei docs/plans/100).
-    REI_KIROKU_CONTEXTS = reiKirokuContexts;
   } // otelEnv "rei";
 
   # keiro migration cutover (EP-24): the message-db polling subscriber is obsolete once
@@ -307,10 +299,10 @@ in
     };
   };
 
-  # keiro migration cutover (EP-24): the keiro reactive-layer host. Runs every flipped
-  # context's inline/async projections, Routers, process managers, durable timers (reminder
-  # fire, dormancy daily-eval), and git side-effect legs. REI_KIROKU_CONTEXTS in the wrapper
-  # env gates which legs activate.
+  # keiro migration cutover (EP-24): the keiro reactive-layer host. Runs the
+  # inline/async projections, Routers, process managers, durable timers (reminder
+  # fire, dormancy daily-eval), and git side-effect legs. Every leg now runs
+  # unconditionally -- the REI_KIROKU_CONTEXTS gate was retired on 2026-09-09.
   launchd.agents.rei-worker-kiroku = {
     enable = true;
     config = {
@@ -324,7 +316,6 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
-        REI_KIROKU_CONTEXTS = reiKirokuContexts;
         REI_KIROKU_METRICS_PORT = kirokuMetricsPort;
       } // otelEnv "rei-worker-kiroku";
     };
