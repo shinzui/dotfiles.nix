@@ -1,0 +1,21 @@
+rei {
+  category "work/project/task" {
+    manage "task-phase"
+    lifecycle-property "task-phase"
+  }
+}
+
+aliases {
+  h  "help"
+  i  "rei intention show"
+  lr "rei local-repo"
+  lrd "rei local-repo --dry-run"
+  al "alias list"
+  ci "rei create-intention"
+  rcs "rei config show --json"
+  mpi "master-plan list --incomplete"
+  mpl "master-plan list"
+  epi "exec-plan list --incomplete"
+  epl "exec-plan list"
+  ds "docket status"
+}
