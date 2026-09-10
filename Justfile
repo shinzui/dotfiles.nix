@@ -27,20 +27,38 @@ symlink-claude-skills:
         fi
     done
 
-# Update kizamu flake input to latest
+# Update one or more shinzui Haskell projects together with `haskell-nix-dev`,
+# the shared toolchain base flake they all follow.
+#
+# The base must move with them. Each project declares its module-owned inputs as
+# `follows = "haskell-nix-dev/<name>"` (nixpkgs, flake-parts, treefmt-nix,
+# pre-commit-hooks), so a project revision that expects inputs the locked base
+# does not re-export cannot resolve at all:
+#
+#   error: input 'seihou/flake-parts' follows a non-existent input
+#          'seihou/haskell-nix-dev/flake-parts'
+#
+# That is not recoverable by updating the project alone — `nix flake update
+# seihou` touches only the seihou node and leaves the stale base in place.
+#
+# Bumping the base is deliberately fleet-wide: it is the single pin every
+# project's nixpkgs follows, which is what keeps them on one GHC and one
+# nixpkgs and lets them share the binary cache. Expect the other Haskell
+# inputs to rebuild against the new base after this runs.
+_update-with-base +INPUTS:
+    nix flake update haskell-nix-dev {{INPUTS}}
+
+# Update kizamu flake input to latest (moves the haskell-nix-dev base too)
 [group: 'kizamu']
-update-kizamu:
-    nix flake update kizamu
+update-kizamu: (_update-with-base "kizamu")
 
-# Update mina flake input to latest
+# Update mina flake input to latest (moves the haskell-nix-dev base too)
 [group: 'mina']
-update-mina:
-    nix flake update mina
+update-mina: (_update-with-base "mina")
 
-# Update mori flake input to latest
+# Update mori flake input to latest (moves the haskell-nix-dev base too)
 [group: 'mori']
-update-mori:
-    nix flake update mori
+update-mori: (_update-with-base "mori")
 
 # Restart mori automate daemon
 [group: 'mori']
@@ -67,10 +85,9 @@ logs-mori-postgres:
 logs-mori:
     tail -f ~/.mori/logs/*.log
 
-# Update mori-rei-app flake input to latest
+# Update mori-rei-app flake input to latest (moves the haskell-nix-dev base too)
 [group: 'mori-rei-app']
-update-mori-rei-app:
-    nix flake update mori-rei-app
+update-mori-rei-app: (_update-with-base "mori-rei-app")
 
 # Restart mori-rei-app server
 [group: 'mori-rei-app']
@@ -87,15 +104,13 @@ status-mori-rei-app:
 logs-mori-rei-app:
     tail -f ~/.mori-rei-app/logs/server.stdout.log ~/.mori-rei-app/logs/server.stderr.log
 
-# Update seihou flake input to latest
+# Update seihou flake input to latest (moves the haskell-nix-dev base too)
 [group: 'seihou']
-update-seihou:
-    nix flake update seihou
+update-seihou: (_update-with-base "seihou")
 
-# Update rei flake input to latest
+# Update rei flake input to latest (moves the haskell-nix-dev base too)
 [group: 'rei']
-update-rei:
-    nix flake update rei
+update-rei: (_update-with-base "rei")
 
 # Check status of rei launchd agents
 [group: 'rei']
@@ -119,20 +134,17 @@ logs-rei-subscription:
 logs-rei:
     tail -f ~/.rei/logs/*.log
 
-# Update reiko flake input to latest
+# Update reiko flake input to latest (moves the haskell-nix-dev base too)
 [group: 'reiko']
-update-reiko:
-    nix flake update reiko
+update-reiko: (_update-with-base "reiko")
 
-# Update notion-cli flake input to latest
+# Update notion-cli flake input to latest (moves the haskell-nix-dev base too)
 [group: 'notion-cli']
-update-notion-cli:
-    nix flake update notion-cli
+update-notion-cli: (_update-with-base "notion-cli")
 
-# Update notion-hub flake input to latest
+# Update notion-hub flake input to latest (moves the haskell-nix-dev base too)
 [group: 'notion-hub']
-update-notion-hub:
-    nix flake update notion-hub
+update-notion-hub: (_update-with-base "notion-hub")
 
 # Restart notion-hub subscription daemon
 [group: 'notion-hub']
@@ -211,8 +223,14 @@ redpanda-ui:
 
 # Update all personal tool flake inputs (kizamu, mina, mori, mori-rei-app, seihou, rei, reiko, notion-cli, notion-hub)
 [group: 'tools']
-update-tools:
-    nix flake update kizamu mina mori mori-rei-app seihou rei reiko notion-cli notion-hub
+update-tools: (_update-with-base "kizamu" "mina" "mori" "mori-rei-app" "seihou" "rei" "reiko" "notion-cli" "notion-hub")
+
+# Update every input that follows haskell-nix-dev, plus the base itself. Wider
+# than `update-tools`: also covers the library inputs with no recipe of their
+# own (kazuha, nihongo, shiki, okf). Use this after a breaking base change, so
+# no project is left resolving against a base contract it does not expect.
+[group: 'tools']
+update-haskell-fleet: (_update-with-base "mori" "rei" "reiko" "seihou" "kizamu" "kazuha" "mina" "nihongo" "shiki" "okf" "notion-cli" "mori-rei-app" "notion-hub")
 
 # Check status of all personal tool agents
 [group: 'tools']
