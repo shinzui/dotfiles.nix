@@ -12,6 +12,11 @@ let
   # Touched after every validated full backup; the scheduler uses its age to pick
   # full vs incremental.
   pgLastFullStamp = "${pgStateDir}/last-full-backup";
+  # Held by pg-backup for the whole run so the offsite sync never copies a
+  # catalog mid-backup.
+  pgBackupLock = "${pgStateDir}/backup.lock";
+  pgOffsiteVolume = "/Volumes/aki-2023";
+  pgOffsiteDir = "${pgOffsiteVolume}/postgresql-backups";
 
   pg-ensure-db = pkgs.writeShellScriptBin "pg-ensure-db" ''
     set -euo pipefail
@@ -60,6 +65,12 @@ let
 
     if ! ${pg}/bin/pg_isready -h "$PGHOST" > /dev/null 2>&1; then
       echo "Error: PostgreSQL is not running."
+      exit 1
+    fi
+
+    exec 9>"${pgBackupLock}"
+    if ! ${pkgs.flock}/bin/flock -n 9; then
+      echo "Error: another backup or offsite sync is running."
       exit 1
     fi
 
@@ -121,7 +132,40 @@ let
       fi
     fi
 
-    exec ${pg-backup}/bin/pg-backup "$mode"
+    ${pg-backup}/bin/pg-backup "$mode"
+    ${pg-backup-offsite-sync}/bin/pg-backup-offsite-sync
+  '';
+
+  # Mirrors the pg_rman catalog to the external drive. Runs after each scheduled
+  # backup and on any volume mount, so a backup taken while the drive was
+  # unplugged is copied the next time it is attached.
+  pg-backup-offsite-sync = pkgs.writeShellScriptBin "pg-backup-offsite-sync" ''
+    set -euo pipefail
+
+    # /Volumes/<name> only exists while mounted, but a real mount has its own
+    # device id; check that so --delete can never target a stray directory.
+    if [ ! -d "${pgOffsiteVolume}" ] || \
+       [ "$(${pkgs.coreutils}/bin/stat -c %d "${pgOffsiteVolume}")" = "$(${pkgs.coreutils}/bin/stat -c %d /Volumes)" ]; then
+      echo "${pgOffsiteVolume} not mounted; skipping offsite sync."
+      exit 0
+    fi
+
+    # Guard --delete against an empty or missing source wiping the mirror.
+    if [ ! -f "${pgBackupDir}/pg_rman.ini" ]; then
+      echo "Error: ${pgBackupDir} is not a pg_rman catalog; refusing to sync."
+      exit 1
+    fi
+
+    exec 9>"${pgBackupLock}"
+    if ! ${pkgs.flock}/bin/flock -w 3600 9; then
+      echo "Error: timed out waiting for running backup; skipping offsite sync."
+      exit 1
+    fi
+
+    echo "=== $(${pkgs.coreutils}/bin/date -Is) offsite sync to ${pgOffsiteDir} ==="
+    mkdir -p "${pgOffsiteDir}"
+    ${pkgs.rsync}/bin/rsync -a --delete "${pgBackupDir}/" "${pgOffsiteDir}/"
+    echo "Offsite sync complete."
   '';
 
   pg-backup-show = pkgs.writeShellScriptBin "pg-backup-show" ''
@@ -165,6 +209,7 @@ in
       pg-ensure-db
       pg-backup
       pg-backup-scheduled
+      pg-backup-offsite-sync
       pg-backup-show
       pg-backup-purge
     ];
@@ -252,6 +297,20 @@ PGCONF
         Nice = 10;
         StandardOutPath = "${pgLog}/pg-backup.stdout.log";
         StandardErrorPath = "${pgLog}/pg-backup.stderr.log";
+      };
+    };
+
+    launchd.agents.pg-backup-offsite-sync = {
+      enable = true;
+      config = {
+        Label = "com.shinzui.pg-backup-offsite-sync";
+        ProgramArguments = [ "${pg-backup-offsite-sync}/bin/pg-backup-offsite-sync" ];
+        # Fires on every volume mount; the script exits unless it is the backup drive.
+        StartOnMount = true;
+        LowPriorityIO = true;
+        Nice = 10;
+        StandardOutPath = "${pgLog}/pg-backup-offsite-sync.stdout.log";
+        StandardErrorPath = "${pgLog}/pg-backup-offsite-sync.stderr.log";
       };
     };
   };
