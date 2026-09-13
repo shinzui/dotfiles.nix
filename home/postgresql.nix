@@ -9,6 +9,9 @@ let
   pgLog = "${pgStateDir}/logs";
   pgBackupDir = "${config.home.homeDirectory}/.local/share/postgresql/backups";
   pgArchiveDir = "${config.home.homeDirectory}/.local/share/postgresql/archivelog";
+  # Touched after every validated full backup; the scheduler uses its age to pick
+  # full vs incremental.
+  pgLastFullStamp = "${pgStateDir}/last-full-backup";
 
   pg-ensure-db = pkgs.writeShellScriptBin "pg-ensure-db" ''
     set -euo pipefail
@@ -85,10 +88,40 @@ let
     ${pkgs.pg_rman}/bin/pg_rman validate \
       -B "${pgBackupDir}"
 
+    if [[ "$BACKUP_MODE" == "full" ]]; then
+      ${pkgs.coreutils}/bin/touch "${pgLastFullStamp}"
+    fi
+
     echo ""
     echo "Backup complete. Recent backups:"
     ${pkgs.pg_rman}/bin/pg_rman show \
       -B "${pgBackupDir}"
+  '';
+
+  # Run daily by launchd. One agent that picks the mode, rather than separate
+  # weekly-full and daily-incremental agents: launchd fires missed calendar jobs
+  # on wake, so two agents would race after a sleep, and an incremental could run
+  # without a recent full behind it.
+  pg-backup-scheduled = pkgs.writeShellScriptBin "pg-backup-scheduled" ''
+    set -euo pipefail
+    FULL_INTERVAL_SECS="''${PG_FULL_BACKUP_INTERVAL_SECS:-561600}" # 6.5 days
+    echo "=== $(${pkgs.coreutils}/bin/date -Is) ==="
+
+    # launchd may fire right after wake/login, before postgres is accepting.
+    for i in $(${pkgs.coreutils}/bin/seq 1 60); do
+      if ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; then break; fi
+      sleep 1
+    done
+
+    mode=full
+    if [ -f "${pgLastFullStamp}" ]; then
+      age=$(( $(${pkgs.coreutils}/bin/date +%s) - $(${pkgs.coreutils}/bin/stat -c %Y "${pgLastFullStamp}") ))
+      if (( age < FULL_INTERVAL_SECS )); then
+        mode=incremental
+      fi
+    fi
+
+    exec ${pg-backup}/bin/pg-backup "$mode"
   '';
 
   pg-backup-show = pkgs.writeShellScriptBin "pg-backup-show" ''
@@ -131,6 +164,7 @@ in
     home.packages = [
       pg-ensure-db
       pg-backup
+      pg-backup-scheduled
       pg-backup-show
       pg-backup-purge
     ];
@@ -204,6 +238,20 @@ PGCONF
         KeepAlive = true;
         StandardOutPath = "${pgLog}/postgres.stdout.log";
         StandardErrorPath = "${pgLog}/postgres.stderr.log";
+      };
+    };
+
+    launchd.agents.pg-backup = {
+      enable = true;
+      config = {
+        Label = "com.shinzui.pg-backup";
+        ProgramArguments = [ "${pg-backup-scheduled}/bin/pg-backup-scheduled" ];
+        # Daily at 03:00; if asleep then, launchd runs it once on wake.
+        StartCalendarInterval = [ { Hour = 3; Minute = 0; } ];
+        LowPriorityIO = true;
+        Nice = 10;
+        StandardOutPath = "${pgLog}/pg-backup.stdout.log";
+        StandardErrorPath = "${pgLog}/pg-backup.stderr.log";
       };
     };
   };
