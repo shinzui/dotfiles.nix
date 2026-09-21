@@ -4310,11 +4310,11 @@
         "typeid-hs-src": "typeid-hs-src_4"
       },
       "locked": {
-        "lastModified": 1790002714,
-        "narHash": "sha256-Pv/vAsgkfIA9zNHIWAtEuJRA3Hn7TiadGlmGohvrKxU=",
+        "lastModified": 1790013733,
+        "narHash": "sha256-Y5S2oTUSpY1JbivDyA4L3s0LgnRRLmPjcaavx1xHpLc=",
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "bfaa879cf730b0a662e5ea17d1b4ef95d10fabca",
+        "rev": "742c461a95d668df7df5577c3603bbe832ecbdae",
         "type": "github"
       },
       "original": {
