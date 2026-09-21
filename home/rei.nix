@@ -5,6 +5,7 @@ let
   pgSocket = config.services.postgresql.socketDir;
   reiBin = "${pkgs.rei}/bin/rei";
   reiLogDir = "${config.home.homeDirectory}/.rei/logs";
+  agentCliPath = "${config.home.homeDirectory}/.local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin";
 
   # Shared rei CLI runtime environment (connection string + keiro routing),
   # also consumed by home/mina.nix so mina's spawned `rei` reads current data.
@@ -275,6 +276,10 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
+        # Scheduled agent work launches the configured provider CLI by name.
+        # launchd's default PATH cannot see the user-installed Claude CLI or
+        # the Homebrew-installed Codex CLI.
+        PATH = agentCliPath;
       } // otelEnv "rei-worker";
     };
   };
