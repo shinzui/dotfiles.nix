@@ -3120,11 +3120,11 @@
         "typeid-hs-src": "typeid-hs-src_3"
       },
       "locked": {
-        "lastModified": 1790223068,
-        "narHash": "sha256-alYvGqmSzLGdHAs2OWhmnNbkmbCG99z8IlbCyunRzuc=",
+        "lastModified": 1790274582,
+        "narHash": "sha256-UZJG9eeDKD6M+ooeIivMtrsg1Td5DA6TBRskC4NTHhg=",
         "owner": "shinzui",
         "repo": "notion-hub",
-        "rev": "46d9cc52a83292d7f1eb64ba26592cec6cb5fcf4",
+        "rev": "7468391377b58b5d4894b9b159fac14d43f0a73c",
         "type": "github"
       },
       "original": {
@@ -4341,11 +4341,11 @@
         "typeid-hs-src": "typeid-hs-src_4"
       },
       "locked": {
-        "lastModified": 1790013733,
-        "narHash": "sha256-Y5S2oTUSpY1JbivDyA4L3s0LgnRRLmPjcaavx1xHpLc=",
+        "lastModified": 1790056873,
+        "narHash": "sha256-y/z+vjynj0aP1zXbJeryo0G+MPd9/PFjbOk7saktaiI=",
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "742c461a95d668df7df5577c3603bbe832ecbdae",
+        "rev": "03cc7b67bf853e743592f4484eef49d3a2434588",
         "type": "github"
       },
       "original": {
