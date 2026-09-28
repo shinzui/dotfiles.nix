@@ -61,7 +61,8 @@ let
         fi
         sleep 1
       done
-      exec socat - "TCP:127.0.0.1:$PORT"
+      # Keep the shell alive so its EXIT trap stops the IAP tunnel.
+      socat - "TCP:127.0.0.1:$PORT"
     '';
   };
 in
