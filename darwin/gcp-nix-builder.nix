@@ -49,19 +49,19 @@ let
       # macOS when used as a ProxyCommand.
       PORT=$(( RANDOM % 10000 + 20000 ))
       gc --project="$PROJECT" compute start-iap-tunnel "$INSTANCE" 22 \
-        --zone="$ZONE" --local-host-port="localhost:$PORT" --quiet 2>/dev/null &
+        --zone="$ZONE" --local-host-port="127.0.0.1:$PORT" --quiet 2>/dev/null &
       tunnel_pid=$!
       trap 'kill "$tunnel_pid" 2>/dev/null || true' EXIT
 
       # Wait up to 90s for the local tunnel listener (and the VM) to be
       # ready. A cold-started VM needs ~30s to be SSH-able.
       for _ in $(seq 1 90); do
-        if (exec 3<>"/dev/tcp/localhost/$PORT") 2>/dev/null; then
+        if (exec 3<>"/dev/tcp/127.0.0.1/$PORT") 2>/dev/null; then
           break
         fi
         sleep 1
       done
-      exec socat - "TCP:localhost:$PORT"
+      exec socat - "TCP:127.0.0.1:$PORT"
     '';
   };
 in
