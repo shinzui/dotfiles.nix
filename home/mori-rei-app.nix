@@ -12,11 +12,16 @@ let
   # event store so rei's schema is not coupled to application state.
   appConnStr = "host=${pgSocket} dbname=mori_rei_app";
   secretPath = age.secrets.mori-rei-app-webhook-secret.path;
+  # Mori's HTTP API, used to resolve each commit's repoId to its project.
+  # Unset, the app dials :8080 (Redpanda Console) and every commit group falls
+  # back to the intention's local-repo property.
+  moriApiUrl = (import ./mori-api-env.nix).url;
 
   mori-rei-app-wrapper = pkgs.writeShellScript "mori-rei-app" ''
     set -euo pipefail
     export REI_PG_CONNECTION_STRING="${reiConnStr}"
     export MORI_REI_APP_PG_CONNECTION_STRING="${appConnStr}"
+    export MORI_API_URL="${moriApiUrl}"
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
     exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
@@ -111,6 +116,7 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = reiConnStr;
         MORI_REI_APP_PG_CONNECTION_STRING = appConnStr;
+        MORI_API_URL = moriApiUrl;
         # The summariser shells out to `claude`, which is user-installed
         # under ~/.local/bin and not on launchd's default PATH.
         PATH = "${config.home.homeDirectory}/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin";

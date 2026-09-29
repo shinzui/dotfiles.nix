@@ -13,6 +13,7 @@ let
   #   traces   -> 127.0.0.1:10428  (VictoriaTraces, home/victoriatraces.nix)
   #   jaeger   -> 127.0.0.1:16686  (Jaeger UI, home/victoriatraces.nix)
   #   redpanda -> 127.0.0.1:8080   (Redpanda Console, home/redpanda.nix)
+  #   mori     -> 127.0.0.1:8780   (mori serve, home/mori.nix) -- this machine only
   #
   # Plain HTTP on :80 avoids local CA trust for these names.
   #
@@ -30,6 +31,17 @@ let
     traces = 10428;
     jaeger = 16686;
     redpanda = 8080;
+  };
+
+  # Services proxied for clients on THIS machine only. Mori's API has no auth
+  # on loopback (Mori ADR 0012) and POST /v1/apps returns live webhook signing
+  # secrets; Caddy dials it from 127.0.0.1, so proxying it to the LAN would
+  # bypass that perimeter. A Host-header matcher alone is not enough -- a LAN
+  # client can send `Host: mori.localhost` to this Mac's :80 -- so these routes
+  # also match on the connecting peer's address. Anything else asking for
+  # mori.* falls through to the 404 below.
+  localOnlyServices = {
+    mori = (import ./mori-api-env.nix).port;
   };
 
   # Documentation sites (fumadocs + Vite) under ~/Keikaku/bokuno/<name>-docs.
@@ -71,15 +83,15 @@ let
   # two upstreams may not share a port, or one route silently shadows the other.
   allRoutes =
     let
-      clashingNames = lib.intersectLists (lib.attrNames services) (lib.attrNames devSites);
-      merged = services // devSites;
-      ports = lib.attrValues merged;
+      names = lib.concatMap lib.attrNames [ services devSites localOnlyServices ];
+      clashingNames = lib.unique (lib.filter (n: lib.count (m: m == n) names > 1) names);
+      ports = lib.concatMap lib.attrValues [ services devSites localOnlyServices ];
     in
     assert lib.assertMsg (clashingNames == [ ])
-      "local-web-proxy: name claimed by both services and devSites: ${lib.concatStringsSep ", " clashingNames}";
+      "local-web-proxy: name claimed twice across services, devSites and localOnlyServices: ${lib.concatStringsSep ", " clashingNames}";
     assert lib.assertMsg (lib.length (lib.unique ports) == lib.length ports)
       "local-web-proxy: two routes share a port";
-    merged;
+    services // devSites;
 
   # Each service matches on the FIRST LABEL of the Host header rather than on a
   # fixed site address, so the domain suffix does not matter: mina.localhost
@@ -104,8 +116,21 @@ let
       }
   '';
 
+  # remote_ip is the TCP peer, not X-Forwarded-For, so a LAN client cannot
+  # spoof its way in; [::1] covers browsers that resolve *.localhost to IPv6.
+  localOnlyRoute = name: port: ''
+      @${name} {
+        expression {host}.startsWith("${name}.")
+        remote_ip 127.0.0.1/32 ::1/128
+      }
+      handle @${name} {
+        reverse_proxy 127.0.0.1:${toString port}
+      }
+  '';
+
   caddyfile = pkgs.writeText "local-web-proxy.Caddyfile" ''
     :80 {
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList localOnlyRoute localOnlyServices)}
     ${lib.concatStringsSep "\n" (lib.mapAttrsToList route allRoutes)}
       handle {
         respond "local-web-proxy: no service for host {host}" 404

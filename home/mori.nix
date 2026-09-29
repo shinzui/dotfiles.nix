@@ -40,6 +40,26 @@ let
     exec ${pkgs.mori}/bin/mori automate daemon --ingest-interval 600
   '';
 
+  moriApi = import ./mori-api-env.nix;
+
+  # Mori's HTTP API, consumed by rei and mori-rei-app via MORI_API_URL. Binds
+  # loopback only, so no MORI_API_TOKEN is needed (Mori ADR 0012).
+  mori-serve-wrapper = pkgs.writeShellScript "mori-serve" ''
+    set -euo pipefail
+    export MORI_PG_CONNECTION_STRING="${connStr}"
+    export MORI_KIROKU_CONTEXTS="${moriKirokuContexts}"
+
+    exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
+    exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
+
+    # Wait for PostgreSQL to be ready
+    until ${pg}/bin/pg_isready -h "${pgSocket}" > /dev/null 2>&1; do
+      sleep 2
+    done
+
+    exec ${pkgs.mori}/bin/mori serve --host ${moriApi.host} --port ${toString moriApi.port}
+  '';
+
   mori-db-setup = pkgs.writeShellScriptBin "mori-db-setup" ''
     set -euo pipefail
     pg-ensure-db mori
@@ -105,11 +125,31 @@ in
     }
 
     stop_and_wait "com.shinzui.mori-automate"
+    stop_and_wait "com.shinzui.mori-serve"
   '';
 
   programs.zsh.sessionVariables = {
     MORI_PG_CONNECTION_STRING = connStr;
     MORI_KIROKU_CONTEXTS = moriKirokuContexts;
+    # Read by the rei CLI's project commands; see home/mori-api-env.nix.
+    MORI_API_URL = moriApi.url;
+  };
+
+  launchd.agents.mori-serve = {
+    enable = true;
+    config = {
+      Label = "com.shinzui.mori-serve";
+      ProgramArguments = [ "${mori-serve-wrapper}" ];
+      RunAtLoad = true;
+      KeepAlive = true;
+      ExitTimeOut = 15;
+      StandardOutPath = "${moriLogDir}/serve.stdout.log";
+      StandardErrorPath = "${moriLogDir}/serve.stderr.log";
+      EnvironmentVariables = {
+        MORI_PG_CONNECTION_STRING = connStr;
+        MORI_KIROKU_CONTEXTS = moriKirokuContexts;
+      };
+    };
   };
 
   launchd.agents.mori-automate = {

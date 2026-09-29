@@ -64,6 +64,8 @@ let
     { app = "rei-subscription";        stream = "stderr"; file = "${homeDir}/.rei/logs/subscription.stderr.log"; }
     { app = "mori-automate";           stream = "stdout"; file = "${homeDir}/.mori/logs/automate.stdout.log"; }
     { app = "mori-automate";           stream = "stderr"; file = "${homeDir}/.mori/logs/automate.stderr.log"; }
+    { app = "mori-serve";              stream = "stdout"; file = "${homeDir}/.mori/logs/serve.stdout.log"; }
+    { app = "mori-serve";              stream = "stderr"; file = "${homeDir}/.mori/logs/serve.stderr.log"; }
     { app = "mori-rei-app";            stream = "stdout"; file = "${homeDir}/.mori-rei-app/logs/server.stdout.log"; }
     { app = "mori-rei-app";            stream = "stderr"; file = "${homeDir}/.mori-rei-app/logs/server.stderr.log"; }
     { app = "notion-hub-subscription"; stream = "stdout"; file = "${homeDir}/.notion-hub/logs/subscription.stdout.log"; }
