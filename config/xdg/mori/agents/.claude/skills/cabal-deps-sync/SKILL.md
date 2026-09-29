@@ -1,6 +1,6 @@
 ---
 name: cabal-deps-sync
-version: "1.0.0"
+version: "1.0.1"
 description: >
   Inspect a Haskell project's .cabal files and sync the dependency declarations in its
   mori.dhall against the local mori registry — mapping cabal build-depends to registered
@@ -289,7 +289,7 @@ mori validate                     # Dhall type + schema check
 mori deps resolve                 # every declared dep must resolve against the registry
 mori deps explain <name>          # which rule fired, and at what grain
 mori deps tree --scope all        # optional: see the resulting graph
-mori register --local             # publish the updated identity
+mori register             # publish the updated identity
 ```
 
 `mori validate` passing does **not** mean the names resolve — it only type-checks. Always

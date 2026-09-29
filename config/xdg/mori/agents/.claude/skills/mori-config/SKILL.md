@@ -1,6 +1,6 @@
 ---
 name: mori-config
-version: "0.3.1"
+version: "0.5.0"
 description: >
   Help author, validate, and edit mori.dhall project configuration files. Covers project
   identity, packages, dependencies, repositories, documentation, skills, and subagents.
@@ -82,6 +82,53 @@ field on `Schema.Project`. Required Input fields are `name`, `namespace`,
   , description = Some "What this project does" -- optional; omit to use the default `None Text`
   }
 ```
+
+#### Stable IDs, renames, and aliases
+
+`namespace/name` is the canonical identity and it may change.
+`stableId` is an opaque identity that survives a rename, so
+`mori register` updates the existing registry row instead of creating a
+second one. Mint it rather than inventing one — letters, digits, and `_`
+only:
+
+```console
+mori identity mint --write   # inserts stableId into mori.dhall
+mori validate
+mori identity show           # manifest, repository, and registry identities
+```
+
+`--write` only edits the standard `Schema.ProjectIdentity::{ … }`
+completion form; if it cannot find that form unambiguously it prints the
+line for a manual edit and changes nothing. Re-running when `stableId`
+already exists is a no-op.
+
+To rename, change `namespace` or `name` and keep the same `stableId`,
+then `mori register`. Mori records the previous canonical identity as an
+alias automatically. Declare older identities explicitly when they
+predate the stable ID:
+
+```dhall
+, aliases = [ Schema.ProjectAlias::{ namespace = "old-org", name = "old-name" } ]
+```
+
+Both alias fields are required. References through an alias keep
+resolving; `mori validate --check-refs` reports them as warnings naming
+the current canonical identity.
+
+#### Deprecation
+
+A `Deprecated` lifecycle can carry migration guidance. Both fields are
+optional:
+
+```dhall
+, lifecycle   = Schema.Lifecycle.Deprecated
+, deprecation = Some Schema.Deprecation::{
+  , alternative = Some "myorg/my-project-v2"
+  , details     = Some "Merged into v2; see its migration guide."
+  }
+```
+
+See `mori help project-identity` for the full model.
 
 ### Repos
 
@@ -253,6 +300,62 @@ upstream that is not registered locally warns rather than failing
     ]
 ```
 
+### OKF knowledge bundles (optional)
+
+`okfBundles` declares directories of OKF Markdown concepts this project
+owns. It is unrelated to `bundles` (which groups packages) — do not
+conflate them. Registration catalogs each bundle, indexes its concepts,
+and makes them addressable as `mori://<ns>/<project>/okf/<bundle>`.
+
+```dhall
+, okfBundles =
+    [ Schema.OkfBundle::{
+      , name        = "team-knowledge"
+      , path        = "knowledge/team"
+      , okfVersion  = "0.1"
+      , description = Some "Shared team knowledge bundle"
+      }
+    ]
+```
+
+`name`, `path`, and `okfVersion` are the required Input fields. A bundle
+may name a governing profile two ways. The legacy `profile` field takes a
+raw URL or path; the typed `profileBinding` takes either
+`Schema.ProfileBinding.Local "<path>"` or
+`Schema.ProfileBinding.Published Schema.PinnedImport::{ … }`, and wins
+when both are present:
+
+```dhall
+, profileBinding = Some
+    ( Schema.ProfileBinding.Published
+        Schema.PinnedImport::{
+        , publisher    = "shinzui/okf-profiles"
+        , publisherRef = Some Schema.MoriRef::{ namespace = "shinzui", name = "okf-profiles" }
+        , export       = Some "documentation.teamKnowledge"
+        , version      = Some "v1.0.0"
+        , pin          = Some "sha256:…"
+        }
+    )
+```
+
+`PinnedImport` requires only `publisher`; everything else defaults. Profile
+validation is advisory and never fails registration.
+
+A project that *publishes* profiles declares them at the root, not inside
+a bundle. Names must match `[a-z][a-z0-9-]*`:
+
+```dhall
+, profiles =
+    [ Schema.OkfProfile::{
+      , name    = "architecture-decisions"
+      , export  = "documentation.architectureDecisions"
+      , version = Some "v1.0.0"
+      }
+    ]
+```
+
+Run `mori help okf` for discovery commands and the addressing rules.
+
 ### Skills and subagents (optional)
 
 ```dhall
@@ -294,6 +397,19 @@ defaults to `mori.dhall`. To migrate an extension file, point it there explicitl
 mori schema migrate --apply --file mori/tech-radar.dhall
 ```
 
+`--file` says *which* file; the *kind* is still inferred from the filename. Only
+`mori.automation.dhall` is inferred as an automation config, so a named automation
+registered under another name is treated as an ordinary project config and its
+`AutomationFile` migrations silently never run — the command reports nothing
+pending. Say the kind explicitly for those:
+
+```bash
+mori schema migrate --apply --kind automation --file automation/release.dhall
+```
+
+`automation` is the only supported `--kind` value. Do not pass it for `mori.dhall`
+or the `mori/<extension>.dhall` files; their inference is correct already.
+
 `mori registry upgrade-schema` is the sweep that walks every registered local
 project *and* its extension files in one pass.
 
@@ -307,7 +423,7 @@ project *and* its extension files in one pass.
 4. Check `mori registry list` for available dependencies
 5. Fill in repositories, docs, and optional sections
 6. Validate: `mori validate`
-7. Register: `mori register --local`
+7. Register: `mori register`
 
 **Editing an existing config:**
 1. Read the current `mori.dhall`

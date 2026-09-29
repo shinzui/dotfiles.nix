@@ -1,1 +1,1 @@
-{"hash":"sha256:0b442a54f3a5f83dcc467b493e3cd00ee70638f70cfa5fba76f469f490aee1ff","installedAt":"2026-08-19T19:20:29Z","kind":"skill","name":"cabal-deps-sync","version":"1.0.0"}
+{"hash":"sha256:b2ae222b577563cf49c1577f35f4505c5cba51dd18fcf6e05d711f235e024676","installedAt":"2026-09-23T13:41:47Z","installedFiles":["SKILL.md","scripts/cabal_mori_deps.py"],"installedHash":"sha256:b2ae222b577563cf49c1577f35f4505c5cba51dd18fcf6e05d711f235e024676","kind":"skill","name":"cabal-deps-sync","version":"1.0.1"}

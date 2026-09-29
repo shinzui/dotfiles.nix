@@ -1,6 +1,6 @@
 ---
 name: mori-bootstrap-corpus
-version: "0.2.0"
+version: "0.2.1"
 description: >
   Bootstrap a complete corpus project from a repo name — initializes git, adds upstream
   subtrees, writes mori.dhall and Justfile, validates, registers, and optionally sets up
@@ -29,7 +29,7 @@ providing a unified workspace for reading, learning from, or building adapters a
 external code.
 
 - **Mechanism**: `git subtree add` (never `--squash`) — full history preserved
-- **Identity**: Registered via `mori register --local` so other projects can declare
+- **Identity**: Registered via `mori register` so other projects can declare
   dependencies and agents can resolve its filesystem path via `mori deps locate`
 
 ### Directory layout
@@ -310,7 +310,7 @@ The user provides a repo name (e.g., `hasql`, `nikita-volkov/hasql`). Drive the 
 
 11. **Validate**: `mori validate`
 
-12. **Register**: `mori register --local`
+12. **Register**: `mori register`
 
 13. **Commit**: `git add mori.dhall Justfile && git commit -m "Add mori.dhall and Justfile"`
 
@@ -325,7 +325,7 @@ The user provides a repo name (e.g., `hasql`, `nikita-volkov/hasql`). Drive the 
 3. `git subtree add --prefix=<repo> <url> <branch>`
 4. Add `Repo` + `Package` entries to `mori.dhall`
 5. Add Justfile recipes for the new repo
-6. `mori validate` then `mori register --local`
+6. `mori validate` then `mori register`
 
 ### Debugging
 

@@ -1,6 +1,6 @@
 ---
 name: cookbook-config
-version: "0.1.1"
+version: "0.2.0"
 description: >
   Help author, validate, and edit mori/cookbook.dhall cookbook extension catalogs. Covers
   entry fields, content types, topics, imports, and validation rules. TRIGGER when: user
@@ -127,12 +127,33 @@ Where the cookbook file lives. Accessed via `Schema.DocLocation.X`:
 - `LocalDir "path"` — relative path to a directory
 - `RepoPath "path"` — path within a repo (for wrapper projects)
 - `Url "https://..."` — external URL
+- `Canonical "mori://ns/project/..."` — a `mori://` reference to another
+  registered project's artifact, resolved through the local registry
+- `CanonicalRef Schema.MoriRef::{...}` — the same thing as a typed record
+
+Prefer `CanonicalRef` when the target is a project or a non-nested artifact.
+Nested references — OKF concepts, checklist steps, DDD flow steps — still need
+the string form `Canonical`, because `MoriRef` has no sub-key field.
 
 ### description (Optional Text, optional)
 
 Brief summary. `None Text` is the published default, so you can
 omit this line entirely to get no description. Use `Some "text"`
 to provide one.
+
+### tags (List Text, optional)
+
+Freeform labels complementing the closed `Topic` union, for one-off
+labels that do not warrant a new `Topic` constructor. Defaults to `[]`,
+so omit the line when you have none.
+
+```dhall
+, tags = [ "hasql-1.10", "gotcha" ]
+```
+
+Reach for a `Topic` when the label is a durable domain area you would
+want to filter on across projects; reach for `tags` when it is specific
+to this entry.
 
 
 ## Complete example

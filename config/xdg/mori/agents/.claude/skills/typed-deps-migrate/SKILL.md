@@ -1,6 +1,6 @@
 ---
 name: typed-deps-migrate
-version: "0.1.0"
+version: "0.1.1"
 description: >
   Migrate a project's mori.dhall from untyped text dependencies to typed MoriRef
   companions, at the right grain — project-grained where the name means a whole project,
@@ -404,7 +404,7 @@ mori validate                  # Dhall typecheck + structural rules
 mori validate --check-deps     # every dependency name resolves
 mori validate --check-refs     # every mori:// reference resolves; ✓ / ✗ / ⚠ per ref
 mori deps resolve              # on-disk paths for every dependency
-mori register --local          # publish the corrected identity
+mori register          # publish the corrected identity
 ```
 
 `mori validate` passing does **not** mean the names resolve — it only type-checks.
