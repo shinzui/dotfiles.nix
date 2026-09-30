@@ -51,7 +51,20 @@ let
       gc --project="$PROJECT" compute start-iap-tunnel "$INSTANCE" 22 \
         --zone="$ZONE" --local-host-port="127.0.0.1:$PORT" --quiet 2>/dev/null &
       tunnel_pid=$!
-      trap 'kill "$tunnel_pid" 2>/dev/null || true' EXIT
+      socat_pid=""
+      cleanup() {
+        if [ -n "$socat_pid" ]; then
+          kill "$socat_pid" 2>/dev/null || true
+        fi
+        kill "$tunnel_pid" 2>/dev/null || true
+      }
+      # ssh ends its ProxyCommand with SIGHUP. Untrapped, that kills bash
+      # outright and skips the EXIT trap, orphaning the IAP tunnel under
+      # launchd. Convert the fatal signals into a normal exit so cleanup runs.
+      trap cleanup EXIT
+      trap 'exit 129' HUP
+      trap 'exit 130' INT
+      trap 'exit 143' TERM
 
       # Wait up to 90s for the local tunnel listener (and the VM) to be
       # ready. A cold-started VM needs ~30s to be SSH-able.
@@ -61,8 +74,14 @@ let
         fi
         sleep 1
       done
-      # Keep the shell alive so its EXIT trap stops the IAP tunnel.
-      socat - "TCP:127.0.0.1:$PORT"
+      # Keep the shell alive so its EXIT trap stops the IAP tunnel. socat
+      # runs in the background under `wait` because bash only runs traps
+      # while in `wait`, never while a foreground child is running. The
+      # explicit <&0 matters: without job control bash would otherwise
+      # point a background job's stdin at /dev/null.
+      socat - "TCP:127.0.0.1:$PORT" <&0 &
+      socat_pid=$!
+      wait "$socat_pid"
     '';
   };
 in
