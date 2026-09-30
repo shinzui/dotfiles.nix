@@ -39,7 +39,9 @@
       rerere.enabled = true;
       push = {
         default = "tracking";
-        followTags = true;
+        # Push release tags explicitly (`git push origin <tag>`); following
+        # them re-sends every reachable tag, including to contributors' forks.
+        followTags = false;
       };
       pull = {
         rebase = true;
