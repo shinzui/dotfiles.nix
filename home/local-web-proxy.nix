@@ -14,6 +14,7 @@ let
   #   jaeger   -> 127.0.0.1:16686  (Jaeger UI, home/victoriatraces.nix)
   #   redpanda -> 127.0.0.1:8080   (Redpanda Console, home/redpanda.nix)
   #   mori     -> 127.0.0.1:8780   (mori serve, home/mori.nix) -- this machine only
+  #   rei      -> 127.0.0.1:8775   (rei-api, home/rei.nix) -- this machine only
   #
   # Plain HTTP on :80 avoids local CA trust for these names.
   #
@@ -40,8 +41,13 @@ let
   # client can send `Host: mori.localhost` to this Mac's :80 -- so these routes
   # also match on the connecting peer's address. Anything else asking for
   # mori.* falls through to the 404 below.
+  #
+  # rei-api is here for the same reason: its reads need no token (only writes
+  # carry a bearer token), so a LAN route would hand anyone on the network the
+  # whole of Rei's read surface.
   localOnlyServices = {
     mori = (import ./mori-api-env.nix).port;
+    rei = (import ./rei-api-env.nix).port;
   };
 
   # Documentation sites (fumadocs + Vite) under ~/Keikaku/bokuno/<name>-docs.

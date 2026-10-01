@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, age, ... }:
 
 let
   pg = config.services.postgresql.package;
@@ -157,6 +157,39 @@ let
     exec ${reiBin} worker kiroku
   '';
 
+  # rei's HTTP API (rei-api); where it listens is shared with the Caddy proxy.
+  reiApi = import ./rei-api-env.nix;
+  reiApiPort = toString reiApi.port;
+  reiApiTokensPath = age.secrets.rei-api-tokens.path;
+  moriApi = import ./mori-api-env.nix;
+
+  rei-api-wrapper = pkgs.writeShellScript "rei-api" ''
+    set -euo pipefail
+    export REI_PG_CONNECTION_STRING="${connStr}"
+    export PG_CONNECTION_STRING="${connStr}"
+    export REI_API_PORT="${reiApiPort}"
+    # Only `POST /api/v1/projects/commands/sync` reads Mori; without it the
+    # server still starts and a sync answers 503 mori_unconfigured.
+    export MORI_API_URL="${moriApi.url}"
+    ${otelExports "rei-api"}
+
+    exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
+    exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
+
+    # Wait for agenix to decrypt the token map. launchd can start this agent
+    # before /run/agenix is populated at login, and an empty REI_API_TOKENS
+    # would boot a server that rejects every write.
+    until [ -r "${reiApiTokensPath}" ]; do
+      sleep 2
+    done
+    REI_API_TOKENS="$(cat ${reiApiTokensPath})"
+    export REI_API_TOKENS
+
+    ${waitForPg}
+
+    exec ${pkgs.rei-api}/bin/rei-api
+  '';
+
   rei-zsh-completions = pkgs.runCommand "rei-zsh-completions" { } ''
     REI_PG_CONNECTION_STRING="host=localhost dbname=rei" ${reiBin} completions zsh > $out
   '';
@@ -230,6 +263,7 @@ in
     stop_and_wait "com.shinzui.rei-subscription"
     stop_and_wait "com.shinzui.rei-worker-git-sync"
     stop_and_wait "com.shinzui.rei-worker-kiroku"
+    stop_and_wait "com.shinzui.rei-api"
   '';
 
   programs.zsh.sessionVariables = {
@@ -323,6 +357,30 @@ in
         PG_CONNECTION_STRING = connStr;
         REI_KIROKU_METRICS_PORT = kirokuMetricsPort;
       } // otelEnv "rei-worker-kiroku";
+    };
+  };
+
+  # rei's HTTP API (rei-api, ExecPlan 243's project endpoints). A thin adapter
+  # over the same store the CLI and workers use: it never migrates, and its
+  # asynchronously fed read models are kept current by rei-worker-kiroku above.
+  # Health: GET http://127.0.0.1:8775/health/ready, or http://rei.localhost/health/ready
+  # through home/local-web-proxy.nix (this machine only).
+  launchd.agents.rei-api = {
+    enable = true;
+    config = {
+      Label = "com.shinzui.rei-api";
+      ProgramArguments = [ "${rei-api-wrapper}" ];
+      RunAtLoad = true;
+      KeepAlive = true;
+      ExitTimeOut = 30;
+      StandardOutPath = "${reiLogDir}/api.stdout.log";
+      StandardErrorPath = "${reiLogDir}/api.stderr.log";
+      EnvironmentVariables = {
+        REI_PG_CONNECTION_STRING = connStr;
+        PG_CONNECTION_STRING = connStr;
+        REI_API_PORT = reiApiPort;
+        MORI_API_URL = moriApi.url;
+      } // otelEnv "rei-api";
     };
   };
 }

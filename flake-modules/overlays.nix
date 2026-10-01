@@ -94,6 +94,10 @@ in
         };
         mori = hsBin "mori" (hsPkg "mori");
         rei = hsBin "rei" (hsPkg "rei");
+        # rei's HTTP front end. Its own flake output: `packages.default` is the CLI,
+        # which does not depend on it.
+        rei-api = hsBin "rei-api"
+          (noHaddock inputs.rei.packages.${prev.stdenv.hostPlatform.system}.rei-api);
         reiko = hsBinShare "reiko" (hsPkg "reiko");
         seihou = hsBin "seihou" (hsPkg "seihou");
         kizamu = hsBin "kizamu" (hsPkg "kizamu");

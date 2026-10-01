@@ -16,4 +16,5 @@ in
   "tmuxai.config.yaml.age".publicKeys = shinzuiAtSungkyung;
   "sesh.toml.age".publicKeys = shinzuiAtSungkyung;
   "mori-rei-app-webhook-secret.age".publicKeys = shinzuiAtSungkyung;
+  "rei-api-tokens.age".publicKeys = shinzuiAtSungkyung;
 }

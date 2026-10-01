@@ -80,5 +80,13 @@
       mode = "600";
       owner = "shinzui";
     };
+    # REI_API_TOKENS for the rei-api agent (home/rei.nix): comma-separated
+    # token=actor pairs, e.g. `<hex>=human,<hex>=agent:mina`.
+    rei-api-tokens = {
+      file = ../secrets/rei-api-tokens.age;
+      path = "/Users/shinzui/.config/rei-api/tokens";
+      mode = "600";
+      owner = "shinzui";
+    };
   };
 }
