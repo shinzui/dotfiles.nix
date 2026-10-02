@@ -19,3 +19,23 @@ aliases {
   epl "exec-plan list"
   ds "docket status"
 }
+
+// Judge actions (plan assessment, digest, explain) run on the Codex CLI
+// subscription with gpt-5.6-luna at high reasoning effort.
+agent {
+  digest {
+    provider "codex-cli"
+    model "gpt-5.6-luna"
+    effort "high"
+  }
+  master-digest {
+    provider "codex-cli"
+    model "gpt-5.6-luna"
+    effort "high"
+  }
+  explain {
+    provider "codex-cli"
+    model "gpt-5.6-luna"
+    effort "high"
+  }
+}
