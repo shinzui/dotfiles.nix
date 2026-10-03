@@ -19,6 +19,7 @@ let
   # ~/.config/mina/agents) stays unmanaged.
   trackedConfigFiles = [
     "mina/config.kdl"
+    "okf/config.dhall"
   ];
 in
 {
