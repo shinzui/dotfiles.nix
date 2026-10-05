@@ -48,8 +48,13 @@ let
       # a kex-handshake-eating timing race with OpenSSH 10.x clients on
       # macOS when used as a ProxyCommand.
       PORT=$(( RANDOM % 10000 + 20000 ))
+      # Keep the tunnel's stderr (one file per invoking user, since root runs
+      # this for the nix-daemon) so a stalled or reconnecting IAP tunnel
+      # leaves evidence instead of a bare "server not responding".
+      TUNNEL_LOG="/tmp/nix-gcp-builder-proxy-$(id -un).log"
+      printf '%s port %s pid %s: opening IAP tunnel\n' "$(date -u +%FT%TZ)" "$PORT" "$$" >>"$TUNNEL_LOG"
       gc --project="$PROJECT" compute start-iap-tunnel "$INSTANCE" 22 \
-        --zone="$ZONE" --local-host-port="127.0.0.1:$PORT" --quiet 2>/dev/null &
+        --zone="$ZONE" --local-host-port="127.0.0.1:$PORT" --quiet 2>>"$TUNNEL_LOG" &
       tunnel_pid=$!
       socat_pid=""
       cleanup() {
@@ -97,5 +102,11 @@ in
       ProxyCommand ${proxyScript}/bin/nix-gcp-builder-proxy
       StrictHostKeyChecking accept-new
       ServerAliveInterval 30
+      # 30 s x 10: tolerate up to 5 minutes without a reply. With the
+      # default count (3, i.e. 90 s) remote builds died twice on
+      # 2026-10-05 while the builder VM (n2-standard-16) was healthy and
+      # its SSH sessions outlived the client's timeout by 5-10 minutes:
+      # the stall was in the IAP tunnel path, not the builder.
+      ServerAliveCountMax 10
   '';
 }
