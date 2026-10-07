@@ -1,13 +1,24 @@
 { config, lib, pkgs, ... }:
 
 {
-  #wezterm terminal
-  #https://nix-community.github.io/home-manager/options.html#opt-programs.wezterm.enable
-  programs.wezterm.enable = true;
-  
+  # wezterm terminal
+  # The app comes from the official Homebrew cask (darwin/homebrew.nix), not
+  # nixpkgs: the cask is Developer ID-signed, so its macOS privacy grants
+  # (e.g. Privacy & Security > Developer Tools) survive upgrades. The nixpkgs
+  # build is only ad-hoc signed, so its identity changes on every rebuild.
+  # `programs.wezterm` can't be used without installing the nixpkgs package,
+  # so the config is written directly.
+
+  # Shell integration (OSC 7 cwd, user vars) shipped inside the cask's bundle.
+  programs.zsh.initContent = ''
+    if [[ -o interactive && -r /Applications/WezTerm.app/Contents/Resources/wezterm.sh ]]; then
+      source /Applications/WezTerm.app/Contents/Resources/wezterm.sh
+    fi
+  '';
+
   # Config {{{
   # https://wezfurlong.org/wezterm/config/files.html
-  programs.wezterm.extraConfig = ''
+  xdg.configFile."wezterm/wezterm.lua".text = ''
     local wezterm = require 'wezterm'
 
     local config = {}
@@ -31,7 +42,7 @@
     end)
 
     config.set_environment_variables = {
-      TERMINFO_DIRS = '/home/shinzui/.nix-profile/share/terminfo',
+      TERMINFO_DIRS = '${config.home.profileDirectory}/share/terminfo',
       WSLENV = 'TERMINFO_DIRS',
     }
 

@@ -101,6 +101,8 @@ in
   homebrew.casks = [
     "steipete/tap/repobar"
     "ghostty"
+    # Signed build so macOS privacy grants persist across upgrades (see home/wezterm.nix)
+    "wezterm"
     "zoom"
     "discord"
     "microsoft-teams"
