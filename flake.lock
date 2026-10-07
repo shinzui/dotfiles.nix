@@ -3320,11 +3320,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1789318666,
-        "narHash": "sha256-oJQvPNd5t6uZbozgnHDAvDYzp2+oJU4fVUFO0Jb80Co=",
+        "lastModified": 1791043095,
+        "narHash": "sha256-H6+1UCaCr+lU0Ep4BvZIUbB1KGJjikME1NTI9etOImA=",
         "owner": "shinzui",
         "repo": "okf",
-        "rev": "c466eebd05a9d8d084dd4cf651f19753d46c74be",
+        "rev": "da8459e59abea7e0de75a0361943765d623f8ca4",
         "type": "github"
       },
       "original": {
