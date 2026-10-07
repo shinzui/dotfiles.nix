@@ -4525,11 +4525,11 @@
         "typeid-hs-src": "typeid-hs-src_4"
       },
       "locked": {
-        "lastModified": 1790811922,
-        "narHash": "sha256-mnQVYX2AfrBrnY4p6JBMplvbG7ehJYIBdgKzHuaMfoc=",
+        "lastModified": 1791086674,
+        "narHash": "sha256-huQQyXlXcPXJrfZW434pQQYc1oTE/CnjuYwQpg9vT64=",
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "e94945dece54713135ed6a89d3b7c319f5525daf",
+        "rev": "dc296c837fe5dd8617b726215bfd15e58ca1a131",
         "type": "github"
       },
       "original": {
