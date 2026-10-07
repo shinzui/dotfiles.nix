@@ -2771,11 +2771,11 @@
         "typeid-hs-src": "typeid-hs-src"
       },
       "locked": {
-        "lastModified": 1790544451,
-        "narHash": "sha256-/vJ2cepQrUSX03g71B58ifoOIk9bt61PyjuLCBZ5yOk=",
+        "lastModified": 1790907063,
+        "narHash": "sha256-7m3Lfbv/S+3IZitIrSPeYzyv8x2r1j8LkGNN+wqJTgE=",
         "owner": "shinzui",
         "repo": "mori",
-        "rev": "5eb063d2ab5d1e9d15a67b4b5afb20d342486458",
+        "rev": "ad383dbee6f5adf5712646d6a983216665f95a6e",
         "type": "github"
       },
       "original": {
