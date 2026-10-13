@@ -4,16 +4,6 @@ let
   shinzuiAtSungkyung = [ shinzui sungkyung ];
 in
 {
-  "netrc.age".publicKeys = shinzuiAtSungkyung;
-  "npmrc.age".publicKeys = shinzuiAtSungkyung;
-  "access_tokens.conf.age".publicKeys = shinzuiAtSungkyung;
-  "openai.age".publicKeys = shinzuiAtSungkyung;
-  "cachix_auth_token.dhall.age".publicKeys = shinzuiAtSungkyung;
-  "tableplus_gcp_service_account.json.age".publicKeys = shinzuiAtSungkyung;
-  "cai_secrets.yaml.age".publicKeys = shinzuiAtSungkyung;
-  "pgpass.age".publicKeys = shinzuiAtSungkyung;
-  "llm-keys.json.age".publicKeys = shinzuiAtSungkyung;
-  "tmuxai.config.yaml.age".publicKeys = shinzuiAtSungkyung;
   "sesh.toml.age".publicKeys = shinzuiAtSungkyung;
   "mori-rei-app-webhook-secret.age".publicKeys = shinzuiAtSungkyung;
   "rei-api-tokens.age".publicKeys = shinzuiAtSungkyung;

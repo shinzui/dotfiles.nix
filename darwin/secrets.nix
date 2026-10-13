@@ -1,7 +1,7 @@
 { config, lib, ... }:
 
 {
-  # Consumers of the secrets below. These live here rather than in
+  # Consumers of the merged public and private secrets. These live here rather than in
   # bootstrap.nix so that `darwinConfigurations.bootstrap-arm`, which imports
   # bootstrap.nix alone, can evaluate on a machine with no secrets yet.
 
@@ -16,58 +16,6 @@
 
   age.identityPaths = [ "/Users/shinzui/.ssh/id_ed25519" ];
   age.secrets = {
-    netrc = {
-      file = ../secrets/netrc.age;
-      path = "/Users/shinzui/.netrc";
-      mode = "700";
-      owner = "shinzui";
-    };
-    npmrc = {
-      file = ../secrets/npmrc.age;
-      path = "/Users/shinzui/.npmrc";
-      mode = "700";
-      owner = "shinzui";
-    };
-    access_token = {
-      file = ../secrets/access_tokens.conf.age;
-      mode = "700";
-      owner = "shinzui";
-    };
-    openapi_secret = {
-      file = ../secrets/openai.age;
-      path = "/Users/shinzui/.openapi_secret";
-      mode = "700";
-      owner = "shinzui";
-    };
-    cachix-authtoken = {
-      file = ../secrets/cachix_auth_token.dhall.age;
-      mode = "700";
-      owner = "shinzui";
-    };
-    tableplus-gcp-service-account = {
-      file = ../secrets/tableplus_gcp_service_account.json.age;
-      path = "/Users/shinzui/.config/gcloud/tableplus_gcp_service_account.json";
-      mode = "700";
-      owner = "shinzui";
-    };
-    pgpass = {
-      file = ../secrets/pgpass.age;
-      path = "/Users/shinzui/.pgpass";
-      mode = "600";
-      owner = "shinzui";
-    };
-    datasette-llm-keys = {
-      file = ../secrets/llm-keys.json.age;
-      path = "/Users/shinzui/Library/Application Support/io.datasette.llm/keys.json";
-      mode = "600";
-      owner = "shinzui";
-    };
-    tmuxai-conf = {
-      file = ../secrets/tmuxai.config.yaml.age;
-      path = "/Users/shinzui/.config/tmuxai/config.yaml";
-      mode = "600";
-      owner = "shinzui";
-    };
     sesh_config = {
       file = ../secrets/sesh.toml.age;
       path = "/Users/shinzui/.config/sesh/sesh.toml";

@@ -128,9 +128,10 @@ write-ups.
 
 ## Secrets
 
-Managed with [agenix](https://github.com/ryantm/agenix); encrypted files live in
-`secrets/` and are declared in `darwin/secrets.nix`. See `docs/secrets.md` and
-`docs/access-tokens.md`.
+Managed with [agenix](https://github.com/ryantm/agenix). Low-impact ciphertext and
+declarations live here; high-tier ciphertext and metadata come from the private
+companion `mori://shinzui/dotfiles-private.nix`. See `docs/secrets.md` and
+`docs/access-tokens.md` for the tier rule and SSH bootstrap.
 
 ## Docs
 
