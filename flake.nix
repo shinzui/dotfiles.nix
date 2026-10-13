@@ -38,7 +38,8 @@
     nix-neovimplugins = { url = "github:NixNeovim/NixNeovimPlugins"; };
     vim-rescript = { url = "github:rescript-lang/vim-rescript"; flake = false; };
     keiro-syntax = { url = "github:shinzui/keiro-syntax"; flake = false; };
-    private-fonts = { url = "github:shinzui/fonts";};
+    private-fonts = { url = "git+ssh://git@github.com/shinzui/fonts"; };
+    dotfiles-private = { url = "git+ssh://git@github.com/shinzui/dotfiles-private.nix"; };
     bun2nix = {
       url = "github:nix-community/bun2nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";

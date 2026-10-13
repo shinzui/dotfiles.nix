@@ -32,6 +32,7 @@ let
     self.darwinModules.accessibility
 
     inputs.agenix.darwinModules.default
+    inputs.dotfiles-private.darwinModules.default
 
     # Determinate Nix integration
     inputs.determinate.darwinModules.default

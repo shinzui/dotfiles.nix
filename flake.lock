@@ -412,6 +412,21 @@
         "url": "https://install.determinate.systems/determinate-nixd/tag/v3.23.1/x86_64-linux"
       }
     },
+    "dotfiles-private": {
+      "locked": {
+        "lastModified": 1791934913,
+        "narHash": "sha256-4zJ2T7czkuIYrEbsnLIWXWKc0bN6E8ly9liHbsc5GuY=",
+        "ref": "refs/heads/master",
+        "rev": "5002b57a1393f44cd313f961789baeda2c200616",
+        "revCount": 5,
+        "type": "git",
+        "url": "ssh://git@github.com/shinzui/dotfiles-private.nix"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/shinzui/dotfiles-private.nix"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -4401,15 +4416,15 @@
       "locked": {
         "lastModified": 1755733544,
         "narHash": "sha256-enuZ9k3pR1ctM8e0sBNPaMYyZSkMfpJPBuEPynDmSYk=",
-        "owner": "shinzui",
-        "repo": "fonts",
+        "ref": "refs/heads/master",
         "rev": "8613d6259c1c2cffab28f236d1bc120c642ddabf",
-        "type": "github"
+        "revCount": 8,
+        "type": "git",
+        "url": "ssh://git@github.com/shinzui/fonts"
       },
       "original": {
-        "owner": "shinzui",
-        "repo": "fonts",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/shinzui/fonts"
       }
     },
     "redpanda-container": {
@@ -4816,6 +4831,7 @@
         "bun2nix": "bun2nix",
         "darwin": "darwin_2",
         "determinate": "determinate",
+        "dotfiles-private": "dotfiles-private",
         "flake-compat": "flake-compat_2",
         "flake-parts": "flake-parts_3",
         "haskell-nix-dev": "haskell-nix-dev",
