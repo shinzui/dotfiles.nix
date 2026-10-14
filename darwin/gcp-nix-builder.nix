@@ -42,11 +42,24 @@ let
         gc() { gcloud "$@"; }
       fi
 
-      STATUS=$(gc --project="$PROJECT" compute instances describe "$INSTANCE" \
-                 --zone="$ZONE" --format='value(status)' 2>/dev/null || echo MISSING)
+      instance_status() {
+        gc --project="$PROJECT" compute instances describe "$INSTANCE" \
+          --zone="$ZONE" --format='value(status)' 2>/dev/null || echo MISSING
+      }
+      STATUS=$(instance_status)
+      # The builder's idle watchdog powers the VM off from inside. A start
+      # sent while it is still STOPPING fails, so wait for it to stop first
+      # (2026-10-14: a gate 28 s after a guestTerminate lost its builder).
+      for _ in $(seq 1 60); do
+        case "$STATUS" in
+          STOPPING|SUSPENDING) sleep 2; STATUS=$(instance_status) ;;
+          *) break ;;
+        esac
+      done
       if [[ "$STATUS" != "RUNNING" ]]; then
         gc --project="$PROJECT" compute instances start "$INSTANCE" \
-          --zone="$ZONE" --quiet >/dev/null 2>&1
+          --zone="$ZONE" --quiet >/dev/null 2>>"/tmp/nix-gcp-builder-proxy-$(id -un).log" \
+          || printf '%s pid %s: start from %s failed\n' "$(date -u +%FT%TZ)" "$$" "$STATUS" >>"/tmp/nix-gcp-builder-proxy-$(id -un).log"
       fi
 
       # Prefer the tailnet: wait up to 120 s for sshd there (a cold VM needs
