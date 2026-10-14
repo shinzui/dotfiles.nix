@@ -1,77 +1,372 @@
-# New Apple Silicon Mac bootstrap
+# New Apple Silicon Mac runbook
 
-This runbook prepares a clean `shinzui` account on an Apple Silicon Mac using the public checkout, authorized private inputs, and selected user data. It never requires a copy of the old `~/.config`. The supported full host for the new Mac is `yujin`; use `SungkyungM1X` only on the existing source Mac. Builds assemble a candidate without switching the running system. A switch activates it and must run only on the matching machine. Before any full switch on Sungkyung, complete the Mori directory migration in section 3; the rebuild wrapper refuses to switch while the old whole-directory link remains.
+Follow these phases in order. Commands marked **NEW MAC** run as `shinzui` on the destination, locally or over SSH. Commands marked **TRUSTED MAC** run on an already-authorized workstation with GitHub CLI access and an identity that decrypts both secret tiers. Keep one Bash terminal for each machine; reconnect after installing Nix and reset the variables below. Stop a phase if a command fails, resolve the cause, then resume that phase. Do not paste this entire document into a shell.
 
-## 1. Prepare the account and Nix
+This configuration supports Apple Silicon macOS with the `shinzui` login and the exact checkout paths below. A new hostname needs a declared host target before activation. Keys stay on their owning machine; only public keys and encrypted files cross machines. Builds prepare a candidate. `sudo ./bin/darwin-rebuild.sh` changes the running machine.
 
-Sign in as `shinzui`, install Apple's Command Line Tools if prompted, and confirm `uname -m` is `arm64`. Install Git and a machine-specific GitHub SSH identity at `~/.ssh/id_ed25519`, authorized for both private flake inputs. Yujin's separate agenix identity is `~/.ssh/agenix_ed25519`, mode `0600`, without a passphrase for unattended decryption. Generate these keys on Yujin and enroll only their public keys; the Yujin agenix public key is already in both repositories' recipient rules. A replacement recipient requires rekeying both tiers before a full switch. Never put a private key in either Git checkout. Review [Determinate's workstation installation guide](https://docs.determinate.systems/getting-started/individuals/) before running the helper. It recognizes an existing Determinate installation and stops on a non-Determinate Nix installation. The stable package endpoint delivered v3.23.2 during repository preparation on 2026-10-14 UTC; its package metadata, Apple signature, and notarization were checked without installing it. Installation on the new Mac remains untested.
+The command examples use `yujin`. For a future machine, replace that value in every `MACHINE_HOST` assignment with the host declared in phase 1. Keep the same host value in both terminals; do not derive it from the trusted Mac's hostname.
 
-The public checkout must be at `/Users/shinzui/.config/dotfiles.nix`, because editable links point there. Clone it over SSH or HTTPS after Git is available, then run the installer helper. Private fonts and `mori://shinzui/dotfiles-private.nix` are root flake inputs even for the minimal bootstrap; authorized SSH access is required before evaluation. Clone the private companion to `/Users/shinzui/Keikaku/dotfiles-private.nix` and confirm both input fetches. For a new age recipient, use the actual public key in both repositories' `secrets/secrets.nix` and run `agenix -r` in each `secrets/` directory; publish the private change before updating the public input lock. Follow [secret onboarding](secrets.md) for identity paths and ciphertext checks.
+GitHub authorization, sudo, Apple installers, macOS permissions, and provider/application logins can require interaction. The helpers automate repeatable file operations; they do not bypass those checkpoints. Keep a private checklist of completed phases, host, public-key fingerprints, repository commits, and system generation. Keep tokens and plaintext secrets out of that record.
 
-If Determinate Nix is already installed and Apple's Git or Python stub requests Command Line Tools, enter `nix shell nixpkgs#git nixpkgs#python3` before the commands below. Keep that shell open for cloning and bootstrap checks; it supplies these tools without installing Apple's system developer package. Nix still needs the GitHub SSH authorization described above.
+| Checkpoint | Continue when |
+| --- | --- |
+| Tools and public checkout | Nix, Git, Python work without relying on Apple's stubs |
+| Machine keys | Two distinct local key pairs; private files mode `0600` |
+| GitHub | Both private inputs accept the new GitHub key |
+| Secret enrollment | Both tiers rekeyed, private published first, public lock updated, new identity decrypts all files |
+| Minimal activation | Native Homebrew works; minimal live checker passes |
+| Full activation | Host names match; full live checker and private consumers pass |
+| Workstation recovery | Logins, device enrollment, identity, and data/services independently verified |
+
+## 1. Select or add the host target — TRUSTED MAC
+
+For Yujin use the existing `yujin` target. Do not use `SungkyungM1X` on a new machine. For a future host, for example `atlas`:
+
+1. Copy the configuration templates `hosts/yujin/default.nix` and `home.nix` into `hosts/atlas/`; these are settings, not keys. Change `networking.computerName` and `networking.hostName` to `atlas`. Keep the dedicated `age.identityPaths` override and GitHub key selection.
+2. Add `atlas = mkDarwinHost { hostModule = ../hosts/atlas; extraModules = homebrewInstallationModules; };` alongside `yujin` in `flake-modules/darwin-configurations.nix`.
+3. Add `atlas` to the accepted targets and usage text in `bin/build.sh`, `bin/darwin-rebuild.sh`, and `TARGETS` in `bin/check-bootstrap.py`. Record the host in the README. The managed Homebrew module is required for this runbook's preactivation checks.
+4. Check the destination's network services in phase 7. Add any required host overrides, commit with a Conventional Commit message, and publish before the new machine pulls and builds it.
+
+For a different login or architecture, first audit bootstrap's primary user, ARM font selection, home/secret paths, and sudo rules. Those machines are outside this runbook's current tested scope.
+
+**TRUSTED MAC:** set these for the destination, not this workstation's hostname:
+
+Start `/bin/bash` first if this terminal is using zsh.
 
 ```bash
-mkdir -p /Users/shinzui/.config /Users/shinzui/Keikaku
-git clone git@github.com:shinzui/dotfiles.nix.git /Users/shinzui/.config/dotfiles.nix
-cd /Users/shinzui/.config/dotfiles.nix
-./bin/darwin-install.sh
+set -euo pipefail
+export MACHINE_HOST=yujin
+export NEW_MAC="shinzui@${MACHINE_HOST}.local"
+export PUBLIC_ROOT=/Users/shinzui/.config/dotfiles.nix
+export PRIVATE_ROOT=/Users/shinzui/Keikaku/dotfiles-private.nix
 ```
 
-After a fresh installation, close this terminal and open a new one so its shell loads Nix's environment. Then confirm `nix --version` succeeds before continuing. If the helper reported that Determinate was already installed, use a shell where `nix` is available.
+Use an IP address for `NEW_MAC` if `.local` discovery fails. Enable Remote Login on the destination when using SSH; an SSH session may be passwordless while sudo still requires its password. Use `ssh -t "$NEW_MAC"` for an interactive terminal and sudo. Do not forward an old SSH agent as a substitute for registering the destination's own key.
+
+## 2. Install Nix, then obtain Git and Python — NEW MAC
+
+Verify the account and architecture:
+
+```bash
+test "$(id -un)" = shinzui
+test "$(uname -m)" = arm64
+export MACHINE_HOST=yujin
+```
+
+If Determinate Nix is installed, use a fresh terminal where `nix --version` works and skip the installer. If no Nix is installed, download the public installer helper before cloning; this avoids needing Apple's Git or Python first. Review [Determinate's installation guide](https://docs.determinate.systems/getting-started/individuals/) and the downloaded helper, then run:
+
+```bash
+umask 077
+INSTALL_WORK=$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-install.XXXXXX")
+curl -fL https://raw.githubusercontent.com/shinzui/dotfiles.nix/master/bin/darwin-install.sh \
+  -o "$INSTALL_WORK/darwin-install.sh"
+cat "$INSTALL_WORK/darwin-install.sh"
+sh "$INSTALL_WORK/darwin-install.sh"
+```
+
+The helper downloads the stable Determinate macOS package, displays its Apple signature, invokes `sudo installer`, and recognizes an existing Determinate installation. It refuses to replace a different Nix installation. Reopen the terminal or reconnect over SSH after installation. Do not reinstall just because an old shell's PATH is missing Nix; check `/nix/var/nix/profiles/default/bin/nix --version` first.
 
 ```bash
 nix --version
+nix shell nixpkgs#gitMinimal nixpkgs#python3 --command /bin/bash
 ```
+
+Keep this Nix-provided Bash shell open through the checkout and preflight phases. Reset `MACHINE_HOST` if you reconnected. These tools do not require Apple's Command Line Tools; some later Homebrew packages do. The initial tools use the Nix registry's nixpkgs; repository builds and the enrollment dev shell use `flake.lock`.
 
 ```bash
-mkdir -p /Users/shinzui/Keikaku
-cd /Users/shinzui/Keikaku
-git clone git@github.com:shinzui/dotfiles-private.nix.git
-cd /Users/shinzui/.config/dotfiles.nix
-git ls-remote --exit-code git@github.com:shinzui/fonts.git HEAD >/dev/null
-git ls-remote --exit-code git@github.com:shinzui/dotfiles-private.nix.git HEAD >/dev/null
-./bin/check-bootstrap.sh bootstrap-arm
+set -euo pipefail
+export MACHINE_HOST=yujin
+export PUBLIC_ROOT=/Users/shinzui/.config/dotfiles.nix
+export PRIVATE_ROOT=/Users/shinzui/Keikaku/dotfiles-private.nix
+mkdir -p /Users/shinzui/.config /Users/shinzui/Keikaku
+if [ ! -e "$PUBLIC_ROOT" ] && [ ! -L "$PUBLIC_ROOT" ]; then
+  git clone https://github.com/shinzui/dotfiles.nix.git "$PUBLIC_ROOT"
+else
+  test -d "$PUBLIC_ROOT/.git"
+  test -z "$(git -C "$PUBLIC_ROOT" status --porcelain)"
+  git -C "$PUBLIC_ROOT" remote -v
+  # Confirm this is shinzui/dotfiles.nix before pulling.
+  git -C "$PUBLIC_ROOT" pull --ff-only
+fi
+cd "$PUBLIC_ROOT"
 ```
 
-The checker is read-only. `PASS`, `MISSING`, and `CONFLICT` lines name prerequisites without printing secrets. It exits 0 only when all required checks pass, 1 for a missing prerequisite or conflict, and 2 for invalid input or policy. Do not overwrite a conflicting target: inspect it and preserve it under a unique protected name outside both repositories before an intentional migration. Its `--home-dir` option is for isolated file checks and does not prove a machine is onboarded.
+Do not replace an existing directory, dirty checkout, incomplete clone, or unexpected remote. Preserve and inspect conflicts before continuing. The public checkout must stay at this exact path because editable Home Manager links point to it.
 
-## 2. Build the minimal system, then the full host
+## 3. Generate separate machine keys — NEW MAC
 
-The minimal target omits Home Manager and agenix and has no remote builder. It installs Homebrew at `/opt/homebrew` through the locked `nix-homebrew` input, owned by `shinzui`, without installing the full formula/cask bundle. On a clean Mac with required SSH input access, build as `shinzui`, record the current Darwin generation if one exists, and switch only on that Mac. Before the full switch, run `networksetup -listallnetworkservices` and confirm that `Wi-Fi` and `Thunderbolt Bridge` are present; the shared configuration declares those names. If either differs, adjust `networking.knownNetworkServices` in `hosts/yujin/default.nix` as described in [secret onboarding](secrets.md). Then run the full checker and build for `yujin`. Homebrew may need App Store and command line tool agreements. The full system retains the remote builder and its access requirements.
+```bash
+python3 "$PUBLIC_ROOT/bin/bootstrap-machine-keys.py" "$MACHINE_HOST"
+```
 
-Prepare restricted parent directories for the selected private destinations before the full switch. These commands affect only the new Mac, after resolving any existing-file conflicts reported by the checker:
+This creates `~/.ssh/id_ed25519` for GitHub and `~/.ssh/agenix_ed25519` for unattended agenix decryption. It keeps complete existing pairs, refuses partial pairs or symlink destinations, sets directory mode `0700` and private-key mode `0600`, and prints public fingerprints. It does not enroll either key. If a key pair already exists, confirm it was generated on this machine and its public key matches its private key; the helper does not validate an encrypted private key's contents.
+
+By default both new keys are passwordless. For a passphrase on a newly created GitHub key, add `--github-passphrase`. To add or change its passphrase later, run `ssh-keygen -p -f ~/.ssh/id_ed25519` interactively; the public key and GitHub registration stay the same. Keep the dedicated agenix key passwordless for launch-daemon decryption. Never copy another machine's SSH private key or place either key in Git or a Nix expression.
+
+## 4. Register GitHub access — TRUSTED MAC, then NEW MAC
+
+**TRUSTED MAC:** retrieve only the public files into a protected enrollment directory. Keep this terminal open; phase 5 reuses `ENROLLMENT_WORK`.
+
+```bash
+umask 077
+mkdir -p "$HOME/.local/state/dotfiles-bootstrap"
+export ENROLLMENT_WORK
+ENROLLMENT_WORK=$(mktemp -d "$HOME/.local/state/dotfiles-bootstrap/enrollment-${MACHINE_HOST}.XXXXXX")
+scp "$NEW_MAC:/Users/shinzui/.ssh/id_ed25519.pub" "$ENROLLMENT_WORK/github.pub"
+scp "$NEW_MAC:/Users/shinzui/.ssh/agenix_ed25519.pub" "$ENROLLMENT_WORK/agenix.pub"
+ssh-keygen -lf "$ENROLLMENT_WORK/github.pub"
+ssh-keygen -lf "$ENROLLMENT_WORK/agenix.pub"
+test "$(awk '{print $1, $2}' "$ENROLLMENT_WORK/github.pub")" != \
+     "$(awk '{print $1, $2}' "$ENROLLMENT_WORK/agenix.pub")"
+gh api user --jq .login
+```
+
+Confirm the logged-in GitHub account is `shinzui`, fingerprints match those shown on the new Mac, and neither public key is reused from the source machine. Check `gh api user/keys`. If it fails for insufficient public-key scope, run `gh auth refresh --hostname github.com --scopes write:public_key` and complete its browser/device flow. A logged-in CLI without that scope can fail `gh ssh-key add` with HTTP 404; this does not mean the public key is invalid. The [GitHub scope](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps) allows creating/listing keys; full administration scope is unnecessary.
+
+Register only if the exact key is absent, so this phase can be resumed:
+
+```bash
+gh api --paginate user/keys --jq '.[].key' > "$ENROLLMENT_WORK/registered.keys"
+if ! awk '{print $1, $2}' "$ENROLLMENT_WORK/registered.keys" | \
+     grep -Fx "$(awk '{print $1, $2}' "$ENROLLMENT_WORK/github.pub")" >/dev/null; then
+  gh ssh-key add "$ENROLLMENT_WORK/github.pub" --title "$MACHINE_HOST" --type authentication
+fi
+```
+
+**NEW MAC:** establish GitHub host trust from its HTTPS-published metadata. Do not disable SSH host-key checking. This preserves existing host entries and refuses a symlink file:
+
+```bash
+curl -fsSL https://api.github.com/meta -o "$HOME/.ssh/github-meta.json"
+python3 - <<'PY_HOSTS'
+import json, os, subprocess
+from pathlib import Path
+p = Path.home() / '.ssh/known_hosts'
+if p.is_symlink() or (p.exists() and not p.is_file()):
+    raise SystemExit('CONFLICT: inspect known_hosts before continuing')
+if p.exists():
+    os.chmod(p, 0o600)
+found = p.exists() and subprocess.run(['ssh-keygen', '-F', 'github.com', '-f', str(p)], capture_output=True).returncode == 0
+if not found:
+    keys = json.loads((p.parent / 'github-meta.json').read_text())['ssh_keys']
+    with p.open('a') as f:
+        f.write('\n' + ''.join('github.com ' + key + '\n' for key in keys))
+    os.chmod(p, 0o600)
+PY_HOSTS
+```
+
+Create GitHub SSH settings only when `~/.ssh/config` is absent. Existing files are preserved; inspect and merge equivalent settings yourself if needed. The full Home Manager configuration will manage the same settings.
+
+```bash
+python3 - <<'PY_SSH'
+import os
+from pathlib import Path
+p = Path.home() / '.ssh/config'
+if p.exists() or p.is_symlink():
+    print('KEPT: existing SSH config; verify the GitHub settings before continuing')
+else:
+    with p.open('x') as f:
+        f.write('''Host github.com
+  IgnoreUnknown UseKeychain
+  User git
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes
+  AddKeysToAgent yes
+  UseKeychain yes
+''')
+    os.chmod(p, 0o600)
+PY_SSH
+```
+
+For an existing config, require `User git`, `IdentityFile ~/.ssh/id_ed25519`, and `IdentitiesOnly yes` for `github.com` and file mode `0600`. Verify authentication with real reads of both required repositories; a GitHub `ssh -T` greeting by itself normally returns exit code 1.
+
+```bash
+git ls-remote --exit-code git@github.com:shinzui/fonts.git HEAD >/dev/null
+git ls-remote --exit-code git@github.com:shinzui/dotfiles-private.nix.git HEAD >/dev/null
+git -C "$PUBLIC_ROOT" remote set-url origin git@github.com:shinzui/dotfiles.nix.git
+umask 077
+if [ ! -e "$PRIVATE_ROOT" ] && [ ! -L "$PRIVATE_ROOT" ]; then
+  git clone git@github.com:shinzui/dotfiles-private.nix.git "$PRIVATE_ROOT"
+else
+  test -d "$PRIVATE_ROOT/.git"
+  test -z "$(git -C "$PRIVATE_ROOT" status --porcelain)"
+  git -C "$PRIVATE_ROOT" remote -v
+  # Confirm the private companion remote before pulling.
+  git -C "$PRIVATE_ROOT" pull --ff-only
+fi
+```
+
+The private companion is `mori://shinzui/dotfiles-private.nix`. Its source/recovery mapping is project-relative `config/bootstrap/private-policy.json` (artifact URI pending). Both private inputs require SSH access even when building `bootstrap-arm`; a GitHub key grants Git access, not secret decryption.
+
+## 5. Enroll and rekey the agenix recipient — TRUSTED MAC
+
+Start with clean public and private checkouts. Pull both before modifying them. Use an existing identity that decrypts both tiers: Sungkyung currently uses `~/.ssh/id_ed25519`; an already-onboarded Yujin uses `~/.ssh/agenix_ed25519`. Do not select a GitHub-only key merely because it is named `id_ed25519`.
+
+```bash
+test -z "$(git -C "$PUBLIC_ROOT" status --porcelain)"
+test -z "$(git -C "$PRIVATE_ROOT" status --porcelain)"
+git -C "$PUBLIC_ROOT" pull --ff-only
+git -C "$PRIVATE_ROOT" pull --ff-only
+export ENROLL_IDENTITY="$HOME/.ssh/id_ed25519"  # choose this source Mac's decrypting identity
+python3 "$PUBLIC_ROOT/bin/add-machine-recipient.py" "$MACHINE_HOST" \
+  "$ENROLLMENT_WORK/agenix.pub" --private-repo "$PRIVATE_ROOT"
+```
+
+The helper validates both recipient files before changing either, keeps all current recipients, and reuses an already-enrolled key. A hostname binding with a different key stops enrollment: for an intentional replacement, use a unique `--recipient-name machine_HOST_replacement1`, keeping the old key until recovery is verified. It accepts only an Ed25519 **public** file, discards its comment, and does not rekey, commit, or publish. Adding a recipient without re-encrypting existing `.age` files is insufficient.
+
+Before rekeying, preserve encrypted originals outside both repositories. On a resumed enrollment, reuse the recorded backup directory rather than replacing it. Enter the repository's locked dev shell, which supplies both `agenix` and `age`:
+
+```bash
+export CIPHERTEXT_BACKUP
+CIPHERTEXT_BACKUP=$(mktemp -d "$HOME/.local/state/dotfiles-bootstrap/ciphertexts-${MACHINE_HOST}.XXXXXX")
+mkdir -m 700 "$CIPHERTEXT_BACKUP/public" "$CIPHERTEXT_BACKUP/private"
+cp "$PUBLIC_ROOT"/secrets/*.age "$CIPHERTEXT_BACKUP/public/"
+cp "$PRIVATE_ROOT"/secrets/*.age "$CIPHERTEXT_BACKUP/private/"
+cd "$PUBLIC_ROOT"
+nix develop --command /bin/bash
+```
+
+**Still TRUSTED MAC, inside the dev shell:** verify originals decrypt before changing ciphertext; compare streams afterward without writing or displaying plaintext.
+
+```bash
+set -euo pipefail
+for tier in public private; do
+  for saved in "$CIPHERTEXT_BACKUP/$tier"/*.age; do
+    age -d -i "$ENROLL_IDENTITY" "$saved" >/dev/null
+  done
+done
+(cd "$PUBLIC_ROOT/secrets" && agenix -r -i "$ENROLL_IDENTITY")
+(cd "$PRIVATE_ROOT/secrets" && agenix -r -i "$ENROLL_IDENTITY")
+for tier in public private; do
+  checkout="$PUBLIC_ROOT"
+  if [ "$tier" = private ]; then checkout="$PRIVATE_ROOT"; fi
+  for saved in "$CIPHERTEXT_BACKUP/$tier"/*.age; do
+    current="$checkout/secrets/$(basename "$saved")"
+    age -d -i "$ENROLL_IDENTITY" "$current" >/dev/null
+    cmp <(age -d -i "$ENROLL_IDENTITY" "$saved") \
+        <(age -d -i "$ENROLL_IDENTITY" "$current")
+  done
+done
+```
+
+`cmp` prints nothing when plaintext is unchanged. Keep the protected ciphertext backup until destination decryption and consumers pass. Review `git diff --stat` and recipient-rule diffs without opening secrets. For a newly enrolled recipient, publish in this order:
+
+```bash
+cd "$PRIVATE_ROOT"
+git add secrets/secrets.nix secrets/*.age
+if ! git diff --cached --quiet; then
+  git commit -m "feat(secrets): enroll $MACHINE_HOST recipient"
+fi
+git push
+cd "$PUBLIC_ROOT"
+nix flake update dotfiles-private
+./bin/build.sh "$MACHINE_HOST" --no-link
+git diff -- flake.lock secrets/secrets.nix
+git add secrets/secrets.nix secrets/*.age flake.lock
+if ! git diff --cached --quiet; then
+  git commit -m "feat(secrets): enroll $MACHINE_HOST recipient"
+fi
+git push
+exit  # leave the enrollment dev shell
+```
+
+Confirm only the intended private input changed in `flake.lock`. The nonactivating build must pass before publishing the public enrollment. Do not run `nix flake update` without an input name here. If enrollment is already complete and published, skip rekeying and proceed to destination verification; rerunning `agenix -r` may change ciphertext even with identical recipients.
+
+## 6. Pull and verify destination decryption — NEW MAC
+
+Use the existing Nix-provided Git/Python shell. Check both trees are clean before pulling. The full host uses the private revision in the public lock, so the lock must include the published enrollment.
+
+```bash
+test -z "$(git -C "$PUBLIC_ROOT" status --porcelain)"
+test -z "$(git -C "$PRIVATE_ROOT" status --porcelain)"
+git -C "$PUBLIC_ROOT" pull --ff-only
+git -C "$PRIVATE_ROOT" pull --ff-only
+python3 - <<'PY_LOCK'
+import json, subprocess
+from pathlib import Path
+root = Path('/Users/shinzui/.config/dotfiles.nix')
+private = Path('/Users/shinzui/Keikaku/dotfiles-private.nix')
+lock = json.loads((root / 'flake.lock').read_text())
+node = lock['nodes']['root']['inputs']['dotfiles-private']
+revision = lock['nodes'][node]['locked']['rev']
+head = subprocess.check_output(['git', '-C', str(private), 'rev-parse', 'HEAD'], text=True).strip()
+if head != revision:
+    raise SystemExit('CONFLICT: private checkout differs from the public locked revision; review before continuing')
+print('PASS: private checkout matches public lock')
+PY_LOCK
+cd "$PUBLIC_ROOT"
+nix develop --command /bin/bash
+```
+
+**Inside the destination dev shell:** test every encrypted file using the destination's dedicated identity. This complements the source-side plaintext comparison.
+
+```bash
+set -euo pipefail
+for checkout in "$PUBLIC_ROOT" "$PRIVATE_ROOT"; do
+  for ciphertext in "$checkout"/secrets/*.age; do
+    age -d -i "$HOME/.ssh/agenix_ed25519" "$ciphertext" >/dev/null
+  done
+done
+nix eval --json ".#darwinConfigurations.${MACHINE_HOST}.config.age.identityPaths" | \
+  python3 -c 'import json,sys; assert json.load(sys.stdin) == ["/Users/shinzui/.ssh/agenix_ed25519"], "host must select the dedicated destination identity"'
+./bin/check-bootstrap.sh bootstrap-arm
+./bin/check-bootstrap.sh "$MACHINE_HOST"
+exit
+```
+
+The checker is read-only and emits `PASS`, `MISSING`, or `CONFLICT` without printing secret contents. Exit 0 means its required checks pass; 1 means missing/conflicting prerequisites; 2 means invalid input/policy. Resolve conflicts before switching. A synthetic `--home-dir` check or source-machine build does not prove destination onboarding.
+
+## 7. Activate minimal, then full configuration — NEW MAC
+
+The minimal target omits Home Manager, agenix, the private module, and remote builders. It installs native Homebrew at `/opt/homebrew` using the locked [nix-homebrew module](mori://zhaofengli/nix-homebrew), owned by `shinzui`. It does not install the full formula/cask bundle. Automatic migration of an existing unmanaged Homebrew installation is disabled; inspect such a conflict before intentionally enabling migration in `darwin/homebrew-installation.nix`.
+
+Record an existing system generation before activation, if present:
+
+```bash
+if [ -L /nix/var/nix/profiles/system ]; then
+  nix-env --list-generations --profile /nix/var/nix/profiles/system
+fi
+cd "$PUBLIC_ROOT"
+./bin/build.sh bootstrap-arm
+sudo ./bin/darwin-rebuild.sh bootstrap-arm
+test "$(/opt/homebrew/bin/brew --prefix)" = /opt/homebrew
+./bin/check-bootstrap.sh bootstrap-arm --live
+```
+
+Build as `shinzui` immediately before switching the same target with sudo. Over SSH, keep a TTY for the password prompt. `result` is a shared build link; never assume it represents the last target you intended. Minimal live checks skip secret destinations it does not install. Open a new shell after activation to load managed shell integration; reset the exported variables if you reconnect.
+
+Install Apple's Command Line Tools before packages that require them. Follow [Apple's instructions](https://developer.apple.com/documentation/xcode/installing-the-command-line-tools/): `xcode-select --install` opens a GUI prompt on the destination. Over SSH, download the appropriate signed Command Line Tools package from Apple on a machine with browser access, extract the `.pkg` from its disk image, copy the package to the destination, and run `sudo /usr/sbin/installer -pkg /path/to/CommandLineTools.pkg -target /` in a TTY there. Verify:
+
+```bash
+xcode-select -p
+pkgutil --pkg-info com.apple.pkg.CLTools_Executables
+networksetup -listallnetworkservices
+```
+
+`softwareupdate --list` returning no updates is not proof that CLT is installed; a fresh Mac may offer no CLT package there. Homebrew itself is installed by Nix. Apple developer agreements and App Store/cask prompts may remain interactive.
+
+The shared network service names are `Wi-Fi` and `Thunderbolt Bridge`. If they differ, update `networking.knownNetworkServices` in this host's `default.nix`, publish from the trusted Mac, and pull before building. An ordinary host assignment replaces the shared `mkDefault`.
+
+After resolving checker conflicts, prepare restricted directories and activate the full target:
 
 ```bash
 install -d -m 700 "$HOME/.config/nhub" "$HOME/.config/ntn" \
   "$HOME/.config/gcloud" "$HOME/.config/gcloud/configurations" \
   "$HOME/.config/nagare" "$HOME/.config/nagare/contexts" \
   "$HOME/.config/nagare/kubeconfigs" "$HOME/.kube"
+cd "$PUBLIC_ROOT"
+./bin/check-bootstrap.sh "$MACHINE_HOST"
+./bin/build.sh "$MACHINE_HOST"
+sudo ./bin/darwin-rebuild.sh "$MACHINE_HOST"
+scutil --get ComputerName
+scutil --get HostName
+scutil --get LocalHostName
 ```
 
-```bash
-cd /Users/shinzui/.config/dotfiles.nix
-./bin/build.sh bootstrap-arm
-sudo ./bin/darwin-rebuild.sh bootstrap-arm
-test -x /opt/homebrew/bin/brew
-test "$(/opt/homebrew/bin/brew --prefix)" = /opt/homebrew
-networksetup -listallnetworkservices
-```
+All three names should match `MACHINE_HOST`. Wait for the agenix launch daemon, then inspect `./bin/check-bootstrap.sh "$MACHINE_HOST" --live` as `shinzui`. It checks installed private files for readability, ownership and mode `0600`; a full live pass also depends on the Tailscale enrollment below. Keep source originals until private consumers work. Accessibility, Automation, application login, and VPN grants are per-machine onboarding.
 
-Confirm the network service names and make any Yujin override before continuing:
+The full host declares a Linux remote builder whose identity is `/etc/nix/builder_ed25519`. Neither repository provisions that private key. If Linux builds are needed, arrange authorized builder access separately, provision a builder-specific identity securely at that path with root ownership and mode `0600`, and register its public key with the builder owner. Do not reuse the GitHub or agenix private key for this. Builder connectivity and GCP authorization are separate from workstation activation.
 
-Homebrew installation is declarative on Yujin and `bootstrap-arm` through [nix-homebrew](mori://zhaofengli/nix-homebrew); no Homebrew installer script is needed. The full Yujin switch installs the existing formula/cask bundle after setting up Homebrew. Open a new shell after activation to load the managed shell integration. Before activation, the checker allows Homebrew to be absent on these two targets; `--live` requires a working `/opt/homebrew` installation. Minimal live checks skip the secrets that the bootstrap does not install. These checks do not prove that every cask is available.
-
-Homebrew's executable version is pinned by `nix-homebrew`; formulae, casks, and taps retain the existing bundle and update policy. Only the native Apple Silicon prefix is enabled. Automatic migration of an existing unmanaged Homebrew installation is disabled: inspect an existing-installation conflict before intentionally enabling migration in `darwin/homebrew-installation.nix`. Sungkyung continues using its existing Homebrew installation and is not opted into this installation module. Apple's system Command Line Tools still use [Apple's installer](https://developer.apple.com/documentation/xcode/installing-the-command-line-tools); Homebrew packages that need them must complete that prerequisite.
-
-```bash
-./bin/check-bootstrap.sh yujin
-./bin/build.sh yujin
-sudo ./bin/darwin-rebuild.sh yujin
-```
-
-Wait for the agenix launch daemon after the full switch. `./bin/check-bootstrap.sh yujin --live` checks private secret destinations as `shinzui` for readability, owner, and mode `0600`; it does not print contents. The private companion's ciphertext is installed at nhub, ntn, gcloud profile, kubectl, and selected Nagare paths. Parent directories containing these files should be accessible only as intended. Keep source originals until the new machine's installed files and consumers work. New macOS Accessibility and Automation grants, application login prompts, and App Store or Homebrew requirements are interactive onboarding steps.
-
-## 3. Restore application access and local identity
+## 8. Restore application access and local identity
 
 Reauthenticate renewable gcloud user sessions and application-default credentials for the three selected profiles. Check the intended active profile privately and test read-only access to the intended GCP resources; do not copy credentials databases, token caches, SDK logs, or print profile/account lists into a public log. The already-declared GKE auth plugin is required by some kubectl contexts. Restore private Kubernetes contexts from the encrypted config and owning Nagare checkouts, recreate auth/discovery/HTTP caches, then test a read-only query against each reachable intended environment. Work-owned host age keys and cluster authority remain with their owning project recovery process.
 
@@ -84,11 +379,13 @@ NAGARE_CONTEXT=local nix run 'github:shinzui/nagare/v0.2.2#nagare' -- --list
 
 If those probes and a private read-only context check pass, install `nix profile install 'github:shinzui/nagare/v0.2.2#nagare'`. Clone the owning Nagare and operations repositories before recreating the selected symlinks under `~/.config/nagare`. Select the active context only after its destination and credentials exist. The local Mori registry and data must be restored before `bootstrap-repos` can clone its recorded projects; on a completely clean Mac, clone the essential repositories explicitly first. Generated databases and workspaces have separate recovery sources in [local services](local-services.md) and their owning runbooks; no database belongs in these dotfiles.
 
+### Source-machine Mori migration
+
 Mori must create a new local `~/.config/mori/host-id`. Verify privately that it differs from Sungkyung's protected copy; do not copy that value or write it back into shared source. On Sungkyung, before activating this changed Home Manager ownership, preserve the old `~/.config/mori` symlink itself under a unique name outside both repositories, create a real local `~/.config/mori` directory, and restore the protected `~/.local/state/dotfiles-bootstrap/sungkyung-mori-host-id` to `~/.config/mori/host-id` with mode `0600`. Confirm its bytes match the protected backup before using Mori. The tracked source's `host-id` was removed from Git, while the old source file remains ignored locally until this switch.
 
 Review the differing historical `mori.bak` and `rei.bak` settings privately before discarding those backups. Their policy action is `data-export` until desired unique preferences have a specific owner and recovery route.
 
-## 4. Enroll Tailscale as a new device
+## 9. Enroll Tailscale as a new device
 
 The full configuration already installs the standalone Tailscale app. Start it, approve the macOS system/network extension and VPN configuration, sign into the intended private tailnet, and complete any device approval. Do not copy the old plist, cached profiles, or node keys. Reapply the reviewed routing and DNS preferences with the app's bundled CLI after confirming the bundle exists:
 
@@ -101,11 +398,11 @@ test -x /Applications/Tailscale.app/Contents/MacOS/Tailscale
 
 Keep GUI start-at-login and VPN-on-demand disabled, matching the private preference snapshot. Check status and the newly enrolled device identity locally without publishing the peer list. Verify connectivity to an intended available peer and, when running, the declared remote builder. IAP fallback is a separate path and does not prove tailnet readiness. The live checker only checks whether the bundled Tailscale CLI's `status --json` command succeeds; confirm enrollment, device identity, and connectivity separately.
 
-## 5. Verify the activated workstation
+## 10. Verify the activated workstation
 
 ```bash
 cd /Users/shinzui/.config/dotfiles.nix
-./bin/check-bootstrap.sh yujin --live
+./bin/check-bootstrap.sh "$MACHINE_HOST" --live
 command -v nvim mori rei tv nagarectl kubectl gcloud
 test -L "$HOME/.config/nvim/lua"
 test -L "$HOME/.config/nihongo/config.kdl"
@@ -121,3 +418,17 @@ just status-redpanda
 ```
 
 The two public CLI files should be editable source links: a harmless temporary checkout edit should appear at the installed path and be restored afterward. Check each private consumer without printing tokens or keys. Inspect actual service readiness using [local services](local-services.md), not just launch-agent presence. Restore application data only from the selected owner backup. Record each authentication, service, Tailscale, and Mori identity result independently. A source-machine build or synthetic checker fixture does not count as physical onboarding.
+
+## Resume and recovery
+
+Resume at the first incomplete checkpoint. Keep the same destination keys, enrollment directory, and pre-rekey ciphertext backup. The key and recipient helpers preserve existing pairs and enrolled recipients. Neither helper deletes keys or removes old recipients. A complete GitHub registration can be detected and skipped; completed secret enrollment should be verified instead of needlessly rekeyed.
+
+If enrollment stopped with uncommitted recipient/ciphertext changes, first confirm those changes belong to this enrollment. Do not repeat the clean-checkout/pull commands in phase 5 over that work. Restore the recorded `ENROLLMENT_WORK`, `CIPHERTEXT_BACKUP`, and `ENROLL_IDENTITY` variables, enter the dev shell, and resume rekeying/comparison against the original backup. If private publication already succeeded, resume with the public lock update and build. Never create a new baseline backup that hides an unresolved plaintext mismatch.
+
+A failed switch may have applied some changes. Preserve its output privately, inspect the active generation, and fix the concrete failing prerequisite before retrying. If a previous working generation exists, use the built `./result/sw/bin/darwin-rebuild --help` to confirm rollback support and run `sudo ./result/sw/bin/darwin-rebuild switch --rollback` on that machine. Generation rollback does not undo Homebrew changes, logins, copied application data, or external device/key enrollment. Preserve conflict backups until the affected consumers pass.
+
+## Evidence and remaining physical checks
+
+As of 2026-10-14, all three declared system targets built on the source Mac. Yujin has its own two keys, GitHub registration, both checkouts, verified access to both private inputs, and passing prerequisite checks. All 24 secret ciphertexts were verified against original plaintext on the source and decrypted with Yujin's new identity without displaying plaintext.
+
+Minimal/full activation, Homebrew installation, Apple's Command Line Tools installation, provider logins, Tailscale enrollment, and application/data recovery have **not** been completed on Yujin. The checkpoints above make those remaining steps explicit; passing builds and helper tests are not evidence that the entire runbook has been exercised on a fresh machine.

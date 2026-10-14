@@ -11,6 +11,14 @@ Homebrew installation through [nix-homebrew](mori://zhaofengli/nix-homebrew). Yu
 the full host's existing `homebrew.*` declarations manage formulae and casks.
 Sungkyung retains its existing Homebrew installation.
 
+For a new Mac, start with the [machine bootstrap runbook](docs/new-machine-bootstrap.md).
+It separates commands for the new and trusted Macs, covers SSH onboarding,
+secret enrollment, minimal/full activation, and application recovery, and names
+the checkpoints required before continuing. `bin/bootstrap-machine-keys.py`
+creates separate local keys without replacing existing pairs;
+`bin/add-machine-recipient.py` enrolls only the public agenix key in both tiers.
+Neither helper activates the machine or publishes enrollment changes.
+
 ## Everyday commands
 
 ```bash
@@ -26,7 +34,7 @@ nix flake update                         # update every input
 nix flake update home-manager            # update one input
 
 nix build .#parqeye                      # build a single packaged tool
-nix develop                              # dev shell (agenix on PATH)
+nix develop                              # dev shell (agenix and age on PATH)
 ```
 
 Build the intended host as the owner immediately before switching with sudo.

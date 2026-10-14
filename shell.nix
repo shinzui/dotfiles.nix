@@ -1,4 +1,4 @@
 { pkgs, agenix, system }:
 pkgs.mkShell {
-  nativeBuildInputs = [ agenix.packages.${system}.agenix ];
+  nativeBuildInputs = [ agenix.packages.${system}.agenix pkgs.age ];
 }

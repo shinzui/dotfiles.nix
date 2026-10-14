@@ -22,7 +22,7 @@ if [[ "$host" != bootstrap-arm ]]; then
     exit 1
   fi
   if [[ -L /Users/shinzui/.config/mori ]]; then
-    printf 'The old ~/.config/mori whole-directory symlink must be migrated before a full switch. See docs/new-machine-bootstrap.md, section 3.\n' >&2
+    printf 'The old ~/.config/mori whole-directory symlink must be migrated before a full switch. See docs/new-machine-bootstrap.md#source-machine-mori-migration.\n' >&2
     exit 1
   fi
   if [[ "$host" == SungkyungM1X ]] &&

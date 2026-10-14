@@ -74,8 +74,8 @@ sudo ./bin/darwin-rebuild.sh bootstrap-arm
 Its module list excludes agenix and the private companion and disables remote
 builders. This does not guarantee
 anonymous input fetching: private flake inputs may still require authorized SSH
-access during resolution. Restore `~/.ssh/id_ed25519` with mode `600`
-and authorize its public key on GitHub, then clone the private companion over SSH:
+access during resolution. Generate a machine-specific `~/.ssh/id_ed25519`
+with mode `600` and authorize its public key on GitHub, then clone the private companion over SSH:
 
 ```bash
 mkdir -p ~/Keikaku
@@ -111,7 +111,7 @@ Configuration reuse does not copy databases, Git credentials, external service
 authorization, or other unmanaged state.
 
 Yujin uses separate GitHub and secret-decryption identities. Its GitHub key is
-`/Users/shinzui/.ssh/id_ed25519`; create it on Yujin with a passphrase and
+`/Users/shinzui/.ssh/id_ed25519`; create it on Yujin, optionally with a passphrase, and
 authorize its public key on GitHub. The Yujin Home Manager override selects it
 for `github.com` and enables macOS Keychain and SSH-agent integration.
 Its dedicated agenix identity is
@@ -141,6 +141,9 @@ current workflow with `mori registry show shinzui/dotfiles-private.nix --full`
 and `mori registry docs shinzui/dotfiles-private.nix`. Commit and publish private
 changes first, then update only `dotfiles-private` in this checkout's lock file.
 Changing recipient rules alone does not re-encrypt existing ciphertext.
+The [runbook's enrollment phase](new-machine-bootstrap.md#5-enroll-and-rekey-the-agenix-recipient--trusted-mac)
+includes the recipient helper, protected ciphertext backup, plaintext stream
+comparison, publication order, and destination decryption checks.
 
 After bootstrap if needed, build the full host as `shinzui` and activate on Yujin:
 
