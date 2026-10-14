@@ -13,6 +13,11 @@ mkdir -p /Users/shinzui/.config /Users/shinzui/Keikaku
 git clone git@github.com:shinzui/dotfiles.nix.git /Users/shinzui/.config/dotfiles.nix
 cd /Users/shinzui/.config/dotfiles.nix
 ./bin/darwin-install.sh
+```
+
+After a fresh installation, close this terminal and open a new one so its shell loads Nix's environment. Then confirm `nix --version` succeeds before continuing. If the helper reported that Determinate was already installed, use a shell where `nix` is available.
+
+```bash
 nix --version
 ```
 
@@ -21,6 +26,8 @@ mkdir -p /Users/shinzui/Keikaku
 cd /Users/shinzui/Keikaku
 git clone git@github.com:shinzui/dotfiles-private.nix.git
 cd /Users/shinzui/.config/dotfiles.nix
+git ls-remote --exit-code git@github.com:shinzui/fonts.git HEAD >/dev/null
+git ls-remote --exit-code git@github.com:shinzui/dotfiles-private.nix.git HEAD >/dev/null
 ./bin/check-bootstrap.sh bootstrap-arm
 ```
 
@@ -28,7 +35,7 @@ The checker is read-only. `PASS`, `MISSING`, and `CONFLICT` lines name prerequis
 
 ## 2. Build the minimal system, then the full host
 
-The minimal target omits Home Manager and agenix and has no remote builder. On a clean Mac with required SSH input access, build as `shinzui`, record the current Darwin generation if one exists, and switch only on that Mac. Then run the full checker and build for `yujin`. Homebrew may need App Store and command line tool agreements. The full system retains the remote builder and its access requirements.
+The minimal target omits Home Manager and agenix and has no remote builder. On a clean Mac with required SSH input access, build as `shinzui`, record the current Darwin generation if one exists, and switch only on that Mac. Before the full switch, run `networksetup -listallnetworkservices` and confirm that `Wi-Fi` and `Thunderbolt Bridge` are present; the shared configuration declares those names. If either differs, adjust `networking.knownNetworkServices` in `hosts/yujin/default.nix` as described in [secret onboarding](secrets.md). Then run the full checker and build for `yujin`. Homebrew may need App Store and command line tool agreements. The full system retains the remote builder and its access requirements.
 
 Prepare restricted parent directories for the selected private destinations before the full switch. These commands affect only the new Mac, after resolving any existing-file conflicts reported by the checker:
 
@@ -43,6 +50,12 @@ install -d -m 700 "$HOME/.config/nhub" "$HOME/.config/ntn" \
 cd /Users/shinzui/.config/dotfiles.nix
 ./bin/build.sh bootstrap-arm
 sudo ./bin/darwin-rebuild.sh bootstrap-arm
+networksetup -listallnetworkservices
+```
+
+Confirm the network service names and make any Yujin override before continuing:
+
+```bash
 ./bin/check-bootstrap.sh yujin
 ./bin/build.sh yujin
 sudo ./bin/darwin-rebuild.sh yujin
@@ -78,7 +91,7 @@ test -x /Applications/Tailscale.app/Contents/MacOS/Tailscale
   --exit-node-allow-lan-access=false --shields-up=false
 ```
 
-Keep GUI start-at-login and VPN-on-demand disabled, matching the private preference snapshot. Check status and the newly enrolled device identity locally without publishing the peer list. Verify connectivity to an intended available peer and, when running, the declared remote builder. IAP fallback is a separate path and does not prove tailnet readiness. The checker treats missing enrollment as a live prerequisite, not a source-file failure.
+Keep GUI start-at-login and VPN-on-demand disabled, matching the private preference snapshot. Check status and the newly enrolled device identity locally without publishing the peer list. Verify connectivity to an intended available peer and, when running, the declared remote builder. IAP fallback is a separate path and does not prove tailnet readiness. The live checker only checks whether the bundled Tailscale CLI's `status --json` command succeeds; confirm enrollment, device identity, and connectivity separately.
 
 ## 5. Verify the activated workstation
 
