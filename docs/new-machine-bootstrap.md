@@ -182,6 +182,8 @@ For an existing config, require `User git`, `IdentityFile ~/.ssh/id_ed25519`, an
 ```bash
 git ls-remote --exit-code git@github.com:shinzui/fonts.git HEAD >/dev/null
 git ls-remote --exit-code git@github.com:shinzui/dotfiles-private.nix.git HEAD >/dev/null
+git ls-remote --exit-code git@github.com:topagentnetwork/tan-effectful.git HEAD >/dev/null
+git ls-remote --exit-code git@github.com:topagentnetwork/typeid-hs.git HEAD >/dev/null
 git -C "$PUBLIC_ROOT" remote set-url origin git@github.com:shinzui/dotfiles.nix.git
 umask 077
 if [ ! -e "$PRIVATE_ROOT" ] && [ ! -L "$PRIVATE_ROOT" ]; then
@@ -274,6 +276,12 @@ Confirm only the intended private input changed in `flake.lock`. The nonactivati
 ## 6. Bootstrap Nix authentication — TRUSTED MAC, then NEW MAC
 
 GitHub SSH authorization does not authenticate Nix's `github:` archive fetches. Private tool inputs can return HTTP 404 without a Nix GitHub token even when both prerequisite checkers pass. A cold-cache build is a separate readiness check. Keep SSH access for cloning and an independent read-only GitHub token for each machine's Nix downloads.
+
+The current organization-owned library inputs use SSH at their existing locked
+revisions. Confirm the destination key is authorized for those repositories in
+phase 4. A fine-grained token targeting `shinzui` covers personal repositories;
+it cannot authenticate archives owned by an organization. Future organization
+inputs need authorized SSH fetching or a token for the appropriate resource owner.
 
 **TRUSTED MAC:** for a future machine, create a fine-grained token targeting `shinzui`, with All repositories access, Contents read-only, and an expiration date. Store it only as encrypted ciphertext in `mori://shinzui/dotfiles-private.nix`. Yujin's token is already enrolled. For another host:
 

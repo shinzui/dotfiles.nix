@@ -11,6 +11,12 @@ rotate the token by encrypting its replacement and completing the same verified
 handoff. Tokens cannot access repositories owned by a different resource owner;
 organization access needs its own authorization.
 
+The currently declared organization library inputs use SSH overrides, preserving
+their existing source revisions and content hashes. A machine's registered SSH
+key must also be authorized for those organization repositories. Review these
+override revisions when updating the consuming tool inputs. This avoids requiring
+an additional organization token for the current flake graph.
+
 Store ciphertext and host-specific secret declarations in
 `mori://shinzui/dotfiles-private.nix`. Yujin selects its dedicated private host
 module; Sungkyung keeps the existing shared declaration. The public

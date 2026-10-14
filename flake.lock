@@ -5968,16 +5968,14 @@
       "locked": {
         "lastModified": 1771080622,
         "narHash": "sha256-QSZWvKm0UVGB7OI6WdNO48On8PWcSlBeAAL2tzJvQ3E=",
-        "owner": "topagentnetwork",
-        "repo": "tan-effectful",
         "rev": "5e081ad8019b4731d1da37003c80aaaac6ccb5b5",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/topagentnetwork/tan-effectful"
       },
       "original": {
-        "owner": "topagentnetwork",
-        "repo": "tan-effectful",
         "rev": "5e081ad8019b4731d1da37003c80aaaac6ccb5b5",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/topagentnetwork/tan-effectful"
       }
     },
     "treefmt-nix": {
@@ -6064,16 +6062,14 @@
       "locked": {
         "lastModified": 1784587920,
         "narHash": "sha256-XCq5GXlOK8ZxbR4ZKIEi99rQdJ6vxX1c6/C3nRGvcrA=",
-        "owner": "topagentnetwork",
-        "repo": "typeid-hs",
         "rev": "7164a74c490cc92ffe73a315d827c9515de125d3",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/topagentnetwork/typeid-hs"
       },
       "original": {
-        "owner": "topagentnetwork",
-        "repo": "typeid-hs",
         "rev": "7164a74c490cc92ffe73a315d827c9515de125d3",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/topagentnetwork/typeid-hs"
       }
     },
     "typeid-hs-src_2": {
@@ -6081,16 +6077,14 @@
       "locked": {
         "lastModified": 1784587920,
         "narHash": "sha256-XCq5GXlOK8ZxbR4ZKIEi99rQdJ6vxX1c6/C3nRGvcrA=",
-        "owner": "topagentnetwork",
-        "repo": "typeid-hs",
         "rev": "7164a74c490cc92ffe73a315d827c9515de125d3",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/topagentnetwork/typeid-hs"
       },
       "original": {
-        "owner": "topagentnetwork",
-        "repo": "typeid-hs",
         "rev": "7164a74c490cc92ffe73a315d827c9515de125d3",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/topagentnetwork/typeid-hs"
       }
     },
     "typeid-hs-src_3": {
@@ -6098,16 +6092,14 @@
       "locked": {
         "lastModified": 1776870448,
         "narHash": "sha256-83cBGDIdngur6BNc9XJAnzAQIsQY/09wAGR9bvF8o4M=",
-        "owner": "topagentnetwork",
-        "repo": "typeid-hs",
         "rev": "e59e3f29237dcaddfd1faba158302532daf62a2a",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/topagentnetwork/typeid-hs"
       },
       "original": {
-        "owner": "topagentnetwork",
-        "repo": "typeid-hs",
         "rev": "e59e3f29237dcaddfd1faba158302532daf62a2a",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/topagentnetwork/typeid-hs"
       }
     },
     "typeid-hs-src_4": {
@@ -6115,16 +6107,14 @@
       "locked": {
         "lastModified": 1784587920,
         "narHash": "sha256-XCq5GXlOK8ZxbR4ZKIEi99rQdJ6vxX1c6/C3nRGvcrA=",
-        "owner": "topagentnetwork",
-        "repo": "typeid-hs",
         "rev": "7164a74c490cc92ffe73a315d827c9515de125d3",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/topagentnetwork/typeid-hs"
       },
       "original": {
-        "owner": "topagentnetwork",
-        "repo": "typeid-hs",
         "rev": "7164a74c490cc92ffe73a315d827c9515de125d3",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/topagentnetwork/typeid-hs"
       }
     },
     "vim-rescript": {

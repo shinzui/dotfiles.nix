@@ -53,13 +53,18 @@
       url = "github:shinzui/redpanda-container";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    # Organization sources use SSH because personal fine-grained tokens are
+    # limited to their resource owner. Keep these existing source revisions;
+    # review the overrides when updating the consuming tool inputs.
     mori = {
       url = "github:shinzui/mori";
+      inputs.typeid-hs-src.url = "git+ssh://git@github.com/topagentnetwork/typeid-hs?rev=7164a74c490cc92ffe73a315d827c9515de125d3";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     rei = {
       url = "github:shinzui/rei";
+      inputs.typeid-hs-src.url = "git+ssh://git@github.com/topagentnetwork/typeid-hs?rev=7164a74c490cc92ffe73a315d827c9515de125d3";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
@@ -110,11 +115,14 @@
     };
     mori-rei-app = {
       url = "github:shinzui/mori-rei-app";
+      inputs.typeid-hs-src.url = "git+ssh://git@github.com/topagentnetwork/typeid-hs?rev=7164a74c490cc92ffe73a315d827c9515de125d3";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     notion-hub = {
       url = "github:shinzui/notion-hub";
+      inputs.tan-effectful-src.url = "git+ssh://git@github.com/topagentnetwork/tan-effectful?rev=5e081ad8019b4731d1da37003c80aaaac6ccb5b5";
+      inputs.typeid-hs-src.url = "git+ssh://git@github.com/topagentnetwork/typeid-hs?rev=e59e3f29237dcaddfd1faba158302532daf62a2a";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
