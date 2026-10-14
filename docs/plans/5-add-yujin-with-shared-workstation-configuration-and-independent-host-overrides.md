@@ -15,6 +15,22 @@ provenance:
       at: 2026-10-14T00:17:40Z
       mode: "other"
       note: "Complete initial three-milestone plan and verify the baseline evaluation command"
+    - model: "gpt-6.1-sol"
+      harness: "codex-cli"
+      at: 2026-10-14T00:24:39Z
+      mode: "update"
+      note: "Apply review findings: checklist, bootstrap parity, wrapper contract harness, activation semantics, and live smoke checks"
+  reviews:
+    - model: "gpt-6.1-sol"
+      harness: "codex-cli"
+      at: 2026-10-14T00:21:14Z
+      verdict: "changes-requested"
+      note: "Baseline snapshot and source claims verified; add Progress checklist, bootstrap regression comparison, and non-activating wrapper contract checks"
+    - model: "gpt-6.1-sol"
+      harness: "codex-cli"
+      at: 2026-10-14T00:24:39Z
+      verdict: "approved"
+      note: "Revised plan validated against repository and locked source; temporary prototype passed host parity, independent overrides, bootstrap preservation, and wrapper checks; builds and onboarding remain implementation acceptance"
 ---
 
 # Add Yujin with shared workstation configuration and independent host overrides
@@ -36,13 +52,30 @@ The existing `SungkyungM1X` flake target continues to work. A new `yujin` target
 ## Progress
 
 
-(Implementation has not started. Populate a timestamped checklist when implementation begins.)
+- [x] (2026-10-14 00:21Z) Review repository and locked dependency interfaces; run the baseline snapshot and validate shared-host composition and isolated overrides in a temporary copy. Subsequently verify the added bootstrap comparison and wrapper harness against that copy.
+- [ ] Milestone 1: Capture full-host and bootstrap baselines, add sibling host modules and the shared constructor, compare final snapshots, and build both full hosts.
+- [ ] Milestone 2: Implement executable host-selecting wrappers, verify their command contracts without activation, and exercise real build dispatch.
+- [ ] Milestone 3: Repeat the override experiment in the implementation checkout, restore parity, rebuild, and complete README, secrets onboarding, and the local ADR.
+- [ ] Record repository acceptance and the ADR distillation pass; record physical Yujin onboarding separately as performed or unperformed.
 
 
 ## Surprises & Discoveries
 
 
-(None yet.)
+Discovery (2026-10-14 UTC): The original Progress placeholder did not satisfy the required checklist, and syntax checks plus successful builds did not verify the switch wrapper's target, argument boundaries, caller-directory independence, or propagated failures. This review adds an explicit work checklist and a temporary, non-activating command harness. Bootstrap also needs a semantic before/after check; a successful derivation evaluation alone does not demonstrate preservation.
+
+Discovery (2026-10-14 UTC): The original baseline snapshot is executable. It returned Sungkyung's three names as `sungkyung`, DNS as `[ "1.1.1.1" "8.8.8.8" ]`, 214 user packages, and 14 system packages. A temporary copy with the proposed constructor and four host modules preserved that snapshot, matched Yujin after removing the names, and produced the intended isolated override results:
+
+```text
+PASS: Sungkyung preserved; Yujin matches shared settings
+yujin: DNS ["9.9.9.9"], Zoxide false
+SungkyungM1X: DNS ["1.1.1.1","8.8.8.8"], Zoxide true
+SungkyungM1X, yujin, bootstrap-arm: system.drvPath evaluation exit 0
+```
+
+This is review evidence from a temporary prototype, not completed configuration implementation or a successful build. No configuration was activated. Locked nix-darwin source confirms that `networking.localHostName` defaults to `networking.hostName`; the host modules therefore need only the two explicit name assignments shown below.
+
+Discovery (2026-10-14 UTC): The added bootstrap snapshot matched between the current checkout and the prototype, with `hasAgenix = false` and `hasHomeManager = false`. The embedded wrapper harness passed against temporary implementations of the proposed wrappers, printing `PASS: wrapper targets, quoting, directory, errors, and exit status`. On macOS, temporary directories may be addressed through `/var` while commands report `/private/var`; the harness resolves its temporary directory before comparing working directories to avoid mistaking that alias for a wrapper defect.
 
 
 ## Decision Log
@@ -58,11 +91,13 @@ Decision (2026-10-14 UTC): Use ordinary Nix modules and the existing dependencie
 
 Decision (2026-10-14 UTC): Document Yujin secret onboarding using the established two-tier secret contract. Do not fabricate a recipient key, copy a private identity through repository files, or rekey unrelated secrets as part of the host refactor. No Intention ID is associated with this plan; the user selected Skip.
 
+Decision (2026-10-14 UTC, review): Preserve bootstrap using a separate before/after snapshot that does not require Home Manager or agenix. Verify wrapper dispatch, quoting, working directory, missing build handling, and exit status using temporary command substitutes. These checks make the promised behavior observable without switching the reviewer's machine.
+
 
 ## Outcomes & Retrospective
 
 
-(To be filled during and after implementation.)
+Review (2026-10-14 UTC): The three-milestone design is supported by repository inspection, locked source inspection, successful baseline evaluation, and a temporary host-composition experiment. The review corrected missing progress tracking and incomplete bootstrap and wrapper acceptance. Implementation, full system builds, documentation changes, ADR creation, and physical Yujin onboarding remain outstanding; keep those results distinct from this review's evidence.
 
 
 ## Context and Orientation
@@ -78,6 +113,8 @@ The full output is currently `darwinConfigurations.SungkyungM1X`. Its hardware p
 
 `bin/build.sh` contains a single build command fixed to Sungkyung. `bin/darwin-rebuild-sungkyung.sh` invokes the built `result/sw/bin/darwin-rebuild` for Sungkyung with an unquoted `$@`. The current workflow is an owner-run build followed by a sudo switch. A build assembles an installable system; a switch activates it and changes the running computer. `bin/test-treesitter.sh` is the existing editor verification helper. There is no `.github/` workflow, host parity test, or root-level test runner in this working tree.
 
+The locked `darwin-rebuild switch` command evaluates and builds its selected flake again before activating; the owner-run build primes access to the private inputs and detects build failures, rather than making the later switch build-free. `bin/test-treesitter.sh` runs `nvim` from the caller's PATH, so its result describes that editor and its current runtime state, not necessarily the newly built editor. Onboarding must check the installed editor again after activation.
+
 No local `docs/adr/` records exist, and `mori show --full` reports no ADR bundle or profile in this repository. One relevant decision was consulted in the private companion: `mori://shinzui/dotfiles-private.nix` with project-relative path `docs/adr/1-two-tier-agenix-secrets.md` (artifact-level URI pending; the registry exposes no concept handle for it). Its contract keeps low-impact ciphertext here, high-tier ciphertext and declarations privately, fetches private inputs over SSH, builds as the owner before switching with sudo, and verifies secret installation after the agenix launch daemon runs. Adding a recipient requires rekeying both tiers. The needed public workflow is described in `docs/secrets.md` and is summarized below, so implementing this plan does not depend on access to that separate decision file.
 
 Dependency discovery used Mori first. The registered flake-parts source was inspected through `mori://hercules-ci/flake-parts/repos/flake-parts`. Mori searches did not find nix-darwin, Home Manager, or nixpkgs corpus projects. Their relevant source files were then downloaded from upstream at this checkout's locked revisions and inspected: nix-darwin `43975d782b418ebf4969e9ccba82466728c2851b`, Home Manager `abfad3d2958c9e6300a883bd443512c55dfeb1be`, and nixpkgs `38a4887411571457d700c51c64a6e49ead2ed5ab`. The verified interfaces are `darwinSystem { system; modules; specialArgs; }`, Home Manager's `home-manager.users` module merging, and Nix's definition priorities. No dependency bounds, version upgrades, or new compatibility workarounds are proposed.
@@ -89,7 +126,7 @@ Dependency discovery used Mori first. The registered flake-parts source was insp
 ### Milestone 1: Compose two independent hosts from the existing shared modules
 
 
-First capture the existing Sungkyung configuration snapshot with the commands below. Add `hosts/sungkyung/default.nix`, `hosts/sungkyung/home.nix`, `hosts/yujin/default.nix`, and `hosts/yujin/home.nix`. Each `default.nix` is a system module that sets only its machine names and imports its adjacent user module into the selected Home Manager account. The initial `home.nix` files contain `{ ... }: { }`, with a short comment identifying where future user differences belong. They do not import `home/default.nix`; shared Home Manager composition continues to do that once.
+First capture the existing Sungkyung and bootstrap configuration snapshots with the commands below. Add `hosts/sungkyung/default.nix`, `hosts/sungkyung/home.nix`, `hosts/yujin/default.nix`, and `hosts/yujin/home.nix`. Each `default.nix` is a system module that sets only its machine names and imports its adjacent user module into the selected Home Manager account. The initial `home.nix` files contain `{ ... }: { }`, with a short comment identifying where future user differences belong. They do not import `home/default.nix`; shared Home Manager composition continues to do that once.
 
 In `flake-modules/darwin-configurations.nix`, add shared `users.primaryUser = lib.mkDefault "shinzui"` and `networking.knownNetworkServices = lib.mkDefault [ "Wi-Fi" "Thunderbolt Bridge" ]` to the existing common system module that configures Home Manager. Remove those settings from the inline Sungkyung definition. Add a local constructor named `mkDarwinHost` in the `let` block. It takes `{ hostModule, system ? "aarch64-darwin" }`, calls `darwinSystem`, appends `hostModule` to `nixDarwinCommonModules`, and supplies the existing `private-fonts` special argument. Define `SungkyungM1X` using `../hosts/sungkyung` and `yujin` using `../hosts/yujin`. Leave the bootstrap definition separate. Keep the common Home Manager modules, state versions, registry entries, overlays, secret imports, and extra arguments intact.
 
@@ -104,7 +141,7 @@ Each host system module follows this form, with the names changed for Sungkyung:
 }
 ```
 
-Stage the new files so Git-based flake evaluation includes them. Evaluate both host names and compare snapshots: Sungkyung retains its old settings, and the snapshots of the two hosts are identical after removing the machine name fields. Build both system targets using the commands below. This milestone passes when both configurations evaluate and build without changing the existing user's configuration. A changed whole-system derivation path alone is not a regression: these outputs embed the source flake in registry configuration, so source edits can legitimately change build paths.
+Stage the new files so Git-based flake evaluation includes them. Evaluate both host names and compare snapshots: Sungkyung retains its old settings, and the snapshots of the two hosts are identical after removing the machine name fields. Compare bootstrap snapshots as well: its settings remain unchanged and it still excludes Home Manager and agenix. Build both system targets using the commands below. This milestone passes when both configurations evaluate and build without changing the existing user's configuration, and bootstrap passes its regression check. A changed whole-system derivation path alone is not a regression: these outputs embed the source flake in registry configuration, so source edits can legitimately change build paths.
 
 ### Milestone 2: Select hosts through the existing build and activation workflow
 
@@ -113,7 +150,7 @@ Give `bin/build.sh` a Bash shebang, fail-fast shell settings, and an optional fi
 
 Create executable `bin/darwin-rebuild.sh`, taking a required host argument followed by optional darwin-rebuild arguments. Use the same explicit target validation and repository-directory handling. Invoke `./result/sw/bin/darwin-rebuild switch --flake ".#<host>"` and forward remaining arguments with `"$@"`. If `result/sw/bin/darwin-rebuild` is absent, print an instruction to run `./bin/build.sh <host>` as the owner and exit unsuccessfully. Keep owner-build and sudo-activation as separate actions, matching the verified SSH/private-input workflow. `result` is a single link: the operator builds the intended host immediately before switching, and the explicit `--flake` argument selects the desired configuration.
 
-Turn `bin/darwin-rebuild-sungkyung.sh` into a quoted delegation to `bin/darwin-rebuild.sh SungkyungM1X`, preserving any user-supplied arguments. Do not add an identical Yujin-specific wrapper. Validate scripts with `bash -n`, exercise build selection for both names, and verify that unknown targets fail without attempting an activation. This milestone passes when the documented commands build the requested targets and Sungkyung's existing invocation still delegates to the same target. Actual activation occurs only on the corresponding workstation during onboarding or an explicitly requested switch.
+Turn `bin/darwin-rebuild-sungkyung.sh` into an executable Bash script that resolves its own directory and uses `exec` to delegate to the absolute sibling script path with `SungkyungM1X` and quoted `"$@"`. Do not add an identical Yujin-specific wrapper. Make all three scripts executable. Validate scripts with `bash -n` and the temporary command harness below, exercise build selection for both names, and verify that unknown targets fail without invoking the substituted build or switch command. This milestone passes when the documented commands build the requested targets and the harness verifies defaults, both host names, bootstrap selection, arguments containing spaces, invocation from outside the checkout, the compatible Sungkyung wrapper, propagated failures, and missing-result guidance. Actual activation occurs only on the corresponding workstation during onboarding or an explicitly requested switch.
 
 ### Milestone 3: Prove divergence and document machine onboarding
 
@@ -162,6 +199,23 @@ NIX
 nix eval --json .#darwinConfigurations.SungkyungM1X.config \
   --apply "$(cat /tmp/dotfiles-host-snapshot.nix)" \
   > /tmp/dotfiles-sungkyung-before.json
+cat > /tmp/dotfiles-bootstrap-snapshot.nix <<'NIX'
+cfg: {
+  inherit (cfg.system) primaryUser stateVersion;
+  inherit (cfg.networking) hostName computerName localHostName;
+  systemPackages = builtins.sort builtins.lessThan
+    (map (p: p.pname or p.name) cfg.environment.systemPackages);
+  daemonNames = builtins.attrNames cfg.launchd.daemons;
+  hasAgenix = cfg ? age;
+  hasHomeManager = cfg ? home-manager;
+  nixSettings = cfg.determinateNix.customSettings;
+  distributedBuilds = cfg.determinateNix.distributedBuilds;
+  buildMachines = cfg.determinateNix.buildMachines;
+}
+NIX
+nix eval --json .#darwinConfigurations.bootstrap-arm.config \
+  --apply "$(cat /tmp/dotfiles-bootstrap-snapshot.nix)" \
+  > /tmp/dotfiles-bootstrap-before.json
 ```
 
 The snapshot contains configuration metadata and package names, not plaintext secrets. Initial authoring verified `nix eval --json .#darwinConfigurations.SungkyungM1X.config.networking.hostName` returns `"sungkyung"`. After Milestone 1 edits, stage only the new host files and take updated snapshots:
@@ -175,6 +229,9 @@ nix eval --json .#darwinConfigurations.SungkyungM1X.config \
 nix eval --json .#darwinConfigurations.yujin.config \
   --apply "$(cat /tmp/dotfiles-host-snapshot.nix)" \
   > /tmp/dotfiles-yujin.json
+nix eval --json .#darwinConfigurations.bootstrap-arm.config \
+  --apply "$(cat /tmp/dotfiles-bootstrap-snapshot.nix)" \
+  > /tmp/dotfiles-bootstrap-after.json
 python3 - <<'PY'
 import json
 from pathlib import Path
@@ -187,18 +244,25 @@ for key in ('hostName', 'computerName', 'localHostName'):
     assert yujin.pop(key) == 'yujin', key
 assert after == yujin, 'Shared settings differ between hosts'
 print('PASS: Sungkyung preserved; Yujin matches shared settings')
+bootstrap_before = json.loads(Path('/tmp/dotfiles-bootstrap-before.json').read_text())
+bootstrap_after = json.loads(Path('/tmp/dotfiles-bootstrap-after.json').read_text())
+assert bootstrap_before == bootstrap_after, 'Bootstrap configuration changed'
+assert not bootstrap_after['hasAgenix'], 'Bootstrap imports agenix'
+assert not bootstrap_after['hasHomeManager'], 'Bootstrap imports Home Manager'
+print('PASS: bootstrap preserved without agenix or Home Manager')
 PY
 nix build .#darwinConfigurations.SungkyungM1X.system --out-link result-sungkyung
 nix build .#darwinConfigurations.yujin.system --out-link result-yujin
 nix eval --raw .#darwinConfigurations.bootstrap-arm.system.drvPath
 ```
 
-The comparison prints exactly the PASS line shown above. Builds exit zero and create their result links; bootstrap evaluation prints a derivation path. Record existing unrelated build failures explicitly rather than silently treating a partial evaluation as a successful build. Do not update all flake inputs to resolve an unrelated build failure.
+The comparison prints both PASS lines shown above. Builds exit zero and create their result links; bootstrap evaluation prints a derivation path. Record existing unrelated build failures explicitly rather than silently treating a partial evaluation as a successful build. Do not update all flake inputs to resolve an unrelated build failure.
 
 After Milestone 2 edits, stage the new script, verify syntax, and exercise build dispatch:
 
 ```bash
 git add bin/darwin-rebuild.sh
+chmod +x bin/build.sh bin/darwin-rebuild.sh bin/darwin-rebuild-sungkyung.sh
 for script in bin/build.sh bin/darwin-rebuild.sh bin/darwin-rebuild-sungkyung.sh; do
   bash -n "$script" || exit 1
 done
@@ -210,6 +274,87 @@ done
 ```
 
 The first three build invocations select the intended host and exit zero. The last two invocations must fail with a nonzero status and an unknown-host error before running Nix or activating anything. Run these failure cases individually; their failure is expected. If ShellCheck is already available, run it on the three modified scripts; do not add a toolchain dependency solely for these wrappers.
+
+Run this command from the repository root after the scripts exist. It copies only the three wrappers into a temporary directory, replaces Nix and the built switch command with recorders, and invokes the copies from another directory. The substitutes record argument arrays and return a requested exit code; they cannot build or activate anything. All assertions must pass and the final line must be `PASS: wrapper targets, quoting, directory, errors, and exit status`.
+
+```bash
+python3 - <<'PY'
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
+
+source = Path.cwd()
+with tempfile.TemporaryDirectory(prefix='dotfiles-wrapper-check-') as directory:
+    root = Path(directory).resolve()
+    for subdir in ('bin', 'shim', 'result/sw/bin', 'caller'):
+        (root / subdir).mkdir(parents=True, exist_ok=True)
+    for name in ('build.sh', 'darwin-rebuild.sh', 'darwin-rebuild-sungkyung.sh'):
+        assert os.access(source / 'bin' / name, os.X_OK), f'{name} is not executable'
+        shutil.copy2(source / 'bin' / name, root / 'bin' / name)
+    recorder = '''#!/usr/bin/env python3
+import json, os, sys
+from pathlib import Path
+Path(os.environ['WRAPPER_LOG']).write_text(json.dumps({
+    'argv': sys.argv[1:], 'cwd': os.getcwd()
+}))
+sys.exit(int(os.environ.get('WRAPPER_EXIT', '0')))
+'''
+    for command in (root / 'shim/nix', root / 'result/sw/bin/darwin-rebuild'):
+        command.write_text(recorder)
+        command.chmod(0o755)
+    log = root / 'invocation.json'
+    env = dict(os.environ, PATH=f"{root / 'shim'}:{os.environ['PATH']}",
+               WRAPPER_LOG=str(log), WRAPPER_EXIT='0')
+
+    def run(script, args=(), exit_code=0):
+        log.write_text('')
+        completed = subprocess.run([str(root / 'bin' / script), *args],
+                                   cwd=root / 'caller', env=env,
+                                   capture_output=True, text=True)
+        assert completed.returncode == exit_code, completed.stderr
+        return json.loads(log.read_text()) if log.read_text() else None
+
+    def expect(script, args, argv, exit_code=0):
+        actual = run(script, args, exit_code)
+        assert actual == {'argv': argv, 'cwd': str(root)}, actual
+
+    expect('build.sh', [], ['build', '.#darwinConfigurations.SungkyungM1X.system'])
+    build_flags = ['--out-link', 'result with spaces']
+    switch_flags = ['--option', 'substituters', 'https://one.invalid https://two.invalid']
+    for host in ('SungkyungM1X', 'yujin', 'bootstrap-arm'):
+        expect('build.sh', [host, *build_flags],
+               ['build', f'.#darwinConfigurations.{host}.system', *build_flags])
+        expect('darwin-rebuild.sh', [host, *switch_flags],
+               ['switch', '--flake', f'.#{host}', *switch_flags])
+    expect('darwin-rebuild-sungkyung.sh', switch_flags,
+           ['switch', '--flake', '.#SungkyungM1X', *switch_flags])
+    for script, args in (('build.sh', ['unknown-host']),
+                         ('darwin-rebuild.sh', ['unknown-host']),
+                         ('darwin-rebuild.sh', [])):
+        log.write_text('')
+        failed = subprocess.run([str(root / 'bin' / script), *args],
+                                cwd=root / 'caller', env=env,
+                                capture_output=True, text=True)
+        assert failed.returncode != 0 and not log.read_text(), failed
+        assert failed.stderr.strip(), 'Missing error or usage message'
+    env['WRAPPER_EXIT'] = '23'
+    expect('build.sh', ['yujin'], ['build', '.#darwinConfigurations.yujin.system'], 23)
+    expect('darwin-rebuild.sh', ['yujin'], ['switch', '--flake', '.#yujin'], 23)
+    expect('darwin-rebuild-sungkyung.sh', [],
+           ['switch', '--flake', '.#SungkyungM1X'], 23)
+    (root / 'result/sw/bin/darwin-rebuild').rename(root / 'saved-rebuild')
+    log.write_text('')
+    missing = subprocess.run([str(root / 'bin/darwin-rebuild.sh'), 'yujin'],
+                             cwd=root / 'caller', env=env,
+                             capture_output=True, text=True)
+    assert missing.returncode != 0 and not log.read_text(), missing
+    assert './bin/build.sh yujin' in missing.stderr, missing.stderr
+print('PASS: wrapper targets, quoting, directory, errors, and exit status')
+PY
+```
 
 For Milestone 3, save copies of the two Yujin files outside the repository before inserting the temporary DNS and Zoxide definitions described above. With those definitions present, run:
 
@@ -250,17 +395,19 @@ During implementation, update this plan's living sections and record one provena
 ## Validation and Acceptance
 
 
-Acceptance requires the before/after snapshot to preserve Sungkyung and the two final snapshots to match apart from their three machine names. Both full system builds and bootstrap evaluation must succeed. The default build command must still select `SungkyungM1X`; the explicit `yujin` command must select Yujin. Invalid target names fail before activation. The temporary DNS and Zoxide experiment must produce the four outputs above, then be removed from the final configuration. This proves independent system and user changes without a copied package list or service configuration.
+Acceptance requires the before/after snapshot to preserve Sungkyung and the two final snapshots to match apart from their three machine names. Bootstrap's before/after snapshot must also match and show neither agenix nor Home Manager. Both full system builds and bootstrap evaluation must succeed. The default build command must still select `SungkyungM1X`; the explicit `yujin` command must select Yujin. The temporary wrapper harness must pass, including the compatible Sungkyung wrapper, caller-directory independence, arguments with spaces, nonzero underlying command statuses, and missing-result guidance. Invalid target names and an omitted switch target fail before invoking a build or switch command. The temporary DNS and Zoxide experiment must produce the four outputs above, then be removed from the final configuration. This proves independent system and user changes without a copied package list or service configuration.
 
 Review the composition as well as the snapshot: both outputs use the same constructor and shared module lists, and neither host imports the other's files. Confirm inherited Homebrew definitions, shared secret imports, overlays, state versions, and module arguments were not altered. The snapshot is deliberately a focused regression check and does not claim exhaustive equality of every option. Builds exercise the complete evaluated configuration; the isolated override experiment demonstrates the feature's behavior.
 
 When onboarding is actually performed on Yujin, verify its three macOS names, expected package availability, and configuration symlinks. After the agenix daemon finishes, verify that the already-declared secret destination files are readable by their configured owner without printing their contents, and run the dependent tools' existing health checks from `docs/local-services.md`. A build cannot prove successful decryption. Separate these live results from repository-only acceptance in Outcomes & Retrospective.
 
+For a concrete initial smoke check on Yujin as `shinzui`, run `command -v nvim zoxide mori`, `test -L "$HOME/.config/nvim/lua"`, `test -L "$HOME/.config/nvim/after"`, `test -L "$HOME/.config/mori"`, `test -r "$HOME/.config/sesh/sesh.toml"`, and `test -r "$HOME/.config/rei-api/tokens"`. Each command must exit zero; the first prints three executable paths. Neovim's `lua` and `after` directories are individually linked by `home/neovim.nix`; the containing `nvim` directory need not itself be a symlink. Rerun `./bin/test-treesitter.sh` against the activated editor and expect its PASS message. Run `just status-postgres`, `just status-tools`, `just status-victorialogs`, `just status-victoriatraces`, and `just status-redpanda` from the repository root; their recipes are defined in `Justfile`. Inspect the reported readiness and use the local-services runbook for failures. Configuration reuse installs declarations and programs; existing databases, Git credentials, external service authorization, and unmanaged state are separate onboarding prerequisites, so report any such missing prerequisite instead of claiming live service parity from a successful build.
+
 
 ## Idempotence and Recovery
 
 
-Evaluation, snapshots, syntax checking, and non-activating builds can be rerun. New files must remain staged for Git-based flake evaluation. Temporary override experiments are reversible: keep copies outside the repository, restore them even if evaluation fails, and recheck the final diff before committing. Do not use a broad `git reset` or restore unrelated work. Build result links are generated artifacts, not source files to commit.
+Evaluation, snapshots, syntax checking, the isolated wrapper harness, and non-activating builds can be rerun. Keep the initial snapshot files until acceptance completes; do not overwrite the before files with post-edit settings. New files must remain staged for Git-based flake evaluation. Temporary override experiments are reversible: keep copies outside the repository, restore them even if evaluation fails, and recheck the final diff before committing. The wrapper harness copies scripts and substitutes commands only inside its own temporary directory. Do not use a broad `git reset` or restore unrelated work. Build result links are generated artifacts, not source files to commit.
 
 If a full build fails, keep the last working activated generation, record the failing command, and fix only the cause relevant to this work. There is no need to switch to test module composition. Preserve the bootstrap output and old Sungkyung commands throughout the change.
 
@@ -279,3 +426,5 @@ The command interfaces are `bin/build.sh [SungkyungM1X|yujin|bootstrap-arm] [nix
 Use the already locked nix-darwin, Home Manager, flake-parts, agenix, Determinate Nix, and private-font inputs. No dependency upgrade is required. The high-tier secret dependency is `mori://shinzui/dotfiles-private.nix`; its module is already imported. If onboarding changes that dependency, locate its current source and workflow with `mori registry show shinzui/dotfiles-private.nix --full` and `mori registry docs shinzui/dotfiles-private.nix`, and publish the narrowly scoped private change before updating its public lock entry.
 
 Authoring note (2026-10-14 UTC): Created this plan after inspecting the existing host assembly, shared system and user modules, scripts, secret workflow, relevant dependency source, and private two-tier ADR. Configuration implementation and physical Yujin onboarding have not been performed.
+
+Revision note (2026-10-14 UTC): Reviewed against the ExecPlan specification and current repository, verified the baseline command and proposed host composition in a temporary copy, and corrected Progress tracking, bootstrap preservation checks, non-activating wrapper verification, executable wrapper requirements, and live smoke-check instructions. Clarified that `switch` rebuilds and the existing Treesitter helper checks the editor on PATH. No host configuration, dependency pin, secret, or activated system was changed by this review.
