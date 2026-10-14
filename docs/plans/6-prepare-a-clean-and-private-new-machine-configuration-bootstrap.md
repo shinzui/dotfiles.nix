@@ -40,6 +40,11 @@ provenance:
       at: 2026-10-14T03:15:37Z
       mode: "implement"
       note: "Implement selective bootstrap policy, encrypted recovery, checker, runbook, builds, and ADR"
+    - model: "gpt-6-sol"
+      harness: "codex-cli"
+      at: 2026-10-14T04:19:34Z
+      mode: "implement"
+      note: "Record and guard Sungkyung Mori ownership repair"
 ---
 
 # Prepare a clean and private new-machine configuration bootstrap
@@ -69,6 +74,7 @@ This is creation of an implementation plan after a read-only audit. It does not 
 - [x] (2026-10-14 03:14 UTC) Distill selective ownership, encrypted credentials, local identity, and bootstrap ordering into a local ADR.
 - [ ] Review unique differences in historical Mori/Rei backups privately and export any desired preference before discarding those backups.
 - [x] (2026-10-14 03:18 UTC) Build released Nagare `v0.2.2` without installation; verify `nagarectl context list` and `NAGARE_CONTEXT=local nagare --list` against the source configuration without changing its profile.
+- [x] (2026-10-14 UTC) Repair Sungkyung's Mori symlink loop after a full switch encountered its old whole-directory link; preserve generated backups outside Git, restore the original source files and host ID, and guard subsequent full switches.
 - [ ] On the actual new Mac, enroll Tailscale, restore renewable authentication, activate the matching host, verify secret modes and consumers, Mori identity, services, and data restoration. No new Mac is accessible in this implementation session.
 - [ ] Finish the retrospective after the remaining repository probe and record physical onboarding separately when it occurs.
 
@@ -85,6 +91,8 @@ The pinned agenix editor returned exit zero when its editor failed to create cip
 The Determinate stable macOS package endpoint returned v3.23.2. Its downloaded package reported that version in `PackageInfo` and passed Apple's signature and notarization check; no package installer ran. The final private policy records thirteen Nagare first-hop links without following their targets. With that final private pin, checker fixtures and all three non-activating Darwin builds passed again.
 
 The current `v0.2.2` Nagare tag exposes `#nagare` and `#nagarectl` on `aarch64-darwin`, and its non-activating build passed. `nagarectl context list` parsed local state. The launcher failed when the source's stale active context name pointed to a missing file, then passed `--list` with an explicit `NAGARE_CONTEXT=local` and isolated temporary state. The release commit differs from the old profile's recorded revision; the new machine must repeat the private context check before installing the tag.
+
+Source-machine correction (2026-10-14 UTC): Sungkyung's old `~/.config/mori` symlink still pointed to the former whole-directory Home Manager target when child links were activated. The child links landed in the tracked source locations and looped back through Home Manager, causing `git status` to report “Too many levels of symbolic links.” The generated `.backup` copies matched all twelve tracked source files by Git blob hash. They and the broken links were preserved under `~/.local/state/dotfiles-bootstrap`; the source files were restored, the outer link became a real mode-`0700` local directory, and its host ID was restored mode `0600` from the protected copy. `git status` became clean, `./bin/check-bootstrap.sh SungkyungM1X` passed, and a read-only Mori registry query worked. No activation was run during repair.
 
 
 ## Decision Log
@@ -116,11 +124,13 @@ Decision (2026-10-14 UTC, implementation): Encrypt the selected gcloud profile f
 
 Decision (2026-10-14 UTC, implementation): Treat differing Mori/Rei backups as possible user data until privately reviewed. Keep the backup files untouched and mark them `data-export`; do not infer that a historical backup is disposable from its name.
 
+Decision (2026-10-14 UTC, source-machine repair): Refuse a documented full switch when Mori's editable source paths are symlinks or missing, or while the old whole-directory `~/.config/mori` link remains. On Sungkyung, also require the local host ID to match its protected backup. This prevents Home Manager from writing new child links through the former directory owner again.
+
 
 ## Outcomes & Retrospective
 
 
-Repository preparation has produced a 70-entry selection policy, an ordered runbook, a read-only checker with synthetic risk scenarios, private encrypted recovery files, editable public links, a machine-local Mori identity boundary, and a bootstrap target free of remote-builder credentials. The private companion commits `ac0575b` (encrypted recovery), `78e7973` (metadata-only audit history), and `a0f7e54` (Nagare link recovery map) are published; the companion is the only updated public lock input. Non-activating Nix evaluations and builds passed for bootstrap, Sungkyung, and Yujin. The released Nagare `v0.2.2` operator package built and passed explicit local-context command probes. The source-Mac preflight correctly reports existing target conflicts. This is not a live deployment result. Remaining work is disposition of Mori's unique backup-only skill and physical new-Mac activation, authentication, Tailscale enrollment, secret consumer checks, and service/data recovery.
+Repository preparation has produced a 70-entry selection policy, an ordered runbook, a read-only checker with synthetic risk scenarios, private encrypted recovery files, editable public links, a machine-local Mori identity boundary, and a bootstrap target free of remote-builder credentials. The private companion commits `ac0575b` (encrypted recovery), `78e7973` (metadata-only audit history), and `a0f7e54` (Nagare link recovery map) are published; the companion is the only updated public lock input. Non-activating Nix evaluations and builds passed for bootstrap, Sungkyung, and Yujin. The released Nagare `v0.2.2` operator package built and passed explicit local-context command probes. A later source-Mac ownership conflict was repaired and the rebuild wrapper now guards the migration boundary. This is not a live new-machine deployment result. Remaining work is disposition of Mori's unique backup-only skill and physical new-Mac activation, authentication, Tailscale enrollment, secret consumer checks, and service/data recovery.
 
 
 ## Context and Orientation
@@ -128,7 +138,7 @@ Repository preparation has produced a 70-entry selection policy, an ordered runb
 
 The public repository is `/Users/shinzui/.config/dotfiles.nix`. `flake.nix` names its dependencies, `flake.lock` fixes their revisions, and `flake-modules/darwin-configurations.nix` combines system modules from `darwin/` and user modules from `home/`. Nix-darwin applies system settings; Home Manager applies user programs and files. A build assembles a candidate configuration; activation changes the running machine. The current full targets are `SungkyungM1X` and `yujin`; `bootstrap-arm` includes `darwin/bootstrap.nix` and Determinate integration but omits Home Manager and agenix secret installation.
 
-`home/xdg-configs.nix` links whole `kazuha`, `mori`, and `rei` directories from `config/xdg/`, and individual `mina/config.kdl` and `okf/config.dhall` files. `home/neovim.nix` individually links `nvim/lua` and `nvim/after`; generated startup configuration remains separately managed. `home/external-configs.nix` deploys PostgreSQL client, pspg, Bird, and YAML lint settings. `home/claude.nix` links shared agent instructions outside XDG configuration; those declarations are already covered and must survive. XDG configuration means the conventional `~/.config` directory here.
+`home/xdg-configs.nix` links whole `kazuha` and `rei` directories from `config/xdg/`; Mori now uses individual `mori/config.dhall` and `mori/agents` links so its host ID stays local. It also links individual `mina/config.kdl` and `okf/config.dhall` files. `home/neovim.nix` individually links `nvim/lua` and `nvim/after`; generated startup configuration remains separately managed. `home/external-configs.nix` deploys PostgreSQL client, pspg, Bird, and YAML lint settings. `home/claude.nix` links shared agent instructions outside XDG configuration; those declarations are already covered and must survive. XDG configuration means the conventional `~/.config` directory here.
 
 Live Home Manager links often first point into `/nix/store` even when the final editable source is outside it. The audit used only `lstat`, directory walks that do not follow links, and first-hop `readlink`. It never traversed those targets or secret links. Maintain this restriction: never search, read, glob, or resolve paths inside `/nix/store`, and never search filesystem root. Source declarations establish intended ownership; metadata alone does not prove a final symlink chain works.
 
@@ -397,3 +407,5 @@ Revision note (2026-10-14 UTC, implementation): Implemented the selection policy
 
 
 Revision note (2026-10-14 UTC, validation addendum): Verified the released Nagare `v0.2.2` operator build and explicit local-context probe; mapped Nagare symlink first hops privately; confirmed Determinate package metadata and signature without installing; tightened preflight to report private destination conflicts and validated the final companion pin with fresh non-activating builds. Mori's unique backup-only skill and physical new-machine checks remain open.
+
+Revision note (2026-10-14 UTC, source-machine repair): Recorded the Mori link loop caused by activating child ownership while Sungkyung's old whole-directory link remained. Restored tracked sources and the protected local host ID, preserved generated backups outside Git, and added a full-switch guard plus earlier runbook warning. Physical new-machine acceptance remains open.
