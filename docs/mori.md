@@ -1,5 +1,9 @@
 # Mori
 
+Sungkyung is the current sole runtime host. Keep the Yujin runtime stopped until
+the separate [host cutover](rei-mori-cutover.md); runtime setup, migrations and
+restart commands below apply to the active host.
+
 Project identity & automation system. Configured in `home/mori.nix`.
 
 ## Architecture

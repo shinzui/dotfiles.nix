@@ -22,6 +22,10 @@ Neither helper activates the machine or publishes enrollment changes.
 before the first build, carries it explicitly through sudo, and removes its
 temporary credential only after the managed user/root authentication passes.
 
+Sungkyung remains the sole active Rei/Mori runtime host. Yujin prepares the
+workstation with the runtime and integrations disabled; follow the separate
+[host cutover](docs/rei-mori-cutover.md) before moving live application state.
+
 ## Everyday commands
 
 ```bash

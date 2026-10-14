@@ -21,11 +21,19 @@ let
   binPath = lib.makeBinPath [ pg pkgs.coreutils pkgs.gnugrep pkgs.gawk pkgs.gnused pkgs.mori ];
   fullPath = "${binPath}:/usr/bin:/bin:/usr/sbin:/sbin";
 
-  rei-doctor = pkgs.writeShellScriptBin "rei-doctor" ''
+  rei-doctor = pkgs.writeShellScriptBin "rei-doctor" (
+    lib.optionalString (!config.workstation.reiMori.enable) ''
+      for argument in "$@"; do
+        if [ "$argument" = --heal ]; then
+          echo "Rei/Mori runtime is inactive on this host; healing is disabled until cutover." >&2
+          exit 1
+        fi
+      done
+    '' + ''
     export PATH="${fullPath}"
     export REI_DOCTOR_SOCKET="${pgSocket}"
     exec ${pkgs.bash}/bin/bash ${./rei-doctor.sh} "$@"
-  '';
+  '');
 in
 {
   home.packages = [ rei-doctor ];
@@ -58,7 +66,7 @@ in
   # mori-automate DB-pool exhaustion went undetected/unhealed for ~5h. Re-assert
   # on every activation: if the plist exists but the agent isn't loaded, load it.
   # Runs AFTER setupLaunchAgents so it sees the freshly-written plist.
-  home.activation.rei-watchdog-ensure-loaded = lib.hm.dag.entryAfter [ "setupLaunchAgents" ] ''
+  home.activation.rei-watchdog-ensure-loaded = lib.mkIf config.workstation.reiMori.enable (lib.hm.dag.entryAfter [ "setupLaunchAgents" ] ''
     label="com.shinzui.rei-watchdog"
     domain="gui/$(id -u)"
     plist="$HOME/Library/LaunchAgents/$label.plist"
@@ -66,7 +74,7 @@ in
       verboseEcho "rei-watchdog not loaded — bootstrapping $plist"
       /bin/launchctl bootstrap "$domain" "$plist" 2>/dev/null || true
     fi
-  '';
+  '');
 
   # Periodic task (NOT KeepAlive — it's a cron-style check, not a daemon).
   launchd.agents.rei-watchdog = {

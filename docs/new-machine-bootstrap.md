@@ -1,5 +1,11 @@
 # New Apple Silicon Mac runbook
 
+**Rei/Mori runtime ownership:** Sungkyung remains the sole active host. Yujin's
+full configuration keeps these background services and their integrations
+disabled while the workstation is prepared. Do not start them, restore their
+live state, or run mutating application commands on Yujin during bootstrap.
+Use the separate [stop-before-start cutover](rei-mori-cutover.md) once Yujin is ready.
+
 Follow these phases in order. Commands marked **NEW MAC** run as `shinzui` on the destination, locally or over SSH. Commands marked **TRUSTED MAC** run on an already-authorized workstation with GitHub CLI access and an identity that decrypts both secret tiers. Keep one Bash terminal for each machine; reconnect after installing Nix and reset the variables below. Stop a phase if a command fails, resolve the cause, then resume that phase. After phase 6, keep the bootstrap credential until the managed handoff passes. Do not paste this entire document into a shell.
 
 This configuration supports Apple Silicon macOS with the `shinzui` login and the exact checkout paths below. A new hostname needs a declared host target before activation. Keys stay on their owning machine; only public keys and encrypted files cross machines. Builds prepare a candidate. `sudo ./bin/darwin-rebuild.sh` changes the running machine.
@@ -419,11 +425,11 @@ nix run 'github:shinzui/nagare/v0.2.2#nagarectl' -- context list
 NAGARE_CONTEXT=local nix run 'github:shinzui/nagare/v0.2.2#nagare' -- --list
 ```
 
-If those probes and a private read-only context check pass, install `nix profile install 'github:shinzui/nagare/v0.2.2#nagare'`. Clone the owning Nagare and operations repositories before recreating the selected symlinks under `~/.config/nagare`. Select the active context only after its destination and credentials exist. The local Mori registry and data must be restored before `bootstrap-repos` can clone its recorded projects; on a completely clean Mac, clone the essential repositories explicitly first. Generated databases and workspaces have separate recovery sources in [local services](local-services.md) and their owning runbooks; no database belongs in these dotfiles.
+If those probes and a private read-only context check pass, install `nix profile install 'github:shinzui/nagare/v0.2.2#nagare'`. Clone the owning Nagare and operations repositories before recreating the selected symlinks under `~/.config/nagare`. Select the active context only after its destination and credentials exist. Restoration and use of the live Mori registry/data on Yujin are deferred to the sole-owner cutover. Clone essential preparation repositories explicitly; do not run `bootstrap-repos` against a second restored production registry during onboarding. Generated databases and workspaces have separate recovery sources in [local services](local-services.md) and their owning runbooks; no database belongs in these dotfiles.
 
 ### Source-machine Mori migration
 
-Mori must create a new local `~/.config/mori/host-id`. Verify privately that it differs from Sungkyung's protected copy; do not copy that value or write it back into shared source. On Sungkyung, before activating this changed Home Manager ownership, preserve the old `~/.config/mori` symlink itself under a unique name outside both repositories, create a real local `~/.config/mori` directory, and restore the protected `~/.local/state/dotfiles-bootstrap/sungkyung-mori-host-id` to `~/.config/mori/host-id` with mode `0600`. Confirm its bytes match the protected backup before using Mori. The tracked source's `host-id` was removed from Git, while the old source file remains ignored locally until this switch.
+When Mori is first used at cutover, it must create a new local `~/.config/mori/host-id`. Defer production runtime use on Yujin until then. Verify privately that it differs from Sungkyung's protected copy; do not copy that value or write it back into shared source. On Sungkyung, before activating this changed Home Manager ownership, preserve the old `~/.config/mori` symlink itself under a unique name outside both repositories, create a real local `~/.config/mori` directory, and restore the protected `~/.local/state/dotfiles-bootstrap/sungkyung-mori-host-id` to `~/.config/mori/host-id` with mode `0600`. Confirm its bytes match the protected backup before using Mori. The tracked source's `host-id` was removed from Git, while the old source file remains ignored locally until this switch.
 
 Review the differing historical `mori.bak` and `rei.bak` settings privately before discarding those backups. Their policy action is `data-export` until desired unique preferences have a specific owner and recovery route.
 
@@ -453,13 +459,14 @@ test -r "$HOME/.config/nhub/config.kdl"
 test -r "$HOME/.config/ntn/config.kdl"
 ./bin/test-treesitter.sh
 just status-postgres
-just status-tools
+python3 ./bin/check-rei-mori-owner.py --expect SungkyungM1X
+# Runtime service health belongs to the active host until the separate cutover.
 just status-victorialogs
 just status-victoriatraces
 just status-redpanda
 ```
 
-The two public CLI files should be editable source links: a harmless temporary checkout edit should appear at the installed path and be restored afterward. Check each private consumer without printing tokens or keys. Inspect actual service readiness using [local services](local-services.md), not just launch-agent presence. Restore application data only from the selected owner backup. Record each authentication, service, Tailscale, and Mori identity result independently. A source-machine build or synthetic checker fixture does not count as physical onboarding.
+The two public CLI files should be editable source links: a harmless temporary checkout edit should appear at the installed path and be restored afterward. Check each private consumer without printing tokens or keys. Inspect actual infrastructure readiness using [local services](local-services.md), not just launch-agent presence. Rei/Mori and their integrations must remain stopped on Yujin until the [sole-owner cutover](rei-mori-cutover.md); their inactive status is expected during bootstrap. Restore application data only from the selected owner backup. Record each authentication, service, Tailscale, and Mori identity result independently. A source-machine build or synthetic checker fixture does not count as physical onboarding.
 
 ## Resume and recovery
 

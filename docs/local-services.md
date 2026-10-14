@@ -1,5 +1,10 @@
 # Local Services
 
+Rei/Mori and their integrations run only on the active runtime host, currently
+Sungkyung. Yujin keeps that runtime disabled during workstation preparation.
+See [host ownership and cutover](rei-mori-cutover.md); general infrastructure
+services remain independent of this profile.
+
 Everything this machine runs in the background, defined declaratively in this
 repo and wired up on `darwin-rebuild switch`. They are per-user **launchd
 agents** (`gui/$(id -u)/com.shinzui.*`), including the web proxy — macOS does

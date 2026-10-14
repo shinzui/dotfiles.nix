@@ -1,4 +1,5 @@
 { ... }:
 {
-  # Sungkyung-specific user settings belong here.
+  # Keep the live runtime here until the verified, non-overlapping cutover.
+  workstation.reiMori.enable = true;
 }

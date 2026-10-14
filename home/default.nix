@@ -44,6 +44,7 @@ in
     ./redpanda.nix
     ./victorialogs.nix
     ./victoriatraces.nix
+    ./rei-mori-runtime.nix
     ./mori.nix
     ./mori-rei-app.nix
     ./rei.nix
