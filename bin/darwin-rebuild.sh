@@ -14,6 +14,23 @@ esac
 
 repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd -- "$repo_dir"
+if [[ "$host" != bootstrap-arm ]]; then
+  mori_source="$repo_dir/config/xdg/mori"
+  if [[ -L "$mori_source/config.dhall" || ! -f "$mori_source/config.dhall" ||
+        -L "$mori_source/agents" || ! -d "$mori_source/agents" ]]; then
+    printf 'Mori source files are missing or symlinks. Restore config/xdg/mori before switching.\n' >&2
+    exit 1
+  fi
+  if [[ -L /Users/shinzui/.config/mori ]]; then
+    printf 'The old ~/.config/mori whole-directory symlink must be migrated before a full switch. See docs/new-machine-bootstrap.md, section 3.\n' >&2
+    exit 1
+  fi
+  if [[ "$host" == SungkyungM1X ]] &&
+     ! cmp -s /Users/shinzui/.config/mori/host-id /Users/shinzui/.local/state/dotfiles-bootstrap/sungkyung-mori-host-id; then
+    printf 'Sungkyung Mori host ID is absent or differs from its protected backup; restore it before switching.\n' >&2
+    exit 1
+  fi
+fi
 if [[ ! -x ./result/sw/bin/darwin-rebuild ]]; then
   printf 'Missing built darwin-rebuild. Run ./bin/build.sh %s as the owner before switching.\n' "$host" >&2
   exit 1

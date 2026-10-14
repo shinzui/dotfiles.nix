@@ -1,6 +1,6 @@
 # New Apple Silicon Mac bootstrap
 
-This runbook prepares a clean `shinzui` account on an Apple Silicon Mac using the public checkout, authorized private inputs, and selected user data. It never requires a copy of the old `~/.config`. The supported full host for the new Mac is `yujin`; use `SungkyungM1X` only on the existing source Mac. Builds assemble a candidate without switching the running system. A switch activates it and must run only on the matching machine.
+This runbook prepares a clean `shinzui` account on an Apple Silicon Mac using the public checkout, authorized private inputs, and selected user data. It never requires a copy of the old `~/.config`. The supported full host for the new Mac is `yujin`; use `SungkyungM1X` only on the existing source Mac. Builds assemble a candidate without switching the running system. A switch activates it and must run only on the matching machine. Before any full switch on Sungkyung, complete the Mori directory migration in section 3; the rebuild wrapper refuses to switch while the old whole-directory link remains.
 
 ## 1. Prepare the account and Nix
 
