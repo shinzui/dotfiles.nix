@@ -145,6 +145,14 @@ The [runbook's enrollment phase](new-machine-bootstrap.md#5-enroll-and-rekey-the
 includes the recipient helper, protected ciphertext backup, plaintext stream
 comparison, publication order, and destination decryption checks.
 
+Yujin also selects the private companion's dedicated encrypted Nix GitHub token
+through its private host module. Its existing `access_token` interface is kept,
+with mode `0600`; Sungkyung retains the shared token. Before the first rebuild,
+follow the [authentication phase](new-machine-bootstrap.md#6-bootstrap-nix-authentication--trusted-mac-then-new-mac)
+to decrypt the token locally using standalone age and pass its configuration
+path explicitly to owner builds and sudo switches. The helper removes the
+bootstrap credential only after normal user/root Nix authentication takes over.
+
 After bootstrap if needed, build the full host as `shinzui` and activate on Yujin:
 
 ```bash

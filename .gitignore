@@ -13,3 +13,5 @@ CLAUDE.local.md
 # --- /seihou:claude-gitignore ---
 .agents/
 config/xdg/mori/host-id
+# Temporary plaintext GitHub credentials must never be tracked.
+*-gh-token.tmp

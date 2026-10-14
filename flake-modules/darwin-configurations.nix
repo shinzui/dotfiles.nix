@@ -117,7 +117,9 @@ in
     SungkyungM1X = mkDarwinHost { hostModule = ../hosts/sungkyung; };
     yujin = mkDarwinHost {
       hostModule = ../hosts/yujin;
-      extraModules = homebrewInstallationModules;
+      extraModules = homebrewInstallationModules ++ [
+        inputs.dotfiles-private.darwinModules.yujin
+      ];
     };
   };
 }

@@ -1,6 +1,6 @@
 # New Apple Silicon Mac runbook
 
-Follow these phases in order. Commands marked **NEW MAC** run as `shinzui` on the destination, locally or over SSH. Commands marked **TRUSTED MAC** run on an already-authorized workstation with GitHub CLI access and an identity that decrypts both secret tiers. Keep one Bash terminal for each machine; reconnect after installing Nix and reset the variables below. Stop a phase if a command fails, resolve the cause, then resume that phase. Do not paste this entire document into a shell.
+Follow these phases in order. Commands marked **NEW MAC** run as `shinzui` on the destination, locally or over SSH. Commands marked **TRUSTED MAC** run on an already-authorized workstation with GitHub CLI access and an identity that decrypts both secret tiers. Keep one Bash terminal for each machine; reconnect after installing Nix and reset the variables below. Stop a phase if a command fails, resolve the cause, then resume that phase. After phase 6, keep the bootstrap credential until the managed handoff passes. Do not paste this entire document into a shell.
 
 This configuration supports Apple Silicon macOS with the `shinzui` login and the exact checkout paths below. A new hostname needs a declared host target before activation. Keys stay on their owning machine; only public keys and encrypted files cross machines. Builds prepare a candidate. `sudo ./bin/darwin-rebuild.sh` changes the running machine.
 
@@ -25,7 +25,7 @@ For Yujin use the existing `yujin` target. Do not use `SungkyungM1X` on a new ma
 1. Copy the configuration templates `hosts/yujin/default.nix` and `home.nix` into `hosts/atlas/`; these are settings, not keys. Change `networking.computerName` and `networking.hostName` to `atlas`. Keep the dedicated `age.identityPaths` override and GitHub key selection.
 2. Add `atlas = mkDarwinHost { hostModule = ../hosts/atlas; extraModules = homebrewInstallationModules; };` alongside `yujin` in `flake-modules/darwin-configurations.nix`.
 3. Add `atlas` to the accepted targets and usage text in `bin/build.sh`, `bin/darwin-rebuild.sh`, and `TARGETS` in `bin/check-bootstrap.py`. Record the host in the README. The managed Homebrew module is required for this runbook's preactivation checks.
-4. Check the destination's network services in phase 7. Add any required host overrides, commit with a Conventional Commit message, and publish before the new machine pulls and builds it.
+4. Check the destination's network services in phase 8. Add any required host overrides, commit with a Conventional Commit message, and publish before the new machine pulls and builds it.
 
 For a different login or architecture, first audit bootstrap's primary user, ARM font selection, home/secret paths, and sudo rules. Those machines are outside this runbook's current tested scope.
 
@@ -271,7 +271,41 @@ exit  # leave the enrollment dev shell
 
 Confirm only the intended private input changed in `flake.lock`. The nonactivating build must pass before publishing the public enrollment. Do not run `nix flake update` without an input name here. If enrollment is already complete and published, skip rekeying and proceed to destination verification; rerunning `agenix -r` may change ciphertext even with identical recipients.
 
-## 6. Pull and verify destination decryption — NEW MAC
+## 6. Bootstrap Nix authentication — TRUSTED MAC, then NEW MAC
+
+GitHub SSH authorization does not authenticate Nix's `github:` archive fetches. Private tool inputs can return HTTP 404 without a Nix GitHub token even when both prerequisite checkers pass. A cold-cache build is a separate readiness check. Keep SSH access for cloning and an independent read-only GitHub token for each machine's Nix downloads.
+
+**TRUSTED MAC:** for a future machine, create a fine-grained token targeting `shinzui`, with All repositories access, Contents read-only, and an expiration date. Store it only as encrypted ciphertext in `mori://shinzui/dotfiles-private.nix`. Yujin's token is already enrolled. For another host:
+
+1. Add `"access_tokens-HOST.conf.age".publicKeys = workstationRecipients;` to the private recipient rules. Enter the public checkout's dev shell on the already-authenticated trusted Mac, then use `agenix -e access_tokens-HOST.conf.age` from the private `secrets/` directory. Its plaintext must contain exactly `access-tokens = github.com=TOKEN` on one line. Edit locally; never paste the token into shell arguments, Nix expressions, logs, or this runbook. Verify the resulting ciphertext decrypts before deleting any temporary plaintext source.
+2. Create a private host module that overrides `age.secrets.access_token.file` to that encrypted file with `lib.mkForce` and mode `"600"`. Export it as `darwinModules.HOST` and add it to that host's public `extraModules` alongside `homebrewInstallationModules`. Preserve the existing shared token for hosts that do not select a dedicated one. These paths are project-relative under `mori://shinzui/dotfiles-private.nix` (artifact URIs pending).
+3. Publish private ciphertext and declarations first, update only `dotfiles-private` in the public lock, check the host selection, build on the trusted Mac, and publish the public update. Pull both clean checkouts on the destination before preparing authentication. Review the lock's revision against the private checkout as in phase 7.
+
+The helper below needs the ciphertext from the new private revision. It uses standalone `age`; do not enter this dotfiles flake's dev shell until the credential is available, because evaluating that shell can itself fetch private inputs.
+
+**NEW MAC:** enter a standalone tools shell and prepare authentication:
+
+```bash
+cd "$PUBLIC_ROOT"
+nix shell nixpkgs#age nixpkgs#python3 --command /bin/bash
+python3 ./bin/bootstrap-nix-auth.py prepare "$MACHINE_HOST" \
+  --ciphertext "$PRIVATE_ROOT/secrets/access_tokens-${MACHINE_HOST}.conf.age"
+```
+
+The helper decrypts with the local `~/.ssh/agenix_ed25519` key, validates one GitHub token setting, and creates `~/.local/state/dotfiles-bootstrap/nix-auth/HOST/access-tokens.conf` with mode `0600` inside owned directories with mode `0700`. It keeps a matching existing credential and refuses conflicting state. It never displays its decrypted contents. This temporary credential must stay available through minimal activation and the full switch.
+
+Run Nix commands through `bootstrap-nix-auth.py run HOST -- COMMAND...` until full activation. For root switches, use `run HOST --sudo -- COMMAND...`; the wrapper passes `NIX_USER_CONF_FILES` explicitly across sudo and removes a conflicting `NIX_CONFIG`. Only the protected file path appears in arguments. Do not run token-printing commands, environment dumps, or debug configuration dumps through the wrapper. The helper's setting is scoped to that command; it does not edit existing Nix configuration files.
+
+After full activation, wait for agenix and authenticate sudo with `sudo -v`, then run:
+
+```bash
+python3 ./bin/bootstrap-nix-auth.py verify "$MACHINE_HOST"
+python3 ./bin/bootstrap-nix-auth.py cleanup "$MACHINE_HOST"
+```
+
+Verification requires the managed agenix file to contain the same token with owner `shinzui` and mode `0600`, normal user and root Nix settings to select it, and a fresh private GitHub commit read to succeed. Cleanup temporarily hides the bootstrap file and repeats verification, so a lingering dependency on it cannot pass. Failure restores/preserves the credential; success removes only the helper's credential and metadata. Run this cleanup on the destination, not the trusted source Mac. The raw token source file used for enrollment can be deleted immediately after its ciphertext decrypts correctly; it is separate from this runtime bootstrap credential.
+
+## 7. Pull and verify destination decryption — NEW MAC
 
 Use the existing Nix-provided Git/Python shell. Check both trees are clean before pulling. The full host uses the private revision in the public lock, so the lock must include the published enrollment.
 
@@ -294,7 +328,7 @@ if head != revision:
 print('PASS: private checkout matches public lock')
 PY_LOCK
 cd "$PUBLIC_ROOT"
-nix develop --command /bin/bash
+python3 ./bin/bootstrap-nix-auth.py run "$MACHINE_HOST" -- nix develop --command /bin/bash
 ```
 
 **Inside the destination dev shell:** test every encrypted file using the destination's dedicated identity. This complements the source-side plaintext comparison.
@@ -315,7 +349,7 @@ exit
 
 The checker is read-only and emits `PASS`, `MISSING`, or `CONFLICT` without printing secret contents. Exit 0 means its required checks pass; 1 means missing/conflicting prerequisites; 2 means invalid input/policy. Resolve conflicts before switching. A synthetic `--home-dir` check or source-machine build does not prove destination onboarding.
 
-## 7. Activate minimal, then full configuration — NEW MAC
+## 8. Activate minimal, then full configuration — NEW MAC
 
 The minimal target omits Home Manager, agenix, the private module, and remote builders. It installs native Homebrew at `/opt/homebrew` using the locked [nix-homebrew module](mori://zhaofengli/nix-homebrew), owned by `shinzui`. It does not install the full formula/cask bundle. Automatic migration of an existing unmanaged Homebrew installation is disabled; inspect such a conflict before intentionally enabling migration in `darwin/homebrew-installation.nix`.
 
@@ -326,8 +360,8 @@ if [ -L /nix/var/nix/profiles/system ]; then
   nix-env --list-generations --profile /nix/var/nix/profiles/system
 fi
 cd "$PUBLIC_ROOT"
-./bin/build.sh bootstrap-arm
-sudo ./bin/darwin-rebuild.sh bootstrap-arm
+python3 ./bin/bootstrap-nix-auth.py run "$MACHINE_HOST" -- ./bin/build.sh bootstrap-arm
+python3 ./bin/bootstrap-nix-auth.py run "$MACHINE_HOST" --sudo -- ./bin/darwin-rebuild.sh bootstrap-arm
 test "$(/opt/homebrew/bin/brew --prefix)" = /opt/homebrew
 ./bin/check-bootstrap.sh bootstrap-arm --live
 ```
@@ -355,18 +389,18 @@ install -d -m 700 "$HOME/.config/nhub" "$HOME/.config/ntn" \
   "$HOME/.config/nagare/kubeconfigs" "$HOME/.kube"
 cd "$PUBLIC_ROOT"
 ./bin/check-bootstrap.sh "$MACHINE_HOST"
-./bin/build.sh "$MACHINE_HOST"
-sudo ./bin/darwin-rebuild.sh "$MACHINE_HOST"
+python3 ./bin/bootstrap-nix-auth.py run "$MACHINE_HOST" -- ./bin/build.sh "$MACHINE_HOST"
+python3 ./bin/bootstrap-nix-auth.py run "$MACHINE_HOST" --sudo -- ./bin/darwin-rebuild.sh "$MACHINE_HOST"
 scutil --get ComputerName
 scutil --get HostName
 scutil --get LocalHostName
 ```
 
-All three names should match `MACHINE_HOST`. Wait for the agenix launch daemon, then inspect `./bin/check-bootstrap.sh "$MACHINE_HOST" --live` as `shinzui`. It checks installed private files for readability, ownership and mode `0600`; a full live pass also depends on the Tailscale enrollment below. Keep source originals until private consumers work. Accessibility, Automation, application login, and VPN grants are per-machine onboarding.
+All three names should match `MACHINE_HOST`. Complete the authentication handoff verification and cleanup from phase 6 after agenix has installed the token. Wait for the agenix launch daemon, then inspect `./bin/check-bootstrap.sh "$MACHINE_HOST" --live` as `shinzui`. It checks installed private files for readability, ownership and mode `0600`; a full live pass also depends on the Tailscale enrollment below. Keep source originals until private consumers work. Accessibility, Automation, application login, and VPN grants are per-machine onboarding.
 
 The full host declares a Linux remote builder whose identity is `/etc/nix/builder_ed25519`. Neither repository provisions that private key. If Linux builds are needed, arrange authorized builder access separately, provision a builder-specific identity securely at that path with root ownership and mode `0600`, and register its public key with the builder owner. Do not reuse the GitHub or agenix private key for this. Builder connectivity and GCP authorization are separate from workstation activation.
 
-## 8. Restore application access and local identity
+## 9. Restore application access and local identity
 
 Reauthenticate renewable gcloud user sessions and application-default credentials for the three selected profiles. Check the intended active profile privately and test read-only access to the intended GCP resources; do not copy credentials databases, token caches, SDK logs, or print profile/account lists into a public log. The already-declared GKE auth plugin is required by some kubectl contexts. Restore private Kubernetes contexts from the encrypted config and owning Nagare checkouts, recreate auth/discovery/HTTP caches, then test a read-only query against each reachable intended environment. Work-owned host age keys and cluster authority remain with their owning project recovery process.
 
@@ -385,7 +419,7 @@ Mori must create a new local `~/.config/mori/host-id`. Verify privately that it 
 
 Review the differing historical `mori.bak` and `rei.bak` settings privately before discarding those backups. Their policy action is `data-export` until desired unique preferences have a specific owner and recovery route.
 
-## 9. Enroll Tailscale as a new device
+## 10. Enroll Tailscale as a new device
 
 The full configuration already installs the standalone Tailscale app. Start it, approve the macOS system/network extension and VPN configuration, sign into the intended private tailnet, and complete any device approval. Do not copy the old plist, cached profiles, or node keys. Reapply the reviewed routing and DNS preferences with the app's bundled CLI after confirming the bundle exists:
 
@@ -398,7 +432,7 @@ test -x /Applications/Tailscale.app/Contents/MacOS/Tailscale
 
 Keep GUI start-at-login and VPN-on-demand disabled, matching the private preference snapshot. Check status and the newly enrolled device identity locally without publishing the peer list. Verify connectivity to an intended available peer and, when running, the declared remote builder. IAP fallback is a separate path and does not prove tailnet readiness. The live checker only checks whether the bundled Tailscale CLI's `status --json` command succeeds; confirm enrollment, device identity, and connectivity separately.
 
-## 10. Verify the activated workstation
+## 11. Verify the activated workstation
 
 ```bash
 cd /Users/shinzui/.config/dotfiles.nix
@@ -429,6 +463,6 @@ A failed switch may have applied some changes. Preserve its output privately, in
 
 ## Evidence and remaining physical checks
 
-As of 2026-10-14, all three declared system targets built on the source Mac. Yujin has its own two keys, GitHub registration, both checkouts, verified access to both private inputs, and passing prerequisite checks. All 24 secret ciphertexts were verified against original plaintext on the source and decrypted with Yujin's new identity without displaying plaintext.
+As of 2026-10-14, all three declared system targets built on the source Mac. Yujin has its own two keys, GitHub registration, both checkouts, and passing prerequisite checks. A cold-cache evaluation subsequently exposed the private Kazuha HTTPS authentication requirement; the dedicated encrypted Nix token and phase 6 address that bootstrap dependency. All 24 secret ciphertexts were verified against original plaintext on the source and decrypted with Yujin's new identity without displaying plaintext.
 
 Minimal/full activation, Homebrew installation, Apple's Command Line Tools installation, provider logins, Tailscale enrollment, and application/data recovery have **not** been completed on Yujin. The checkpoints above make those remaining steps explicit; passing builds and helper tests are not evidence that the entire runbook has been exercised on a fresh machine.

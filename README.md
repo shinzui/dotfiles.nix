@@ -18,6 +18,9 @@ the checkpoints required before continuing. `bin/bootstrap-machine-keys.py`
 creates separate local keys without replacing existing pairs;
 `bin/add-machine-recipient.py` enrolls only the public agenix key in both tiers.
 Neither helper activates the machine or publishes enrollment changes.
+`bin/bootstrap-nix-auth.py` prepares authentication from encrypted ciphertext
+before the first build, carries it explicitly through sudo, and removes its
+temporary credential only after the managed user/root authentication passes.
 
 ## Everyday commands
 
