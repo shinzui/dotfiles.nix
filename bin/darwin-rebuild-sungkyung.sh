@@ -1,1 +1,5 @@
-./result/sw/bin/darwin-rebuild switch --flake .#SungkyungM1X $@ 
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+exec "$script_dir/darwin-rebuild.sh" SungkyungM1X "$@"

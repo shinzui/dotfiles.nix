@@ -60,13 +60,24 @@ The existing `SungkyungM1X` flake target continues to work. A new `yujin` target
 - [x] (2026-10-14 00:21Z) Review repository and locked dependency interfaces; run the baseline snapshot and validate shared-host composition and isolated overrides in a temporary copy. Subsequently verify the added bootstrap comparison and wrapper harness against that copy.
 - [x] (2026-10-14 00:34Z) Milestone 1: Capture full-host and bootstrap baselines, add sibling host modules and the shared constructor, compare final snapshots, and build both full hosts.
 - [x] (2026-10-14 00:34Z) Milestone 2: Implement executable host-selecting wrappers and pass Bash syntax and the non-activating command harness.
-- [ ] Milestone 2 remaining: Exercise real build dispatch for the default, explicit Sungkyung, and Yujin targets.
-- [ ] Milestone 3: Repeat the override experiment in the implementation checkout, restore parity, rebuild, and complete README, secrets onboarding, and the local ADR.
+- [x] (2026-10-14 00:38Z) Milestone 2: Real default and explicit Sungkyung wrapper builds exited zero; invalid and omitted switch targets fail before dispatch.
+- [ ] Milestone 2 remaining: Complete the real Yujin wrapper build after restoring shared settings.
+- [x] (2026-10-14 00:38Z) Milestone 3: Prove independent DNS and Zoxide overrides, restore both files, repeat host/bootstrap parity, and complete README, secrets onboarding, and the local ADR.
+- [ ] Milestone 3 remaining: Finish the restored Yujin build.
 - [ ] Record repository acceptance and the ADR distillation pass; record physical Yujin onboarding separately as performed or unperformed.
 
 
 ## Surprises & Discoveries
 
+
+Implementation (2026-10-14 UTC, override validation): Temporary Yujin system DNS and user Zoxide definitions changed only Yujin. A `finally` block restored both host files even if evaluation failed. The restored snapshots passed both comparisons again. The editor on PATH passed the existing Treesitter helper with TypeScript, Python, Bash, Nix, Haskell, Lua, and Markdown injections; this remains a local editor check, not evidence of Yujin activation.
+
+```text
+yujin: DNS ["9.9.9.9"], Zoxide false
+SungkyungM1X: DNS ["1.1.1.1","8.8.8.8"], Zoxide true
+PASS: independent system and user overrides
+PASS: treesitter queries valid, injections working
+```
 
 Implementation (2026-10-14 UTC): The checkout snapshots passed both host parity and bootstrap preservation. Both full system builds exited zero, and bootstrap derivation evaluation exited zero. Concurrent Nix evaluations emitted an ignored SQLite busy warning; they completed successfully. The wrappers passed Bash syntax checks and the complete temporary command harness without activation. ShellCheck is not installed.
 
@@ -94,6 +105,8 @@ Discovery (2026-10-14 UTC): The added bootstrap snapshot matched between the cur
 
 ## Decision Log
 
+
+Decision (2026-10-14 UTC, implementation): Keep build result links for explicit validation outside the checkout under `/tmp/yujin-plan-*`, while exercising the no-argument build with its normal `result` link. This avoids committing generated links and leaves the normal result associated with Sungkyung. No configuration was activated and no recipient or lock changes were needed.
 
 Decision (2026-10-14 UTC): Keep `darwin/` and `home/` as the shared workstation configuration, and add sibling `hosts/sungkyung/` and `hosts/yujin/` directories. Neither host imports the other. This preserves the existing organization and makes ownership of later differences explicit without introducing a second configuration framework.
 
@@ -444,3 +457,5 @@ Authoring note (2026-10-14 UTC): Created this plan after inspecting the existing
 Revision note (2026-10-14 UTC): Reviewed against the ExecPlan specification and current repository, verified the baseline command and proposed host composition in a temporary copy, and corrected Progress tracking, bootstrap preservation checks, non-activating wrapper verification, executable wrapper requirements, and live smoke-check instructions. Clarified that `switch` rebuilds and the existing Treesitter helper checks the editor on PATH. No host configuration, dependency pin, secret, or activated system was changed by this review.
 
 Revision note (2026-10-14 UTC, implementation checkpoint): Implemented and built both host outputs with preserved Sungkyung and bootstrap snapshots; added host-selecting wrappers with passing non-activating contracts and distilled the architectural boundary into a local ADR. Real wrapper builds, the override experiment, and onboarding documentation remain.
+
+Revision note (2026-10-14 UTC, wrapper and onboarding checkpoint): Verified wrapper defaults and explicit Sungkyung builds, independent overrides and restoration, invalid-target failures, and the editor smoke check. Completed the shared-settings and secrets-onboarding documentation. The final Yujin wrapper build remains running; physical onboarding is not performed in this session.
