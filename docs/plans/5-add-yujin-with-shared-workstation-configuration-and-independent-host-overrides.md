@@ -20,6 +20,11 @@ provenance:
       at: 2026-10-14T00:24:39Z
       mode: "update"
       note: "Apply review findings: checklist, bootstrap parity, wrapper contract harness, activation semantics, and live smoke checks"
+    - model: "gpt-6.1-sol"
+      harness: "codex-cli"
+      at: 2026-10-14T00:33:32Z
+      mode: "implement"
+      note: "Implement shared host composition, host-selecting wrappers, and workstation onboarding; record validation"
   reviews:
     - model: "gpt-6.1-sol"
       harness: "codex-cli"
@@ -53,14 +58,23 @@ The existing `SungkyungM1X` flake target continues to work. A new `yujin` target
 
 
 - [x] (2026-10-14 00:21Z) Review repository and locked dependency interfaces; run the baseline snapshot and validate shared-host composition and isolated overrides in a temporary copy. Subsequently verify the added bootstrap comparison and wrapper harness against that copy.
-- [ ] Milestone 1: Capture full-host and bootstrap baselines, add sibling host modules and the shared constructor, compare final snapshots, and build both full hosts.
-- [ ] Milestone 2: Implement executable host-selecting wrappers, verify their command contracts without activation, and exercise real build dispatch.
+- [x] (2026-10-14 00:34Z) Milestone 1: Capture full-host and bootstrap baselines, add sibling host modules and the shared constructor, compare final snapshots, and build both full hosts.
+- [x] (2026-10-14 00:34Z) Milestone 2: Implement executable host-selecting wrappers and pass Bash syntax and the non-activating command harness.
+- [ ] Milestone 2 remaining: Exercise real build dispatch for the default, explicit Sungkyung, and Yujin targets.
 - [ ] Milestone 3: Repeat the override experiment in the implementation checkout, restore parity, rebuild, and complete README, secrets onboarding, and the local ADR.
 - [ ] Record repository acceptance and the ADR distillation pass; record physical Yujin onboarding separately as performed or unperformed.
 
 
 ## Surprises & Discoveries
 
+
+Implementation (2026-10-14 UTC): The checkout snapshots passed both host parity and bootstrap preservation. Both full system builds exited zero, and bootstrap derivation evaluation exited zero. Concurrent Nix evaluations emitted an ignored SQLite busy warning; they completed successfully. The wrappers passed Bash syntax checks and the complete temporary command harness without activation. ShellCheck is not installed.
+
+```text
+PASS: Sungkyung preserved; Yujin matches shared settings
+PASS: bootstrap preserved without agenix or Home Manager
+PASS: wrapper targets, quoting, directory, errors, and exit status
+```
 
 Discovery (2026-10-14 UTC): The original Progress placeholder did not satisfy the required checklist, and syntax checks plus successful builds did not verify the switch wrapper's target, argument boundaries, caller-directory independence, or propagated failures. This review adds an explicit work checklist and a temporary, non-activating command harness. Bootstrap also needs a semantic before/after check; a successful derivation evaluation alone does not demonstrate preservation.
 
@@ -115,7 +129,7 @@ The full output is currently `darwinConfigurations.SungkyungM1X`. Its hardware p
 
 The locked `darwin-rebuild switch` command evaluates and builds its selected flake again before activating; the owner-run build primes access to the private inputs and detects build failures, rather than making the later switch build-free. `bin/test-treesitter.sh` runs `nvim` from the caller's PATH, so its result describes that editor and its current runtime state, not necessarily the newly built editor. Onboarding must check the installed editor again after activation.
 
-No local `docs/adr/` records exist, and `mori show --full` reports no ADR bundle or profile in this repository. One relevant decision was consulted in the private companion: `mori://shinzui/dotfiles-private.nix` with project-relative path `docs/adr/1-two-tier-agenix-secrets.md` (artifact-level URI pending; the registry exposes no concept handle for it). Its contract keeps low-impact ciphertext here, high-tier ciphertext and declarations privately, fetches private inputs over SSH, builds as the owner before switching with sudo, and verifies secret installation after the agenix launch daemon runs. Adding a recipient requires rekeying both tiers. The needed public workflow is described in `docs/secrets.md` and is summarized below, so implementing this plan does not depend on access to that separate decision file.
+At implementation start, no local `docs/adr/` records existed, and `mori show --full` reported no ADR bundle or profile in this repository. Implementation added [the shared-host ADR](../adr/1-shared-workstation-modules-and-host-overrides.md), recording sibling modules, merge priorities, preserved outputs, and the separate owner-build/sudo-switch workflow. One relevant decision was consulted in the private companion: `mori://shinzui/dotfiles-private.nix` with project-relative path `docs/adr/1-two-tier-agenix-secrets.md` (artifact-level URI pending; the registry exposes no concept handle for it). Its contract keeps low-impact ciphertext here, high-tier ciphertext and declarations privately, fetches private inputs over SSH, builds as the owner before switching with sudo, and verifies secret installation after the agenix launch daemon runs. Adding a recipient requires rekeying both tiers. The needed public workflow is described in `docs/secrets.md` and is summarized below, so implementing this plan does not depend on access to that separate decision file.
 
 Dependency discovery used Mori first. The registered flake-parts source was inspected through `mori://hercules-ci/flake-parts/repos/flake-parts`. Mori searches did not find nix-darwin, Home Manager, or nixpkgs corpus projects. Their relevant source files were then downloaded from upstream at this checkout's locked revisions and inspected: nix-darwin `43975d782b418ebf4969e9ccba82466728c2851b`, Home Manager `abfad3d2958c9e6300a883bd443512c55dfeb1be`, and nixpkgs `38a4887411571457d700c51c64a6e49ead2ed5ab`. The verified interfaces are `darwinSystem { system; modules; specialArgs; }`, Home Manager's `home-manager.users` module merging, and Nix's definition priorities. No dependency bounds, version upgrades, or new compatibility workarounds are proposed.
 
@@ -428,3 +442,5 @@ Use the already locked nix-darwin, Home Manager, flake-parts, agenix, Determinat
 Authoring note (2026-10-14 UTC): Created this plan after inspecting the existing host assembly, shared system and user modules, scripts, secret workflow, relevant dependency source, and private two-tier ADR. Configuration implementation and physical Yujin onboarding have not been performed.
 
 Revision note (2026-10-14 UTC): Reviewed against the ExecPlan specification and current repository, verified the baseline command and proposed host composition in a temporary copy, and corrected Progress tracking, bootstrap preservation checks, non-activating wrapper verification, executable wrapper requirements, and live smoke-check instructions. Clarified that `switch` rebuilds and the existing Treesitter helper checks the editor on PATH. No host configuration, dependency pin, secret, or activated system was changed by this review.
+
+Revision note (2026-10-14 UTC, implementation checkpoint): Implemented and built both host outputs with preserved Sungkyung and bootstrap snapshots; added host-selecting wrappers with passing non-activating contracts and distilled the architectural boundary into a local ADR. Real wrapper builds, the override experiment, and onboarding documentation remain.

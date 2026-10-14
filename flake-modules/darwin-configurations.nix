@@ -49,6 +49,12 @@ let
       in
       {
         nixpkgs = nixpkgsConfig;
+        users.primaryUser = lib.mkDefault "shinzui";
+        # Inspect services with networksetup -listallnetworkservices.
+        networking.knownNetworkServices = lib.mkDefault [
+          "Wi-Fi"
+          "Thunderbolt Bridge"
+        ];
         # `home-manager` config
         users.users.${primaryUser}.home = "/Users/${primaryUser}";
         home-manager.useGlobalPkgs = true;
@@ -68,6 +74,12 @@ let
       }
     )
   ];
+
+  mkDarwinHost = { hostModule, system ? "aarch64-darwin" }: darwinSystem {
+    inherit system;
+    modules = nixDarwinCommonModules ++ [ hostModule ];
+    specialArgs = { inherit (inputs) private-fonts; };
+  };
 in
 {
   flake.darwinConfigurations = {
@@ -92,23 +104,7 @@ in
       ];
     };
 
-    #MacBook Pro M1X
-    SungkyungM1X = darwinSystem {
-      system = "aarch64-darwin";
-      modules = nixDarwinCommonModules ++ [
-        {
-          users.primaryUser = "shinzui";
-          networking.computerName = "sungkyung";
-          networking.hostName = "sungkyung";
-
-          #networksetup -listallnetworkservices
-          networking.knownNetworkServices = [
-            "Wi-Fi"
-            "Thunderbolt Bridge"
-          ];
-        }
-      ];
-      specialArgs = { inherit (inputs) private-fonts; };
-    };
+    SungkyungM1X = mkDarwinHost { hostModule = ../hosts/sungkyung; };
+    yujin = mkDarwinHost { hostModule = ../hosts/yujin; };
   };
 }
