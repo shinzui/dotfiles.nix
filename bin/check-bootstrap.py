@@ -175,9 +175,10 @@ def private_target_state(home, dest):
 
 def homebrew_ready():
     brew = Path("/opt/homebrew/bin/brew")
-    if not brew.is_file() or not os.access(brew, os.X_OK):
-        return False
     try:
+        mode = brew.lstat().st_mode
+        if not (stat.S_ISREG(mode) or stat.S_ISLNK(mode)):
+            return False
         result = subprocess.run([str(brew), "--prefix"], capture_output=True, text=True, timeout=8)
         return result.returncode == 0 and result.stdout.strip() == "/opt/homebrew"
     except (OSError, subprocess.TimeoutExpired):
@@ -258,12 +259,12 @@ def main():
             report(label, "PASS" if fixture.get(label, True) else "MISSING")
         private_access = fixture.get("private access", False)
     report("private Git access", "PASS" if private_access else "MISSING")
-    if args.target != "bootstrap-arm":
+    if args.live or args.target == "SungkyungM1X":
         brew_ready = fixture.get("Homebrew /opt/homebrew", True) if fixture is not None else homebrew_ready()
         report("Homebrew /opt/homebrew", "PASS" if brew_ready else "MISSING")
 
     if args.live:
-        if private:
+        if private and args.target != "bootstrap-arm":
             for e in private["entries"]:
                 if "secret_name" not in e:
                     continue

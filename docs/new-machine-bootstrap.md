@@ -8,6 +8,8 @@ Sign in as `shinzui`, install Apple's Command Line Tools if prompted, and confir
 
 The public checkout must be at `/Users/shinzui/.config/dotfiles.nix`, because editable links point there. Clone it over SSH or HTTPS after Git is available, then run the installer helper. Private fonts and `mori://shinzui/dotfiles-private.nix` are root flake inputs even for the minimal bootstrap; authorized SSH access is required before evaluation. Clone the private companion to `/Users/shinzui/Keikaku/dotfiles-private.nix` and confirm both input fetches. For a new age recipient, use the actual public key in both repositories' `secrets/secrets.nix` and run `agenix -r` in each `secrets/` directory; publish the private change before updating the public input lock. Follow [secret onboarding](secrets.md) for identity paths and ciphertext checks.
 
+If Determinate Nix is already installed and Apple's Git or Python stub requests Command Line Tools, enter `nix shell nixpkgs#git nixpkgs#python3` before the commands below. Keep that shell open for cloning and bootstrap checks; it supplies these tools without installing Apple's system developer package. Nix still needs the GitHub SSH authorization described above.
+
 ```bash
 mkdir -p /Users/shinzui/.config /Users/shinzui/Keikaku
 git clone git@github.com:shinzui/dotfiles.nix.git /Users/shinzui/.config/dotfiles.nix
@@ -35,7 +37,7 @@ The checker is read-only. `PASS`, `MISSING`, and `CONFLICT` lines name prerequis
 
 ## 2. Build the minimal system, then the full host
 
-The minimal target omits Home Manager and agenix and has no remote builder. On a clean Mac with required SSH input access, build as `shinzui`, record the current Darwin generation if one exists, and switch only on that Mac. Before the full switch, run `networksetup -listallnetworkservices` and confirm that `Wi-Fi` and `Thunderbolt Bridge` are present; the shared configuration declares those names. If either differs, adjust `networking.knownNetworkServices` in `hosts/yujin/default.nix` as described in [secret onboarding](secrets.md). Then run the full checker and build for `yujin`. Homebrew may need App Store and command line tool agreements. The full system retains the remote builder and its access requirements.
+The minimal target omits Home Manager and agenix and has no remote builder. It installs Homebrew at `/opt/homebrew` through the locked `nix-homebrew` input, owned by `shinzui`, without installing the full formula/cask bundle. On a clean Mac with required SSH input access, build as `shinzui`, record the current Darwin generation if one exists, and switch only on that Mac. Before the full switch, run `networksetup -listallnetworkservices` and confirm that `Wi-Fi` and `Thunderbolt Bridge` are present; the shared configuration declares those names. If either differs, adjust `networking.knownNetworkServices` in `hosts/yujin/default.nix` as described in [secret onboarding](secrets.md). Then run the full checker and build for `yujin`. Homebrew may need App Store and command line tool agreements. The full system retains the remote builder and its access requirements.
 
 Prepare restricted parent directories for the selected private destinations before the full switch. These commands affect only the new Mac, after resolving any existing-file conflicts reported by the checker:
 
@@ -50,22 +52,16 @@ install -d -m 700 "$HOME/.config/nhub" "$HOME/.config/ntn" \
 cd /Users/shinzui/.config/dotfiles.nix
 ./bin/build.sh bootstrap-arm
 sudo ./bin/darwin-rebuild.sh bootstrap-arm
+test -x /opt/homebrew/bin/brew
+test "$(/opt/homebrew/bin/brew --prefix)" = /opt/homebrew
 networksetup -listallnetworkservices
 ```
 
 Confirm the network service names and make any Yujin override before continuing:
 
-Install Homebrew as `shinzui` before the full host switch, using the [official installation instructions](https://docs.brew.sh/Installation). `bin/darwin-install.sh` installs only Determinate Nix, and enabling Homebrew in nix-darwin does not install Homebrew itself. This Apple Silicon configuration expects `/opt/homebrew`; the minimal `bootstrap-arm` target does not require it. Run the installer only if `/opt/homebrew/bin/brew` is absent, complete its interactive prompts, and load its environment in the current shell:
+Homebrew installation is declarative on Yujin and `bootstrap-arm` through [nix-homebrew](mori://zhaofengli/nix-homebrew); no Homebrew installer script is needed. The full Yujin switch installs the existing formula/cask bundle after setting up Homebrew. Open a new shell after activation to load the managed shell integration. Before activation, the checker allows Homebrew to be absent on these two targets; `--live` requires a working `/opt/homebrew` installation. Minimal live checks skip the secrets that the bootstrap does not install. These checks do not prove that every cask is available.
 
-```bash
-if [ ! -x /opt/homebrew/bin/brew ]; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
-eval "$(/opt/homebrew/bin/brew shellenv)"
-test "$(/opt/homebrew/bin/brew --prefix)" = /opt/homebrew
-```
-
-The full configuration manages Homebrew's shell environment after activation. The full-host checker verifies that Homebrew runs at the expected prefix; it does not install packages or prove that every cask is available.
+Homebrew's executable version is pinned by `nix-homebrew`; formulae, casks, and taps retain the existing bundle and update policy. Only the native Apple Silicon prefix is enabled. Automatic migration of an existing unmanaged Homebrew installation is disabled: inspect an existing-installation conflict before intentionally enabling migration in `darwin/homebrew-installation.nix`. Sungkyung continues using its existing Homebrew installation and is not opted into this installation module. Apple's system Command Line Tools still use [Apple's installer](https://developer.apple.com/documentation/xcode/installing-the-command-line-tools); Homebrew packages that need them must complete that prerequisite.
 
 ```bash
 ./bin/check-bootstrap.sh yujin

@@ -6,7 +6,10 @@ the user environment, wired together with [flake-parts](https://flake.parts).
 
 Two Apple Silicon workstations share the configuration: `SungkyungM1X`
 (Sungkyung) and `yujin`, both `aarch64-darwin` with the `shinzui` login.
-`bootstrap-arm` provides the separate minimal system configuration.
+`bootstrap-arm` provides the separate minimal system configuration, including
+Homebrew installation through [nix-homebrew](mori://zhaofengli/nix-homebrew). Yujin also uses that installer;
+the full host's existing `homebrew.*` declarations manage formulae and casks.
+Sungkyung retains its existing Homebrew installation.
 
 ## Everyday commands
 

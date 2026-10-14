@@ -75,16 +75,21 @@ let
     )
   ];
 
-  mkDarwinHost = { hostModule, system ? "aarch64-darwin" }: darwinSystem {
+  homebrewInstallationModules = [
+    inputs.nix-homebrew.darwinModules.default
+    ../darwin/homebrew-installation.nix
+  ];
+
+  mkDarwinHost = { hostModule, system ? "aarch64-darwin", extraModules ? [ ] }: darwinSystem {
     inherit system;
-    modules = nixDarwinCommonModules ++ [ hostModule ];
+    modules = nixDarwinCommonModules ++ extraModules ++ [ hostModule ];
     specialArgs = { inherit (inputs) private-fonts; };
   };
 in
 {
   flake.darwinConfigurations = {
     # Minimal configuration to bootstrap a machine that has no decryptable
-    # secrets yet: substituters, trusted users, shells, fd limits.
+    # secrets yet: substituters, trusted users, shells, fd limits, Homebrew.
     #
     # Deliberately does NOT include agenix or secrets.nix — bootstrap.nix must
     # stay free of `config.age.secrets` for exactly that reason. It does need
@@ -106,10 +111,13 @@ in
           determinateNix.buildMachines = lib.mkForce [ ];
         }
         { nixpkgs = nixpkgsConfig; }
-      ];
+      ] ++ homebrewInstallationModules;
     };
 
     SungkyungM1X = mkDarwinHost { hostModule = ../hosts/sungkyung; };
-    yujin = mkDarwinHost { hostModule = ../hosts/yujin; };
+    yujin = mkDarwinHost {
+      hostModule = ../hosts/yujin;
+      extraModules = homebrewInstallationModules;
+    };
   };
 }

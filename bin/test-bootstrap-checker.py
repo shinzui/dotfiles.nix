@@ -57,14 +57,17 @@ with tempfile.TemporaryDirectory(prefix="bootstrap-checker-") as temp:
         return p
 
     assert run(expect=0).stdout.count("PASS: source") == len(MODULE["REQUIRED_PUBLIC"])
-    assert "PASS: Homebrew /opt/homebrew" in run(expect=0).stdout
+    assert "Homebrew /opt/homebrew" not in run(expect=0).stdout
     flags["Homebrew /opt/homebrew"] = False
     fixture.write_text(json.dumps(flags))
-    for target_name in ("yujin", "SungkyungM1X"):
-        assert "MISSING: Homebrew /opt/homebrew" in run(expect=1, target_name=target_name).stdout
+    assert "MISSING: Homebrew /opt/homebrew" in run(expect=1, target_name="SungkyungM1X").stdout
+    assert "Homebrew /opt/homebrew" not in run(expect=0, target_name="yujin").stdout
     assert "Homebrew /opt/homebrew" not in run(expect=0, target_name="bootstrap-arm").stdout
+    for target_name in ("yujin", "SungkyungM1X", "bootstrap-arm"):
+        assert "MISSING: Homebrew /opt/homebrew" in run("--live", expect=1, target_name=target_name).stdout
     flags["Homebrew /opt/homebrew"] = True
     fixture.write_text(json.dumps(flags))
+    assert "PASS: Homebrew /opt/homebrew" in run("--live", expect=0, target_name="bootstrap-arm").stdout
     assert "worktrunk" not in run(expect=0).stdout
     target = home / ".config/nihongo/config.kdl"
     target.parent.mkdir()

@@ -35,7 +35,7 @@ let
 in
 
 {
-  programs.zsh.shellInit = ''
+  programs.zsh.shellInit = lib.mkIf (!(config.nix-homebrew.enable or false)) ''
     eval "$(${brewBinPrefix}/brew shellenv)"
   '';
 
