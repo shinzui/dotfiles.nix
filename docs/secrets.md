@@ -57,8 +57,16 @@ pending) for workstation migration and provider rotation.
 
 ## New-machine bootstrap
 
-Use the minimal `bootstrap-arm` configuration first. Its module list excludes
-agenix and the private companion. Restore `~/.ssh/id_ed25519` with mode `600`
+Use the minimal `bootstrap-arm` configuration first if secrets are unavailable:
+
+```bash
+./bin/build.sh bootstrap-arm
+sudo ./bin/darwin-rebuild.sh bootstrap-arm
+```
+
+Its module list excludes agenix and the private companion. This does not guarantee
+anonymous input fetching: private flake inputs may still require authorized SSH
+access during resolution. Restore `~/.ssh/id_ed25519` with mode `600`
 and authorize its public key on GitHub, then clone the private companion over SSH:
 
 ```bash
@@ -71,3 +79,83 @@ rather than a GitHub API token stored inside the companion. Build the full
 configuration as the owner and perform the full switch. Verify installed
 symlinks and dependent tools after agenix finishes. The owner workstation sops
 identity is managed privately; work-owned cluster host identities are excluded.
+
+## Yujin onboarding
+
+On Yujin, verify the assumptions before activation:
+
+```bash
+uname -m                              # arm64
+id -un                                # shinzui
+networksetup -listallnetworkservices
+```
+
+The shared service list is `Wi-Fi` and `Thunderbolt Bridge`. If Yujin differs,
+set `networking.knownNetworkServices` in `hosts/yujin/default.nix`; an ordinary
+assignment replaces the shared `mkDefault`. A different architecture or login
+requires auditing ARM font selection, bootstrap's primary user, home and secret
+paths, and the sudo rule before using this configuration.
+
+Clone this checkout to `/Users/shinzui/.config/dotfiles.nix` so the existing
+out-of-store configuration symlinks point to the editable source. Establish SSH
+access to the private fonts input and `mori://shinzui/dotfiles-private.nix`.
+Configuration reuse does not copy databases, Git credentials, external service
+authorization, or other unmanaged state.
+
+Restore the already-authorized workstation identity securely to
+`/Users/shinzui/.ssh/id_ed25519`, with mode `600`, or use the actual public key
+of a new identity. The configured `age.identityPaths` uses that private file.
+Adding a host SSH public key to recipient rules is insufficient unless its
+matching private identity is also configured. For a different identity path,
+add `lib` to `hosts/yujin/default.nix`'s module arguments and replace the list:
+
+```nix
+age.identityPaths = lib.mkForce [ "/Users/shinzui/.ssh/workstation_identity" ];
+```
+
+Never put private identities in repository files. Restoring an existing authorized
+identity needs no recipient or ciphertext changes. For a new identity, add its
+real public recipient to both tiers' rules and run `agenix -r` in each tier's
+secret directory after identity and access are available. Locate the companion's
+current workflow with `mori registry show shinzui/dotfiles-private.nix --full`
+and `mori registry docs shinzui/dotfiles-private.nix`. Commit and publish private
+changes first, then update only `dotfiles-private` in this checkout's lock file.
+Changing recipient rules alone does not re-encrypt existing ciphertext.
+
+After bootstrap if needed, build the full host as `shinzui` and activate on Yujin:
+
+```bash
+cd /Users/shinzui/.config/dotfiles.nix
+./bin/build.sh yujin
+./bin/test-treesitter.sh
+sudo ./bin/darwin-rebuild.sh yujin
+scutil --get ComputerName
+scutil --get HostName
+scutil --get LocalHostName
+```
+
+All three name checks should print `yujin`. Wait for agenix's launch daemon, then
+check secret destinations are readable as their configured owner without printing
+contents. A successful build does not prove successful decryption. As `shinzui`:
+
+```bash
+command -v nvim zoxide mori
+test -L "$HOME/.config/nvim/lua"
+test -L "$HOME/.config/nvim/after"
+test -L "$HOME/.config/mori"
+test -r "$HOME/.config/sesh/sesh.toml"
+test -r "$HOME/.config/rei-api/tokens"
+./bin/test-treesitter.sh
+just status-postgres
+just status-tools
+just status-victorialogs
+just status-victoriatraces
+just status-redpanda
+```
+
+The path and readability checks should exit zero. Check the remaining declared
+secret destinations the same way and inspect service readiness using
+[the local-services runbook](local-services.md). Neovim's `lua` and `after`
+directories are linked individually; its parent directory need not be a symlink.
+The Treesitter helper must print PASS against the activated editor. Report missing
+state or credentials separately from configuration build results.

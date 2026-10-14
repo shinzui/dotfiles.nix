@@ -4,13 +4,20 @@ Personal macOS system configuration: [nix-darwin](https://github.com/LnL7/nix-da
 for the system, [home-manager](https://github.com/nix-community/home-manager) for
 the user environment, wired together with [flake-parts](https://flake.parts).
 
-One host is defined, `SungkyungM1X` (aarch64-darwin).
+Two Apple Silicon workstations share the configuration: `SungkyungM1X`
+(Sungkyung) and `yujin`, both `aarch64-darwin` with the `shinzui` login.
+`bootstrap-arm` provides the separate minimal system configuration.
 
 ## Everyday commands
 
 ```bash
 ./bin/build.sh                           # build the system without activating
 sudo ./bin/darwin-rebuild-sungkyung.sh   # build and activate
+
+./bin/build.sh SungkyungM1X              # explicit Sungkyung build
+sudo ./bin/darwin-rebuild.sh SungkyungM1X # activate on Sungkyung
+./bin/build.sh yujin                     # build Yujin
+sudo ./bin/darwin-rebuild.sh yujin        # activate on Yujin
 
 nix flake update                         # update every input
 nix flake update home-manager            # update one input
@@ -19,12 +26,20 @@ nix build .#parqeye                      # build a single packaged tool
 nix develop                              # dev shell (agenix on PATH)
 ```
 
-Build before you switch. `bin/build.sh` catches everything except activation,
-and a failed build costs far less than a failed activation.
+Build the intended host as the owner immediately before switching with sudo.
+`result` is one shared build link; `darwin-rebuild switch` evaluates and builds
+the explicitly selected target again before activation. The owner build checks
+the configuration and primes access to private inputs. Activate each full host
+only on its corresponding workstation.
+
+The wrappers work from any caller directory. Build defaults to `SungkyungM1X`;
+the generic switch requires a target. Both accept `SungkyungM1X`, `yujin`, and
+`bootstrap-arm`, reject unknown names, and forward remaining arguments unchanged.
+See [secrets onboarding](docs/secrets.md#yujin-onboarding) before a new-machine switch.
 
 ## Layout
 
-```
+```text
 flake.nix                    inputs + mkFlake; outputs live in flake-modules/
 flake-modules/
   overlays.nix               flake.overlays -- package fixes and local packages
@@ -35,6 +50,8 @@ lib/nixpkgs-config.nix       shared { config, overlays } for nixpkgs
 
 darwin/                      nix-darwin config (bootstrap, homebrew, secrets, defaults)
 home/                        home-manager config, one file per topic
+hosts/sungkyung/              Sungkyung system (default.nix) and user (home.nix) overrides
+hosts/yujin/                  Yujin system (default.nix) and user (home.nix) overrides
 modules/darwin/              custom nix-darwin modules (users, pam, accessibility)
 overlays/                    individual overlay files, imported by flake-modules/overlays.nix
 derivations/                 packages built from source in this repo
@@ -52,6 +69,35 @@ set via `flake.*`; per-system outputs (`packages`, `devShells`) via `perSystem`.
 
 `lib/nixpkgs-config.nix` is the shared nixpkgs configuration. It sets
 `allowUnfree` and `overlays = attrValues self.overlays`.
+
+### Shared settings and host differences
+
+`flake-modules/darwin-configurations.nix` composes both full hosts with
+`mkDarwinHost` and the same shared modules. Common system changes belong in
+`darwin/`, and common user changes belong in `home/`. A machine's differences
+belong in `hosts/<name>/default.nix` for system settings or `home.nix` for user
+settings. Neither host imports the other; shared user configuration is imported
+once by the common composition.
+
+Later imports do not automatically win. Conflicting ordinary scalar settings
+produce an error, and ordinary list settings generally accumulate. A shared
+`lib.mkDefault` preference has lower priority than an ordinary host definition.
+Use `lib.mkForce` for intentional replacement of an unconditional shared setting
+or a whole list. `lib.mkBefore` and `lib.mkAfter` control list order, not replacement.
+For example, these temporary differences were used to verify isolation:
+
+```nix
+# In hosts/yujin/default.nix, with lib added to the module arguments:
+networking.dns = lib.mkForce [ "9.9.9.9" ];
+# In hosts/yujin/home.nix, with lib added to the module arguments:
+programs.zoxide.enable = lib.mkForce false;
+```
+
+When a shared preference first needs real per-host variation, prefer giving that
+preference `mkDefault` rather than forcing every future override. Avoid hostname
+conditionals across shared modules. Introduce a named shared profile only when
+repeated subsets emerge across hosts. The reasoning is recorded in
+[the shared workstation ADR](docs/adr/1-shared-workstation-modules-and-host-overrides.md).
 
 ### Overlays apply in alphabetical order
 
@@ -121,7 +167,8 @@ so edits take effect immediately without a rebuild.
 ```
 
 Run that after a build and before switching — grammar/query mismatches are a
-recurring failure mode. `~/.local/share/nvim/site/` is unmanaged state that
+recurring failure mode. The helper uses `nvim` on PATH, so rerun it after activation
+to check the installed editor. `~/.local/share/nvim/site/` is unmanaged state that
 survives every rebuild and takes runtimepath priority over Nix-provided plugins;
 stale parsers there have broken treesitter twice. See `docs/bugs/` for both
 write-ups.
