@@ -1,7 +1,7 @@
 # Secrets
 
 [agenix](https://github.com/ryantm/agenix) decrypts age-encrypted files using the
-restored workstation SSH identity. Ciphertext is included in the system build;
+configured workstation identity. Ciphertext is included in the system build;
 plaintext is installed at activation into `/run/agenix/` and linked to its
 configured destination. On macOS, agenix installs through a launch daemon, so
 wait for that daemon before checking a new secret.
@@ -29,7 +29,7 @@ with `nix develop` to get the pinned agenix CLI. In the chosen repository's
 `secrets/` directory, add a new file's public recipients to `secrets.nix`:
 
 ```nix
-"newsecret.age".publicKeys = shinzuiAtSungkyung;
+"newsecret.age".publicKeys = workstationRecipients;
 ```
 
 Edit the encrypted secret interactively:
@@ -110,19 +110,31 @@ access to the private fonts input and `mori://shinzui/dotfiles-private.nix`.
 Configuration reuse does not copy databases, Git credentials, external service
 authorization, or other unmanaged state.
 
-Restore the already-authorized workstation identity securely to
-`/Users/shinzui/.ssh/id_ed25519`, with mode `600`, or use the actual public key
-of a new identity. The configured `age.identityPaths` uses that private file.
-Adding a host SSH public key to recipient rules is insufficient unless its
-matching private identity is also configured. For a different identity path,
-add `lib` to `hosts/yujin/default.nix`'s module arguments and replace the list:
+Yujin uses separate GitHub and secret-decryption identities. Its GitHub key is
+`/Users/shinzui/.ssh/id_ed25519`; create it on Yujin with a passphrase and
+authorize its public key on GitHub. The Yujin Home Manager override selects it
+for `github.com` and enables macOS Keychain and SSH-agent integration.
+Its dedicated agenix identity is
+`/Users/shinzui/.ssh/agenix_ed25519`, with mode `600` and no passphrase so the
+launch daemon can decrypt unattended. The Yujin host override selects that
+identity; Sungkyung retains the shared `id_ed25519` setting. Generate both
+keys on their owning machine and transfer only their public keys for enrollment.
+The dedicated Yujin recipient is included in both tiers' `workstationRecipients`.
+On 2026-10-14, the key was generated on Yujin and all 24 ciphertext files across
+both tiers were re-encrypted. Decryption on Sungkyung and Yujin matched the
+original contents without displaying plaintext. This verifies enrollment,
+not secret installation or consumer readiness after a full host switch.
+
+Adding a public key to recipient rules is insufficient unless its matching
+private identity is configured. For a different identity path, replace Yujin's
+existing override:
 
 ```nix
 age.identityPaths = lib.mkForce [ "/Users/shinzui/.ssh/workstation_identity" ];
 ```
 
 Never put private identities in repository files. Restoring an existing authorized
-identity needs no recipient or ciphertext changes. For a new identity, add its
+identity needs no recipient or ciphertext changes. For a replacement identity, add its
 real public recipient to both tiers' rules and run `agenix -r` in each tier's
 secret directory after identity and access are available. Locate the companion's
 current workflow with `mori registry show shinzui/dotfiles-private.nix --full`
