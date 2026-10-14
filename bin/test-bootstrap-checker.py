@@ -48,8 +48,8 @@ with tempfile.TemporaryDirectory(prefix="bootstrap-checker-") as temp:
     flags = {"private access": True, "tailscale enrolled": True}
     fixture.write_text(json.dumps(flags))
 
-    def run(*extra, expect):
-        command = [str(CHECKER), "yujin", "--home-dir", str(home), "--source-dir", str(source), "--policy", str(policy), "--private-policy", str(private_policy), "--fixture-results", str(fixture), *extra]
+    def run(*extra, expect, target_name="yujin"):
+        command = [str(CHECKER), target_name, "--home-dir", str(home), "--source-dir", str(source), "--policy", str(policy), "--private-policy", str(private_policy), "--fixture-results", str(fixture), *extra]
         p = subprocess.run(command, capture_output=True, text=True)
         assert p.returncode == expect, (p.returncode, p.stdout, p.stderr)
         assert "approval = true" not in p.stdout + p.stderr
@@ -57,6 +57,14 @@ with tempfile.TemporaryDirectory(prefix="bootstrap-checker-") as temp:
         return p
 
     assert run(expect=0).stdout.count("PASS: source") == len(MODULE["REQUIRED_PUBLIC"])
+    assert "PASS: Homebrew /opt/homebrew" in run(expect=0).stdout
+    flags["Homebrew /opt/homebrew"] = False
+    fixture.write_text(json.dumps(flags))
+    for target_name in ("yujin", "SungkyungM1X"):
+        assert "MISSING: Homebrew /opt/homebrew" in run(expect=1, target_name=target_name).stdout
+    assert "Homebrew /opt/homebrew" not in run(expect=0, target_name="bootstrap-arm").stdout
+    flags["Homebrew /opt/homebrew"] = True
+    fixture.write_text(json.dumps(flags))
     assert "worktrunk" not in run(expect=0).stdout
     target = home / ".config/nihongo/config.kdl"
     target.parent.mkdir()

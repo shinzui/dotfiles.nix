@@ -55,6 +55,18 @@ networksetup -listallnetworkservices
 
 Confirm the network service names and make any Yujin override before continuing:
 
+Install Homebrew as `shinzui` before the full host switch, using the [official installation instructions](https://docs.brew.sh/Installation). `bin/darwin-install.sh` installs only Determinate Nix, and enabling Homebrew in nix-darwin does not install Homebrew itself. This Apple Silicon configuration expects `/opt/homebrew`; the minimal `bootstrap-arm` target does not require it. Run the installer only if `/opt/homebrew/bin/brew` is absent, complete its interactive prompts, and load its environment in the current shell:
+
+```bash
+if [ ! -x /opt/homebrew/bin/brew ]; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+eval "$(/opt/homebrew/bin/brew shellenv)"
+test "$(/opt/homebrew/bin/brew --prefix)" = /opt/homebrew
+```
+
+The full configuration manages Homebrew's shell environment after activation. The full-host checker verifies that Homebrew runs at the expected prefix; it does not install packages or prove that every cask is available.
+
 ```bash
 ./bin/check-bootstrap.sh yujin
 ./bin/build.sh yujin
