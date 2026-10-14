@@ -9,7 +9,6 @@ let
   # making home-manager the owner of everything under it.
   trackedConfigDirs = [
     "kazuha"
-    "mori"
     "rei"
   ];
 
@@ -19,7 +18,11 @@ let
   # ~/.config/mina/agents) stays unmanaged.
   trackedConfigFiles = [
     "mina/config.kdl"
+    "mori/config.dhall"
+    "mori/agents"
+    "nihongo/config.kdl"
     "okf/config.dhall"
+    "seihou/config.dhall"
   ];
 in
 {

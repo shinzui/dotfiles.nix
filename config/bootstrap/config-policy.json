@@ -1,0 +1,689 @@
+{
+  "schema_version": 1,
+  "audit_top_level": [
+    ".DS_Store",
+    "anthropic",
+    "argocd",
+    "asciinema",
+    "atuin",
+    "bat",
+    "bird",
+    "btop",
+    "cabal",
+    "cachix",
+    "caddy",
+    "cai",
+    "cmux",
+    "configstore",
+    "direnv",
+    "dotfiles.nix",
+    "gcloud",
+    "gh",
+    "gh-dash",
+    "ghc",
+    "ghostty",
+    "git",
+    "gitui",
+    "goose",
+    "helix",
+    "hunk",
+    "iterm2",
+    "k3d",
+    "karabiner",
+    "kazuha",
+    "kitty",
+    "longbridge",
+    "mina",
+    "mole",
+    "mori",
+    "mori-rei-app",
+    "mori.bak",
+    "nagare",
+    "nhub",
+    "nihongo",
+    "nix",
+    "notion-cli",
+    "ntn",
+    "nvim",
+    "okf",
+    "op",
+    "pgcli",
+    "pspg",
+    "raycast",
+    "rei",
+    "rei-api",
+    "rei.bak",
+    "reiko",
+    "seihou",
+    "sesh",
+    "sesh.toml",
+    "silicon",
+    "simple-update-notifier",
+    "sops",
+    "starship.toml",
+    "tan-knowledge",
+    "television",
+    "testkit",
+    "tmux",
+    "tmuxai",
+    "wezterm",
+    "worktrunk",
+    "yamllint",
+    "yarn",
+    "zed"
+  ],
+  "entries": [
+    {
+      "path": ".DS_Store",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "anthropic",
+      "action": "data-export",
+      "owner": "new-machine-runbook",
+      "reason": "Potential user data; export desired items through its owning application, not as configuration"
+    },
+    {
+      "path": "argocd",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application account state; authenticate later only if separately required"
+    },
+    {
+      "path": "asciinema",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "atuin",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "bat",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "bird",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "btop",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "cabal",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "cachix",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "caddy",
+      "action": "recreate",
+      "owner": "new-machine-runbook",
+      "reason": "Generated installation, cache, or runtime state; recreate through declared tools when needed"
+    },
+    {
+      "path": "cai",
+      "action": "data-export",
+      "owner": "new-machine-runbook",
+      "reason": "Potential user data; export desired items through its owning application, not as configuration"
+    },
+    {
+      "path": "cmux",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "configstore",
+      "action": "recreate",
+      "owner": "new-machine-runbook",
+      "reason": "Generated installation, cache, or runtime state; recreate through declared tools when needed"
+    },
+    {
+      "path": "direnv",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "dotfiles.nix",
+      "action": "recreate",
+      "owner": "new-machine-runbook",
+      "reason": "Clone the public repository at the expected path; never transfer a working checkout as config data"
+    },
+    {
+      "path": "gcloud",
+      "action": "private",
+      "owner": "private-companion",
+      "reason": "Selected sensitive family; exact recovery records are in the private companion"
+    },
+    {
+      "path": "gh",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "gh-dash",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "ghc",
+      "action": "recreate",
+      "owner": "new-machine-runbook",
+      "reason": "Generated installation, cache, or runtime state; recreate through declared tools when needed"
+    },
+    {
+      "path": "ghostty",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "git",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "gitui",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "goose",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "helix",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "hunk",
+      "action": "recreate",
+      "owner": "new-machine-runbook",
+      "reason": "Generated installation, cache, or runtime state; recreate through declared tools when needed"
+    },
+    {
+      "path": "iterm2",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "k3d",
+      "action": "recreate",
+      "owner": "new-machine-runbook",
+      "reason": "Generated installation, cache, or runtime state; recreate through declared tools when needed"
+    },
+    {
+      "path": "karabiner",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "kazuha",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "kitty",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "longbridge",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "mina",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "mole",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "mori",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "mori-rei-app",
+      "action": "recreate",
+      "owner": "new-machine-runbook",
+      "reason": "Generated installation, cache, or runtime state; recreate through declared tools when needed"
+    },
+    {
+      "path": "mori.bak",
+      "action": "data-export",
+      "owner": "new-machine-runbook",
+      "reason": "Historical backup differs from active source; review unique preferences privately before exclusion"
+    },
+    {
+      "path": "nagare",
+      "action": "private",
+      "owner": "private-companion",
+      "reason": "Selected sensitive family; exact recovery records are in the private companion"
+    },
+    {
+      "path": "nhub",
+      "action": "private",
+      "owner": "private-companion",
+      "reason": "Selected sensitive family; exact recovery records are in the private companion"
+    },
+    {
+      "path": "nihongo",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "nix",
+      "action": "recreate",
+      "owner": "new-machine-runbook",
+      "reason": "Generated installation, cache, or runtime state; recreate through declared tools when needed"
+    },
+    {
+      "path": "notion-cli",
+      "action": "recreate",
+      "owner": "new-machine-runbook",
+      "reason": "Generated installation, cache, or runtime state; recreate through declared tools when needed"
+    },
+    {
+      "path": "ntn",
+      "action": "private",
+      "owner": "private-companion",
+      "reason": "Selected sensitive family; exact recovery records are in the private companion"
+    },
+    {
+      "path": "nvim",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "okf",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "op",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application account state; authenticate later only if separately required"
+    },
+    {
+      "path": "pgcli",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "pspg",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "raycast",
+      "action": "data-export",
+      "owner": "new-machine-runbook",
+      "reason": "Potential user data; export desired items through its owning application, not as configuration"
+    },
+    {
+      "path": "rei",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "rei-api",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "rei.bak",
+      "action": "data-export",
+      "owner": "new-machine-runbook",
+      "reason": "Historical backup differs from active source; review unique preferences privately before exclusion"
+    },
+    {
+      "path": "reiko",
+      "action": "recreate",
+      "owner": "new-machine-runbook",
+      "reason": "Generated installation, cache, or runtime state; recreate through declared tools when needed"
+    },
+    {
+      "path": "seihou",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "sesh",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "sesh.toml",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "silicon",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "simple-update-notifier",
+      "action": "recreate",
+      "owner": "new-machine-runbook",
+      "reason": "Generated installation, cache, or runtime state; recreate through declared tools when needed"
+    },
+    {
+      "path": "sops",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "starship.toml",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "tan-knowledge",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "television",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "testkit",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "tmux",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "tmuxai",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "wezterm",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "worktrunk",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "yamllint",
+      "action": "managed",
+      "owner": "existing-declaration",
+      "reason": "Existing Home Manager, Nix, or agenix declaration owns selected generated settings; inspect mixed-file exceptions"
+    },
+    {
+      "path": "yarn",
+      "action": "data-export",
+      "owner": "new-machine-runbook",
+      "reason": "Potential user data; export desired items through its owning application, not as configuration"
+    },
+    {
+      "path": "zed",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected application setting, backup, log, cache, or empty state; do not transfer"
+    },
+    {
+      "path": "gh/config.yml",
+      "action": "managed",
+      "owner": "home-manager",
+      "reason": "GitHub CLI preferences are already declared"
+    },
+    {
+      "path": "gh/hosts.yml",
+      "action": "reauthenticate",
+      "owner": "github-cli",
+      "reason": "Account state is recovered by fresh authentication"
+    },
+    {
+      "path": "direnv/lib/hm-nix-direnv.sh",
+      "action": "managed",
+      "owner": "home-manager",
+      "reason": "Generated integration already declared"
+    },
+    {
+      "path": "direnv/direnv.toml",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Additional preference was not selected"
+    },
+    {
+      "path": "television/cable/nix-search-tv.toml",
+      "action": "managed",
+      "owner": "home-manager",
+      "reason": "Generated Nix search channel already declared"
+    },
+    {
+      "path": "television/config.toml",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected main preferences"
+    },
+    {
+      "path": "mori/config.dhall",
+      "action": "public-file",
+      "owner": "home/xdg-configs.nix",
+      "reason": "Selected existing editable Mori settings without shared host identity"
+    },
+    {
+      "path": "mori/agents",
+      "action": "public-directory",
+      "owner": "home/xdg-configs.nix",
+      "reason": "Audited source-only Mori skills"
+    },
+    {
+      "path": "mori/host-id",
+      "action": "recreate",
+      "owner": "mori-local",
+      "reason": "Host identity must be minted separately per machine"
+    },
+    {
+      "path": "kazuha/config.dhall",
+      "action": "managed",
+      "owner": "home/xdg-configs.nix",
+      "reason": "Existing selected source-only directory"
+    },
+    {
+      "path": "rei/config.yaml",
+      "action": "managed",
+      "owner": "home/xdg-configs.nix",
+      "reason": "Existing selected source-only directory"
+    },
+    {
+      "path": "nhub/config.kdl",
+      "action": "private",
+      "owner": "private-companion",
+      "reason": "Whole selected config contains a provider token"
+    },
+    {
+      "path": "ntn/config.kdl",
+      "action": "private",
+      "owner": "private-companion",
+      "reason": "Whole selected config contains a provider token"
+    },
+    {
+      "path": "nihongo/config.kdl",
+      "action": "public-file",
+      "owner": "home/xdg-configs.nix",
+      "reason": "Selected non-secret editable CLI preferences"
+    },
+    {
+      "path": "seihou/config.dhall",
+      "action": "public-file",
+      "owner": "home/xdg-configs.nix",
+      "reason": "Selected non-secret editable CLI preferences"
+    },
+    {
+      "path": "gcloud/configurations",
+      "action": "private",
+      "owner": "private-companion",
+      "reason": "Profile metadata requires private review and recovery"
+    },
+    {
+      "path": "gcloud/active_config",
+      "action": "private",
+      "owner": "private-companion",
+      "reason": "Selected profile state belongs in private recovery mapping"
+    },
+    {
+      "path": "gcloud/cache",
+      "action": "recreate",
+      "owner": "gcloud",
+      "reason": "SDK cache is generated"
+    },
+    {
+      "path": "gcloud/logs",
+      "action": "exclude",
+      "owner": "gcloud",
+      "reason": "SDK logs are not portable settings"
+    },
+    {
+      "path": "nagare/contexts",
+      "action": "private",
+      "owner": "private-companion",
+      "reason": "Selected context configuration requires private recovery"
+    },
+    {
+      "path": "nagare/kubeconfigs",
+      "action": "private",
+      "owner": "private-companion",
+      "reason": "Cluster access configuration requires private recovery"
+    },
+    {
+      "path": "nagare/hosts",
+      "action": "private",
+      "owner": "private-companion",
+      "reason": "Repository-owned links are recreated after owning checkout"
+    },
+    {
+      "path": "nagare/operator",
+      "action": "private",
+      "owner": "private-companion",
+      "reason": "Operator settings require owning-project recovery review"
+    },
+    {
+      "path": "nagare/cluster-secrets",
+      "action": "private",
+      "owner": "owning-project",
+      "reason": "Work-owned cluster authority stays with its owning recovery workflow"
+    },
+    {
+      "path": "nagare/current-context",
+      "action": "recreate",
+      "owner": "nagare",
+      "reason": "Select context only after recovery"
+    },
+    {
+      "path": "seihou/agents",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected agent installation tree"
+    },
+    {
+      "path": "seihou/installed",
+      "action": "recreate",
+      "owner": "seihou",
+      "reason": "Installed templates are regenerated from owner"
+    },
+    {
+      "path": "ntn/agents",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected agent installation tree"
+    },
+    {
+      "path": "testkit/agents",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected agent installation tree"
+    },
+    {
+      "path": "worktrunk/config.toml",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected config includes approvals and machine paths"
+    },
+    {
+      "path": "karabiner/karabiner.json",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected remappings and device-specific settings"
+    },
+    {
+      "path": "mole/clean-list.txt",
+      "action": "exclude",
+      "owner": "new-machine-runbook",
+      "reason": "Unselected cleanup preference; review before source cleanup"
+    }
+  ]
+}

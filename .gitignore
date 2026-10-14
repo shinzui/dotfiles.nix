@@ -1,4 +1,6 @@
 result
+/result-bootstrap
+/result-yujin
 todo.md
 .luarc.json
 .envrc
@@ -10,3 +12,4 @@ todo.md
 CLAUDE.local.md
 # --- /seihou:claude-gitignore ---
 .agents/
+config/xdg/mori/host-id

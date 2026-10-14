@@ -35,7 +35,9 @@ only on its corresponding workstation.
 The wrappers work from any caller directory. Build defaults to `SungkyungM1X`;
 the generic switch requires a target. Both accept `SungkyungM1X`, `yujin`, and
 `bootstrap-arm`, reject unknown names, and forward remaining arguments unchanged.
-See [secrets onboarding](docs/secrets.md#yujin-onboarding) before a new-machine switch.
+Follow the [new-machine bootstrap](docs/new-machine-bootstrap.md) before a new-machine
+switch. Its [selection audit](docs/config-bootstrap-audit.md) explains which
+preferences are portable; [secret onboarding](docs/secrets.md) covers age keys.
 
 ## Layout
 

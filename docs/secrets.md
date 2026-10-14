@@ -57,6 +57,13 @@ pending) for workstation migration and provider rotation.
 
 ## New-machine bootstrap
 
+Follow the ordered [new-machine runbook](new-machine-bootstrap.md). The
+private companion now installs selected nhub, ntn, gcloud profile, kubectl,
+and Nagare files as encrypted `0600` destinations. The exact source and
+recovery mapping is in that repository's `config/bootstrap/private-policy.json`
+(artifact URI pending under `mori://shinzui/dotfiles-private.nix`). Never
+transfer its plaintext source files through Git.
+
 Use the minimal `bootstrap-arm` configuration first if secrets are unavailable:
 
 ```bash
@@ -64,7 +71,8 @@ Use the minimal `bootstrap-arm` configuration first if secrets are unavailable:
 sudo ./bin/darwin-rebuild.sh bootstrap-arm
 ```
 
-Its module list excludes agenix and the private companion. This does not guarantee
+Its module list excludes agenix and the private companion and disables remote
+builders. This does not guarantee
 anonymous input fetching: private flake inputs may still require authorized SSH
 access during resolution. Restore `~/.ssh/id_ed25519` with mode `600`
 and authorize its public key on GitHub, then clone the private companion over SSH:
@@ -142,7 +150,8 @@ contents. A successful build does not prove successful decryption. As `shinzui`:
 command -v nvim zoxide mori
 test -L "$HOME/.config/nvim/lua"
 test -L "$HOME/.config/nvim/after"
-test -L "$HOME/.config/mori"
+test -L "$HOME/.config/mori/config.dhall"
+test -f "$HOME/.config/mori/host-id"
 test -r "$HOME/.config/sesh/sesh.toml"
 test -r "$HOME/.config/rei-api/tokens"
 ./bin/test-treesitter.sh

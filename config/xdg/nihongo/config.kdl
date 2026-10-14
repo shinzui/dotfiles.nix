@@ -1,0 +1,5 @@
+aliases {
+    ks "kanji show --format image"
+    kp "kanji png"
+    h  "help"
+}

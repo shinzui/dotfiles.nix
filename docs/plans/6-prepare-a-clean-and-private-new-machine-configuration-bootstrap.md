@@ -35,6 +35,11 @@ provenance:
       at: 2026-10-14T02:41:37Z
       mode: "update"
       note: "Correct nhub and ntn to private encrypted configs after detecting literal KDL workspace tokens"
+    - model: "gpt-6-sol"
+      harness: "codex-cli"
+      at: 2026-10-14T03:15:37Z
+      mode: "implement"
+      note: "Implement selective bootstrap policy, encrypted recovery, checker, runbook, builds, and ADR"
 ---
 
 # Prepare a clean and private new-machine configuration bootstrap
@@ -56,18 +61,30 @@ This is creation of an implementation plan after a read-only audit. It does not 
 ## Progress
 
 
-- [ ] Classify all 70 configuration entries plus the `~/.kube` and Tailscale Library preference audits, record the seven confirmed keepers and required Tailscale onboarding, and introduce a public configuration policy with private mappings.
-- [ ] Recover required Nagare, gcloud, and kubectl settings/access, enroll the new Tailscale device and reapply intentional preferences, and encrypt retained credentials privately without exposing values.
-- [ ] Encrypt the credential-bearing nhub/ntn configs privately, capture nihongo/seihou as public editable sources, and separate Mori's per-machine identity.
-- [ ] Provide a consistent Determinate bootstrap runbook and read-only prerequisite/live checker.
-- [ ] Pass isolated checker scenarios, configuration evaluation and builds, and record fresh-machine acceptance separately.
-- [ ] Distill durable decisions into ADRs and complete the implementation retrospective.
+- [x] (2026-10-14 03:14 UTC) Classify all 70 audited top-level entries and selected file exceptions in the public policy; add exact private mappings for `~/.kube`, Tailscale, and selected sensitive files.
+- [x] (2026-10-14 03:14 UTC) Encrypt and decrypt-compare ten selected private files, including nhub/ntn, gcloud profiles, kubectl, and Nagare local files; publish the private companion and update only its public lock input.
+- [x] (2026-10-14 03:14 UTC) Add public editable nihongo/seihou links, isolate Mori's tracked host identity with a protected source-machine backup, and disable the bootstrap target's remote builder.
+- [x] (2026-10-14 03:14 UTC) Provide the Determinate installer helper, ordered runbook, audit rationale, and read-only checker.
+- [x] (2026-10-14 03:14 UTC) Pass isolated checker scenarios, bootstrap/full-host evaluations, and non-activating builds for all three targets.
+- [x] (2026-10-14 03:14 UTC) Distill selective ownership, encrypted credentials, local identity, and bootstrap ordering into a local ADR.
+- [ ] Review unique differences in historical Mori/Rei backups privately and export any desired preference before discarding those backups.
+- [x] (2026-10-14 03:18 UTC) Build released Nagare `v0.2.2` without installation; verify `nagarectl context list` and `NAGARE_CONTEXT=local nagare --list` against the source configuration without changing its profile.
+- [ ] On the actual new Mac, enroll Tailscale, restore renewable authentication, activate the matching host, verify secret modes and consumers, Mori identity, services, and data restoration. No new Mac is accessible in this implementation session.
+- [ ] Finish the retrospective after the remaining repository probe and record physical onboarding separately when it occurs.
 
 
 ## Surprises & Discoveries
 
 
-(No implementation discoveries yet. Initial audit evidence is recorded in Context and Orientation.)
+Implementation evidence (2026-10-14 UTC): The evaluated `bootstrap-arm` builder settings changed from `true` and one `nix-gcp-builder` entry to `false` and `[]`; full-host derivations and non-activating builds succeeded. `./bin/check-bootstrap.sh bootstrap-arm` on Sungkyung reports four public target conflicts and ten pre-existing private destination conflicts, as expected from its existing whole Mori link, unmanaged CLI files, and original private files; it does not overwrite them.
+
+The historical `mori.bak/config.dhall` and `rei.bak/config.yaml` differ byte-for-byte from active source. A redacted structural comparison found no old-only setting keys; Rei's backup carries an older option value. Mori's backup-only `automation-config` skill is absent from current linked sources and the registered Mori checkout. Their policy action is `data-export`, not `exclude`, pending a decision on that unique skill. No backup was deleted.
+
+The pinned agenix editor returned exit zero when its editor failed to create ciphertext, and a heredoc loop caused it to replace `EDITOR` with `cp /dev/stdin`. Running each edit with terminal stdin (`</dev/tty`) and checking non-empty ciphertext plus decrypt-to-`cmp` produced ten verified files. The original plaintext files remain only on the source machine.
+
+The Determinate stable macOS package endpoint returned v3.23.2. Its downloaded package reported that version in `PackageInfo` and passed Apple's signature and notarization check; no package installer ran. The final private policy records thirteen Nagare first-hop links without following their targets. With that final private pin, checker fixtures and all three non-activating Darwin builds passed again.
+
+The current `v0.2.2` Nagare tag exposes `#nagare` and `#nagarectl` on `aarch64-darwin`, and its non-activating build passed. `nagarectl context list` parsed local state. The launcher failed when the source's stale active context name pointed to a missing file, then passed `--list` with an explicit `NAGARE_CONTEXT=local` and isolated temporary state. The release commit differs from the old profile's recorded revision; the new machine must repeat the private context check before installing the tag.
 
 
 ## Decision Log
@@ -95,11 +112,15 @@ Decision (2026-10-14 UTC, Tailscale): Preserve the existing standalone `tailscal
 
 Decision (2026-10-14 UTC, content placement correction): The actual `nhub/config.kdl` and `ntn/config.kdl` contain literal workspace tokens. Preserve each whole config as an agenix-encrypted private secret installed at its current destination, retaining aliases and workspace settings without inventing a split-config mechanism. Neither file is a public tracked source or ordinary private plaintext Git source. `nihongo/config.kdl` contains aliases and `seihou/config.dhall` contains non-secret preferences; those two are public editable sources. A credential check must recognize KDL `token` nodes and provider-token literals, not only API-key-shaped field names.
 
+Decision (2026-10-14 UTC, implementation): Encrypt the selected gcloud profile files and active selection, `~/.kube/config`, and Nagare's local context and two local kubeconfigs as individual private agenix records. Reauthenticate renewable gcloud state and keep work-owned Nagare host authority with its owning project. This preserves the selected workflows without copying a broad token database or whole config tree.
+
+Decision (2026-10-14 UTC, implementation): Treat differing Mori/Rei backups as possible user data until privately reviewed. Keep the backup files untouched and mark them `data-export`; do not infer that a historical backup is disposable from its name.
+
 
 ## Outcomes & Retrospective
 
 
-(Implementation has not started. The user narrowed the migration selection to seven keepers; supplemental audits include kubectl and Tailscale preferences outside `~/.config`, and a token-node content check corrected nhub/ntn placement to encrypted private configs. Other unmanaged app settings are excluded by default, and existing managed settings are excluded from the additional migration selection. Fill this section with verified repository preparation and, separately, results observed on the new machine. Do not equate a successful build or synthetic home-directory check with physical onboarding.)
+Repository preparation has produced a 70-entry selection policy, an ordered runbook, a read-only checker with synthetic risk scenarios, private encrypted recovery files, editable public links, a machine-local Mori identity boundary, and a bootstrap target free of remote-builder credentials. The private companion commits `ac0575b` (encrypted recovery), `78e7973` (metadata-only audit history), and `a0f7e54` (Nagare link recovery map) are published; the companion is the only updated public lock input. Non-activating Nix evaluations and builds passed for bootstrap, Sungkyung, and Yujin. The released Nagare `v0.2.2` operator package built and passed explicit local-context command probes. The source-Mac preflight correctly reports existing target conflicts. This is not a live deployment result. Remaining work is disposition of Mori's unique backup-only skill and physical new-Mac activation, authentication, Tailscale enrollment, secret consumer checks, and service/data recovery.
 
 
 ## Context and Orientation
@@ -349,7 +370,7 @@ Keep prior ciphertext and recoverable identities until encryption comparison and
 ## Interfaces and Dependencies
 
 
-`config/bootstrap/config-policy.json` has shape `{ "schema_version": 1, "entries": [ { "path": "nihongo/config.kdl", "action": "public-file", "owner": "home/xdg-configs.nix", "reason": "Explicitly selected CLI preferences" } ] }`. Require each entry's four fields, unique paths, known actions, and no absolute or parent-escape paths. A directory-level decision does not override a more specific file decision; validate overlaps explicitly. Private mappings use the same version plus exact source/destination/secret-name/recovery-method fields as appropriate, never values. They live in the private companion and are not a public flake data dependency. External-home records for `~/.kube` and Tailscale Library preferences belong in these exact private mappings; do not invent corresponding paths under `~/.config` or bypass the public path-escape checks.
+`config/bootstrap/config-policy.json` has shape `{ "schema_version": 1, "audit_top_level": [".DS_Store", "anthropic"], "entries": [ { "path": "nihongo/config.kdl", "action": "public-file", "owner": "home/xdg-configs.nix", "reason": "Explicitly selected CLI preferences" } ] }`. The actual `audit_top_level` has all 70 observed names; the checker requires a one-to-one top-level policy match. Require each entry's four fields, unique paths, known actions, and no absolute or parent-escape paths. A directory-level decision does not override a more specific file decision; validate overlaps explicitly. Private mappings use the same version plus exact source/destination/secret-name/recovery-method fields as appropriate, never values. They live in the private companion and are not a public flake data dependency. External-home records for `~/.kube` and Tailscale Library preferences belong in these exact private mappings; do not invent corresponding paths under `~/.config` or bypass the public path-escape checks.
 
 `bin/check-bootstrap.sh <target> [--live] [--home-dir <absolute-home-path>]` is executable, read-only, preserves argument boundaries, and exits `0` for all required checks passing, `1` for failed prerequisites/conflicts/live checks, and `2` for invalid usage or policy. Its normal home is `/Users/shinzui`; a synthetic path is for isolated file checks only and must not cause machine activation or an assertion that hardware deployment passed. Unknown target names fail before network or Nix commands. Use a small Python helper if JSON/policy checks become clearer there, with responsibility limited to safe validation. `bin/test-bootstrap-checker.py` exercises the externally observable checker contract without third-party test dependencies.
 
@@ -370,3 +391,9 @@ Revision note (2026-10-14 UTC, Tailscale): Added the already-managed standalone 
 
 
 Revision note (2026-10-14 UTC, public/private placement): A content-level review found actual workspace-token literals in nhub/ntn KDL config files. Corrected their deployment to whole-file private agenix encryption; public editable additions are now only nihongo and seihou. Updated progress, decisions, private deployment, symlink work, live checks, and acceptance, and saved a private metadata-only finding without tokens or workspace identifiers. Neither credential-bearing file was copied, staged, or committed to either repository.
+
+
+Revision note (2026-10-14 UTC, implementation): Implemented the selection policy, encrypted private recovery mappings, editable public sources, local Mori identity boundary, bootstrap checker and guide, builder isolation, and ADR. Recorded repository validation and kept live onboarding, differing backup review, and Nagare compatibility as explicit remaining work.
+
+
+Revision note (2026-10-14 UTC, validation addendum): Verified the released Nagare `v0.2.2` operator build and explicit local-context probe; mapped Nagare symlink first hops privately; confirmed Determinate package metadata and signature without installing; tightened preflight to report private destination conflicts and validated the final companion pin with fresh non-activating builds. Mori's unique backup-only skill and physical new-machine checks remain open.

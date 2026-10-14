@@ -100,6 +100,11 @@ in
         }
         inputs.determinate.darwinModules.default
         ../darwin/bootstrap.nix
+        {
+          # The minimal target has no decrypted /etc/nix/builder_ed25519.
+          determinateNix.distributedBuilds = lib.mkForce false;
+          determinateNix.buildMachines = lib.mkForce [ ];
+        }
         { nixpkgs = nixpkgsConfig; }
       ];
     };
