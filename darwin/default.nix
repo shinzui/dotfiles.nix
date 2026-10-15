@@ -7,6 +7,7 @@
 
     # Other nix-darwin configuration
     ./homebrew.nix
+    ./app-store.nix
     ./secrets.nix
     ./mac-defaults.nix
     ./gcp-nix-builder.nix

@@ -394,6 +394,29 @@ networksetup -listallnetworkservices
 
 The shared network service names are `Wi-Fi` and `Thunderbolt Bridge`. If they differ, update `networking.knownNetworkServices` in this host's `default.nix`, publish from the trusted Mac, and pull before building. An ordinary host assignment replaces the shared `mkDefault`.
 
+Before full activation, sign into the Mac App Store with the account that owns
+your apps. The shared declarations in
+[`darwin/app-store.nix`](../darwin/app-store.nix) install Adobe Lightroom and
+Slack automatically on both full hosts. Add future App Store apps there with
+their numeric ID, installation path, and bundle identifier. Activation checks
+the matching bundle identifier, executable, and App Store receipt directly;
+it does not depend on Spotlight indexing or `mas list`. Existing verified
+apps are kept, and missing apps are installed with `mas get`. Free apps can be
+acquired by that command; paid apps must already belong to the signed-in
+account. App Store authentication may still require approval.
+
+Rebuilds do not run `mas update`: enable automatic updates in the App Store
+to keep applications current. Installation failures and conflicting existing
+bundles fail activation. Resolve the reported error and rerun the normal
+rebuild; no separate install command is needed. Adobe account and Slack
+workspace sign-in remain per-machine.
+
+App Store installation runs separately from Homebrew Bundle. Leave
+`homebrew.masApps` empty: with this configuration's forced Bundle cleanup,
+adding an App Store entry there also makes other unlisted App Store apps
+eligible for removal. `programs.mas.cleanup = false` preserves unlisted apps.
+The minimal `bootstrap-arm` target does not install desktop apps.
+
 After resolving checker conflicts, prepare restricted directories and activate the full target:
 
 ```bash

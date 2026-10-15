@@ -4,7 +4,12 @@
     "sessionUrl": false
   },
   "includeCoAuthoredBy": false,
-  "model": "fable",
+  "permissions": {
+    "allow": [
+      "Read(~/Keikaku/**)"
+    ]
+  },
+  "model": "opus",
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true
@@ -20,15 +25,39 @@
     }
   },
   "tui": "default",
+  "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
   "verbose": true,
   "agentPushNotifEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1755366220134
   },
-  "permissions": {
-    "allow": [
-      "Read(~/Keikaku/**)"
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: PUBLIC — shinzui/seihou (github.com:shinzui/seihou.git). Any push there is publishing.",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured",
+      "**Default / protected branches**: Default branch is `master`; no rulesets listed; no protected branches listed (per gh — note a public repo with no listed protections, so treat unreviewed pushes to `master` cautiously)",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine with open internet",
+      "**Source control**: The trusted repo (shinzui/seihou) and its origin remote (github.com:shinzui/seihou.git) only",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar. Note: `.envrc`, `.envrc.local`, `.envrc.sample` are gitignored/flagged in this repo and likely hold local secrets — treat as sensitive, never commit",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic (note: k8s namespaces seen in this project are `flake`, `seihou-core`, `test` — none are prod-named)",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development (Haskell/Dhall project scaffolding tooling, seihou repo)",
+      "**Trusted repo**: /Users/shinzui/Keikaku/bokuno/seihou-project/seihou (github.com:shinzui/seihou.git) — PUBLIC, so only this repo's own work belongs in commits/pushes here; content ported from elsewhere is not its own work",
+      "**Org-specific CLIs**: `mori` (dependency/doc lookup registry CLI used per CLAUDE.md and seen in project + shell history), `seihou` (this project's own CLI), `okf`, `mina`, `rei`, `kazuha`, `nagarectl` — all seen repeatedly in shell history/project usage but with no documented purpose beyond name; treat as routine local tooling, not verified org services"
     ]
   }
 }

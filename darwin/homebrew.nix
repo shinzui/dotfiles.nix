@@ -79,19 +79,8 @@ in
     "redpanda-data/tap"
   ];
 
-  # Prefer installing application from the Mac App Store
-  #
-  # Commented apps suffer continual update issue:
-  # https://github.com/malob/nixpkgs/issues/9
-  #
-  # `mas` not working on macOS 12
-  # https://github.com/mas-cli/mas/issues/417
-  # homebrew.masApps = {
-  #   # "1Blocker" = 1365531024;
-  #   "1Password" = 1333542190;
-  #   Slack = 803453959;
-  #   Xcode = 497799835;
-  # };
+  # Declare App Store apps in darwin/app-store.nix.
+  # They install separately so Bundle cleanup cannot remove unlisted apps.
 
   # If an app isn't available in the Mac App Store install the Homebrew Cask.
   homebrew.casks = [
