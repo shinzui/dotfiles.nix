@@ -5,6 +5,9 @@ let
   nixConfigDir = "${config.home.homeDirectory}/.config/dotfiles.nix";
 in
 {
+  home.file.".claude/settings.json".source =
+    mkOutOfStoreSymlink "${nixConfigDir}/config/claude/settings.json";
+
   home.file.".claude/CLAUDE.md".source =
     mkOutOfStoreSymlink "${nixConfigDir}/config/agents/AGENTS.md";
 
