@@ -4,6 +4,7 @@ let
   pg = config.services.postgresql.package;
   pgSocket = config.services.postgresql.socketDir;
   logDir = "${config.home.homeDirectory}/.mori-rei-app/logs";
+  agentCliPath = "${config.home.homeDirectory}/.local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin";
   # The rei event store. REI_PG_CONNECTION_STRING is the same env var
   # the `rei` CLI reads, so both tools share one configuration source.
   reiConnStr = "host=${pgSocket} dbname=rei";
@@ -22,6 +23,7 @@ let
     export REI_PG_CONNECTION_STRING="${reiConnStr}"
     export MORI_REI_APP_PG_CONNECTION_STRING="${appConnStr}"
     export MORI_API_URL="${moriApiUrl}"
+    export PATH="${agentCliPath}"
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
     exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)
@@ -119,7 +121,7 @@ in
         MORI_API_URL = moriApiUrl;
         # The summariser shells out to `claude`, which is user-installed
         # under ~/.local/bin and not on launchd's default PATH.
-        PATH = "${config.home.homeDirectory}/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin";
+        PATH = agentCliPath;
       };
     };
   };
