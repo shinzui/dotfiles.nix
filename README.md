@@ -29,6 +29,9 @@ workstation with the runtime and integrations disabled; follow the separate
 ## Everyday commands
 
 ```bash
+just rebuild-sungkyung                   # build and activate on Sungkyung
+just rebuild-yujin                       # build and activate on Yujin
+
 ./bin/build.sh                           # build the system without activating
 sudo ./bin/darwin-rebuild-sungkyung.sh   # build and activate
 

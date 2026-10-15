@@ -2,6 +2,18 @@
 default:
   just --list
 
+# Build and activate Yujin (run on Yujin)
+[group: 'system']
+rebuild-yujin:
+    ./bin/build.sh yujin
+    sudo ./bin/darwin-rebuild.sh yujin
+
+# Build and activate Sungkyung (run on Sungkyung)
+[group: 'system']
+rebuild-sungkyung:
+    ./bin/build.sh SungkyungM1X
+    sudo ./bin/darwin-rebuild.sh SungkyungM1X
+
 # Symlink Claude skills to project-local .claude/skills/
 [group: 'setup']
 symlink-claude-skills:
