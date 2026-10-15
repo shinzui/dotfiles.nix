@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "parqeye";
-  version = "0.0.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "kaushiksrini";
     repo = "parqeye";
     rev = "v${version}";
-    hash = "sha256-gsH/dSxQRbfTdWeZ8KCTxjQmmD8yfAxrr+WAs/nGtUw=";
+    hash = "sha256-D/pq9UhB2K76yVIihIBy+47AASe2g5sIA+bW+myI2k0=";
   };
 
-  cargoHash = "sha256-Xk1T+1TDMs13y/1ghieiewy2ZwrHZD0U6iZw3n/DMKI=";
+  cargoHash = "sha256-vMYuZiYnuyYcQXLwHLzMYLGPrp6pGp9/Qkx5lmM7/Ik=";
 
   doCheck = false;
 

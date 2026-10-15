@@ -231,7 +231,6 @@ in
     pgformatter
     pgcli
     pg_rman
-    harlequin # DB client that supports duckdb and postgresql
     prettier
     # graphql-language-service-cli
     pnpm

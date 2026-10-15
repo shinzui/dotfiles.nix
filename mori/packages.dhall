@@ -46,7 +46,7 @@ in  [ Schema.Package::{
       , language = Schema.Language.Rust
       , path = Some "derivations/parqeye.nix"
       , description = Some
-          "Parquet file inspector (kaushiksrini/parqeye); built against nixos-25.11 rustc"
+          "Parquet file inspector built with the shared nixpkgs Rust toolchain"
       }
     , Schema.Package::{
       , name = "container"

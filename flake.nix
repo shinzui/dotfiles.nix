@@ -3,11 +3,6 @@
 
   inputs = {
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    # Escape hatch for packages that don't build against current unstable —
-    # e.g. crates needing an older rustc. The `pkgs-stable` overlay exposes it
-    # as `pkgs.pkgs-stable`.
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
-
     # Shared Haskell toolchain base flake. Every shinzui Haskell project below
     # follows this single input (and its pinned nixpkgs), so they all build
     # against one GHC 9.12.4 toolchain and one nixpkgs revision — maximizing

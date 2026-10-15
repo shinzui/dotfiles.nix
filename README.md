@@ -130,22 +130,6 @@ change behaviour.
 Note that `flake-modules/packages.nix` deliberately applies only the few
 overlays its packages need, not the full set.
 
-### The `pkgs-stable` escape hatch
-
-When a package doesn't build against current unstable, take just that package
-from `nixpkgs-stable` (pinned to a release channel) rather than pinning
-everything:
-
-```nix
-harlequin = final.pkgs-stable.harlequin;         # a whole package
-rustPlatform = final.pkgs-stable.rustPlatform;   # or just a toolchain
-```
-
-Do **not** reach for `builtins.fetchTarball` to a hardcoded nixpkgs revision.
-That sits outside `flake.lock`, so `nix flake update` can never move it, it
-instantiates an entire extra nixpkgs, and it drifts silently — two such pins
-were retired in July 2026 after quietly going years out of date.
-
 ### Retire workarounds as you go
 
 Overlays that outlive their cause become the next outage. When a bump breaks
@@ -157,6 +141,17 @@ another:
 - `tmux-extrakto-darwin-fix` existed to keep Linux-only dependencies off Darwin,
   but nixpkgs fixed that upstream and the overlay was left force-adding `xclip`
   to the Darwin closure — causing the exact problem it was named after.
+- `httpstat-fix` and `worktrunk-skip-proc-tests` duplicated fixes already in the
+  locked nixpkgs and were removed after checking the stock packages.
+- Parqeye 0.2.0 builds with the current Rust toolchain. Its old compiler override
+  and the unused `nixpkgs-stable` input were removed together.
+
+Apple Container uses nixpkgs' packaging with a small version/source override
+until the locked nixpkgs catches up with the selected upstream release.
+Avoid copying complete package definitions or pinning an extra package set
+unless a verified compatibility problem requires it. Keep any necessary pin in
+`flake.lock`; an ad-hoc `builtins.fetchTarball` revision cannot move with
+`nix flake update`.
 
 Every overlay in `overlays/` should say what it fixes and when it can go.
 

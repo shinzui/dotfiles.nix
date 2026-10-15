@@ -2,26 +2,14 @@
 #
 # Note: these are applied via `attrValues self.overlays`, so they are applied in
 # *alphabetical* order of their attribute names, which one relies on:
-#   - `vimExtraPlugins-no-require-check` must sort after `nix-neovimplugins`,
+#   - `vimExtraPlugins-require-check-exemptions` must sort after `nix-neovimplugins`,
 #     which is what introduces `vimExtraPlugins`.
 # Renaming either one will silently change behaviour.
-{ self, inputs, lib, ... }:
-let
-  nixpkgsConfig = import ../lib/nixpkgs-config.nix { inherit self lib; };
-in
+{ self, inputs, ... }:
 {
   flake.overlays = {
     nix-neovimplugins = inputs.nix-neovimplugins.overlays.default;
     bun2nix = inputs.bun2nix.overlays.default;
-
-    # Pin harlequin to avoid broken textual dependency
-    harlequin-pin = import ../overlays/harlequin-pin.nix;
-
-    # Fix httpstat's setup.py to build under Python 3.12+ (ast.Str removal)
-    httpstat-fix = import ../overlays/httpstat-fix.nix;
-
-    # Skip worktrunk tests that need the OS process table (blocked in the sandbox)
-    worktrunk-skip-proc-tests = import ../overlays/worktrunk-skip-proc-tests.nix;
 
     my-packages = final: prev:
       let
@@ -74,15 +62,12 @@ in
         };
         ck = final.callPackage (self + "/derivations/ck.nix") { };
         parqeye = final.callPackage (self + "/derivations/parqeye.nix") {
-          inherit (final) lib fetchFromGitHub;
-          # parqeye v0.0.2 pins an `ethnum` that transmutes between `()` and
-          # `TryFromIntError`; rustc >= ~1.95 rejects that (E0512). No newer
-          # parqeye release exists, so build it with nixos-25.11's rustc 1.91.
-          rustPlatform = final.pkgs-stable.rustPlatform;
+          inherit (final) lib fetchFromGitHub rustPlatform;
         };
-        # Shadows nixpkgs' own `container` (1.1.0) with a local copy pinned to
-        # the latest upstream release. See derivations/apple-container.nix.
-        container = final.callPackage (self + "/derivations/apple-container.nix") { };
+        # Keep nixpkgs' packaging, overriding only the newer release source.
+        container = final.callPackage (self + "/derivations/apple-container.nix") {
+          container = prev.container;
+        };
         beautiful-mermaid = final.callPackage (self + "/derivations/beautiful-mermaid") { };
         markit = final.callPackage (self + "/derivations/markit") { };
         defuddle = final.callPackage (self + "/derivations/defuddle") { };
@@ -112,15 +97,6 @@ in
         notion-hub-subscriptions = hsBin "notion-hub-subscriptions"
           (noHaddock inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.notion-hub-subscriptions);
       };
-
-    # Escape hatch for packages that don't build against current unstable —
-    # currently parqeye, which needs an older rustc.
-    pkgs-stable = final: prev: {
-      pkgs-stable = import inputs.nixpkgs-stable {
-        system = prev.stdenv.hostPlatform.system;
-        inherit (nixpkgsConfig) config;
-      };
-    };
 
     # Exempt the few NixNeovimPlugins that fail nixpkgs' neovim require-check
     # (named to sort after `nix-neovimplugins`, which provides vimExtraPlugins)

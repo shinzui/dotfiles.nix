@@ -228,7 +228,6 @@ This document provides a comprehensive overview of all packages installed throug
 - **[postgresql_17](https://www.postgresql.org/)** - Powerful, open-source object-relational database system
 - **[pgcli](https://www.pgcli.com/)** - Command line interface for PostgreSQL with auto-completion
 - **[pspg](https://github.com/okbob/pspg)** - Unix pager designed for work with tables
-- **[harlequin](https://harlequin.sh/)** - Terminal-based SQL IDE for DuckDB and PostgreSQL
 
 ---
 

@@ -108,29 +108,20 @@ git diff HEAD flake.lock | grep -A2 -B2 'nixpkgs-unstable'
 
 ## Solution Strategies
 
-### Strategy 1 (preferred): Take the package from `pkgs-stable`
+### Strategy 1: Check the maintained release before adding a compatibility pin
 
-The `nixpkgs-stable` input is pinned to a release channel and exposed as
-`pkgs.pkgs-stable` by the `pkgs-stable` overlay. Pull just the broken package
-— or just the toolchain it needs — from there:
+Test the stock package from the locked nixpkgs first. If a custom derivation
+uses an old release, test the current upstream release with the shared
+toolchain before introducing another package set.
 
-```nix
-# overlays/harlequin-pin.nix
-final: prev: {
-  harlequin = final.pkgs-stable.harlequin;
-}
-```
+Parqeye 0.0.2 previously required an older compiler from a separate
+`nixpkgs-stable` input. Parqeye 0.2.0 builds with the normal Rust toolchain, so
+the compiler override, stable overlay, and unused input were removed together.
 
-```nix
-# or only the toolchain, leaving the rest of the package on unstable
-parqeye = final.callPackage ../derivations/parqeye.nix {
-  inherit (final) lib fetchFromGitHub;
-  rustPlatform = final.pkgs-stable.rustPlatform;
-};
-```
-
-This is lock-tracked, so `nix flake update` moves it, and it comes from the
-binary cache.
+If an older package or toolchain is still necessary, add an explicit,
+lock-tracked input and scope it to the affected package. Document the failure
+and the condition for removing the pin. Do not add a second package set without
+first reproducing the compatibility problem.
 
 ### Anti-pattern: `builtins.fetchTarball` to a hardcoded revision
 
@@ -147,7 +138,7 @@ pgcli = (import (builtins.fetchTarball {
 `nix flake update` cannot move it, so it drifts silently — the harlequin pin sat
 on 2.1.2 long after the stable channel had 2.4.1 — and each one pulls an entire
 parallel package set into the closure. Removing two such pins in July 2026 cut
-~600 MB. Use `pkgs-stable` instead.
+~600 MB. Use a lock-tracked input if a compatibility pin is still necessary.
 
 ### Strategy 2: Override the broken dependency
 
@@ -171,7 +162,7 @@ final: prev: {
 Often the cleanest fix is a small `overrideAttrs` rather than a pin:
 
 ```nix
-# overlays/httpstat-fix.nix -- setup.py uses ast.Str.s, removed in Python 3.12
+# Historical httpstat fix, retired once the locked nixpkgs bypassed get_version().
 final: prev: {
   httpstat = prev.httpstat.overrideAttrs (old: {
     postPatch = (old.postPatch or "") + ''
@@ -192,7 +183,7 @@ If the failure is a test that can't pass in the sandbox, skip that test rather
 than disabling the whole suite:
 
 ```nix
-# overlays/worktrunk-skip-proc-tests.nix
+# Historical Worktrunk workaround; the locked nixpkgs now skips these tests itself.
 checkFlags = (old.checkFlags or [ ]) ++ [ "--skip=some::failing::test" ];
 ```
 
@@ -203,8 +194,9 @@ checkFlags = (old.checkFlags or [ ]) ++ [ "--skip=some::failing::test" ];
 flake.overlays = {
   # ... other overlays ...
 
-  # Fix httpstat's setup.py to build under Python 3.12+
-  httpstat-fix = import ../overlays/httpstat-fix.nix;
+  # Keep the exemption overlay after the provider in alphabetical order.
+  vimExtraPlugins-require-check-exemptions =
+    import ../overlays/vimExtraPlugins-require-check-exemptions.nix;
 };
 ```
 
@@ -214,7 +206,7 @@ name is load-bearing when one overlay must see another's output. Today
 
 2. Make sure to stage the overlay file for flakes:
 ```bash
-git add overlays/httpstat-fix.nix
+git add overlays/vimExtraPlugins-require-check-exemptions.nix
 ```
 
 ## Testing Fixes
@@ -411,6 +403,12 @@ overlay is the cause before writing a new one. Both of these happened here:
   Darwin. nixpkgs fixed that upstream, and the overlay was left unconditionally
   adding `xclip` — an X11 tool — to the Darwin closure. It had inverted into
   causing the problem it was named after.
+- **`httpstat-fix`** became redundant once nixpkgs supplied the version directly
+  rather than calling the broken AST-based version reader. The stock package
+  from the locked nixpkgs resolved successfully during the October 2026 audit.
+- **`worktrunk-skip-proc-tests`** duplicated the exact Darwin-only test exclusions
+  already in the locked nixpkgs. The stock package resolved successfully, so the
+  local overlay was removed to reuse its cached build.
 
 When a bump breaks something, test the stock package first:
 
@@ -424,7 +422,7 @@ If it builds, your overlay is the problem.
 
 1. **Test the stock package before writing an overlay** - the workaround may be the bug
 2. **Always check if the package is still broken upstream** - Sometimes packages are quickly fixed in nixpkgs
-3. **Consider reporting the issue** - Fixes like `httpstat-fix` are real upstream bugs worth a nixpkgs PR
+3. **Consider reporting the issue** - Send reproducible package fixes upstream, then retire local workarounds when the locked dependency includes them
 4. **Document your overlays** - Add comments explaining why the overlay exists and when it can be removed
 5. **Regularly review overlays** - Periodically check if overlays are still needed
 6. **Use temporary allows for debugging** - `NIXPKGS_ALLOW_BROKEN=1` is useful for debugging but never commit it
@@ -437,9 +435,6 @@ dotfiles.nix/
 ├── flake-modules/
 │   └── overlays.nix                 # declares the overlay set
 ├── overlays/
-│   ├── harlequin-pin.nix            # takes harlequin from pkgs-stable
-│   ├── httpstat-fix.nix             # patches setup.py for Python 3.12+
-│   ├── worktrunk-skip-proc-tests.nix  # skips sandbox-incompatible tests
 │   ├── vimExtraPlugins-require-check-exemptions.nix
 │   └── vimUtils.nix                 # helper functions, not a fix
 ```
