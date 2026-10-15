@@ -99,6 +99,7 @@ in
     "ghostty"
     # Signed build so macOS privacy grants persist across upgrades (see home/wezterm.nix)
     "wezterm"
+    "wispr-flow"
     "zoom"
     "discord"
     "anki"
