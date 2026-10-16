@@ -41,12 +41,16 @@ import json, os, pathlib, runpy, sys
 root = pathlib.Path(__file__).parent
 with (root / "calls").open("a") as log:
     log.write(json.dumps(sys.argv[1:]) + "\\n")
-if sys.argv[1:] != ["get", "123"]:
+if sys.argv[1:] not in (["install", "123"], ["get", "123"]):
     sys.exit("Unexpected command (Spotlight and updates must not be used)")
 if os.environ.get("FAIL_INSTALL"):
     sys.exit(1)
+if os.environ.get("NEEDS_ACQUISITION") and sys.argv[1] == "install":
+    sys.exit(1)
 if not os.environ.get("INCOMPLETE_INSTALL"):
     runpy.run_path(os.environ["TEST_MODULE"])["make_app"](root / "Example App.app")
+if os.environ.get("FAIL_AFTER_INSTALL"):
+    sys.exit(1)
 ''')
         self.mas.chmod(0o700)
 
@@ -71,7 +75,20 @@ if not os.environ.get("INCOMPLETE_INSTALL"):
         for _ in range(2):
             result = self.run_installer()
             self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(self.calls.read_text().splitlines(), [json.dumps(["get", "123"])])
+        self.assertEqual(self.calls.read_text().splitlines(), [json.dumps(["install", "123"])])
+
+    def test_unowned_free_app_falls_back_to_acquisition_once(self):
+        for _ in range(2):
+            result = self.run_installer(NEEDS_ACQUISITION="1")
+            self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.calls.read_text().splitlines(), [
+            json.dumps(["install", "123"]), json.dumps(["get", "123"]),
+        ])
+
+    def test_failure_after_install_does_not_trigger_acquisition(self):
+        result = self.run_installer(FAIL_AFTER_INSTALL="1")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.calls.read_text().splitlines(), [json.dumps(["install", "123"])])
 
     def test_wrong_bundle_is_not_replaced(self):
         make_app(self.app, bundle_id="com.example.Other")
@@ -92,6 +109,10 @@ if not os.environ.get("INCOMPLETE_INSTALL"):
         result = self.run_installer(FAIL_INSTALL="1")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("rerun the rebuild", result.stderr)
+        self.assertIn("both mas install and mas get failed", result.stderr)
+        self.assertEqual(self.calls.read_text().splitlines(), [
+            json.dumps(["install", "123"]), json.dumps(["get", "123"]),
+        ])
 
     def test_success_exit_without_installed_app_is_rejected(self):
         result = self.run_installer(INCOMPLETE_INSTALL="1")

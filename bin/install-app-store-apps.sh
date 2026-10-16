@@ -42,9 +42,18 @@ while (( $# > 0 )); do
   fi
 
   echo "  installing $app_name ($app_id)"
-  if ! run_mas get "$app_id"; then
-    echo "Unable to install $app_name. Check App Store sign-in and the error above, then rerun the rebuild." >&2
-    exit 1
+  # Redownload owned apps first. The acquisition endpoint used by `get` can
+  # reject owned apps even when `install` works in the same session.
+  if ! run_mas install "$app_id"; then
+    # A failed command may still have installed the app; verify before trying
+    # acquisition, which can require additional Apple Account authentication.
+    if ! is_installed; then
+      echo "  install failed; trying App Store acquisition for $app_name ($app_id)"
+      if ! run_mas get "$app_id"; then
+        echo "Unable to install $app_name ($app_id): both mas install and mas get failed. Review both errors above. Confirm the App Store account owns the app (paid apps must be purchased in the App Store), then rerun the rebuild." >&2
+        exit 1
+      fi
+    fi
   fi
   if ! is_installed; then
     echo "The App Store command finished, but $app_name could not be verified at $app_path. Check the installation before rebuilding." >&2

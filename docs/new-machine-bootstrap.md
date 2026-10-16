@@ -401,8 +401,10 @@ Slack automatically on both full hosts. Add future App Store apps there with
 their numeric ID, installation path, and bundle identifier. Activation checks
 the matching bundle identifier, executable, and App Store receipt directly;
 it does not depend on Spotlight indexing or `mas list`. Existing verified
-apps are kept, and missing apps are installed with `mas get`. Free apps can be
-acquired by that command; paid apps must already belong to the signed-in
+apps are kept, and missing apps are installed with `mas install` first, using
+the redownload path for apps the account already owns. If that fails without
+installing the app, activation falls back to `mas get` to acquire free apps.
+Paid apps must already belong to the signed-in
 account. App Store authentication may still require approval.
 
 Rebuilds do not run `mas update`: enable automatic updates in the App Store
