@@ -55,7 +55,7 @@
       # Keep the exact rehearsed runtime/toolchain for the global registry cutover.
       # mori://shinzui/mori/plans/304-upgrade-mori-to-keiro-0-21-and-retire-obsolete-runtime-workarounds
       # Rejoin the shared toolchain only after the resulting runtime is rehearsed.
-      url = "github:shinzui/mori/fb73c479692ce99e1f9e663a4b27c6ae35a461c4";
+      url = "github:shinzui/mori/364f9a27f9927d2449e6f1e5ad878020487bab50";
       inputs.typeid-hs-src.url = "git+ssh://git@github.com/topagentnetwork/typeid-hs?rev=7164a74c490cc92ffe73a315d827c9515de125d3";
     };
     rei = {
