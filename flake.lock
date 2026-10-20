@@ -4997,11 +4997,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792197412,
-        "narHash": "sha256-kpXfe8QF5JF4X2YxrFZClVhg6TAnePFF2Kw3Q6+JifY=",
+        "lastModified": 1792199624,
+        "narHash": "sha256-XJ21SlozlkPtDhmVpy1ZN2O3tm+w/pbh5zUTCSJFfQA=",
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "e5f26a5e07a2472e0e695607482198865ccc1581",
+        "rev": "99b882ee6d9cdc77ee0e8dead8962736bd3c4d0a",
         "type": "github"
       },
       "original": {
