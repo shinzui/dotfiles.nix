@@ -42,16 +42,17 @@
     "baikai-src_10": {
       "flake": false,
       "locked": {
-        "lastModified": 1788878334,
-        "narHash": "sha256-KF9+BAXnHQpA2ufrSg+s7AEH/cLpgmiJJ5ICLGCXnis=",
+        "lastModified": 1790971536,
+        "narHash": "sha256-9xdSbXJkj0FceU2xHpwpyeQAgHCtTzMdDoxC39kAk48=",
         "owner": "shinzui",
         "repo": "baikai",
-        "rev": "4a9547b00de18b095259e3720e1ede82670787c9",
+        "rev": "16425ff769d8291bc4bb3deba4b145fe9c2074b8",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "baikai",
+        "rev": "16425ff769d8291bc4bb3deba4b145fe9c2074b8",
         "type": "github"
       }
     },
@@ -1097,11 +1098,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1789084880,
-        "narHash": "sha256-6M5pGtto99W7pjxPiaqTh/0ERBw4/eOLWQTrAKKjHsI=",
+        "lastModified": 1792264978,
+        "narHash": "sha256-qUddP1X00wrEAeTyYLRfbSn1cLuC78rvuH8BWW/jl/E=",
         "owner": "shinzui",
         "repo": "haskell-nix-dev",
-        "rev": "206ecd25bcb4a07581210bdae3e6f43c8fd179d8",
+        "rev": "21933607e80ec4660a28a125a6f4c0707e358caf",
         "type": "github"
       },
       "original": {
@@ -3583,11 +3584,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791852454,
-        "narHash": "sha256-xnNNKWjmTJzHC0GQ20evQTJNLGxFz8ZSYd2pcTZWcZU=",
+        "lastModified": 1792503019,
+        "narHash": "sha256-0gg9dAYk48zN832jOY7Q0cg4peSdVGMSwN+hUvFnKEE=",
         "owner": "shinzui",
         "repo": "notion-cli",
-        "rev": "370162687a5a2143f571242e22bf91c648df1604",
+        "rev": "2e5078bdd3a47e37ac0a53bee1db6c7566897cea",
         "type": "github"
       },
       "original": {
@@ -3708,11 +3709,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791043095,
-        "narHash": "sha256-H6+1UCaCr+lU0Ep4BvZIUbB1KGJjikME1NTI9etOImA=",
+        "lastModified": 1792430708,
+        "narHash": "sha256-m7UbLUo7LFrs0urwJU79sjDXuuMwhzI3n8sfOy1gPF4=",
         "owner": "shinzui",
         "repo": "okf",
-        "rev": "da8459e59abea7e0de75a0361943765d623f8ca4",
+        "rev": "feacb5ee2c5b8e2669469a92c60530dae362b241",
         "type": "github"
       },
       "original": {
