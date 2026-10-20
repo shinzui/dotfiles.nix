@@ -23,6 +23,30 @@
         "type": "github"
       }
     },
+    "agenix_2": {
+      "inputs": {
+        "darwin": "darwin_3",
+        "home-manager": "home-manager_2",
+        "nixpkgs": [
+          "dotfiles-private",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790530381,
+        "narHash": "sha256-/FjF9A8HVLVftjdmz1MPA2G0wSYWRaC628NTAsCqeyI=",
+        "owner": "ryantm",
+        "repo": "agenix",
+        "rev": "9353cb29366a8535ac9483065284785fd48012a2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ryantm",
+        "ref": "0.18.0",
+        "repo": "agenix",
+        "type": "github"
+      }
+    },
     "baikai-src": {
       "flake": false,
       "locked": {
@@ -373,6 +397,29 @@
         "type": "github"
       }
     },
+    "darwin_3": {
+      "inputs": {
+        "nixpkgs": [
+          "dotfiles-private",
+          "agenix",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783744694,
+        "narHash": "sha256-2cp6N3rrwnGYLTx9l6N+NI+kwrCWxvJUbj5WJhvB29A=",
+        "owner": "nix-darwin",
+        "repo": "nix-darwin",
+        "rev": "c3e90c89649b07d1a96e4b9dd6cd0d6e44b91a74",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-darwin",
+        "ref": "nix-darwin-26.05",
+        "repo": "nix-darwin",
+        "type": "github"
+      }
+    },
     "determinate": {
       "inputs": {
         "determinate-nixd-aarch64-darwin": "determinate-nixd-aarch64-darwin",
@@ -431,12 +478,18 @@
       }
     },
     "dotfiles-private": {
+      "inputs": {
+        "agenix": "agenix_2",
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
       "locked": {
-        "lastModified": 1792009727,
-        "narHash": "sha256-oSR3qU2B+Fo3ta+QLbxC9PVnRmHwVnkX6TnHVHgp1hM=",
+        "lastModified": 1792503565,
+        "narHash": "sha256-n5njTCx+p/mVqPlzOm4S4daUlGsxb/otheW63SMwnC4=",
         "ref": "refs/heads/master",
-        "rev": "74bb4ed6bc8fe2956fbe7379992bd75b0dced142",
-        "revCount": 13,
+        "rev": "6c6584cbda768fde9674ba90b8fae197211d9c6a",
+        "revCount": 17,
         "type": "git",
         "url": "ssh://git@github.com/shinzui/dotfiles-private.nix"
       },
@@ -1779,6 +1832,29 @@
     "home-manager_10": {
       "inputs": {
         "nixpkgs": [
+          "reiko",
+          "redpanda-container",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1786031233,
+        "narHash": "sha256-TIDlLTLI1/pB7IqgjzcKQjpODQsZE2oII4XGG9B6KjI=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "7834e82588860aaf780cec1366524456a70898d7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "ref": "master",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "home-manager_11": {
+      "inputs": {
+        "nixpkgs": [
           "seihou",
           "redpanda-container",
           "nixpkgs"
@@ -1802,6 +1878,29 @@
     "home-manager_2": {
       "inputs": {
         "nixpkgs": [
+          "dotfiles-private",
+          "agenix",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790215976,
+        "narHash": "sha256-VkR1rMGyjU9jtw8ISFx5uqR9e+LEaOlhHwrseFkiIVk=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "a6631107a83ceab5872f298a2ea710859c80c4cb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "ref": "release-26.05",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "home-manager_3": {
+      "inputs": {
+        "nixpkgs": [
           "nixpkgs-unstable"
         ]
       },
@@ -1820,33 +1919,10 @@
         "type": "github"
       }
     },
-    "home-manager_3": {
-      "inputs": {
-        "nixpkgs": [
-          "kazuha",
-          "redpanda-container",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1786031233,
-        "narHash": "sha256-TIDlLTLI1/pB7IqgjzcKQjpODQsZE2oII4XGG9B6KjI=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "7834e82588860aaf780cec1366524456a70898d7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "ref": "master",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
     "home-manager_4": {
       "inputs": {
         "nixpkgs": [
-          "mori-rei-app",
+          "kazuha",
           "redpanda-container",
           "nixpkgs"
         ]
@@ -1870,7 +1946,6 @@
       "inputs": {
         "nixpkgs": [
           "mori-rei-app",
-          "rei",
           "redpanda-container",
           "nixpkgs"
         ]
@@ -1893,7 +1968,8 @@
     "home-manager_6": {
       "inputs": {
         "nixpkgs": [
-          "notion-hub",
+          "mori-rei-app",
+          "rei",
           "redpanda-container",
           "nixpkgs"
         ]
@@ -1916,6 +1992,7 @@
     "home-manager_7": {
       "inputs": {
         "nixpkgs": [
+          "notion-hub",
           "redpanda-container",
           "nixpkgs"
         ]
@@ -1938,7 +2015,6 @@
     "home-manager_8": {
       "inputs": {
         "nixpkgs": [
-          "rei",
           "redpanda-container",
           "nixpkgs"
         ]
@@ -1961,7 +2037,7 @@
     "home-manager_9": {
       "inputs": {
         "nixpkgs": [
-          "reiko",
+          "rei",
           "redpanda-container",
           "nixpkgs"
         ]
@@ -4799,7 +4875,7 @@
     },
     "redpanda-container": {
       "inputs": {
-        "home-manager": "home-manager_3",
+        "home-manager": "home-manager_4",
         "nixpkgs": [
           "kazuha",
           "nixpkgs"
@@ -4822,7 +4898,7 @@
     },
     "redpanda-container_2": {
       "inputs": {
-        "home-manager": "home-manager_4",
+        "home-manager": "home-manager_5",
         "nixpkgs": [
           "mori-rei-app",
           "nixpkgs"
@@ -4845,7 +4921,7 @@
     },
     "redpanda-container_3": {
       "inputs": {
-        "home-manager": "home-manager_5",
+        "home-manager": "home-manager_6",
         "nixpkgs": [
           "mori-rei-app",
           "rei",
@@ -4869,7 +4945,7 @@
     },
     "redpanda-container_4": {
       "inputs": {
-        "home-manager": "home-manager_6",
+        "home-manager": "home-manager_7",
         "nixpkgs": [
           "notion-hub",
           "nixpkgs"
@@ -4892,7 +4968,7 @@
     },
     "redpanda-container_5": {
       "inputs": {
-        "home-manager": "home-manager_7",
+        "home-manager": "home-manager_8",
         "nixpkgs": [
           "nixpkgs-unstable"
         ]
@@ -4913,7 +4989,7 @@
     },
     "redpanda-container_6": {
       "inputs": {
-        "home-manager": "home-manager_8",
+        "home-manager": "home-manager_9",
         "nixpkgs": [
           "rei",
           "nixpkgs"
@@ -4936,7 +5012,7 @@
     },
     "redpanda-container_7": {
       "inputs": {
-        "home-manager": "home-manager_9",
+        "home-manager": "home-manager_10",
         "nixpkgs": [
           "reiko",
           "nixpkgs"
@@ -4959,7 +5035,7 @@
     },
     "redpanda-container_8": {
       "inputs": {
-        "home-manager": "home-manager_10",
+        "home-manager": "home-manager_11",
         "nixpkgs": [
           "seihou",
           "nixpkgs"
@@ -5325,7 +5401,7 @@
         "flake-compat": "flake-compat_2",
         "flake-parts": "flake-parts_3",
         "haskell-nix-dev": "haskell-nix-dev",
-        "home-manager": "home-manager_2",
+        "home-manager": "home-manager_3",
         "kazuha": "kazuha",
         "keiro-syntax": "keiro-syntax",
         "kizamu": "kizamu",
