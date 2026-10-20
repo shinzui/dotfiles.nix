@@ -21,6 +21,8 @@ let
 
     ${waitForPg}
 
+    ${pkgs.notion-hub-subscriptions}/bin/notion-hub-migrations verify
+
     exec ${pkgs.notion-hub-subscriptions}/bin/notion-hub-subscriptions
   '';
 
@@ -31,17 +33,23 @@ let
   nhub-db-setup = pkgs.writeShellScriptBin "nhub-db-setup" ''
     set -euo pipefail
     pg-ensure-db notion_hub
+    export HASKELL_ENV=production
+    export NOTION_HUB_PG_CONNECTION_STRING="${connStr}"
+    exec ${pkgs.notion-hub-subscriptions}/bin/notion-hub-migrations up
+  '';
 
-    echo ""
-    echo "Database ready! Next: run migrations from the notion-hub dev shell:"
-    echo "  cd ~/Keikaku/bokuno/notion-hub"
-    echo "  PGHOST=${pgSocket} PGDATABASE=notion_hub just run-migrations"
+  nhub-migrate = pkgs.writeShellScriptBin "nhub-migrate" ''
+    set -euo pipefail
+    export HASKELL_ENV=production
+    export NOTION_HUB_PG_CONNECTION_STRING="${connStr}"
+    exec ${pkgs.notion-hub-subscriptions}/bin/notion-hub-migrations "$@"
   '';
 in
 {
   home.packages = [
     pkgs.notion-hub
     nhub-db-setup
+    nhub-migrate
   ];
 
   home.file.".zfunc/_nhub".source = nhub-zsh-completions;

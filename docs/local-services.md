@@ -177,6 +177,24 @@ registered in `flake-modules/modules.nix`. Apple Container itself is packaged in
 
 See [`rei.md`](rei.md) and [`mori.md`](mori.md) for per-system detail.
 
+Notion Hub's CLI and worker use the same pinned revision from
+`mori://shinzui/notion-hub`. `nhub-db-setup` creates its global database and
+applies the packaged migration plan. `nhub-migrate status` and
+`nhub-migrate verify` inspect that database without a development shell.
+The subscription agent waits for PostgreSQL and requires successful migration
+verification before starting. For an existing database upgrade, stop its writers
+and worker, back up and rehearse a restore, then run `nhub-migrate up` before
+restarting the agent. Follow the owning project's upgrade guide
+(`mori://shinzui/notion-hub`, repository path `docs/dependency-upgrade.md`,
+artifact URI pending); schema changes may require all predecessor writers to stop.
+
+On 2026-10-19, the Sungkyung Home Manager configuration was activated with
+Notion Hub revision `a4d900afbf1c8eef54f1b5c705a2fd09dbb61970`, using Keiro
+0.21.0.0 and Kiroku store 0.11.0.0. The live database verified 64 applied
+migrations with zero pending or unknown entries after a restored-copy rehearsal.
+The full Darwin system also built; the application rollout used user-level
+Home Manager activation and did not require an administrator system switch.
+
 ## Web UIs
 
 | Service | Module | Label | URL |
