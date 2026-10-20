@@ -29,9 +29,6 @@
   "editorMode": "vim",
   "verbose": true,
   "agentPushNotifEnabled": true,
-  "feedbackSurveyState": {
-    "lastShownTime": 1755366220134
-  },
   "autoMode": {
     "environment": [
       "### Org-wide",
@@ -54,10 +51,21 @@
       "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
       "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic (note: k8s namespaces seen in this project are `flake`, `seihou-core`, `test` — none are prod-named)",
       "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "**Repository visibility**: private (shinzui/notion-hub, github.com:shinzui/notion-hub.git, confirmed via gh)",
+      "**Default / protected branches**: Default branch is `master`; rulesets not queryable here; no protected branches listed (per gh — treat unreviewed pushes to `master` cautiously since protection status is unconfirmed)",
+      "**Source control**: The trusted repo (shinzui/notion-hub) and its origin remote (github.com:shinzui/notion-hub.git) only",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar. Note: `.envrc`, `.envrc.local` are gitignored/flagged in this repo and likely hold local secrets — treat as sensitive, never commit",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic (note: k8s namespace seen in this project's recent usage is `flake` — not prod-named)",
       "### User-specific",
       "**Primary use of Claude Code**: software development (Haskell/Dhall project scaffolding tooling, seihou repo)",
       "**Trusted repo**: /Users/shinzui/Keikaku/bokuno/seihou-project/seihou (github.com:shinzui/seihou.git) — PUBLIC, so only this repo's own work belongs in commits/pushes here; content ported from elsewhere is not its own work",
-      "**Org-specific CLIs**: `mori` (dependency/doc lookup registry CLI used per CLAUDE.md and seen in project + shell history), `seihou` (this project's own CLI), `okf`, `mina`, `rei`, `kazuha`, `nagarectl` — all seen repeatedly in shell history/project usage but with no documented purpose beyond name; treat as routine local tooling, not verified org services"
+      "**Org-specific CLIs**: `mori` (dependency/doc lookup registry CLI used per CLAUDE.md and seen in project + shell history), `seihou` (this project's own CLI), `okf`, `mina`, `rei`, `kazuha`, `nagarectl` — all seen repeatedly in shell history/project usage but with no documented purpose beyond name; treat as routine local tooling, not verified org services",
+      "**Primary use of Claude Code**: software development (Haskell/Cabal event-sourced Notion tracker, notion-hub repo)",
+      "**Trusted repo**: /Users/shinzui/Keikaku/bokuno/notion-hub (github.com:shinzui/notion-hub.git) — private, so confidential project material is fine here but secrets/personal data are never cleared by visibility alone",
+      "**Org-specific CLIs**: `mori` (dependency/doc lookup registry CLI, documented in ~/.claude/CLAUDE.md), `nhub`/`notion-hub-server` (this project's own CLI/API, per README), `just` (task runner used throughout README/CLAUDE.md) — treat as routine local tooling for this project"
     ]
+  },
+  "feedbackSurveyState": {
+    "lastShownTime": 1755366220134
   }
 }
