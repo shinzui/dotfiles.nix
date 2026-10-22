@@ -53,6 +53,12 @@ the explicitly selected target again before activation. The owner build checks
 the configuration and primes access to private inputs. Activate each full host
 only on its corresponding workstation.
 
+The switch wrapper explicitly selects `/Users/shinzui/.ssh/id_ed25519` for
+root's SSH Git fetches, because root does not read the owner's SSH configuration.
+An explicitly supplied `GIT_SSH_COMMAND` takes precedence. A passphrase-protected
+key also needs its unlocked agent carried through sudo with
+`--preserve-env=SSH_AUTH_SOCK`.
+
 The wrappers work from any caller directory. Build defaults to `SungkyungM1X`;
 the generic switch requires a target. Both accept `SungkyungM1X`, `yujin`, and
 `bootstrap-arm`, reject unknown names, and forward remaining arguments unchanged.

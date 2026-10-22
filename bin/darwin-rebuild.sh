@@ -35,4 +35,9 @@ if [[ ! -x ./result/sw/bin/darwin-rebuild ]]; then
   printf 'Missing built darwin-rebuild. Run ./bin/build.sh %s as the owner before switching.\n' "$host" >&2
   exit 1
 fi
+# Root evaluates the flake again and does not read the owner's SSH config.
+# Select the workstation key explicitly, including when no agent is available.
+if (( EUID == 0 )) && [[ -z "${GIT_SSH_COMMAND:-}" ]]; then
+  export GIT_SSH_COMMAND='/usr/bin/ssh -i /Users/shinzui/.ssh/id_ed25519 -o IdentitiesOnly=yes'
+fi
 exec ./result/sw/bin/darwin-rebuild switch --flake ".#${host}" "$@"
