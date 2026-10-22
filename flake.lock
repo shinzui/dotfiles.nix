@@ -485,11 +485,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792503565,
-        "narHash": "sha256-n5njTCx+p/mVqPlzOm4S4daUlGsxb/otheW63SMwnC4=",
+        "lastModified": 1792680391,
+        "narHash": "sha256-zKFqKw6gZmT2rID1f2RmE2JAghugtwWB1TYPXE1WlZo=",
         "ref": "refs/heads/master",
-        "rev": "6c6584cbda768fde9674ba90b8fae197211d9c6a",
-        "revCount": 17,
+        "rev": "257fb14bd18cab1b32418033e649c13085926717",
+        "revCount": 18,
         "type": "git",
         "url": "ssh://git@github.com/shinzui/dotfiles-private.nix"
       },
