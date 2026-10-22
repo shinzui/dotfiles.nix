@@ -4,6 +4,12 @@ let
   # The private socket directory keeps PostgreSQL's trust authentication off TCP.
   clientDir = "${config.home.homeDirectory}/.local/state/sungkyung-clients";
   pgSocket = "${clientDir}/postgresql";
+  clientEnv = {
+    MORI_PG_CONNECTION_STRING = "host=${pgSocket} dbname=mori user=shinzui connect_timeout=5";
+    REI_PG_CONNECTION_STRING = "host=${pgSocket} dbname=rei user=shinzui connect_timeout=5";
+    MORI_API_URL = "http://127.0.0.1:18780";
+    KIROKU_REMOTE_URL = "http://127.0.0.1:19091";
+  };
   tunnel = pkgs.writeShellScript "sungkyung-client-tunnel" ''
     set -euo pipefail
     umask 077
@@ -45,12 +51,14 @@ in
   # the authoritative host's CLI version for every command.
   home.packages = [ (lib.meta.hiPrio remoteRei) ];
 
-  programs.zsh.sessionVariables = {
-    MORI_PG_CONNECTION_STRING = lib.mkForce "host=${pgSocket} dbname=mori user=shinzui connect_timeout=5";
-    REI_PG_CONNECTION_STRING = lib.mkForce "host=${pgSocket} dbname=rei user=shinzui connect_timeout=5";
-    MORI_API_URL = lib.mkForce "http://127.0.0.1:18780";
-    KIROKU_REMOTE_URL = lib.mkForce "http://127.0.0.1:19091";
-  };
+  programs.zsh.sessionVariables = lib.mapAttrs (_: lib.mkForce) clientEnv;
+
+  # Long-lived terminals and coding agents can retain old local endpoints plus
+  # Home Manager's exported "already sourced" flags across a rebuild. Refresh
+  # the client endpoints on every shell startup, outside that one-time guard.
+  programs.zsh.envExtra = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (name: value: "export ${name}=${lib.escapeShellArg value}") clientEnv
+  );
 
   # This is only an SSH client; all application workers stay on Sungkyung.
   launchd.agents.sungkyung-client-tunnel = {

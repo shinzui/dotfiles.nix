@@ -26,6 +26,7 @@
   },
   "tui": "default",
   "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
   "editorMode": "vim",
   "verbose": true,
   "agentPushNotifEnabled": true,

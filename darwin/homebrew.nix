@@ -95,6 +95,7 @@ in
     "codex"
     "hammerspoon"
     "insomnia"
+    "notion"
     "tailscale-app"
     "orchard"
     "raycast"
