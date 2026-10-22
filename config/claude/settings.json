@@ -9,7 +9,7 @@
       "Read(~/Keikaku/**)"
     ]
   },
-  "model": "opus",
+  "model": "fable",
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true
