@@ -84,6 +84,7 @@ in
 
   # If an app isn't available in the Mac App Store install the Homebrew Cask.
   homebrew.casks = [
+    "1password"
     "steipete/tap/repobar"
     "ghostty"
     # Signed build so macOS privacy grants persist across upgrades (see home/wezterm.nix)
