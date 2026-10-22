@@ -100,5 +100,6 @@ in
     "raycast"
     "google-chrome"
     "cleanshot"
+    "screen-studio"
   ];
 }
