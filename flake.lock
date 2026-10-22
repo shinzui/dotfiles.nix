@@ -5170,11 +5170,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792201574,
-        "narHash": "sha256-4c0qY3g1BSitcgPjvhoE/1rOQv9Dib21mBjhcOkeLog=",
+        "lastModified": 1792558777,
+        "narHash": "sha256-Mk0GmFVeNHmYXF8LMyCjNFTfi9aQ0Ag48v0AP6QYRzE=",
         "owner": "shinzui",
         "repo": "reiko",
-        "rev": "0b5da1f221a5ceac50eb35eb0d165b7f6db20c8d",
+        "rev": "eb3f9cb54534c68f4c0c67e64856273edcb30f71",
         "type": "github"
       },
       "original": {
