@@ -99,5 +99,6 @@ in
     "orchard"
     "raycast"
     "google-chrome"
+    "cleanshot"
   ];
 }
