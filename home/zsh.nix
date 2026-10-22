@@ -57,6 +57,25 @@ in
           command mori "$@"
         fi
       }
+
+      # pgcli against the staging PostgreSQL 18 instance via ~/.pg_service.conf.
+      # pgcli only applies the service's dbname and search_path options when
+      # given a "dbname=... service=..." conninfo string, so build one here.
+      # Defaults to the read-only agent login; --me uses the personal IAM login.
+      # Usage: pgcli-stage18 [--me] [dbname] [pgcli args...]
+      pgcli-stage18() {
+        local service=stage-pg18-agent
+        if [[ "$1" == "--me" ]]; then
+          service=stage-pg18
+          shift
+        fi
+        local db=postgres
+        if [[ -n "$1" && "$1" != -* ]]; then
+          db=$1
+          shift
+        fi
+        command pgcli "dbname=$db service=$service" "$@"
+      }
     ''
   ];
 
