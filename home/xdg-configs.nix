@@ -8,6 +8,7 @@ let
   # directory under config/xdg/ that will be symlinked to ~/.config/<name>,
   # making home-manager the owner of everything under it.
   trackedConfigDirs = [
+    "ghostty"
     "kazuha"
     "rei"
   ];

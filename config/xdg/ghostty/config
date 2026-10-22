@@ -1,0 +1,12 @@
+theme = catppuccin-frappe.conf
+
+font-family = "PragmataPro Mono Liga"
+font-size  =14
+
+window-decoration = false
+
+# Minimal UI settings
+window-padding-x = 0
+window-padding-y = 0
+macos-titlebar-style = hidden
+macos-non-native-fullscreen = true
