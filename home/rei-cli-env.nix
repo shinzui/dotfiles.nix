@@ -14,16 +14,23 @@
 # migration and removed Rei.Infrastructure.StoreRouter.CutoverConfig; every leg
 # now runs unconditionally against kiroku, and no consumer reads the variable
 # any more, so it was removed here on 2026-09-09.
-{ pkgs, lib, pgSocket }:
+{ pkgs, lib, pgSocket, topicProfilesEnabled ? false }:
 
 let
   connStr = "host=${pgSocket} dbname=rei";
   kirokuMetricsPort = "9091";
   kirokuRemoteUrl = "http://localhost:${kirokuMetricsPort}";
+  # Enable only with the coordinated reader/catalog rollout recorded by
+  # mori://shinzui/rei/masterplans/30-support-user-defined-topic-profiles.
+  topicProfileEnv = {
+    REI_CLASSIFICATION_WRITES_ENABLED = lib.boolToString topicProfilesEnabled;
+    REI_TOPIC_PROFILE_WRITES_ENABLED = lib.boolToString topicProfilesEnabled;
+    REI_TOPIC_REVIEW_WRITES_ENABLED = lib.boolToString topicProfilesEnabled;
+  };
 
 in
 {
-  inherit connStr kirokuMetricsPort kirokuRemoteUrl;
+  inherit connStr kirokuMetricsPort kirokuRemoteUrl topicProfileEnv;
 
   binDir = "${pkgs.rei}/bin";
 
@@ -34,5 +41,5 @@ in
   cliEnv = {
     REI_PG_CONNECTION_STRING = connStr;
     KIROKU_REMOTE_URL = kirokuRemoteUrl;
-  };
+  } // topicProfileEnv;
 }

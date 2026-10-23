@@ -3,7 +3,10 @@
 let
   logDir = "${config.home.homeDirectory}/.reiko/logs";
   pgSocket = config.services.postgresql.socketDir;
-  reiCli = import ./rei-cli-env.nix { inherit pkgs lib pgSocket; };
+  reiCli = import ./rei-cli-env.nix {
+    inherit pkgs lib pgSocket;
+    topicProfilesEnabled = config.workstation.reiMori.enable;
+  };
   connStr = reiCli.connStr;
 
   reiko-zsh-completions = pkgs.runCommand "reiko-zsh-completions" { } ''
@@ -55,7 +58,7 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = connStr;
         KIROKU_REMOTE_URL = reiCli.kirokuRemoteUrl;
-      };
+      } // reiCli.topicProfileEnv;
       StandardOutPath = "${logDir}/web.stdout.log";
       StandardErrorPath = "${logDir}/web.stderr.log";
     };

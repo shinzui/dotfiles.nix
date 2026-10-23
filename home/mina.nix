@@ -18,6 +18,7 @@ let
   reiCli = import ./rei-cli-env.nix {
     inherit pkgs lib;
     pgSocket = config.services.postgresql.socketDir;
+    topicProfilesEnabled = config.workstation.reiMori.enable;
   };
 
   # OpenTelemetry export to the local VictoriaTraces collector (mina ExecPlan

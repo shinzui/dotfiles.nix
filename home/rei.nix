@@ -9,12 +9,18 @@ let
 
   # Shared rei CLI runtime environment (connection string + keiro routing),
   # also consumed by home/mina.nix so mina's spawned `rei` reads current data.
-  reiCli = import ./rei-cli-env.nix { inherit pkgs lib pgSocket; };
+  reiCli = import ./rei-cli-env.nix {
+    inherit pkgs lib pgSocket;
+    topicProfilesEnabled = config.workstation.reiMori.enable;
+  };
   connStr = reiCli.connStr;
   kirokuMetricsPort = reiCli.kirokuMetricsPort;
   kirokuRemoteUrl = reiCli.kirokuRemoteUrl;
+  topicProfileExports = lib.concatStringsSep "\n" (lib.mapAttrsToList
+    (name: value: ''export ${name}="${value}"'') reiCli.topicProfileEnv);
   rei-cli-wrapper = pkgs.writeShellScriptBin "rei" ''
     set -euo pipefail
+    ${topicProfileExports}
 
     if [ "$#" -ge 3 ] \
       && [ "$1" = "kiroku" ] \
@@ -269,7 +275,7 @@ in
   programs.zsh.sessionVariables = {
     REI_PG_CONNECTION_STRING = connStr;
     KIROKU_REMOTE_URL = kirokuRemoteUrl;
-  } // otelEnv "rei";
+  } // reiCli.topicProfileEnv // otelEnv "rei";
 
   # keiro migration cutover (EP-24): the message-db polling subscriber is obsolete once
   # message-db is frozen — inline keiro projections keep read models current in-transaction.
@@ -287,7 +293,7 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
-      } // otelEnv "rei-subscription";
+      } // reiCli.topicProfileEnv // otelEnv "rei-subscription";
     };
   };
 
@@ -314,7 +320,7 @@ in
         # launchd's default PATH cannot see the user-installed Claude CLI or
         # the Homebrew-installed Codex CLI.
         PATH = agentCliPath;
-      } // otelEnv "rei-worker";
+      } // reiCli.topicProfileEnv // otelEnv "rei-worker";
     };
   };
 
@@ -334,7 +340,7 @@ in
       EnvironmentVariables = {
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
-      } // otelEnv "rei-worker-git-sync";
+      } // reiCli.topicProfileEnv // otelEnv "rei-worker-git-sync";
     };
   };
 
@@ -356,7 +362,7 @@ in
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
         REI_KIROKU_METRICS_PORT = kirokuMetricsPort;
-      } // otelEnv "rei-worker-kiroku";
+      } // reiCli.topicProfileEnv // otelEnv "rei-worker-kiroku";
     };
   };
 
@@ -380,7 +386,7 @@ in
         PG_CONNECTION_STRING = connStr;
         REI_API_PORT = reiApiPort;
         MORI_API_URL = moriApi.url;
-      } // otelEnv "rei-api";
+      } // reiCli.topicProfileEnv // otelEnv "rei-api";
     };
   };
 }

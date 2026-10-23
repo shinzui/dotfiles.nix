@@ -62,7 +62,9 @@
       inputs.typeid-hs-src.url = "git+ssh://git@github.com/topagentnetwork/typeid-hs?rev=7164a74c490cc92ffe73a315d827c9515de125d3";
     };
     rei = {
-      url = "github:shinzui/rei";
+      # Personal Topic-profile cohort; release proof belongs to
+      # mori://shinzui/rei/masterplans/30-support-user-defined-topic-profiles.
+      url = "github:shinzui/rei/9833d3cf0766495c6fc7b59050e13a92a11ff8c8";
       inputs.typeid-hs-src.url = "git+ssh://git@github.com/topagentnetwork/typeid-hs?rev=7164a74c490cc92ffe73a315d827c9515de125d3";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
@@ -113,7 +115,9 @@
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     mori-rei-app = {
-      url = "github:shinzui/mori-rei-app";
+      url = "github:shinzui/mori-rei-app/f5e4788430585010f6d071ff7eedbf573b62ec7f";
+      # The integration embeds Rei's codecs and catalog: deploy the same source.
+      inputs.rei.follows = "rei";
       inputs.typeid-hs-src.url = "git+ssh://git@github.com/topagentnetwork/typeid-hs?rev=7164a74c490cc92ffe73a315d827c9515de125d3";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
