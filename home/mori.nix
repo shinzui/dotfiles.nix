@@ -26,8 +26,9 @@ let
     #     `nix: posix_spawnp: does not exist`)
     #   - the mori package bin -> `mori` (reactions call `mori path`/`cd`)
     #   - ~/.local/bin         -> `claude` (mls-schema-sync runs `claude -p`)
-    #   - /opt/homebrew/bin    -> `codex` (used by some reactions)
-    export PATH="/nix/var/nix/profiles/default/bin:${pkgs.mori}/bin:${config.home.homeDirectory}/.local/bin:/opt/homebrew/bin:$PATH"
+    #   - the codex package bin -> `codex` (used by some reactions)
+    #   - /opt/homebrew/bin    -> other Homebrew-installed tools
+    export PATH="/nix/var/nix/profiles/default/bin:${pkgs.mori}/bin:${config.home.homeDirectory}/.local/bin:${pkgs.codex}/bin:/opt/homebrew/bin:$PATH"
 
     exec >  >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z')
     exec 2> >(${pkgs.moreutils}/bin/ts '%Y-%m-%dT%H:%M:%S%z' >&2)

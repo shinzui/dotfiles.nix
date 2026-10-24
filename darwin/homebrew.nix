@@ -93,7 +93,6 @@ in
     "zoom"
     "discord"
     "anki"
-    "codex"
     "hammerspoon"
     "insomnia"
     "notion"
