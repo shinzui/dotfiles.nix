@@ -2,6 +2,18 @@
 
 Sungkyung is the sole active runtime host for `mori://shinzui/rei` and
 `mori://shinzui/mori`. Yujin is a prepared destination until an explicit cutover.
+
+While Yujin is a client, `com.shinzui.sungkyung-client-ingest` scans its locally
+present observed repositories every ten minutes through the existing database
+tunnel. The script checks each checkout's repo ID and Git root before calling
+`mori automate ingest git`; it does not register projects or start application
+workers. Webhook delivery, batching, and Rei writes still run on Sungkyung.
+The collector requires Mori's observed-HEAD guard on both machines: an older
+checkout whose exact HEAD is already observed leaves the shared cursor alone.
+An unobserved divergent history still halts for an explicit checkpoint recovery.
+Logs are in `~/.local/state/sungkyung-clients/ingest.{stdout,stderr}.log` on Yujin.
+Commits must carry an `Intention:` trailer to reach `mori://shinzui/mori-rei-app`;
+its existing commit classification and hourly batch interval still apply.
 A successful Yujin bootstrap or full switch does not authorize starting this
 runtime on a second machine. Do not perform the migration during initial setup.
 

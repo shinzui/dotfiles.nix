@@ -42,6 +42,13 @@ let
       -i "${config.home.homeDirectory}/.ssh/id_ed25519_sungkyung_rei" \
       shinzui@100.66.155.64 "rei-argv:$payload"
   '';
+  clientIngest = pkgs.writeShellScript "sungkyung-client-ingest" ''
+    set -euo pipefail
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "export ${name}=${lib.escapeShellArg value}") clientEnv)}
+    export PATH="${pkgs.git}/bin:/usr/bin:/bin"
+    exec ${pkgs.python3}/bin/python3 ${../../bin/mori-client-ingest.py} \
+      --mori ${pkgs.mori}/bin/mori
+  '';
 in
 {
   # Prepare this machine without starting the live runtime or its integrations.
@@ -60,7 +67,8 @@ in
     lib.mapAttrsToList (name: value: "export ${name}=${lib.escapeShellArg value}") clientEnv
   );
 
-  # This is only an SSH client; all application workers stay on Sungkyung.
+  # Application workers stay on Sungkyung; the client only collects its Git
+  # history through the tunnel. Database access alone cannot discover commits.
   launchd.agents.sungkyung-client-tunnel = {
     enable = true;
     config = {
@@ -71,6 +79,18 @@ in
       ThrottleInterval = 15;
       StandardOutPath = "${clientDir}/tunnel.stdout.log";
       StandardErrorPath = "${clientDir}/tunnel.stderr.log";
+    };
+  };
+
+  launchd.agents.sungkyung-client-ingest = {
+    enable = true;
+    config = {
+      Label = "com.shinzui.sungkyung-client-ingest";
+      ProgramArguments = [ "${clientIngest}" ];
+      RunAtLoad = true;
+      StartInterval = 600;
+      StandardOutPath = "${clientDir}/ingest.stdout.log";
+      StandardErrorPath = "${clientDir}/ingest.stderr.log";
     };
   };
 

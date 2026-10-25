@@ -55,10 +55,11 @@
     # limited to their resource owner. Keep these existing source revisions;
     # review the overrides when updating the consuming tool inputs.
     mori = {
-      # Keep the exact rehearsed runtime/toolchain for the global registry cutover.
+      # Keep the rehearsed runtime/toolchain, with the observed-HEAD guard for
+      # clients which feed commits through the shared database tunnel.
       # mori://shinzui/mori/plans/304-upgrade-mori-to-keiro-0-21-and-retire-obsolete-runtime-workarounds
       # Rejoin the shared toolchain only after the resulting runtime is rehearsed.
-      url = "github:shinzui/mori/364f9a27f9927d2449e6f1e5ad878020487bab50";
+      url = "github:shinzui/mori/4f56ce3e2a5cbb615018a51b8ecb50a6feeafe85";
       inputs.typeid-hs-src.url = "git+ssh://git@github.com/topagentnetwork/typeid-hs?rev=7164a74c490cc92ffe73a315d827c9515de125d3";
     };
     rei = {
