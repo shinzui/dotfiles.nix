@@ -441,7 +441,42 @@ The full host declares a Linux remote builder whose identity is `/etc/nix/builde
 
 ## 9. Restore application access and local identity
 
-Reauthenticate renewable gcloud user sessions and application-default credentials for the three selected profiles. Check the intended active profile privately and test read-only access to the intended GCP resources; do not copy credentials databases, token caches, SDK logs, or print profile/account lists into a public log. The already-declared GKE auth plugin is required by some kubectl contexts. Restore private Kubernetes contexts from the encrypted config and owning Nagare checkouts, recreate auth/discovery/HTTP caches, then test a read-only query against each reachable intended environment. Work-owned host age keys and cluster authority remain with their owning project recovery process.
+Reauthenticate renewable gcloud user sessions for the three selected profiles.
+Application Default Credentials (ADC) are a separate local login shared by
+applications, rather than one ADC file per named gcloud profile. A restored
+profile or `gcloud auth login` alone does not create ADC for Cloud SQL Auth Proxy.
+After the full switch, run the private companion's account-specific setup:
+
+```bash
+"$HOME/Keikaku/dotfiles-private.nix/scripts/setup-gcloud-adc.sh"
+```
+
+This entry point belongs to `mori://shinzui/dotfiles-private.nix`, project-relative
+`scripts/setup-gcloud-adc.sh` (artifact URI pending). It calls the public
+[ADC helper](../bin/setup-gcloud-adc.sh) with the intended account and quota
+project. Complete browser consent as your normal user, without sudo. The helper
+creates ADC, sets its quota project explicitly, and verifies token refresh
+without printing the token. It runs only when invoked; rebuilds do not log in.
+Running it again replaces the existing local ADC login. The generic form is:
+
+```bash
+./bin/setup-gcloud-adc.sh ACCOUNT QUOTA_PROJECT
+```
+
+Keep `GOOGLE_APPLICATION_CREDENTIALS` unset when using this local ADC file.
+Cloud SQL recipes that already pass `--impersonate-service-account` use these
+user credentials as the source; do not add impersonation to this ADC enrollment.
+See Google's [ADC login reference](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/login)
+and [quota project reference](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/set-quota-project).
+
+Check the intended active profile privately and test read-only access to the
+intended GCP resources; do not copy credentials databases, token caches, SDK logs,
+or print profile/account lists into a public log. The already-declared GKE auth
+plugin is required by some kubectl contexts. Restore private Kubernetes contexts
+from the encrypted config and owning Nagare checkouts, recreate auth/discovery/HTTP
+caches, then test a read-only query against each reachable intended environment.
+Work-owned host age keys and cluster authority remain with their owning project
+recovery process.
 
 Nagare has a separate Nix profile installation. The source Mac's old profile references a revision that is not the current `v0.2.2` tag and has no root flake at that revision. The immutable `v0.2.2` release tag built on this Mac; its `nagarectl context list` parsed the selected local configuration, and its launcher listed recipes when `NAGARE_CONTEXT=local` was explicit. The source's old active context name is absent from its current context directory, so the launcher fails without that override. On the new Mac, recover and select an intended context before running the launcher. Do not silently install the latest 0.6 release or run a context upgrade. The currently published latest release was `v0.6.3` during preparation, but an upgrade needs its own reviewed transition. Consult `mori://shinzui/nagare/docs/user-manual`, project-relative `installation.md` (file URI pending). Repeat these nonactivating compatibility probes after restoring the selected context:
 
