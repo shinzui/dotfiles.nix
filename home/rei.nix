@@ -5,7 +5,7 @@ let
   pgSocket = config.services.postgresql.socketDir;
   reiBin = "${pkgs.rei}/bin/rei";
   reiLogDir = "${config.home.homeDirectory}/.rei/logs";
-  agentCliPath = "${config.home.homeDirectory}/.local/bin:${pkgs.codex}/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin";
+  agentCliPath = "${config.home.homeDirectory}/.local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin";
 
   # Shared rei CLI runtime environment (connection string + keiro routing),
   # also consumed by home/mina.nix so mina's spawned `rei` reads current data.

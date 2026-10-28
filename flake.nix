@@ -130,9 +130,6 @@
     determinate = {
       url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
     };
-    # Codex CLI, updated daily. Deliberately does not follow nixpkgs-unstable:
-    # its packages are built and cached (cache.numtide.com) against its own pin.
-    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs = inputs@{ flake-parts, ... }:

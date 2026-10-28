@@ -4,7 +4,7 @@ let
   pg = config.services.postgresql.package;
   pgSocket = config.services.postgresql.socketDir;
   logDir = "${config.home.homeDirectory}/.mori-rei-app/logs";
-  agentCliPath = "${config.home.homeDirectory}/.local/bin:${pkgs.codex}/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin";
+  agentCliPath = "${config.home.homeDirectory}/.local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin";
   # The rei event store. REI_PG_CONNECTION_STRING is the same env var
   # the `rei` CLI reads, so both tools share one configuration source.
   reiConnStr = "host=${pgSocket} dbname=rei";

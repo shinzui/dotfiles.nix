@@ -84,6 +84,7 @@ in
 
   # If an app isn't available in the Mac App Store install the Homebrew Cask.
   homebrew.casks = [
+    "codex" # OpenAI coding agent CLI
     "1password"
     "steipete/tap/repobar"
     "ghostty"

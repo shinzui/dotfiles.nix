@@ -193,7 +193,6 @@ in
 
     #人工知能
     agent-browser #browser automation CLI for AI agents
-    codex #OpenAI coding agent (from llm-agents.nix)
     repomix
     beautiful-mermaid
     markit

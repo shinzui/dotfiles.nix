@@ -96,9 +96,6 @@
         notion-hub = hsBin "notion-hub" (hsPkg "notion-hub");
         notion-hub-subscriptions = hsBin "notion-hub-subscriptions"
           (noHaddock inputs.notion-hub.packages.${prev.stdenv.hostPlatform.system}.notion-hub-subscriptions);
-        # Replaces both nixpkgs' lagging codex and the Homebrew cask, whose
-        # quarantined upgrades block on a Gatekeeper prompt invisible over SSH.
-        codex = inputs.llm-agents.packages.${prev.stdenv.hostPlatform.system}.codex;
       };
 
     # Exempt the few NixNeovimPlugins that fail nixpkgs' neovim require-check
