@@ -16,6 +16,7 @@ aliases {
   mpi "master-plan list --incomplete"
   mpl "master-plan list"
   epi "exec-plan list --incomplete"
+  epsi "exec-plan list --standalone --incomplete"
   epl "exec-plan list"
   ds "docket status"
 }
