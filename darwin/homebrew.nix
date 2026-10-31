@@ -100,7 +100,9 @@ in
     "tailscale-app"
     "orchard"
     "raycast"
-    "google-chrome"
+    # google-chrome is intentionally NOT managed here: `onActivation.upgrade`
+    # swapped the .app bundle under the running browser on every rebuild,
+    # breaking open windows. Chrome self-updates via its own updater instead.
     "cleanshot"
     "screen-studio"
   ];
