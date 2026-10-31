@@ -98,6 +98,12 @@ in
     run install -d -m 700 "${clientDir}" "${pgSocket}"
   '';
 
+  # Interactive SSH uses Yujin's dedicated key; the daemon keeps its root-only key.
+  programs.ssh.settings."nix-gcp-builder" = lib.hm.dag.entryBefore [ "*" ] {
+    IdentityFile = "~/.ssh/nix-builder-yujin";
+    IdentitiesOnly = true;
+  };
+
   programs.ssh.settings."github.com" = lib.hm.dag.entryBefore [ "*" ] {
     User = "git";
     IdentityFile = "~/.ssh/id_ed25519";
