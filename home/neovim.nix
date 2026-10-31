@@ -38,6 +38,7 @@ in
   # `init.lua`.
   xdg.configFile."nvim/lua".source = mkOutOfStoreSymlink "${nixConfigDir}/config/nvim/lua";
   xdg.configFile."nvim/after".source = mkOutOfStoreSymlink "${nixConfigDir}/config/nvim/after";
+  xdg.configFile."nvim/colors".source = mkOutOfStoreSymlink "${nixConfigDir}/config/nvim/colors";
   programs.neovim.extraConfig = ''
     lua require('init')
   '';
