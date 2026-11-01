@@ -5131,11 +5131,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793107880,
-        "narHash": "sha256-Gy+KZbSQ6fMnbVuKGUpa+e5ZqzEouGH4FBa4TGmm4kw=",
+        "lastModified": 1793569208,
+        "narHash": "sha256-S0fjG2KR/3hWrqOvsgWVTbcfDaR6Q/OyhQsmkZUK7S8=",
         "owner": "shinzui",
         "repo": "seihou",
-        "rev": "8d018870552d155c43ce66017aaa1d9118ed724e",
+        "rev": "69f1aa12f4c5e24ddbe7cad763db4bc4bc8b4064",
         "type": "github"
       },
       "original": {
@@ -5147,17 +5147,17 @@
     "seihou-schema-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1792109628,
-        "narHash": "sha256-AUnphG+2ARMAn+HCo6r85A5fhxjlSp0rLe/O8gMEexU=",
+        "lastModified": 1793560913,
+        "narHash": "sha256-eaYOcyxhizsGeZjx7AR1VgPPVz7yGrrOuOuMpDffO68=",
         "owner": "shinzui",
         "repo": "seihou-schema",
-        "rev": "7d02695f5a716384ec2174a018c20ee680ab3d13",
+        "rev": "dbeff0dd67c15b7a1c57f90b23103afdc2fa8056",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "seihou-schema",
-        "rev": "7d02695f5a716384ec2174a018c20ee680ab3d13",
+        "rev": "dbeff0dd67c15b7a1c57f90b23103afdc2fa8056",
         "type": "github"
       }
     },
