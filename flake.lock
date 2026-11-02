@@ -3440,11 +3440,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793056282,
-        "narHash": "sha256-M1vs74mnOvFI0JlVB09Wegj///Kbr41FBn6hcylt6i8=",
+        "lastModified": 1793647336,
+        "narHash": "sha256-u1MkruxtwENe+qZz3XsgD/fVescyr+jAufNbtznw6d4=",
         "owner": "shinzui",
         "repo": "notion-cli",
-        "rev": "a2d503380e2e1c752cba05a8cb55e3e9f8eb434f",
+        "rev": "51722d64a764892715ebcea226059a3cf5b969c1",
         "type": "github"
       },
       "original": {
