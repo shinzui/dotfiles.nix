@@ -11,6 +11,7 @@
     ./secrets.nix
     ./mac-defaults.nix
     ./gcp-nix-builder.nix
+    ./intranet-nix-builder.nix
   ];
 
   networking.dns = [
