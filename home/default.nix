@@ -161,7 +161,6 @@ in
     silicon # Create beautiful image of your source code
 
     retry #https://github.com/minfrin/retry
-    gnused
     sd # `sed` and `awk` replacement
     tree
     tealdeer #fasts impl of tldr in rust

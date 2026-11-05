@@ -59,7 +59,6 @@ This document provides a comprehensive overview of all packages installed throug
 - **[fdupes](https://github.com/adrianlopezroche/fdupes)** - Identify and delete duplicate files
 - **[fd](https://github.com/sharkdp/fd)** - Simple, fast and user-friendly alternative to find
 - **[tree](http://mama.indstate.edu/users/ice/tree/)** - Display directory tree structures
-- **[gnused](https://www.gnu.org/software/sed/)** - GNU stream editor
 - **[sd](https://github.com/chmln/sd)** - Intuitive find & replace CLI (sed/awk alternative)
 - **[ripgrep](https://github.com/BurntSushi/ripgrep)** - Recursively search directories for a regex pattern
 - **[ripgrep-all](https://github.com/phiresky/ripgrep-all)** - rga: ripgrep, but also search in PDFs, E-Books, Office documents, etc.
