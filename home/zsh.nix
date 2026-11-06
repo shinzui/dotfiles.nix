@@ -46,6 +46,12 @@ in
         unset ZVM_INIT_MODE
       fi
 
+      # Rex terminal exports REX_BIN_DIR (the bundled `rex` CLI) only inside
+      # Rex sessions, so add it to PATH when present and not already there.
+      if [[ -n "$REX_BIN_DIR" ]] && (( ! ''${path[(Ie)$REX_BIN_DIR]} )); then
+        path+=("$REX_BIN_DIR")
+      fi
+
       # mori shell integration — enables `mori cd` to change directory
       mori() {
         if [[ "$1" == "cd" ]]; then
