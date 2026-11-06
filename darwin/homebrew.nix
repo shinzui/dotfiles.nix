@@ -77,6 +77,7 @@ in
     "txn2/tap"
     "steipete/tap"
     "redpanda-data/tap"
+    "saffsanity/sill"
   ];
 
   # Declare App Store apps in darwin/app-store.nix.
@@ -105,5 +106,6 @@ in
     # breaking open windows. Chrome self-updates via its own updater instead.
     "cleanshot"
     "screen-studio"
+    "saffsanity/sill/sill"
   ];
 }
