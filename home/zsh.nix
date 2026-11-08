@@ -46,6 +46,17 @@ in
         unset ZVM_INIT_MODE
       fi
 
+      # Rex terminal exports REX_BIN_DIR (the bundled `rex` CLI) only inside
+      # Rex sessions, so add it to PATH when present and not already there.
+      # Its completion script defers to `rex __complete` at runtime, so
+      # sourcing it here (after compinit) stays in sync with the installed Rex.
+      if [[ -n "$REX_BIN_DIR" && -x "$REX_BIN_DIR/rex" ]]; then
+        (( ''${path[(Ie)$REX_BIN_DIR]} )) || path+=("$REX_BIN_DIR")
+        if [[ -o interactive ]]; then
+          source <("$REX_BIN_DIR/rex" completion zsh)
+        fi
+      fi
+
       # mori shell integration — enables `mori cd` to change directory
       mori() {
         if [[ "$1" == "cd" ]]; then
