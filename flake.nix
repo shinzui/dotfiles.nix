@@ -114,7 +114,7 @@
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     mori-rei-app = {
-      url = "github:shinzui/mori-rei-app/0e8bff489caa4bcdf50670b828fc0f38a86a8207";
+      url = "github:shinzui/mori-rei-app/c353368f64aac5725b188ce38b6cd8518f5f23ba";
       # The integration embeds Rei's codecs and catalog: deploy the same source.
       inputs.rei.follows = "rei";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";

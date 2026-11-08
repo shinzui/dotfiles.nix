@@ -3059,17 +3059,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1794155183,
-        "narHash": "sha256-W4aPBhvxo38zkDNtqublvQNTBnBX9E+huAszUz0ckYc=",
+        "lastModified": 1794156125,
+        "narHash": "sha256-6i8MP3C423kz3pByD7R+DBEfxHAE0FfyZqChrtWedCA=",
         "owner": "shinzui",
         "repo": "mori-rei-app",
-        "rev": "0e8bff489caa4bcdf50670b828fc0f38a86a8207",
+        "rev": "c353368f64aac5725b188ce38b6cd8518f5f23ba",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "mori-rei-app",
-        "rev": "0e8bff489caa4bcdf50670b828fc0f38a86a8207",
+        "rev": "c353368f64aac5725b188ce38b6cd8518f5f23ba",
         "type": "github"
       }
     },
