@@ -1,28 +1,30 @@
-# Single source of truth for the rei CLI's runtime environment.
-#
-# Anything that shells out to `rei` outside an interactive login shell — the
-# rei launchd agents in home/rei.nix, and the mina web server's global mode in
-# home/mina.nix, which spawns `rei` to resolve intention details — needs the
-# same PostgreSQL connection string that home/rei.nix exports for interactive
-# shells via programs.zsh.sessionVariables.
-#
-# Without REI_PG_CONNECTION_STRING the spawned rei cannot connect. Keeping it in
-# one importable file prevents the connection string from drifting between
-# modules.
-#
-# REI_KIROKU_CONTEXTS was the EP-24 cutover gate. rei-core completed that
-# migration and removed Rei.Infrastructure.StoreRouter.CutoverConfig; every leg
-# now runs unconditionally against kiroku, and no consumer reads the variable
-# any more, so it was removed here on 2026-09-09.
-{ pkgs, lib, pgSocket, topicProfilesEnabled ? false }:
+# Shared global CLI/API setup. Everyday commands need the API URL and a bearer;
+# operator commands retain PostgreSQL configuration. Tokens are read from the
+# private agenix mapping only when a process starts. mori://shinzui/mina selects its existing
+# agent credential; the workstation and mori://shinzui/reiko use the owner credential.
+{ pkgs, lib, pgSocket, topicProfilesEnabled ? false, apiTokenMapPath, apiActor ? "human", projectOutcomeWritesEnabled ? false }:
 
 let
+  api = import ./rei-api-env.nix;
+  apiExports = ''
+    export REI_API_URL="''${REI_API_URL:-${api.url}}"
+    if [ -z "''${REI_API_TOKEN:-}" ] && [ "$REI_API_URL" = "${api.url}" ] && [ -r "${apiTokenMapPath}" ]; then
+      REI_API_TOKEN="$(${pkgs.python3}/bin/python3 ${../bin/rei-api-credential.py} token "${apiTokenMapPath}" "${apiActor}")"
+      export REI_API_TOKEN
+    fi
+  '';
+  client = pkgs.writeShellScriptBin "rei" ''
+    set -euo pipefail
+    ${apiExports}
+    exec ${pkgs.rei}/bin/rei "$@"
+  '';
   connStr = "host=${pgSocket} dbname=rei";
   kirokuMetricsPort = "9091";
   kirokuRemoteUrl = "http://localhost:${kirokuMetricsPort}";
   # Enable only with the coordinated reader/catalog rollout recorded by
   # mori://shinzui/rei/masterplans/30-support-user-defined-topic-profiles.
   topicProfileEnv = {
+    REI_PROJECT_OUTCOME_WRITES_ENABLED = lib.boolToString projectOutcomeWritesEnabled;
     REI_CLASSIFICATION_WRITES_ENABLED = lib.boolToString topicProfilesEnabled;
     REI_TOPIC_PROFILE_WRITES_ENABLED = lib.boolToString topicProfilesEnabled;
     REI_TOPIC_REVIEW_WRITES_ENABLED = lib.boolToString topicProfilesEnabled;
@@ -30,15 +32,16 @@ let
 
 in
 {
-  inherit connStr kirokuMetricsPort kirokuRemoteUrl topicProfileEnv;
+  inherit apiExports client connStr kirokuMetricsPort kirokuRemoteUrl topicProfileEnv;
 
-  binDir = "${pkgs.rei}/bin";
+  binDir = "${client}/bin";
 
   # Minimal environment a non-interactive spawner (e.g. mina web --global)
   # must set so the `rei` it execs reads current data. Intentionally excludes
   # the OTEL_* tracing vars: a web server may invoke rei frequently, and trace
   # export is not needed for correctness.
   cliEnv = {
+    REI_API_URL = api.url;
     REI_PG_CONNECTION_STRING = connStr;
     KIROKU_REMOTE_URL = kirokuRemoteUrl;
   } // topicProfileEnv;

@@ -12,6 +12,8 @@ let
   reiCli = import ./rei-cli-env.nix {
     inherit pkgs lib pgSocket;
     topicProfilesEnabled = config.workstation.reiMori.enable;
+    apiTokenMapPath = age.secrets.rei-api-tokens.path;
+    projectOutcomeWritesEnabled = config.workstation.reiMori.projectOutcomeWrites;
   };
   connStr = reiCli.connStr;
   kirokuMetricsPort = reiCli.kirokuMetricsPort;
@@ -21,6 +23,7 @@ let
   rei-cli-wrapper = pkgs.writeShellScriptBin "rei" ''
     set -euo pipefail
     ${topicProfileExports}
+    ${reiCli.apiExports}
 
     if [ "$#" -ge 3 ] \
       && [ "$1" = "kiroku" ] \
@@ -190,6 +193,8 @@ let
     done
     REI_API_TOKENS="$(cat ${reiApiTokensPath})"
     export REI_API_TOKENS
+    REI_API_CREDENTIAL_POLICIES="$(${pkgs.python3}/bin/python3 ${../bin/rei-api-credential.py} policies "${reiApiTokensPath}")"
+    export REI_API_CREDENTIAL_POLICIES
 
     ${waitForPg}
 
@@ -273,6 +278,7 @@ in
   '';
 
   programs.zsh.sessionVariables = {
+    REI_API_URL = reiCli.cliEnv.REI_API_URL;
     REI_PG_CONNECTION_STRING = connStr;
     KIROKU_REMOTE_URL = kirokuRemoteUrl;
   } // reiCli.topicProfileEnv // otelEnv "rei";

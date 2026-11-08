@@ -44,25 +44,34 @@ tail -f ~/.rei/logs/subscription.stderr.log
 tail -f ~/.rei/logs/worker.stderr.log
 ```
 
-## Database
+## Global CLI and API credentials
 
-Uses the shared PostgreSQL service. Connection string is set automatically via `REI_PG_CONNECTION_STRING` in the shell environment.
+Everyday commands execute through the local API at `http://127.0.0.1:8775`.
+The installed `rei` wrapper reads the owner token privately from the existing
+agenix token map. An explicit token takes precedence; the wrapper loads the local
+token only for the configured local API URL. A remote caller must provide its own
+API URL and credential. Operator commands retain the explicit PostgreSQL socket.
 
-### Initial setup
+The shared wrapper in `home/rei-cli-env.nix` also supplies the CLI used by the
+`mori://shinzui/mina` and `mori://shinzui/reiko` integrations. The former selects
+its existing `agent:mina` credential. The API grants only the owner credential
+named `claude-code` and `codex` foreground recorder profiles; the provider stays
+on the caller. Secrets are read at process startup and are never Nix inputs.
 
-After first `darwin-rebuild switch`:
+`workstation.reiMori.projectOutcomeWrites` stays false by default. Enable it on
+the active host only after compatible readers, migrations and shared outcome-ID
+reconstruction are verified. Runtime host ownership remains governed by
+[the host cutover procedure](rei-mori-cutover.md).
 
-```bash
-rei-db-setup
-cd ~/Keikaku/bokuno/rei-project/rei-production
-PGHOST=~/.rei/db PGDATABASE=rei just run-migrations
-```
+## Database and coordinated rollouts
 
-### Migrations
+The active global database uses the socket `/Users/shinzui/.local/state/postgresql`
+and database `rei`. Development shells select a different database, so migration
+and operator commands must name the intended target explicitly.
 
-After pulling rei updates that include new migrations:
-
-```bash
-cd ~/Keikaku/bokuno/rei-project/rei-production
-just run-migrations
-```
+The current coordinated rollout is tracked by
+`mori://shinzui/rei/plans/289-audit-and-roll-out-the-current-rei-cohort-to-the-global-database`.
+Its source, backup, reconstruction, reader and delivery gates belong to
+`mori://shinzui/rei/okf/adrs/concepts/ADR-31`. Do not deploy a new Core/catalog by
+replacing only the CLI or by applying SQL without a production-restore rehearsal.
+The embedded `mori://shinzui/mori-rei-app` runtime must move with Core.

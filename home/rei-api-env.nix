@@ -3,9 +3,8 @@
 # Beside mina (8765), reiko (8770), and mori (8780). Not rei-api's built-in
 # default of :8080, which here belongs to Redpanda Console (home/redpanda.nix).
 #
-# rei-api's reads are unauthenticated (only writes need a bearer token from
-# REI_API_TOKENS), so home/local-web-proxy.nix exposes it as rei.localhost to
-# this machine only, as it does Mori's API.
+# Everyday CLI callers use the local API URL and a bearer loaded privately at
+# process startup. home/local-web-proxy.nix also exposes rei.localhost locally.
 rec {
   host = "127.0.0.1";
   port = 8775;

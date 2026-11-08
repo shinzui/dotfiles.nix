@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, age, ... }:
 
 let
   logDir = "${config.home.homeDirectory}/.mina/logs";
@@ -19,6 +19,9 @@ let
     inherit pkgs lib;
     pgSocket = config.services.postgresql.socketDir;
     topicProfilesEnabled = config.workstation.reiMori.enable;
+    apiTokenMapPath = age.secrets.rei-api-tokens.path;
+    projectOutcomeWritesEnabled = config.workstation.reiMori.projectOutcomeWrites;
+    apiActor = "agent:mina";
   };
 
   # OpenTelemetry export to the local VictoriaTraces collector (mina ExecPlan

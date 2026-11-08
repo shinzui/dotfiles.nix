@@ -62,9 +62,9 @@
       url = "github:shinzui/mori/4f56ce3e2a5cbb615018a51b8ecb50a6feeafe85";
     };
     rei = {
-      # Personal Topic-profile cohort; release proof belongs to
-      # mori://shinzui/rei/masterplans/30-support-user-defined-topic-profiles.
-      url = "github:shinzui/rei/9833d3cf0766495c6fc7b59050e13a92a11ff8c8";
+      # Coordinated global runtime, API CLI, outcomes and Note references.
+      # mori://shinzui/rei/plans/289-audit-and-roll-out-the-current-rei-cohort-to-the-global-database
+      url = "github:shinzui/rei/98d56587efeca18384b8e0fc51b3ce5acc1e35c5";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
@@ -114,7 +114,7 @@
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     mori-rei-app = {
-      url = "github:shinzui/mori-rei-app/fccc5b054529acd3cde7d34c5bd523101f143c81";
+      url = "github:shinzui/mori-rei-app/4fcbb7cb8aff2304c77bd309c56cd1eada66b7a3";
       # The integration embeds Rei's codecs and catalog: deploy the same source.
       inputs.rei.follows = "rei";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";

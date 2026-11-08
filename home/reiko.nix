@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, age, ... }:
 
 let
   logDir = "${config.home.homeDirectory}/.reiko/logs";
@@ -6,6 +6,8 @@ let
   reiCli = import ./rei-cli-env.nix {
     inherit pkgs lib pgSocket;
     topicProfilesEnabled = config.workstation.reiMori.enable;
+    apiTokenMapPath = age.secrets.rei-api-tokens.path;
+    projectOutcomeWritesEnabled = config.workstation.reiMori.projectOutcomeWrites;
   };
   connStr = reiCli.connStr;
 

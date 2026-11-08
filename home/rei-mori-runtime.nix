@@ -5,6 +5,11 @@ in
 {
   options.workstation.reiMori = {
     enable = lib.mkEnableOption "the active runtime for mori://shinzui/rei and mori://shinzui/mori";
+    projectOutcomeWrites = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enable project outcome writes after the coordinated reader and ownership reconstruction rollout.";
+    };
     agents = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       readOnly = true;
