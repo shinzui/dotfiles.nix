@@ -243,17 +243,17 @@
     "baikai-src_9": {
       "flake": false,
       "locked": {
-        "lastModified": 1792949977,
-        "narHash": "sha256-wRvSFDNnYYg3ZNnu1qTPfzJDunmQhHoAxAFNRir/2So=",
+        "lastModified": 1793716861,
+        "narHash": "sha256-vtjUfLJPfE9Ok19KRHgygn0ttKJzmGt14A+CPSnm8kw=",
         "owner": "shinzui",
         "repo": "baikai",
-        "rev": "03140cf60381ac154ebfa86d3bb2208d7df8626c",
+        "rev": "cdb79e5805613ab60074bb2c9279d779af610c05",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "baikai",
-        "rev": "03140cf60381ac154ebfa86d3bb2208d7df8626c",
+        "rev": "cdb79e5805613ab60074bb2c9279d779af610c05",
         "type": "github"
       }
     },
@@ -3681,11 +3681,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793209930,
-        "narHash": "sha256-COR0rxPvdsr/4KkkU1YaUgeVdnX5C+5twOUg4j+yIxw=",
+        "lastModified": 1794165548,
+        "narHash": "sha256-hzH69E2JAqjCOLzYKzQU/sGMcpslLwiCOaeGAeO2IxI=",
         "owner": "shinzui",
         "repo": "okf",
-        "rev": "440e1ccd53a4e023869a653698cb7797f9e88a5b",
+        "rev": "e0dd9e3047285caff6c4c4d9c6aee06e6ebb31b7",
         "type": "github"
       },
       "original": {
