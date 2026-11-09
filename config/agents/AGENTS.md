@@ -50,6 +50,10 @@ Use `mori registry list`, `mori registry search`, `mori registry show --full`, a
 
   **NEVER search, glob, grep, read, or otherwise traverse the filesystem root `/` under any circumstances.** It is enormous and not a source of truth for project code. Scope searches to the current project directory (or another specific path) and use `mori` (see above) to locate dependency sources on disk instead.
 
+## Linux Builds and Containers
+
+**Prefer local Apple containers over remote Linux builders whenever possible.** Use Apple's `container` tooling for Linux builds and tests when it can satisfy the task's architecture, resource, and environment requirements. Fall back to remote Linux builders when local Apple containers are unavailable or unsuitable.
+
 ## Git Commits
 
   **Follow the [Conventional Commits](https://www.conventionalcommits.org/) specification for all commit messages.** Use types like `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, etc., optionally with a scope (e.g. `feat(parser): ...`) and a `!` or `BREAKING CHANGE:` footer for breaking changes.
