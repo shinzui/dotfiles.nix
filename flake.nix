@@ -55,11 +55,9 @@
     # limited to their resource owner. Keep these existing source revisions;
     # review the overrides when updating the consuming tool inputs.
     mori = {
-      # Keep the rehearsed runtime/toolchain, with the observed-HEAD guard for
-      # clients which feed commits through the shared database tunnel.
-      # mori://shinzui/mori/plans/304-upgrade-mori-to-keiro-0-21-and-retire-obsolete-runtime-workarounds
-      # Rejoin the shared toolchain only after the resulting runtime is rehearsed.
-      url = "github:shinzui/mori/4f56ce3e2a5cbb615018a51b8ecb50a6feeafe85";
+      # Retain Mori's own runtime/toolchain for the rehearsed global registry rollout.
+      # mori://shinzui/mori/plans/306-upgrade-mori-to-keiro-0-22-and-compatible-released-runtime-dependencies
+      url = "github:shinzui/mori/3ba3562309d48c775e4a1b1bef72cf2b5401f094";
     };
     rei = {
       # Coordinated global runtime, API CLI, outcomes and Note references.
