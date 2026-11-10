@@ -3639,11 +3639,11 @@
         "typeid-hs-src": "typeid-hs-src"
       },
       "locked": {
-        "lastModified": 1792209474,
-        "narHash": "sha256-4kddCx4T73Lkpwz9qEuZapHQR1GHOvQZsI9HTKdIqRE=",
+        "lastModified": 1794318905,
+        "narHash": "sha256-YrmyHChJQA7qjqGr9IEFRYL2hfbLozwgank9FRgowVU=",
         "owner": "shinzui",
         "repo": "notion-hub",
-        "rev": "a4d900afbf1c8eef54f1b5c705a2fd09dbb61970",
+        "rev": "b900d36db34f1099a0faf42574f9f001b25155e7",
         "type": "github"
       },
       "original": {
