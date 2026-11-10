@@ -35,8 +35,8 @@ Success means existing records survive a verified restore, a controlled new writ
 
 - [x] (2026-11-10) Review the plan against the working tree and Sungkyung's live state; expand it to every PostgreSQL-dependent service and to the backups. Yujin itself was not inspected.
 - [ ] Milestone 1: inventory both physical machines, versions, databases, workspace files, repositories, ingress, and pending work; classify all 19 non-template databases found on Sungkyung.
-- [ ] Milestone 1: get the Notion Hub subscription worker out of its crash loop through mori://shinzui/notion-hub.
-- [ ] Milestone 1: locate the aki-2023 drive and establish which cluster its mirror holds.
+- [x] (2026-11-10) Milestone 1: get the Notion Hub subscription worker out of its crash loop through mori://shinzui/notion-hub (revision b900d36, deployed to Sungkyung).
+- [x] (2026-11-10) Milestone 1: locate the aki-2023 drive and establish which cluster its mirror holds. It holds Sungkyung's chain, verified by checksum after a fresh full backup.
 - [ ] Milestone 2: implement and verify staged ownership, Caddy ownership, backup ownership, the PostgreSQL 18 tool wrapper, reverse client configuration, and evidence tooling without moving the active runtime.
 - [ ] Milestone 3: rehearse PostgreSQL/SQLite restoration and a pg_rman restore on Yujin in isolation; record timing and recovery proof.
 - [ ] Milestone 4: freeze writes, stop and verify Sungkyung, create final exports, take the final physical backup, and fence its old databases and Mina store.
@@ -68,12 +68,26 @@ ServerError "23505" "duplicate key value violates unique constraint \"idx_tracke
 tracked_pages: active 12, archived 1
 ```
 
+Resolved 2026-11-10: the duplicate was two PageTracked events for one Notion page, 19 seconds apart, created because nhub page track checks a read model that had stalled. Revision b900d36 of mori://shinzui/notion-hub leaves out a PageTracked whose Notion page already has a live row. Run first against a clone and then deployed, it brought the worker to a single run with every read model at the newest event in its category. Why the read model stalled on 2026-10-19 is still unexplained.
+
+```text
+com.shinzui.notion-hub-subscription: state = running, runs = 1, last exit code = (never exited)
+tracked-page-read-model 896, conversation-read-model 723, okf-sync-read-model 874, collection-read-model 716
+```
+
 The offsite mirror is stale and its contents are unknown. Sungkyung's last successful sync was on 2026-10-13, every attempt logged since reports the drive missing, and aki-2023 was not mounted during the review. Yujin's unconditional StartOnMount agent would have overwritten the mirror with Yujin's catalog if the drive has been attached there since. Treat the mirror as unverified until milestone 1 inspects it.
 
 ```text
 === 2026-10-13T17:56:13-07:00 offsite sync to /Volumes/aki-2023/postgresql-backups ===
 Offsite sync complete.
 /Volumes/aki-2023 not mounted; skipping offsite sync.   (197 such entries in the log)
+```
+
+Resolved 2026-11-10: aki-2023 was reattached to Sungkyung and its on-mount sync replaced the mirror before it could be inspected, so whether Yujin had overwritten it in the meantime is unknown and no longer matters. A fresh full backup was then taken and mirrored, and a checksum comparison found no differences between the catalog and the mirror. The drive must not be attached to Yujin until Yujin's backup agents are stopped.
+
+```text
+2026-11-10 06:41:03  2026-11-10 06:42:00  FULL  2870MB     1  OK
+rsync -anc --delete catalog/ mirror/ -> 0 differing entries
 ```
 
 The earlier revision's Yujin offsite path was unsafe. It placed Yujin's mirror at /Volumes/aki-2023/postgresql-backups/yujin, inside the directory Sungkyung mirrors with rsync --delete, so the next Sungkyung sync would have deleted Yujin's mirror.
@@ -129,6 +143,8 @@ Caddy binds 0.0.0.0:80 today and docs/local-services.md describes reaching tools
 2026-11-10: Keep Sungkyung's PostgreSQL server running, fenced, for the retention window so its state can be inspected and rollback does not require restarting it. Stopping that server is part of the separate retirement action after retention.
 
 2026-11-10: The user confirmed that the 14 rollout and scratch databases do not move. This settles the earlier default for all 14, including notion_hub_okf_live_20260923, and removes the option of promoting one into the migration set without asking.
+
+2026-11-10: Fix the Notion Hub crash loop as a direct commit against BUG-4 in mori://shinzui/notion-hub rather than through a new ExecPlan, which milestone 1 had called for. The change is one projection rule with tests and a proof on a clone, and it did not alter the schema, so the deployed version stays stable for the rehearsal.
 
 
 ## Outcomes & Retrospective
@@ -601,3 +617,5 @@ Created 2026-10-16: grounded six migration milestones in existing ownership, fou
 Revised 2026-11-10: at the user's request the plan was reviewed and expanded so that every service using PostgreSQL ends up on Yujin, explicitly covering Mina, Reiko, and Notion Hub, and so that the PostgreSQL backups move too. The title now states that scope, while the path, slug, and id are unchanged. Milestone 6 is new and moves backups; the former milestone 6 is split into milestones 7 (client reversal and workers), 8 (Mina, Reiko, Notion Hub, and reopening ingress), and 9 (durability and docs). The review, which used the working tree plus read-only inspection of Sungkyung, also corrected defects in the earlier revision: the Yujin offsite path nested inside a directory mirrored with rsync --delete; PostgreSQL 17 tools used against an 18 server; the omitted sungkyung-client-ingest writer; missing Notion Hub and mori-rei-app client settings; no treatment of the 14 extra databases; and no plan for Notion Hub's existing crash loop or the stale offsite mirror. These are recorded in Surprises & Discoveries and the Decision Log. Yujin was not inspected, so its databases, backup catalog, and drive history remain milestone 1 unknowns.
 
 Revised 2026-11-10: the user confirmed the 14 rollout and scratch databases stay on Sungkyung, so milestone 1 now only checks that no service depends on them.
+
+Revised 2026-11-10: recorded the deployed Notion Hub fix and the refreshed, verified offsite mirror, which closes those two milestone 1 items.
