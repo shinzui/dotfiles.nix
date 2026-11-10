@@ -131,14 +131,16 @@ On Yujin, append to `~/.ssh/authorized_keys`, substituting the public keys and
 Sungkyung's verified tailnet address:
 
 ```text
-from="100.66.155.64",restrict,port-forwarding,permitopen="127.0.0.1:8780",permitopen="127.0.0.1:8775",permitopen="127.0.0.1:9091",permitopen="127.0.0.1:80",permitopen="127.0.0.1:9428",permitopen="127.0.0.1:10428",permitopen="127.0.0.1:16686",permitopen="127.0.0.1:8080",permitopen="127.0.0.1:8081",permitopen="127.0.0.1:8082",permitopen="127.0.0.1:9092",permitopen="127.0.0.1:9644",command="/usr/bin/false" ssh-ed25519 <tunnel key> sungkyung-yujin-client
+from="100.66.155.64",restrict,port-forwarding,command="/usr/bin/false" ssh-ed25519 <tunnel key> sungkyung-yujin-client
 from="100.66.155.64",restrict,pty,command="/Users/shinzui/.local/libexec/rei-ssh-dispatch" ssh-ed25519 <rei key> sungkyung-yujin-rei
 ```
 
-`permitopen` limits TCP forwards only. It does not constrain Unix socket
-forwards, so the tunnel key can reach any socket the shinzui user can, which
-includes PostgreSQL with trust authentication. Treat the key as same-user
-database access. `~/.local/libexec/rei-ssh-dispatch` refuses until the host is
+Do not add `permitopen`: OpenSSH applies it to Unix-socket forwards as well,
+and a `host:port` entry cannot name a socket, so the PostgreSQL forward fails
+with "open failed: connect failed". Without it the tunnel key can reach any
+TCP port or socket the shinzui user can on Yujin, which includes PostgreSQL
+with trust authentication. Treat the key as same-user database access, limited
+to Sungkyung's address by `from=`. `~/.local/libexec/rei-ssh-dispatch` refuses until the host is
 the runtime owner, and then runs the owner's managed Rei by absolute path.
 
 ## Rehearsal on Yujin (milestone 3)
