@@ -278,21 +278,26 @@ SELECT json_build_object('key', n.nspname || '.' || c.relname, 'statement',
          n.nspname, c.relname))
 """ + USER_RELATIONS + " AND c.relkind = 'S' ORDER BY n.nspname, c.relname"
 
-LARGE_OBJECTS = ("SELECT json_build_object('oid', oid, 'owner', pg_get_userbyid(lomowner), 'acl', lomacl,"
+LARGE_OBJECTS = ("SELECT json_build_object('oid', oid, 'owner', pg_get_userbyid(lomowner),"
+                 " 'acl', coalesce(lomacl, acldefault('L'::\"char\", lomowner))::text,"
                  " 'sha256', encode(sha256(lo_get(oid)), 'hex'))::text FROM pg_largeobject_metadata ORDER BY oid")
 
 # Definitions of every user object that is not an extension member, one text
 # line each, so a changed column, index, constraint, function, trigger, view,
 # owner, or grant changes the schema digest.
+# A NULL ACL means the owner's default privileges, and pg_dump omits a grant
+# that equals the default, so ACLs are compared through acldefault(): an
+# explicit default on the source and NULL after restore are the same grant.
 SCHEMA_OBJECTS = """
 WITH ext AS (SELECT classid, objid FROM pg_depend WHERE deptype = 'e'),
 user_ns AS (SELECT oid, nspname FROM pg_namespace WHERE nspname !~ '^pg_' AND nspname <> 'information_schema')
 SELECT line FROM (
-  SELECT 'schema ' || nspname || ' owner ' || pg_get_userbyid(nspowner) || ' acl ' || coalesce(nspacl::text, '')
+  SELECT 'schema ' || nspname || ' owner ' || pg_get_userbyid(nspowner) || ' acl ' || coalesce(nspacl, acldefault('n'::"char", nspowner))::text
     AS line FROM pg_namespace WHERE oid IN (SELECT oid FROM user_ns)
   UNION ALL
   SELECT 'relation ' || n.nspname || '.' || c.relname || ' kind ' || c.relkind::text || ' owner '
-    || pg_get_userbyid(c.relowner) || ' acl ' || coalesce(c.relacl::text, '') || ' persistence '
+    || pg_get_userbyid(c.relowner) || ' acl '
+    || coalesce(c.relacl, acldefault(CASE c.relkind WHEN 'S' THEN 's' ELSE 'r' END::"char", c.relowner))::text || ' persistence '
     || c.relpersistence::text || ' partbound ' || coalesce(pg_get_expr(c.relpartbound, c.oid), '')
     FROM pg_class c JOIN user_ns n ON n.oid = c.relnamespace
     WHERE c.relkind IN ('r', 'p', 'v', 'm', 'S', 'f', 'c')
@@ -313,7 +318,7 @@ SELECT line FROM (
     FROM pg_constraint WHERE connamespace IN (SELECT oid FROM user_ns)
   UNION ALL
   SELECT 'function ' || p.oid::regprocedure::text || ' owner ' || pg_get_userbyid(p.proowner) || ' acl '
-    || coalesce(p.proacl::text, '') || ' md5 ' || md5(CASE WHEN p.prokind IN ('f', 'p')
+    || coalesce(p.proacl, acldefault('f'::"char", p.proowner))::text || ' md5 ' || md5(CASE WHEN p.prokind IN ('f', 'p')
          THEN pg_get_functiondef(p.oid) ELSE p.prosrc END)
     FROM pg_proc p WHERE p.pronamespace IN (SELECT oid FROM user_ns)
       AND NOT EXISTS (SELECT 1 FROM ext WHERE classid = 'pg_proc'::regclass AND objid = p.oid)
@@ -342,7 +347,8 @@ SELECT line FROM (
 DATABASE_METADATA = """
 SELECT json_build_object('owner', pg_get_userbyid(d.datdba), 'encoding', pg_encoding_to_char(d.encoding),
   'collate', d.datcollate, 'ctype', d.datctype, 'connection_limit', d.datconnlimit,
-  'allow_connections', d.datallowconn, 'acl', d.datacl::text,
+  'allow_connections', d.datallowconn,
+  'acl', coalesce(d.datacl, acldefault('d'::"char", d.datdba))::text,
   'settings', (SELECT json_agg(s.setconfig ORDER BY s.setrole) FROM pg_db_role_setting s
                WHERE s.setdatabase = d.oid))
 FROM pg_database d WHERE d.datname = current_database()"""

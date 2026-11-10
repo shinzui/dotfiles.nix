@@ -244,6 +244,19 @@ class PostgresTests(unittest.TestCase):
         self.assertIn('rei.large_objects: same row count, different content', differences)
         self.assertTrue(any(d.startswith('rei.schema') for d in differences))
 
+    def test_explicit_default_acl_equals_null_acl(self):
+        # pg_dump omits a grant equal to the owner's default, so a restore has
+        # a NULL ACL where the source had an explicit default one.
+        before = self.take('acl-before')
+        self.sql('rei', 'GRANT ALL ON dupes TO ' + self.user)
+        self.sql('rei', 'GRANT ALL ON SCHEMA public TO pg_database_owner')
+        self.assertEqual(HELPER['compare'](before, self.take('acl-default')), [])
+        self.sql('rei', 'CREATE ROLE acl_probe')
+        self.sql('rei', 'GRANT SELECT ON dupes TO acl_probe')
+        self.assertTrue(any(d.startswith('rei.schema') for d in HELPER['compare'](before, self.take('acl-real'))))
+        self.sql('rei', 'REVOKE SELECT ON dupes FROM acl_probe')
+        self.sql('rei', 'DROP ROLE acl_probe')
+
     def test_wrong_socket_identity_is_refused(self):
         out = self.evidence / 'wrong.json'
         status, _ = self.run_helper('fingerprint', '--out', str(out), '--expect-system-identifier', '1', 'rei')

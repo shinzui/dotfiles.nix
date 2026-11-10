@@ -156,6 +156,14 @@ python3 bin/rei-mori-migration.py conflicts --socket "$REHEARSAL_ROOT/socket" --
   --expect-data-directory "$REHEARSAL_ROOT/data" rei mori mori_rei_app notion_hub
 ```
 
+The globals export holds two roles. shinzui already exists as each cluster's
+bootstrap superuser, so reviewed-globals.sql creates only message_store:
+
+```sql
+CREATE ROLE message_store;
+ALTER ROLE message_store WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS;
+```
+
 Restore with the commands in the plan's Concrete Steps, then fingerprint the
 restore and a second restore of the same archives, and compare them:
 
@@ -165,6 +173,15 @@ python3 bin/rei-mori-migration.py fingerprint --socket "$REHEARSAL_ROOT/socket" 
   --out "$EVIDENCE/rehearsal-restore-1.json" rei mori mori_rei_app notion_hub
 python3 bin/rei-mori-migration.py compare "$EVIDENCE/rehearsal-restore-1.json" "$EVIDENCE/rehearsal-restore-2.json"
 ```
+
+The 2026-11-10 rehearsal measured about 20 s to export, 15 s to transfer, 17 s
+to restore, and 10 to 20 s to fingerprint each side, so the data path takes a
+few minutes. Freezing writers, the checks, and the per-service proofs set the
+length of the window.
+
+For the pg_rman proof, run `pg_rman validate` on the catalog and then
+`pg_rman restore --hard-copy` into an empty directory. `--check` cannot be
+used there: it reads `pg_control` in the target and fails on an empty one.
 
 ## Maintenance window (milestones 4 to 8)
 
