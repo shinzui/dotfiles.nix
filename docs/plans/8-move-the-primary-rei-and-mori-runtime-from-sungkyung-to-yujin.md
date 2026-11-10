@@ -55,7 +55,9 @@ Success means existing records survive a verified restore, a controlled new writ
 
 Yujin switched to the preparation revision (41b23f8) on 2026-11-10: launchctl list shows no pg-backup agent, the tunnel answers with Sungkyung's system identifier 7610654636632884239, Mori 18780 and the new Rei API 18775 forwards return 200, fresh shells carry the tunnelled Notion Hub string, and ~/.local/libexec/rei-ssh-dispatch refuses with exit 2 because Yujin is not the owner.
 
-Handoff, 2026-11-10: milestone 2 still needs the preparation revision switched on Sungkyung (interactive sudo), pg-backup-offsite-adopt --verified on Sungkyung right after its switch, and the Sungkyung-to-Yujin keys created and enrolled per the runbook. Milestone 1 still needs the second inventory sample on Sungkyung at least a day after 2026-11-10T13:56Z, the mori-rei-app, support-service, and workspace inventory, and the disk-capacity figures.
+Sungkyung switched to 41b23f8 on 2026-11-10 with its runtime running (Notion Hub worker runs = 1) and pg18 at PostgreSQL 18.6. rsync -anc found 0 differing entries and an identical pg_rman.ini between its catalog and /Volumes/aki-2023/postgresql-backups, so the mirror was adopted for cluster 7610654636632884239, and the next guarded sync passed and completed. On Yujin, pg-backup and pg-backup-offsite-sync now refuse with exit 1.
+
+Handoff, 2026-11-10: milestone 2 still needs the Sungkyung-to-Yujin keys created and enrolled per the runbook. Milestone 1 still needs the second inventory sample on Sungkyung at least a day after 2026-11-10T13:56Z, the mori-rei-app, support-service, and workspace inventory, and the disk-capacity figures.
 - [ ] Milestone 3: rehearse PostgreSQL/SQLite restoration and a pg_rman restore on Yujin in isolation; record timing and recovery proof.
 - [ ] Milestone 4: freeze writes, stop and verify Sungkyung (runtime and support services), create final exports, take the final physical backup, and fence its old databases and Mina store.
 - [ ] Milestone 5: restore and compare final data on Yujin; establish its own Mori identity and repository locations; validate Yujin with workers off.
