@@ -125,6 +125,7 @@ const skeleton = `# ${title}
 This ExecPlan is a living document. The sections Progress, Surprises & Discoveries,
 Decision Log, and Outcomes & Retrospective must be kept up to date as work proceeds.
 If durable project context changes, update or create ADRs in docs/adr/ in the same change.
+Record friction met while implementing in the friction-log bundle as it occurs (see FRICTION.md).
 
 
 ## Purpose / Big Picture
@@ -135,24 +136,28 @@ working. State the user-visible behavior you will enable.
 
 ## Progress
 
-Use a checklist to summarize granular steps. Every stopping point must be documented here,
-even if it requires splitting a partially completed task into two ("done" vs. "remaining").
-This section must always reflect the actual current state of the work.
+Use checkboxes for verifiable milestones or substantial deliverables, not individual
+edits, commands, tests, commits, or session activity. Update this section when a milestone
+is accepted, a material blocker or change of course arises, or work is handed off. For a
+handoff during a milestone, add a short prose note stating the remaining outcome.
 
-- [ ] Example incomplete step.
+- [ ] <First verifiable milestone or deliverable and its acceptance condition.>
 
 
 ## Surprises & Discoveries
 
 Document unexpected behaviors, bugs, optimizations, or insights discovered during
-implementation. Provide concise evidence.
+implementation. Provide concise evidence. Friction with the tools, documents, and processes
+used to do the work belongs in the friction log (see FRICTION.md); cite an entry's FRIC-N
+handle here only when it also changed the plan.
 
 (None yet.)
 
 
 ## Decision Log
 
-Record every decision made while working on the plan.
+Record decisions that change scope, architecture, interfaces, acceptance, or the path a
+future contributor should follow. Omit routine implementation choices.
 
 - Decision: ...
   Rationale: ...
@@ -162,7 +167,8 @@ Record every decision made while working on the plan.
 ## Outcomes & Retrospective
 
 Summarize outcomes, gaps, and lessons learned at major milestones or at completion.
-Compare the result against the original purpose. Before marking the plan complete,
+Compare the result against the original purpose. Cite the friction entries recorded under
+this plan by handle with their triage outcome. Before marking the plan complete,
 distill durable project context from the Decision Log, Surprises & Discoveries, and
 this section into docs/adr/. Keep task-local execution details here.
 
@@ -182,8 +188,8 @@ ADR exists, say so.
 
 ## Plan of Work
 
-Describe, in prose, the sequence of edits and additions. For each edit, name the file and
-location (function, module) and what to insert or change. Keep it concrete and minimal.
+Describe the sequence of meaningful changes in prose. Name key files and locations
+(functions or modules) and the intended result, leaving routine edit choices open.
 
 Break into milestones if the work spans multiple independent phases. Each milestone must be
 independently verifiable. Introduce each milestone with a brief paragraph: scope, what will
@@ -194,7 +200,7 @@ exist at the end, commands to run, acceptance criteria.
 
 State the exact commands to run and where to run them (working directory). When a command
 generates output, show a short expected transcript so the reader can compare. This section
-must be updated as work proceeds.
+should be revised when the implementation approach changes.
 
 
 ## Validation and Acceptance
@@ -202,6 +208,9 @@ must be updated as work proceeds.
 Describe how to exercise the system and what to observe. Phrase acceptance as behavior with
 specific inputs and outputs. If tests are involved, name the exact test commands and expected
 results. Show that the change is effective beyond compilation.
+If an uncertain interface connects independently developed pieces, identify an early
+representative interaction check appropriate to the project and authorized environment.
+Distinguish required acceptance from proposals for additional scope.
 
 
 ## Idempotence and Recovery
@@ -212,8 +221,10 @@ rollback path.
 
 ## Interfaces and Dependencies
 
-Name the libraries, modules, and services to use and why. Specify the types, interfaces, and
-function signatures that must exist at the end of each milestone. Use full module paths.
+Name the libraries, modules, and services whose choice matters. Specify key types or
+interfaces that other work depends on, using full module paths.
+For a child plan, identify prerequisite artifacts or behavior and the parent-declared
+plan or milestone that must be accepted before this work begins.
 `;
 
 writeFileSync(path, fm.join("\n") + skeleton, "utf8");

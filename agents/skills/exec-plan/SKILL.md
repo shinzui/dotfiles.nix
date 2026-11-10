@@ -1,22 +1,19 @@
 ---
 name: exec-plan
 description: >
-  Create, implement, discuss, review, or update execution plans (ExecPlans) — self-contained
-  design documents that guide a coding agent or novice through delivering a working feature or
-  system change. Use when planning significant work, implementing from a plan, reviewing a plan
-  another model wrote, or recording design decisions. TRIGGER when: user wants to plan a feature,
-  follow a plan, review a plan, or manage ExecPlan documents.
+  Create, implement, review, or update an ExecPlan for a substantial feature or system change.
+  Use when the user asks to plan work, follow a plan, or manage an existing ExecPlan.
 argument-hint: <create|implement|discuss|review|update|status> [plan-name-or-path]
 user-invocable: true
 ---
 
 # ExecPlan Skill
 
-You are managing execution plans (ExecPlans) — self-contained living documents that guide implementation of features and system changes. Before doing anything, read the full specification at [PLANS.md](PLANS.md) and follow it to the letter. For any ADR discovery, citation, creation, update, or validation, also read and follow [ADR.md](ADR.md).
+You are managing execution plans (ExecPlans) — self-contained living documents that guide implementation of features and system changes. Read [PLANS.md](PLANS.md) when creating, implementing, or reviewing a plan; for a narrow edit, consult the relevant sections. For ADR discovery, citation, creation, update, or validation, use [ADR.md](ADR.md). For recording and triaging friction met while implementing, use [FRICTION.md](FRICTION.md). The user's requested scope takes precedence over this skill's workflow defaults.
 
 ExecPlans live in the `docs/plans/` directory at the repository root. Each plan is a single Markdown file named with a sequential number prefix followed by a slug derived from its title (e.g., `docs/plans/1-add-template-engine.md`). Each plan begins with a YAML frontmatter block — `id`, `slug`, `title`, `kind: exec-plan`, `created_at`, optional `intention`, optional `master_plan`, optional `provenance` — so tooling can identify it without parsing prose.
 
-Create new plans with the bundled `init-plan.ts` script (see Mode: create). The script picks the next sequential number, derives the slug from the title, writes the frontmatter and skeleton, and refuses to overwrite an existing file. Record every later authorship event with the bundled `record-provenance.ts` script (see Provenance). Do not pick numbers, write skeletons, or hand-author frontmatter by hand.
+Create new plans with the bundled `init-plan.ts` script (see Mode: create). The script picks the next sequential number, derives the slug from the title, writes the frontmatter and skeleton, and refuses to overwrite an existing file. Record every later authorship event with the bundled `record-provenance.ts` script (see Provenance), and record friction with the bundled `record-friction.ts` script (see Friction Log). Do not pick numbers, allocate handles, write skeletons, or hand-author frontmatter by hand.
 
 
 ## Formatting
@@ -30,6 +27,18 @@ Architecture Decision Records (ADRs) hold durable project context. Follow `ADR.m
 conditional local-filesystem versus profiled-OKF workflow, stable `ADR-N` allocation, strict
 validation, and local versus cross-repository references. Plans remain self-contained: summarize
 the relevant decision context in the plan even when you also cite the ADR.
+
+
+## Friction Log
+
+Friction is the cost of doing the work: a document, interface, tool, environment, or house
+process that cost material effort while implementing. Record it as it happens, in the
+repository's friction-log bundle, with the bundled `record-friction.ts` script, and triage it
+when the plan completes. Follow `FRICTION.md` for the threshold, the fields, bootstrap of the
+bundle through `okf profile init`, triage, and citation. Friction is not Surprises & Discoveries,
+which holds only findings that changed the plan: when one event is both, record both and cite
+the entry's `FRIC-N` handle from the plan. Friction is in the surfaces you used, not in the thing
+you are building.
 
 
 ## Git Trailers
@@ -99,21 +108,21 @@ The rules that keep this metadata trustworthy:
 
 **Plans created before provenance existed have no `provenance` block.** That is expected, not a defect. Record your own entry when you touch such a plan; the script adds the block containing only your entry. Never invent a `created_by` record for work you did not do, and never assume an absent block means the plan was written by a human.
 
-**Record one revision entry per plan per session,** at the first stopping point where you write to the plan file — not once per commit or per milestone. Record one review entry per review pass.
+**Record one revision entry per plan per session,** when you first make a substantive edit to the plan — not once per commit or milestone. Record one review entry per review pass.
 
-**Provenance is metadata about authorship only.** It never substitutes for the Decision Log, Surprises & Discoveries, or a revision note at the bottom of the plan.
+**Provenance is metadata about authorship only.** It never substitutes for material decisions, discoveries, or revision notes.
 
 
 ## Modes of Operation
 
-Determine the mode from the first argument. If no argument is given, ask the user what they want to do.
+Determine the mode from the argument or the user's request. Ask only if the intended action cannot be inferred.
 
 
 ### Mode: create
 
 Create a new ExecPlan. The remaining arguments describe the feature or change.
 
-1. Research the codebase thoroughly before writing anything. Use Glob, Grep, and Read to understand the current state of the repository — file structure, key modules, build system, test infrastructure, and any existing patterns relevant to the planned work.
+1. Inspect the parts of the codebase and existing plans needed to ground the proposed work, including relevant build and validation paths. Expand the research when a design claim depends on it.
 
 2. Follow the discovery workflow in `ADR.md`. Scan ADR filenames and headings, then read only ADRs relevant to this plan. Carry relevant local ADR context into Context and Orientation with repository-relative links; use Mori's exact canonical handle for a cross-repository ADR. If no relevant ADR exists, note that explicitly in the same section.
 
@@ -125,7 +134,7 @@ Create a new ExecPlan. The remaining arguments describe the feature or change.
 
     The script prints the created file path to stdout (e.g., `docs/plans/4-add-template-engine.md`). Always supply your own verified identity using `--model` or a session-file adapter (see Provenance); add `--harness` when passing an explicit model and you know the harness. Pass `--intention` only when an Intention ID is active for this session; pass `--master-plan` only when this plan is a child of an existing MasterPlan, naming the parent's file path.
 
-4. Read the file back and flesh out each prose section in order, grounding every claim in what you found during research. The Progress, Surprises & Discoveries, Decision Log, and Outcomes & Retrospective sections start empty by design — only the Decision Log should be seeded now, with any initial scoping decisions you made.
+4. Read the file back and fill the sections with task-relevant context. In Progress, list only verifiable milestones or substantial deliverables. Leave Surprises & Discoveries and Outcomes & Retrospective empty until there is something material to record; seed the Decision Log only with consequential design or scope decisions.
 
 5. The plan must be fully self-contained per PLANS.md: a novice with only the plan file and the working tree must be able to implement the feature end-to-end. Define every term of art in plain language. Name files by full repository-relative path. Show exact commands with working directories and expected output.
 
@@ -138,30 +147,37 @@ Create a new ExecPlan. The remaining arguments describe the feature or change.
 
 Implement an existing ExecPlan. The argument is the plan file path (e.g., `docs/plans/1-add-template-engine.md`).
 
-1. Read the entire ExecPlan file. This is your sole source of truth. Do not rely on any context outside the plan and the working tree.
+1. Read the entire ExecPlan file and, for a child, the relevant parent coordination and dependency guidance. Use these documents and the working tree to resume without relying on prior conversation memory; the user's current instructions govern scope.
 
-2. Identify the current state from the Progress section — find the first unchecked item or the next milestone to begin.
+2. Identify the next unfinished milestone within the requested scope and any parent execution order. Check its prerequisites and recorded acceptance evidence against the working tree; the Progress section may lag work in progress.
 
-3. Proceed through the plan step by step. Do not prompt the user for "next steps"; simply continue to the next milestone.
+3. Select an observable acceptance criterion, implement a cohesive set of changes toward it, and validate the result. Mark a milestone complete only when all its required acceptance criteria pass. Follow PLANS.md's early integration guidance when uncertain interfaces are involved. Continue through the implementation the user authorized; a commit or passing test suite is a checkpoint, not a reason to stop while authorized work can proceed.
 
-4. At every stopping point (completing a step, encountering an issue, finishing a milestone), update the ExecPlan file:
-   - Check off completed items in Progress with a timestamp.
-   - Split partially completed items into "done" and "remaining" entries.
-   - Add new items discovered during implementation.
-   - Record any surprises in Surprises & Discoveries with evidence.
-   - Record any decisions in the Decision Log with rationale.
-   - Update or create ADRs in `docs/adr/` when the change affects durable project context.
-   - The first time you write to the plan in this session, record a provenance revision entry with `--mode implement` (see Provenance). Do this once per session, not once per stopping point.
+4. Record friction as it occurs. When a surface you used, rather than the thing you are building, costs more than a few minutes, forces a workaround, blocks progress, or will recur for the next contributor, run the bundled script while the command and the error are in front of you:
 
-5. Resolve ambiguities autonomously. When you make a judgment call, record it in the Decision Log.
+    ```bash
+    bun agents/skills/exec-plan/record-friction.ts log --title "<what cost effort>" \
+      --description "<one sentence naming the surface and the cost>" \
+      --kind <documentation|interface|tooling|environment|process> \
+      --impact <blocked|detour|slowdown|nuisance> --affects <uri> --plan <plan-path> \
+      --attempted "<what you were doing>" --encountered "<what happened instead>" \
+      [--evidence "<error text>"] [--workaround "<what you did instead>"] \
+      --model <your-model-id> [--harness <name>]
+    ```
 
-6. Commit frequently. Each commit should leave the codebase in a working state. Every commit must include an `ExecPlan:` git trailer linking to the plan file (see Git Trailers above).
+    One entry per occurrence, per `FRICTION.md`. The script bootstraps the bundle on first use, allocates the handle, and validates; it prints the entry path. Do not repeat the entry in the plan unless it also changed the plan; then cite its handle from Surprises & Discoveries.
 
-7. After completing each milestone, run the validation steps described in the plan and record the results.
+5. Update the ExecPlan when a milestone is verified, a material blocker or course change arises, or work is handed off. Keep Progress at milestone or substantial-deliverable scale: record the outcome, date, and concise evidence, and describe partial work in a short handoff note when needed. Do not add checkboxes for routine actions or split items merely to show session activity. Record consequential discoveries and decisions in their respective sections. Update or create ADRs when durable project context changes. The first time you write to the plan in this session, record one provenance revision entry with `--mode implement` (see Provenance).
 
-8. At completion, fill in the Outcomes & Retrospective section.
+6. Resolve routine ambiguities and defects within the accepted scope autonomously. Distinguish work needed to meet an existing criterion from a proposed new requirement; obtain a scope decision before adding the latter to acceptance. Record decisions only when they change the plan's scope, architecture, interfaces, acceptance, or future implementation path.
 
-9. Distill durable context before declaring the plan complete: review the Decision Log, Surprises & Discoveries, and Outcomes & Retrospective, then update or create ADRs in `docs/adr/` for project-level decisions, constraints, gotchas, or architectural lessons that should survive beyond this plan.
+7. Commit at meaningful working boundaries. Every commit must include an `ExecPlan:` git trailer linking to the plan file (see Git Trailers above).
+
+8. Use focused checks while developing and run the required milestone checks at a coherent boundary. Record concise acceptance evidence. Repeat checks when relevant changes, failures, or remaining risks invalidate that evidence; preserve applicable results while honoring any required final-candidate validation.
+
+9. At completion, triage the friction entries recorded under this plan per `FRICTION.md` (`record-friction.ts update`), then fill in the Outcomes & Retrospective section, citing each entry by handle with its triage outcome.
+
+10. Distill durable context before declaring the plan complete: review the Decision Log, Surprises & Discoveries, and Outcomes & Retrospective, then update or create ADRs in `docs/adr/` for project-level decisions, constraints, gotchas, or architectural lessons that should survive beyond this plan.
 
 
 ### Mode: discuss
@@ -172,11 +188,11 @@ Discuss or review an existing ExecPlan. The argument is the plan file path.
 
 2. Engage with the user's questions or proposed changes.
 
-3. For every decision reached during discussion, update the Decision Log in the plan file with the decision, rationale, and date.
+3. Record material decisions reached during discussion in the Decision Log with rationale and date.
 
-4. If the discussion results in changes to the plan, update all affected sections — not just the one being discussed. Per PLANS.md, revisions must be comprehensively reflected across all sections.
+4. If the discussion changes the plan, review affected sections for consistency and update those that need it.
 
-5. Append a revision note at the bottom of the plan describing what changed and why.
+5. For a material plan revision, append one concise note describing what changed and why.
 
 6. If you changed the plan, record a provenance revision entry with `--mode discuss` (see Provenance). If the user asked for an assessment of the plan's quality rather than a conversation about it, use Mode: review instead so the result is recorded as a review.
 
@@ -189,7 +205,7 @@ Review an existing ExecPlan against the specification and record the verdict. Th
 
 2. Read the plan's `provenance` block first. Note which model authored it and which models have already reviewed it, and say so in your report: a plan already reviewed by three models with the same verdict needs a different kind of attention than an unreviewed one. An absent block means the provenance is unknown, not that the plan is unreviewed.
 
-3. Audit the plan and gather concrete findings. At minimum check that: it is self-contained (a novice with only this file and the working tree could implement it); every milestone is independently verifiable and states its acceptance as observable behavior; the Context and Orientation section names real files by repository-relative path and its claims match the current working tree; ADR citations follow `ADR.md` and resolve; every fenced code block carries a language tag; and the living-document sections exist and are consistent with each other.
+3. Audit the plan and gather concrete findings. At minimum check that: it is self-contained (a novice with only this file and the working tree could implement it); every milestone is independently verifiable and states its acceptance as observable behavior; the Context and Orientation section names real files by repository-relative path and its claims match the current working tree; ADR citations follow `ADR.md` and resolve; friction handles the plan cites resolve in the repository's friction-log bundle; every fenced code block carries a language tag; and the living-document sections exist and are consistent with each other.
 
 4. Verify claims against the repository rather than trusting the prose. Open the files the plan names, run the commands it says to run when they are safe and cheap, and report anything that no longer matches reality.
 
@@ -214,9 +230,9 @@ Revise an existing ExecPlan to reflect new information or changed requirements. 
 
 2. Make the requested changes.
 
-3. Ensure changes are comprehensively reflected across all sections, including the living document sections (Progress, Surprises & Discoveries, Decision Log, Outcomes & Retrospective).
+3. Review the affected sections, including living sections, and update what is needed to keep the plan consistent. Avoid filler in unaffected sections.
 
-4. Append a revision note at the bottom of the plan describing what changed and why.
+4. For a material plan revision, append one concise note describing what changed and why. Routine milestone status updates need no revision note.
 
 5. Record a provenance revision entry with `--mode update` (see Provenance), noting in one line what the revision changed.
 
@@ -225,9 +241,9 @@ Revise an existing ExecPlan to reflect new information or changed requirements. 
 
 Show the current state of one or all ExecPlans.
 
-If a plan path is given, read that plan and summarize: title, purpose, progress percentage (checked vs total items), current milestone, any blockers noted in Surprises & Discoveries.
+If a plan path is given, read it and summarize its purpose, completed and remaining milestones, current work, and material blockers. Do not calculate a percentage from checkbox counts; checkboxes are outcomes, not units of effort. When the repository has a friction-log bundle, list the entries recorded under the plan that are still `logged`, by handle (see `FRICTION.md` for the query).
 
-If no path is given, scan `docs/plans/` for all `.md` files and show a summary table of each plan's title and progress.
+If no path is given, scan `docs/plans/` for all `.md` files and show a summary table of each plan's title and milestone state.
 
 Status is read-only: it never writes to a plan, and it never records a provenance entry. When summarizing a single plan, include its authoring model and the verdict of its most recent review when the `provenance` block has them.
 

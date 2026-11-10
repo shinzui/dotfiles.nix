@@ -15,3 +15,4 @@ CLAUDE.local.md
 config/xdg/mori/host-id
 # Temporary plaintext GitHub credentials must never be tracked.
 *-gh-token.tmp
+.codex/

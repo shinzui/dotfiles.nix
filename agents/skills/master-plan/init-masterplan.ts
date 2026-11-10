@@ -151,6 +151,8 @@ If no relevant ADR exists, say so.
 
 Status values: Not Started, In Progress, Complete, Cancelled.
 Hard Deps and Soft Deps reference other rows by their # prefix (e.g., EP-1, EP-3).
+A whole-child hard dependency requires that child to be Complete. If only a milestone's
+accepted output is needed, name it explicitly (e.g., EP-1 M1) and explain it below.
 
 
 ## Dependency Graph
@@ -158,6 +160,8 @@ Hard Deps and Soft Deps reference other rows by their # prefix (e.g., EP-1, EP-3
 Describe the ordering constraints between child plans in prose. Explain why each hard
 dependency exists — what artifact or behavior from the earlier plan does the later plan
 require? Identify which plans can proceed in parallel and under what conditions.
+Keep a simple child-by-child order unless integration needs interleaving; in that case,
+state the sequence of existing child milestones and their required outputs here.
 
 
 ## Integration Points
@@ -168,32 +172,36 @@ which plan is responsible for defining it, and how later plans should consume or
 it. Identify any cross-plan decisions that should become ADRs, especially architecture
 boundaries, durable integration constraints, shared interface ownership, decomposition
 rationale that will matter later, and deliberate exclusions.
+For uncertain shared behavior, identify an early representative producer/consumer check
+and its owner before expanding dependent variants. Reuse existing acceptance where it fits.
 
 (None identified, or list each integration point.)
 
 
 ## Progress
 
-Track milestone-level progress across all child plans. Each entry names the child plan
-and the milestone. This section provides an at-a-glance view of the entire initiative.
+Summarize the current initiative state, blocked child plans, and remaining integration
+or acceptance gates. The Exec-Plan Registry owns child-plan status, and each child plan
+owns its milestone progress. Do not duplicate those milestones as checkboxes here.
+Use a checkbox only for a cross-plan gate that has its own observable acceptance.
 
-- [ ] EP-1: <first milestone description>
-- [ ] EP-1: <second milestone description>
-- [ ] EP-2: <first milestone description>
+(No child plans started.)
 
 
 ## Surprises & Discoveries
 
 Document cross-plan insights, dependency changes, scope adjustments, or unexpected
-interactions between child plans. Provide concise evidence.
+interactions between child plans. Provide concise evidence. Friction recurring across child
+plans belongs here by FRIC-N handle; single occurrences stay in the friction log (see the
+exec-plan skill's FRICTION.md).
 
 (None yet.)
 
 
 ## Decision Log
 
-Record every decomposition or coordination decision made while working on the master
-plan.
+Record material decomposition or coordination decisions that affect dependencies,
+interfaces, acceptance, or the path future contributors should follow.
 
 - Decision: ...
   Rationale: ...

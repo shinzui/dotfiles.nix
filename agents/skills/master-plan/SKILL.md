@@ -1,23 +1,22 @@
 ---
 name: master-plan
 description: >
-  Create, implement, review, and manage master plans that decompose large initiatives into
-  multiple coordinated ExecPlans with dependencies and integration points. TRIGGER when: user
-  wants to plan a large initiative, coordinate multiple exec-plans, review a decomposition
-  another model produced, or track multi-plan progress.
+  Create, implement, review, or update a MasterPlan coordinating multiple ExecPlans.
+  Use when an initiative needs cross-plan dependencies, shared interfaces, or integration tracking.
 argument-hint: <create|implement|status|update|discuss|review> [plan-name-or-path]
 user-invocable: true
 ---
 
 # MasterPlan Skill
 
-You are managing master plans (MasterPlans) — coordination documents that decompose large initiatives into multiple ExecPlans with defined dependencies and integration points. Before doing anything, read the full specifications:
+You are managing master plans (MasterPlans) — coordination documents for initiatives spanning multiple ExecPlans. Read the relevant guidance for the work at hand:
 
 - [MASTERPLAN.md](MASTERPLAN.md) — requirements for MasterPlan documents
 - [ExecPlan specification](../exec-plan/PLANS.md) — requirements for child ExecPlan documents
 - [ExecPlan skill](../exec-plan/SKILL.md) — the ExecPlan skeleton and implementation protocol
+- [Friction log workflow](../exec-plan/FRICTION.md) — recording and triaging friction met while implementing
 
-Follow all three to the letter.
+The user's requested scope takes precedence over this skill's workflow defaults. Keep the MasterPlan focused on coordination; child ExecPlans own implementation detail and milestone progress.
 
 MasterPlans live in the `docs/masterplans/` directory at the repository root. Each master plan is a single Markdown file named with a sequential number prefix followed by a slug derived from its title (e.g., `docs/masterplans/1-kafka-consumer-pipeline.md`). Each plan begins with a YAML frontmatter block — `id`, `slug`, `title`, `kind: master-plan`, `created_at`, optional `intention`, optional `provenance` — so tooling can identify it without parsing prose.
 
@@ -40,6 +39,13 @@ When creating a MasterPlan, use that guide to inspect the local corpus and any r
 When implementing or updating a MasterPlan, update or create ADRs in the same change whenever the initiative changes durable project context. MasterPlans should especially identify cross-plan decisions that deserve ADR records: architecture boundaries, decomposition rationale that will matter later, shared interface ownership, durable integration constraints, and deliberate exclusions.
 
 At completion, distill durable context from the MasterPlan and child ExecPlans: review Decision Logs, Surprises & Discoveries, and Outcomes & Retrospectives, then promote project-level decisions or lessons into `docs/adr/`. Leave task-local execution details in the plans.
+
+
+## Friction Log
+
+Friction met while implementing a child ExecPlan is recorded as it occurs in the repository's friction-log bundle with `agents/skills/exec-plan/record-friction.ts`, naming the child plan in `--plan`; friction met while doing coordination work on the MasterPlan itself names the MasterPlan. Follow `agents/skills/exec-plan/FRICTION.md`, the shared contract installed by the exec-plan dependency, for the threshold, the fields, bootstrap, triage, and citation.
+
+A MasterPlan sees friction across its children. When a child plan completes, triage the entries recorded under it. When the same surface has cost effort under more than one child, record that in the MasterPlan's Surprises & Discoveries with the handles; recurrence is the strongest case for promoting an entry to a bug report or an improvement request. Child plans cite their own entries in their Outcomes & Retrospective; the MasterPlan's retrospective cites only recurring or initiative-level friction.
 
 
 ## Git Trailers
@@ -115,18 +121,18 @@ The rules that keep this metadata trustworthy:
 
 ## Modes of Operation
 
-Determine the mode from the first argument. If no argument is given, ask the user what they want to do.
+Determine the mode from the argument or the user's request. Ask only if the intended action cannot be inferred.
 
 
 ### Mode: create
 
 Create a new MasterPlan and all its child ExecPlans. The remaining arguments describe the initiative.
 
-1. Research the codebase thoroughly before writing anything. Use Glob, Grep, and Read to understand the repository: file structure, key modules, build system, test infrastructure, dependency management, and existing patterns. A MasterPlan coordinates multiple plans, so you need both broad and deep understanding of the codebase. The research must be proportional to the initiative's scope.
+1. Inspect the codebase, existing plans, and validation paths relevant to the proposed work streams. Research more deeply where a dependency or interface claim requires it.
 
 2. Follow `agents/skills/exec-plan/ADR.md`. Scan local ADR filenames and headings, search Mori when cross-repository decisions may apply, and read only relevant records. Carry the context into the MasterPlan and affected child ExecPlans, using repository-relative links locally and exact Mori handles across repositories. If no relevant ADR exists, note that explicitly in the MasterPlan.
 
-3. Identify the natural work streams. Group by functional concern, not by file. Each work stream should produce an independently verifiable behavior. Aim for two to seven child plans per the decomposition principles in MASTERPLAN.md. If you identify more than seven, introduce phases to group them into implementation waves.
+3. Identify the natural work streams. Group by functional concern, not by file. Each child plan should produce an independently verifiable behavior; do not split or add plans to meet a target count. Introduce phases only when they clarify ordering or handoffs.
 
 4. For each work stream, determine its purpose and scope (what exists after it is complete that did not exist before), the key files and modules it touches, its dependencies on other work streams (hard, soft, or integration per MASTERPLAN.md), and integration points with other work streams (shared types, interfaces, files, or configurations). Identify any cross-plan decisions likely to deserve ADR records, especially architecture boundaries, durable integration constraints, shared interface ownership, decomposition rationale that will matter later, and deliberate exclusions.
 
@@ -136,7 +142,7 @@ Create a new MasterPlan and all its child ExecPlans. The remaining arguments des
     bun agents/skills/master-plan/init-masterplan.ts --title "<initiative title>" --model <your-model-id> [--harness <name>] [--intention <id>]
     ```
 
-    Always supply your own verified identity using `--model` or a session-file adapter (see Provenance); add `--harness` when passing an explicit model and you know the harness. The script prints the created file path to stdout. Read the file back and flesh out the prose sections (Vision & Scope, Decomposition Strategy, Dependency Graph, Integration Points). Leave the living-document sections empty for now, except the Decision Log which records the initial decomposition decisions.
+    Always supply your own verified identity using `--model` or a session-file adapter (see Provenance); add `--harness` when passing an explicit model and you know the harness. The script prints the created file path to stdout. Read the file back and fill in Vision & Scope, Decomposition Strategy, Dependency Graph, and Integration Points. Set a brief initial Progress snapshot. Record only material decomposition decisions in the Decision Log; leave the other living sections empty until they have meaningful content.
 
 6. Create each child ExecPlan by running the exec-plan skill's init script, passing the parent path:
 
@@ -148,44 +154,46 @@ Create a new MasterPlan and all its child ExecPlans. The remaining arguments des
 
     - Be fully self-contained: a novice with only the child plan and the working tree must be able to implement it end-to-end.
     - Reference other child plans only by file path when describing dependencies or integration points, never by assumed shared context.
-    - Include all relevant codebase context discovered during research, even if it overlaps with other child plans. Self-containment takes precedence over avoiding repetition.
+    - Include the codebase context and assumptions needed to implement that child plan, even when some context overlaps. Link to checked-in sources rather than copying unrelated research.
     - Include any ADR context relevant to that child plan, by repository-relative path.
 
 7. After creating all documents, fill in the MasterPlan's Exec-Plan Registry with each child plan's number, title, path, dependencies, and initial status (Not Started).
 
 8. Present a summary to the user: the initiative's purpose, relevant ADRs consulted, the number of child plans created, a one-line description of each with its dependencies, and all file paths.
 
-For large initiatives (five or more child plans), consider using the Agent tool to research and draft child exec-plans in parallel. Each agent should receive the full codebase context relevant to its work stream plus the integration points it must respect. After parallel creation, review all child plans for cross-plan consistency — shared types must agree, dependency references must be correct, and integration points must be documented identically in each plan that touches them.
+When delegation is available and authorized, independent child plans may be drafted in parallel. Give each contributor the relevant context and integration points, then check the plans for consistent interfaces, dependencies, and ownership.
 
 
 ### Mode: implement
 
 Implement child ExecPlans under an existing MasterPlan. The first argument is the master plan file path. An optional second argument names a specific child ExecPlan to implement.
 
-1. Read the entire MasterPlan file. Parse the Exec-Plan Registry to understand the current state of all child plans.
+1. Read the entire MasterPlan file. Parse the Exec-Plan Registry and any explicit milestone sequence. Check the relevant child Progress and acceptance evidence against the working tree; reconcile stale status before selecting work.
 
-2. Determine which child plan to implement next:
+2. Select the next work within the user's authorized scope:
 
-   - If a specific child plan path was given as a second argument, use that plan. Verify its hard dependencies are all marked Complete first; if not, report the unmet dependencies and stop.
-   - Otherwise, find the first child plan in the registry whose hard dependencies are all Complete and whose own status is Not Started or In Progress.
-   - If no plan is implementable (all remaining plans have unsatisfied hard dependencies), report the blocking situation — which plans are blocked and what they are waiting on — and stop.
+   - If a specific child plan was requested, work within that child. Otherwise, follow the MasterPlan's explicit execution order; when none is specified, continue the first eligible unfinished child in registry order.
+   - Verify hard dependencies at their declared granularity per MASTERPLAN.md. A dependency naming a whole child requires that child to be Complete; a dependency naming a milestone requires its accepted artifact or behavior. Do not silently weaken a whole-child dependency to start work early.
+   - An explicit milestone sequence may switch between unfinished children to verify their integration before expanding implementation. Keep whole-child status In Progress until all its acceptance criteria pass.
+   - If the selected work is blocked, continue other ready work only within the authorized scope and dependency order. If none is available, report the concrete unmet prerequisite and stop.
 
 3. Update the child plan's status to In Progress in the MasterPlan's Exec-Plan Registry.
 
-4. Read the child ExecPlan file. Follow the implementation protocol described in `agents/skills/exec-plan/SKILL.md` (Mode: implement) to carry out the work. This means: identify the current state from the Progress section, proceed step by step through milestones, update the child plan's living sections at every stopping point, resolve ambiguities autonomously, and commit frequently. Every commit must include both `MasterPlan:` and `ExecPlan:` git trailers.
+4. Read the child ExecPlan file. Follow `agents/skills/exec-plan/SKILL.md` (Mode: implement) within the selected child or scheduled milestone, recording friction as it occurs with the child plan's path. Use the MasterPlan's integration points to check uncertain shared behavior with its consumer early. Update plans on milestone completion, material change, or handoff, and commit at meaningful working boundaries. Every commit must include both `MasterPlan:` and `ExecPlan:` git trailers.
 
 5. After completing the child plan:
 
    - Finalize the child plan's living sections per the exec-plan protocol (Outcomes & Retrospective, etc.).
    - Update the MasterPlan's Exec-Plan Registry: mark the child plan Complete.
-   - Update the MasterPlan's Progress section: check off the corresponding milestones.
+   - Update the MasterPlan's brief Progress snapshot for the new registry state and any remaining integration gate. Do not duplicate child milestones as checkboxes.
    - Record any cross-plan discoveries in the MasterPlan's Surprises & Discoveries section — especially anything that affects other child plans' assumptions, interfaces, or feasibility.
+   - Triage the friction entries recorded under the child per `agents/skills/exec-plan/FRICTION.md`. When the same surface has cost effort under more than one child, record that in the MasterPlan's Surprises & Discoveries with the handles and promote it.
    - Update or create ADRs in `docs/adr/` for durable cross-plan decisions, architecture boundaries, shared interface ownership, integration constraints, or deliberate exclusions revealed by the child plan.
    - Record provenance revision entries with `--mode implement` (see Provenance): one on the child ExecPlan for the implementation work, and one on the MasterPlan for the coordination edits. Record each at most once per session, even when several child plans are implemented back to back.
 
-6. Check for the next implementable child plan. If one exists, present it and ask the user whether to continue implementation or stop here. If the user chooses to continue, repeat from step 2. If no plans remain, fill in the MasterPlan's Outcomes & Retrospective section.
+6. After the selected milestone or child is accepted, return to step 2 and continue within the user's authorized scope. A commit or passing test suite is a checkpoint, not a reason to end implementation. Stop only when no authorized work can proceed, at a requested boundary, or at completion. When all child plans and integration gates are complete, fill in Outcomes & Retrospective.
 
-7. When the MasterPlan is complete, perform the ADR distillation pass across the MasterPlan and all child ExecPlans. Review Decision Logs, Surprises & Discoveries, and Outcomes & Retrospectives, then promote durable project context into `docs/adr/`.
+7. When the MasterPlan is complete, perform the ADR distillation pass across the MasterPlan and all child ExecPlans. Review Decision Logs, Surprises & Discoveries, and Outcomes & Retrospectives, then promote durable project context into `docs/adr/`. Triage any friction entries still `logged` under the initiative, and cite recurring friction in the MasterPlan's Outcomes & Retrospective.
 
 
 ### Mode: status
@@ -196,9 +204,9 @@ If a master plan path is given:
 
 1. Read the MasterPlan file. Parse the Exec-Plan Registry.
 
-2. For each child plan in the registry, read its Progress section and compute completion percentage (checked items vs total items).
+2. Read child Progress sections as needed to identify current milestones and blockers. Treat the registry as the source of truth for child-plan status.
 
-3. Present a summary: the initiative title, overall progress (child plans completed / total), and a table showing each child plan's number, title, status, progress percentage, current milestone, and any blockers.
+3. Present a summary: the initiative title, child plans completed / total, remaining integration gates, and a table showing each child plan's number, title, status, current milestone, and any blockers. Do not infer effort percentages from checkbox counts. When the repository has a friction-log bundle, note the entries still `logged` under each child, by handle.
 
 4. Highlight dependency bottlenecks — child plans that are blocked and what they are waiting on. If multiple plans can proceed in parallel, note this.
 
@@ -225,13 +233,13 @@ Revise an existing MasterPlan to reflect new information, changed requirements, 
 
    Reordering: update the Dependency Graph and Exec-Plan Registry, propagate changed dependency references to affected child plans.
 
-3. Ensure changes are comprehensively reflected across all sections of the MasterPlan, including living document sections (Progress, Surprises & Discoveries, Decision Log).
+3. Review affected MasterPlan sections, including the living sections, and update what is needed for consistency. Avoid filler in unaffected sections.
 
 4. Cascade changes to affected child ExecPlans when necessary — update dependency references, integration point descriptions, or context sections that reference changed plans.
 
 5. Update or create ADRs in `docs/adr/` when the revision changes durable project context, especially cross-plan boundaries, shared interfaces, integration constraints, or exclusions.
 
-6. Append a revision note at the bottom of the MasterPlan describing what changed and why.
+6. For a material coordination revision, append one concise note describing what changed and why. Routine status updates need no revision note.
 
 7. Record a provenance revision entry with `--mode update` on the MasterPlan (see Provenance), and one on each child ExecPlan you edited in the same pass.
 
@@ -240,15 +248,15 @@ Revise an existing MasterPlan to reflect new information, changed requirements, 
 
 Discuss or review an existing MasterPlan. The argument is the master plan file path.
 
-1. Read the entire MasterPlan file. Read all child ExecPlan files referenced in the Exec-Plan Registry to have full context.
+1. Read the MasterPlan and the child ExecPlans relevant to the discussion. Read further when a proposed change affects their dependencies or interfaces.
 
 2. Engage with the user's questions or proposed changes. Common discussion topics include decomposition alternatives, dependency ordering, scope of individual child plans, integration concerns, risk assessment, and phase planning.
 
-3. For every decision reached during discussion, update the Decision Log in the MasterPlan with the decision, rationale, and date.
+3. Record material decomposition or coordination decisions in the Decision Log with rationale and date.
 
 4. If a decision reached during discussion changes durable project context, update or create the relevant ADR in `docs/adr/`.
 
-5. If the discussion results in changes to the MasterPlan or any child plans, update all affected sections and documents. Per MASTERPLAN.md, revisions must be comprehensively reflected across all sections. Append a revision note at the bottom of the MasterPlan.
+5. If the discussion changes the MasterPlan or child plans, update affected sections and documents so they remain consistent. Add one concise MasterPlan revision note for a material coordination change.
 
 6. If you changed any document, record a provenance revision entry with `--mode discuss` on each file you edited (see Provenance). If the user asked for an assessment of the decomposition's quality rather than a conversation about it, use Mode: review instead so the result is recorded as a review.
 
@@ -261,7 +269,7 @@ Review an existing MasterPlan and its decomposition, then record the verdict. Th
 
 2. Read the `provenance` block of the MasterPlan and of each child plan first. Note which model authored each document and which models have already reviewed it, and say so in your report — including any child plan that no model has reviewed. An absent block means the provenance is unknown, not that the document is unreviewed.
 
-3. Audit the coordination layer, which is what a MasterPlan exists to get right. At minimum check that: the decomposition follows the principles in MASTERPLAN.md (functional concerns, two to seven plans, balanced scope); every registry row names a child file that exists at the stated path; hard dependencies are genuinely blocking rather than a preference for ordering, and the graph has no cycles; every shared artifact touched by more than one child plan appears in Integration Points with a single owning plan; and no two child plans define the same type, table, or interface incompatibly.
+3. Audit the coordination layer, which is what a MasterPlan exists to get right. At minimum check that: the decomposition follows the principles in MASTERPLAN.md without artificial child-plan splits; every registry row names a child file that exists at the stated path; hard dependencies are genuinely blocking rather than a preference for ordering, and the graph has no cycles at the declared plan or milestone granularity; any interleaved sequence respects those prerequisites; every shared artifact touched by more than one child plan appears in Integration Points with a single owning plan; and no two child plans define the same type, table, or interface incompatibly.
 
 4. Audit each child plan for the properties the MasterPlan promises: self-containment, independent implementability once its hard dependencies are complete, observable acceptance per milestone, and ADR citations that resolve per `agents/skills/exec-plan/ADR.md`.
 

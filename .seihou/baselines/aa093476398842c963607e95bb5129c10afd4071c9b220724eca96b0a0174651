@@ -7,9 +7,9 @@ This document defines the requirements for a master plan ("MasterPlan"), a coord
 
 Use a MasterPlan when the work requires multiple independently-deliverable changes that share a unifying goal. Indicators that a MasterPlan is appropriate:
 
-The initiative spans three or more distinct functional concerns (for example, a new data model, a consumer, and an API endpoint). Work streams have ordering constraints or shared interfaces that require coordination. The total scope would produce an unwieldy single ExecPlan (more than five milestones or touching more than ten files across unrelated modules). Multiple contributors or sessions will work on different parts of the initiative.
+The initiative contains distinct, independently deliverable work streams with dependencies or shared interfaces that need coordination. A single ExecPlan would obscure those boundaries or become hard to resume. Multiple contributors or sessions may work on different parts of the initiative.
 
-If the work fits comfortably in a single ExecPlan with two to four milestones, use an ExecPlan directly. A MasterPlan adds value only when coordination across plans is the hard problem.
+If one ExecPlan can explain and verify the work clearly, use it directly. A MasterPlan adds value when coordination across plans is the hard problem.
 
 
 ## Non-Negotiable Requirements
@@ -45,7 +45,7 @@ Provenance is optional and its absence carries no meaning. Documents created bef
 
 ## Decomposition Principles
 
-Break the initiative into work streams by functional concern, not by file or module. Each work stream should produce a demonstrable, independently verifiable behavior. Prefer fewer well-scoped plans (two to seven) over many granular ones. If you find yourself creating more than seven child plans, introduce phases to group related plans into implementation waves.
+Break the initiative into work streams by functional concern, not by file or module. Each work stream should produce a demonstrable, independently verifiable behavior. Use the fewest child plans that preserve clear ownership, dependencies, and acceptance. Group plans into phases only when phases make ordering or handoffs clearer.
 
 When deciding where to draw boundaries, consider the following. Minimize cross-plan coupling: two plans that must modify the same function in the same way should likely be one plan. Maximize independent verifiability: each plan's outcome should be testable without the others being complete. Respect natural ordering: if feature B is meaningless without feature A, make A a dependency of B rather than merging them. Balance scope: avoid one plan doing eighty percent of the work while others are trivial; redistribute if possible.
 
@@ -54,11 +54,13 @@ When deciding where to draw boundaries, consider the following. Minimize cross-p
 
 MasterPlans model three kinds of relationships between child plans.
 
-Hard dependencies mean plan B cannot begin until plan A is complete. Use these sparingly as they serialize work and extend timelines. A hard dependency is warranted when plan B's code would not compile or make sense without plan A's artifacts (types, modules, configurations).
+Hard dependencies identify artifacts or behavior that must be accepted before dependent work begins. A reference to a whole child requires that child to be Complete. When only one milestone is needed, explicitly name that milestone and its required output in the registry and Dependency Graph, and reflect the prerequisite in the affected child plans. Use hard dependencies sparingly as they serialize work and extend timelines; do not silently reinterpret an existing whole-child dependency as a milestone dependency.
 
 Soft dependencies mean plan B benefits from plan A being complete but can proceed independently, perhaps with temporary stubs or assumptions. Soft dependencies are the norm when two plans share context but not code artifacts.
 
 Integration dependencies mean plans A and B both define interfaces or data structures that must agree. Neither blocks the other, but a reconciliation step is needed before or after implementation to ensure the interfaces align. Document the shared interfaces in the Integration Points section of the MasterPlan.
+
+Keep a simple child-by-child sequence when it fits the dependencies. When coupled work needs interleaving, describe an explicit milestone sequence in Dependency Graph using the existing child milestones and their acceptance conditions. The registry continues to track whole-child status. Interleaving does not waive hard dependencies or require another progress checklist.
 
 
 ## Integration Points
@@ -67,16 +69,22 @@ When multiple child plans touch the same files, types, or interfaces, the Master
 
 Integration points prevent silent conflicts where two plans make incompatible assumptions about shared code.
 
+When a shared interface or behavior is uncertain, name a representative producer/consumer check and its owner, and schedule it before expanding dependent variants. Use the actual implementation path appropriate to the project, such as a library consumer test or an authorized native roundtrip. An isolated change needs no additional integration exercise; reuse existing acceptance where it already proves the interaction.
+
 
 ## Living Document Requirements
 
-The MasterPlan must maintain and keep current the following sections: a Progress section (aggregate checklist tracking milestone-level progress across all child plans), a Surprises & Discoveries section (cross-plan insights, dependency changes, scope adjustments), a Decision Log (every decomposition or coordination decision with rationale and date), and an Outcomes & Retrospective section (filled during and after the initiative).
+The MasterPlan must maintain and keep current the following sections: a Progress section summarizing initiative state and remaining integration work, a Surprises & Discoveries section for findings that affect more than one child plan, a Decision Log for material decomposition or coordination decisions with rationale and date, and an Outcomes & Retrospective section filled during and after the initiative.
+
+The Exec-Plan Registry is the source of truth for child-plan status; each child ExecPlan owns its milestone progress. Do not copy child milestones or routine tasks into MasterPlan checkboxes. In Progress, identify the current phase, blocked plans, and any cross-plan integration or acceptance gate not represented by a child plan. Use a checklist for those gates only if checking them off makes the initiative easier to manage. Update the snapshot on child-plan status changes, material blockers, integration results, or handoff, not after every action.
 
 When a child plan's implementation reveals that the decomposition was wrong (a plan should be split, merged, reordered, or cancelled), update the MasterPlan first, then cascade the changes to affected child plans. Record the change in the Decision Log with rationale.
 
 When a living-document entry captures durable project context, update `docs/adr/` in the same change. This is especially important for cross-plan discoveries that alter shared interfaces, architectural boundaries, integration constraints, or deliberate exclusions.
 
+Friction met while implementing is recorded in the repository's friction-log bundle under the child plan being implemented, following `agents/skills/exec-plan/FRICTION.md`, not in MasterPlan sections. The MasterPlan's Surprises & Discoveries records friction with the same surface recurring across child plans, by `FRIC-N` handle, because recurrence is a coordination signal and the strongest case for promotion to a bug report or an improvement request.
+
 
 ## Writing Style and Formatting
 
-Follow the same writing style and formatting rules as ExecPlans (see `agents/skills/exec-plan/PLANS.md`). Write in plain prose. Use fenced code blocks (triple backticks) with an explicit language tag — for example `bash`, `typescript`, `haskell`, `diff`, or `text` — for every command, transcript, diff, or code snippet. Bare fences without a language tag are not permitted. The Exec-Plan Registry is the one exception where a table is preferred for scanability.
+Follow the same writing style and formatting rules as ExecPlans (see `agents/skills/exec-plan/PLANS.md`), except that MasterPlan Progress is a concise coordination snapshot rather than a mandatory checklist. Write in plain prose. Use fenced code blocks (triple backticks) with an explicit language tag — for example `bash`, `typescript`, `haskell`, `diff`, or `text` — for every command, transcript, diff, or code snippet. Bare fences without a language tag are not permitted. The Exec-Plan Registry is the one exception where a table is preferred for scanability.
