@@ -1,7 +1,7 @@
 ---
 id: 8
 slug: move-the-primary-rei-and-mori-runtime-from-sungkyung-to-yujin
-title: "Move every PostgreSQL-backed service and its backups from Sungkyung to Yujin"
+title: "Move every PostgreSQL-backed service, its backups, and the shared support services from Sungkyung to Yujin"
 kind: exec-plan
 created_at: 2026-10-17T03:57:38Z
 provenance:
@@ -15,9 +15,14 @@ provenance:
       at: 2026-11-10T13:39:33Z
       mode: "update"
       note: "Reviewed against the repo and Sungkyung; added Mina, Reiko, Notion Hub, and PostgreSQL backup move; fixed offsite path and PG17 tooling defects"
+    - model: "claude-opus-5-5"
+      harness: "claude-code"
+      at: 2026-11-10T21:34:09Z
+      mode: "update"
+      note: "Added support services (Caddy, VictoriaLogs, VictoriaTraces, Redpanda) and a mori-rei-app proof; data-safety invariants; Yujin backup-agent hazard"
 ---
 
-# Move every PostgreSQL-backed service and its backups from Sungkyung to Yujin
+# Move every PostgreSQL-backed service, its backups, and the shared support services from Sungkyung to Yujin
 
 This ExecPlan is a living document. Keep Progress, Surprises & Discoveries, Decision Log, and Outcomes & Retrospective current during implementation. Creating this plan does not execute the migration.
 
@@ -25,25 +30,27 @@ This ExecPlan is a living document. Keep Progress, Surprises & Discoveries, Deci
 ## Purpose / Big Picture
 
 
-Make Yujin the only workstation that runs anything depending on the shared PostgreSQL server. After this plan the following run on Yujin and nowhere else: Rei (the intention tracker, with its API and workers), Mori (the project registry and its automation daemon), mori-rei-app (the webhook bridge from Mori to Rei), Notion Hub (its database and subscription worker), Mina and Reiko (the two web tools that read Mori and Rei), Caddy (the proxy behind names such as mina.localhost), and PostgreSQL's scheduled backups with their external-drive mirror. Existing intentions, notes, event history, automation progress, webhook delivery records, Notion Hub tracked pages and conversations, Mina tracking/Obeya data, and Reiko archives must survive. On Yujin the tools and browser names work locally. Sungkyung becomes a client: it opens the SSH connection to Yujin and accesses Yujin's services through private local forwards. It runs no service against its own PostgreSQL; its old cluster stays only as a fenced recovery copy for the retention window.
+Make Yujin the only workstation that runs anything depending on the shared PostgreSQL server. After this plan the following run on Yujin and nowhere else: Rei (the intention tracker, with its API and workers), Mori (the project registry and its automation daemon), mori-rei-app (the webhook bridge from Mori to Rei), Notion Hub (its database and subscription worker), Mina and Reiko (the two web tools that read Mori and Rei), PostgreSQL's scheduled backups with their external-drive mirror, and the shared support services: Caddy (the proxy behind names such as mina.localhost), VictoriaLogs with its log shippers, VictoriaTraces with its Jaeger UI, and the Redpanda cluster. The support services hold no data this plan has to preserve, but they move with the runtime so that every name and port Sungkyung uses reaches one machine, and never a mix of two. Existing intentions, notes, event history, automation progress, webhook delivery records, Notion Hub tracked pages and conversations, Mina tracking/Obeya data, and Reiko archives must survive. On Yujin the tools and browser names work locally. Sungkyung becomes a client: it opens the SSH connection to Yujin and accesses Yujin's services through private local forwards. It runs no service against its own PostgreSQL; its old cluster stays only as a fenced recovery copy for the retention window.
 
-Success means existing records survive a verified restore, a controlled new write in each of Rei, Mina, Reiko, and Notion Hub is visible from both machines, workers resume from preserved positions, Yujin's own scheduled backup and offsite mirror have produced a copy that was actually restored, and Sungkyung can neither write its old production databases nor run a competing backup schedule. Schedule a maintenance window after a timed rehearsal; measure the duration rather than promising zero downtime. Preserve original data and independent backups throughout.
+Success means existing records survive a verified restore, a controlled new write in each of Rei, Mina, Reiko, and Notion Hub is visible from both machines, a controlled commit travels through Mori and mori-rei-app into exactly one Rei action, workers resume from preserved positions, a log line and a trace produced on Sungkyung land in Yujin's VictoriaLogs and VictoriaTraces, Sungkyung's Kafka clients reach Yujin's Redpanda, Yujin's own scheduled backup and offsite mirror have produced a copy that was actually restored, and Sungkyung can neither write its old production databases nor run a competing backup schedule. Schedule a maintenance window after a timed rehearsal; measure the duration rather than promising zero downtime. Preserve original data and independent backups throughout.
 
 
 ## Progress
 
 
 - [x] (2026-11-10) Review the plan against the working tree and Sungkyung's live state; expand it to every PostgreSQL-dependent service and to the backups. Yujin itself was not inspected.
+- [x] (2026-11-10) Extend the scope to the shared support services (Caddy, VictoriaLogs, VictoriaTraces with Jaeger UI, Redpanda) and give mori-rei-app its own proof; read-only check of Yujin's support services, backup agents, and databases.
 - [ ] Milestone 1: inventory both physical machines, versions, databases, workspace files, repositories, ingress, and pending work; classify all 19 non-template databases found on Sungkyung.
 - [x] (2026-11-10) Milestone 1: get the Notion Hub subscription worker out of its crash loop through mori://shinzui/notion-hub (revision b900d36, deployed to Sungkyung).
 - [x] (2026-11-10) Milestone 1: locate the aki-2023 drive and establish which cluster its mirror holds. It holds Sungkyung's chain, verified by checksum after a fresh full backup.
-- [ ] Milestone 2: implement and verify staged ownership, Caddy ownership, backup ownership, the PostgreSQL 18 tool wrapper, reverse client configuration, and evidence tooling without moving the active runtime.
+- [x] (2026-11-10) Milestone 1: stop Yujin's com.shinzui.pg-backup and com.shinzui.pg-backup-offsite-sync agents before aki-2023 is attached anywhere. Both were booted out with exit 0, launchctl list shows no pg-backup agent, com.shinzui.postgresql is still running, and aki-2023 was not mounted. This lasts only until Yujin's next switch: any Yujin switch before the milestone 2 preparation revision reloads both agents, so stop them again after such a switch.
+- [ ] Milestone 2: implement and verify staged ownership, support-service ownership, backup ownership, the PostgreSQL 18 tool wrapper, reverse client configuration, and evidence tooling without moving the active runtime.
 - [ ] Milestone 3: rehearse PostgreSQL/SQLite restoration and a pg_rman restore on Yujin in isolation; record timing and recovery proof.
-- [ ] Milestone 4: freeze writes, stop and verify Sungkyung, create final exports, take the final physical backup, and fence its old databases and Mina store.
+- [ ] Milestone 4: freeze writes, stop and verify Sungkyung (runtime and support services), create final exports, take the final physical backup, and fence its old databases and Mina store.
 - [ ] Milestone 5: restore and compare final data on Yujin; establish its own Mori identity and repository locations; validate Yujin with workers off.
 - [ ] Milestone 6: move PostgreSQL backups to Yujin: first full backup, restore proof, new offsite mirror, frozen Sungkyung chain.
-- [ ] Milestone 7: reverse Sungkyung's client connection and resume workers.
-- [ ] Milestone 8: prove Mina, Reiko, and Notion Hub on Yujin from both machines, then reopen ingress.
+- [ ] Milestone 7: reverse Sungkyung's client connection, including the support-service forwards, and resume workers.
+- [ ] Milestone 8: prove Mina, Reiko, Notion Hub, and mori-rei-app on Yujin from both machines, then reopen ingress.
 - [ ] Milestone 9: prove restart persistence and update runbooks/ADRs.
 
 
@@ -106,6 +113,40 @@ mina.db-wal  1236032 bytes
 
 Caddy binds 0.0.0.0:80 today and docs/local-services.md describes reaching tools from other devices through names that encode this Mac's LAN address, so bookmarks and DNS records for those names follow Sungkyung's address and will stop working after the move.
 
+A later read-only check on Yujin, also on 2026-11-10, found that Yujin's own backup agents are loaded and its catalog took a full backup on 2026-11-05. aki-2023 was not attached. Until those agents are stopped, attaching the drive to Yujin would run an on-mount sync with rsync --delete into /Volumes/aki-2023/postgresql-backups, replacing the verified Sungkyung chain with Yujin's. This is the most immediate data-loss hazard in the plan, which is why stopping them is now its own Progress item.
+
+```text
+-  0  com.shinzui.pg-backup
+-  0  com.shinzui.pg-backup-offsite-sync
+~/.local/state/postgresql/last-full-backup  modified 2026-11-05 03:00
+/Volumes: Macintosh HD, Recovery
+```
+
+Yujin's cluster has none of the four canonical database names, so the final restore needs no rename. It does hold two scratch databases of its own, and Yujin has its own Mina store, which milestone 5 must preserve as a conflict rather than overwrite.
+
+```text
+postgres                              7774 kB
+rei_ep276_20261108_044829             334 MB
+rei_ep276_rebuild_20261108_044829     337 MB
+system_identifier                     7696681397435454777
+~/.local/share/mina/mina.db           present
+```
+
+The support services already run on both machines, because their modules are shared and nothing gates them. Yujin runs com.shinzui.local-web-proxy (Caddy on *:80), com.shinzui.victorialogs with sixteen victorialogs-shipper agents, com.shinzui.victoriatraces, com.shinzui.victoriatraces-jaeger-ui (nginx on 127.0.0.1:16686), and Redpanda's Apple Container cluster (Console on 127.0.0.1:8080). VictoriaLogs and VictoriaTraces listen on every interface (*:9428, *:10428), not just loopback. Because Yujin has been a client, its stores are small. Sungkyung's sizes are a milestone 1 measurement.
+
+```text
+~/.local/share/victoria-logs/data     1.1M
+~/.local/share/victoria-traces/data   29M
+```
+
+The log shippers tail local files and post to localhost:9428. If Sungkyung's shippers kept running after its port 9428 is forwarded to Yujin, they would write Sungkyung's leftover and fenced-cluster log lines into Yujin's VictoriaLogs under the same app names, interleaving two machines in one stream. They must stop with the rest of Sungkyung's support services.
+
+Mori's registration for mori-rei-app points at a host-relative URL, so after the move Mori's deliveries go to whichever machine runs mori-automate, and the registration needs no change. The app's webhook secret is age-encrypted to Yujin's agenix key as well as Sungkyung's (secrets/secrets.nix, with hosts/yujin/default.nix pointing age.identityPaths at ~/.ssh/agenix_ed25519).
+
+```text
+app_01knxf3p1aezarprphnkpgsqzj  mori-rei-app  http://localhost:26862/webhook  active  1 (1 changeset)
+```
+
 
 ## Decision Log
 
@@ -141,6 +182,18 @@ Caddy binds 0.0.0.0:80 today and docs/local-services.md describes reaching tools
 2026-11-10: Reverse the Git ingest along with the tunnel by moving sungkyung-client-ingest into home/rei-mori-client.nix, so Sungkyung's commits keep reaching Mori after the move.
 
 2026-11-10: Keep Sungkyung's PostgreSQL server running, fenced, for the retention window so its state can be inspected and rollback does not require restarting it. Stopping that server is part of the separate retirement action after retention.
+
+2026-11-10: At the user's request, the shared support services move too: Caddy, VictoriaLogs with its shippers, VictoriaTraces with its Jaeger UI, and Redpanda (the user chose to move Redpanda when asked). They do not depend on PostgreSQL. They move because, once Sungkyung forwards port 80 and the telemetry and Kafka ports to Yujin, any of them still running on Sungkyung would either block a forward or answer a name for the wrong machine. Afterwards each runs only on Yujin, and Sungkyung reaches it on the same port numbers through the tunnel, so the OTEL_EXPORTER_OTLP_ENDPOINT, rpk profile, and bookmarks on Sungkyung keep working unchanged.
+
+2026-11-10: Keep the support services off the PostgreSQL critical path. They get their own switch, workstation.supportServices.enable (default true), and do not join workstation.reiMori.agents. Yujin keeps it true throughout, so preparation does not stop or restart anything on Yujin. Sungkyung turns it off in the stopped revision of milestone 4. No support-service step reads, writes, exports, restores, or fences PostgreSQL data, a pg_rman catalog, the bundle, or the offsite mirror, and a support-service failure is repaired in place. It is never a reason to retry, roll back, or reorder a database step. This supersedes the 2026-10-16 wording that added Caddy to the owned agent list. Caddy still moves to Yujin, through this switch instead, so the validation stage now permits four runtime agents (mori-serve, rei-api, mina-web, reiko-web) while Yujin's support services simply stay running.
+
+2026-11-10: Do not carry telemetry history (user decision). VictoriaLogs and VictoriaTraces keep seven days, and both machines have recorded the same days, so merging partitions would add a maintenance-window step for data nobody has to preserve. Sungkyung's ~/.local/share/victoria-logs and ~/.local/share/victoria-traces stay on disk through the retention window. If an investigation needs them, open them with a temporary instance on a non-conflicting loopback port and a copied data directory.
+
+2026-11-10: Move Redpanda without its topic data. Its data lives in the Apple Container volume redpanda-0-data, outside Nix. On Sungkyung run redpanda-down, which keeps all data, before the stopped switch. Then disable services.redpanda-container on Sungkyung, and keep the volume for the retention window. Never run redpanda-purge or delete the volume from this plan. Nothing in the Rei/Mori/Notion Hub runtime uses Redpanda, so topics left behind on Sungkyung are recorded in milestone 1 and are not migrated.
+
+2026-11-10: Carry the support-service forwards in a second SSH agent, yujin-support-tunnel, separate from the database tunnel. Both use ExitOnForwardFailure, so if the two were one agent, a busy local port such as 9092 held by an ad hoc Kafka would also take down the PostgreSQL, Mori, and Rei forwards.
+
+2026-11-10: Give mori-rei-app its own proof in milestone 8 instead of letting the generic "first automation" stand for it. The bridge depends on things the other proofs miss: the decrypted webhook secret, its summariser CLIs and their logins on Yujin, Mori's project lookup, repository checkouts for plan documents, its commit-batch queue, and its webhook_delivery idempotency table. It is the one service whose double delivery writes duplicate Rei actions.
 
 2026-11-10: The user confirmed that the 14 rollout and scratch databases do not move. This settles the earlier default for all 14, including notion_hub_okf_live_20260923, and removes the option of promoting one into the migration set without asking.
 
@@ -178,7 +231,11 @@ config/xdg/rei/config.yaml points to /Users/shinzui/Keikaku/rei-workspace/. Tran
 
 home/mina.nix runs Mina at 127.0.0.1:8765; home/reiko.nix runs Reiko at 127.0.0.1:8770. Both spawn Rei; Mina also spawns Mori. Their launch-agent environments and PATH must work independently of interactive shells. Current Mina source stores tracking and Obeya data in ~/.local/share/mina/mina.db, subject to XDG_DATA_HOME and MINA_TRACKING_DB overrides. It uses SQLite WAL mode: committed data may still be in a journal beside the database, so copying mina.db alone can lose data. Include effective Mina global/project configuration and durable .mina contents. Current Reiko source keeps archive sidecars and state under ~/.local/share/reiko, subject to XDG_DATA_HOME and reikoDataDir in ~/.config/reiko/config.yaml. Verify these defaults against the deployed binaries. Mina creates the directory and database when they are missing, so an absent file produces a silently empty store instead of an error. ~/.mina and ~/.reiko hold only caches and logs on Sungkyung, and Mina's global configuration is a Home Manager link, so the durable Mina state there is the SQLite store plus any .mina contents inside repositories. reiko web turns a failed rei call into a warning and an empty list, as the comment in home/reiko.nix explains, so an empty collection page on Yujin is a failure signal and not evidence of an empty store.
 
-home/local-web-proxy.nix runs Caddy as com.shinzui.local-web-proxy on port 80, currently independently enabled on both machines. It proxies named local tools. Mori 8780 and Rei API 8775 additionally require a loopback peer; these routes must remain private. Caddy's other routes reach Yujin's local logs/traces/Jaeger/Redpanda and development servers. Historical telemetry and Redpanda data are outside this application migration; verify needed Yujin upstreams and record unavailable optional routes. After the move Sungkyung's forwards listen only on loopback, so other devices that reach these tools through a name encoding Sungkyung's LAN address must be repointed at Yujin, and a documentation dev server started on Sungkyung is no longer reachable through its named route because that route now resolves on Yujin.
+home/local-web-proxy.nix runs Caddy as com.shinzui.local-web-proxy on port 80, currently independently enabled on both machines. It proxies named local tools. Mori 8780 and Rei API 8775 additionally require a loopback peer; these routes must remain private. Caddy's other routes reach the support services below and documentation dev servers on ports 5210 to 5221. After the move Sungkyung's forwards listen only on loopback, so other devices that reach these tools through a name encoding Sungkyung's LAN address must be repointed at Yujin, and a documentation dev server started on Sungkyung is no longer reachable through its named route because that route now resolves on Yujin.
+
+The shared support services are the following, and every one is imported by home/default.nix on both machines with nothing gating it today. home/victorialogs.nix runs com.shinzui.victorialogs on port 9428, keeps data in ~/.local/share/victoria-logs/data with seven-day retention, and generates one com.shinzui.victorialogs-shipper-<app>-<stream> agent per log file. Each shipper waits for its file, then tails it with tail -n0 -F, so it ships only lines written after it starts, and posts each line to localhost:9428. The covered apps are rei-worker, rei-worker-git-sync, rei-subscription, mori-automate, mori-serve, mori-rei-app, notion-hub-subscription, and postgresql. home/victoriatraces.nix runs com.shinzui.victoriatraces on port 10428, with data in ~/.local/share/victoria-traces/data and seven-day retention, plus com.shinzui.victoriatraces-jaeger-ui, an nginx serving the Jaeger UI on 127.0.0.1:16686. Rei (home/rei.nix, in launch agents and the interactive shell) and Mina (home/mina.nix) export OpenTelemetry traces to http://localhost:10428/insert/opentelemetry. home/redpanda.nix turns on the redpanda-container Home Manager module from the redpanda-container flake input (registered in flake-modules/modules.nix; not in the Mori registry, so docs/redpanda.md is the reference). Its com.shinzui.redpanda agent is one-shot: it runs redpanda-up at login and exits. The broker and Console are Apple Container containers that keep running regardless of launchd, with Kafka on 127.0.0.1:9092, Admin API 9644, Schema Registry 8081, HTTP Proxy 8082, and Console 8080. Data lives in the container volume redpanda-0-data. redpanda-down stops the containers and keeps the data, redpanda-purge destroys it, and setting services.redpanda-container.enable = false keeps the volume. rpk comes from Homebrew, and its local profile points at 127.0.0.1. None of these services stores anything this migration must preserve, and none of them touches PostgreSQL except the postgresql log shipper, which only reads log files.
+
+home/mori-rei-app.nix runs com.shinzui.mori-rei-app (mori://shinzui/mori-rei-app, pinned in flake.nix) as mori-rei-app serve. It listens on port 26862 and receives Mori's signed webhooks at the registered URL http://localhost:26862/webhook (app app_01knxf3p1aezarprphnkpgsqzj). Its wrapper waits for the agenix secret age.secrets.mori-rei-app-webhook-secret, then for PostgreSQL, and then runs createdb mori_rei_app, ignoring any error. That is a reason the bridge must not start on Yujin before the final restore: it would create an empty mori_rei_app that the restore's --create then collides with. It writes Rei through REI_PG_CONNECTION_STRING, keeps its idempotency ledger public.webhook_delivery and lifecycle audit in mori_rei_app, and batches commits through a pgmq queue drained hourly by default with a 300-second visibility timeout. It resolves each commit's repository through MORI_API_URL and reads plan documents from that project's checkout, falling back to the intention's local-repo property when the lookup fails. Its summariser shells out to the claude or codex CLI found on the agent's PATH (~/.local/bin, then /opt/homebrew/bin) using that CLI's own login, and quietly falls back to deterministic text when the CLI is missing. The upstream README describes current source, not the pinned revision, so milestone 1 confirms these against the deployed binary.
 
 Relevant local ADRs are [shared host composition](../adr/1-shared-workstation-modules-and-host-overrides.md) and [private bootstrap/identity](../adr/2-selective-private-workstation-bootstrap.md). They require shared modules with explicit host differences, distinct machine identities, and independent proof of physical readiness. No existing ADR specifies database transfer. Follow [ownership guidance](../rei-mori-cutover.md), [bootstrap prerequisites](../new-machine-bootstrap.md), and [backup configuration](../pg-backup.md) until implementation updates them. The local Mori manifest declares no profiled ADR bundle; preserve the plain Markdown ADR convention.
 
@@ -188,6 +245,17 @@ Full database archives and separate globals exports were checked against officia
 
 
 ## Plan of Work
+
+
+The milestones below elaborate these data-safety invariants. If a step seems to need breaking one, stop and ask the user. Do not work around it.
+
+1. Sungkyung's original data is never modified, apart from the recorded ALLOW_CONNECTIONS fence and Mina file-mode fence, both of which reverse. Nothing on Sungkyung is dropped, deleted, purged, reset, or overwritten during this plan: databases, data directories, the pg_rman catalog, WAL archive, Mina files, telemetry directories, or the Redpanda volume.
+2. aki-2023 is attached to a machine only when that machine's backup agents cannot sync to the wrong directory. Yujin's agents must be stopped before the drive is next attached anywhere (milestone 1), and Yujin syncs only to the sibling path guarded by the cluster-identity marker (milestones 2 and 6).
+3. The final export happens only after every writer is stopped, and it is accepted only when the before and after fingerprints match. If they differ, find the writer and repeat into a new bundle (milestone 4).
+4. No service on Yujin may start against the restored data until the offline comparison of all four databases and Mina's store passes exactly (milestone 5). Background workers and mori-rei-app wait until Yujin's own first backup has been restored and matched (milestone 6).
+5. Two complete, checksum-verified bundles exist before promotion, and one of them is outside both Macs' internal disks (milestone 4).
+6. Restores go only into empty or quarantined targets. A failed restore is quarantined and retried elsewhere, never repeated over data.
+7. Only one host owns the runtime and only one owns backups at any time, and the owner checker proves it at every revision.
 
 
 ### Milestone 1: Inventory the real state and implement evidence collection
@@ -207,19 +275,23 @@ Discover actual queue/checkpoint schemas from database catalogs and the deployed
 
 Inventory the Rei workspace, repository/worktree dependencies, local branches/changes, Mina SQLite overrides/configuration, Reiko state, source/destination path conflicts, secrets readability, and every ingress/automation/webhook route. Determine how to pause and resume each producer. Verify Yujin's tailnet address and SSH host fingerprints over a trusted channel; re-enroll renewable credentials using the bootstrap runbook. Never copy machine identity keys.
 
-Inspect both machines' backup schedules and mounted external volumes immediately. Because the existing offsite path is shared by default, stop Yujin's backup agents first, with launchctl bootout gui/$(id -u)/com.shinzui.pg-backup-offsite-sync and the same for com.shinzui.pg-backup, before the drive is attached anywhere. Then locate aki-2023, attach it to one machine with neither sync able to run, and read its postgresql-backups directory: compare pg_rman.ini and the newest backup with Sungkyung's catalog and Yujin's to establish whose chain it holds and how old that chain is. If Yujin's agent overwrote it, record that plainly, because there has been no independent copy of Sungkyung's data since 2026-10-13. Preserve the directory either way and do not let another mirror run until distinct destinations and the guard from milestone 2 are active. If the drive cannot be found, stop and ask the user, since milestones 4 and 6 both need independent storage.
+Inventory the support services on both machines: loaded labels, listening addresses for ports 80, 9428, 10428, 16686, 8080, 8081, 8082, 9092, and 9644, the size of each telemetry data directory, container ls output, and rpk topic list on Sungkyung, recorded privately so the topics left behind are known. Record which other local processes ever bind those ports on Sungkyung, such as a k3d cluster or a hand-started Kafka, because Sungkyung's support tunnel will need them free. For mori-rei-app, record the deployed revision on both machines. Confirm the deployed binary's port, environment variables, pgmq queue name and database, and summariser provider against its --help and source at that revision. Find which of claude and codex it will call, and check that the CLI is installed on Yujin's agent PATH and logged in, without printing credentials. Confirm that age.secrets.mori-rei-app-webhook-secret decrypts on Yujin by testing that the file is readable and non-empty. Do not print the secret. Record mori app list and the current mori app deliveries summary for app_01knxf3p1aezarprphnkpgsqzj. Confirm Yujin has checkouts, or a plan to create them, for every repository whose plan documents the bridge reads.
+
+Inspect both machines' backup schedules and mounted external volumes immediately. On 2026-11-10, Yujin's backup agents were found loaded. Because the existing offsite path is shared by default, stop Yujin's backup agents first, with launchctl bootout gui/$(id -u)/com.shinzui.pg-backup-offsite-sync and the same for com.shinzui.pg-backup, before the drive is attached anywhere. Then locate aki-2023, attach it to one machine with neither sync able to run, and read its postgresql-backups directory: compare pg_rman.ini and the newest backup with Sungkyung's catalog and Yujin's to establish whose chain it holds and how old that chain is. If Yujin's agent overwrote it, record that plainly, because there has been no independent copy of Sungkyung's data since 2026-10-13. Preserve the directory either way and do not let another mirror run until distinct destinations and the guard from milestone 2 are active. If the drive cannot be found, stop and ask the user, since milestones 4 and 6 both need independent storage.
 
 Resolve the Notion Hub crash loop before leaving this milestone. Use mori://shinzui/notion-hub to find the failing event through kiroku.subscriptions, kiroku.streams, and the worker log, determine why the projection inserts a second non-archived row for one notion_page_id, and repair it through that project's own ExecPlan and normal release path, then deploy the fixed revision to Sungkyung with the usual build and switch. Do not delete events, hand-edit tracked_pages, or advance a checkpoint from this plan. Done means launchctl print gui/$(id -u)/com.shinzui.notion-hub-subscription shows a running process whose runs count stops climbing, and the subscription's position in kiroku.subscriptions has caught up. Anything that moves the deployed Notion Hub schema must finish before the rehearsal, which needs a stable version.
 
-Acceptance: a complete private transfer manifest, every database classified, no unclassified store, Notion Hub's worker running without restarts, aki-2023 located with its contents identified, Yujin's backup agents stopped, sufficient measured disk capacity (Yujin needs room for the restored databases, the WAL the restore generates, and the first full backup), exact source/destination versions, and a list of writers/ingress/pending effects exist. The evidence helper detects a changed row with unchanged counts, sequence/checkpoint drift, and the wrong socket. Do not create an empty production store as an inventory fix.
+Acceptance: a complete private transfer manifest, every database classified, no unclassified store, Notion Hub's worker running without restarts, aki-2023 located with its contents identified, Yujin's backup agents stopped, sufficient measured disk capacity (Yujin needs room for the restored databases, the WAL the restore generates, and the first full backup), exact source/destination versions, the support-service and mori-rei-app inventory above, and a list of writers/ingress/pending effects exist. The evidence helper detects a changed row with unchanged counts, sequence/checkpoint drift, and the wrong socket. Do not create an empty production store as an inventory fix.
 
 
 ### Milestone 2: Prepare staged ownership and reverse client configuration
 
 
-Extend home/rei-mori-runtime.nix with workstation.reiMori.stage = "validation" | "active", default active. enable = false forces every owned agent off. On the enabled owner, validation permits only mori-serve, rei-api, mina-web, reiko-web, and local-web-proxy. It forces all automations, workers, integrations, and healing off. Active preserves each module's existing enable value; never turn the two legacy workers back on. Add local-web-proxy to the owned agent list so Caddy moves too. In home/rei-doctor.nix allow --heal and watchdog self-bootstrap only when enabled and active; stop the watchdog before other shutdown hooks.
+Extend home/rei-mori-runtime.nix with workstation.reiMori.stage = "validation" | "active", default active. enable = false forces every owned agent off. On the enabled owner, validation permits only mori-serve, rei-api, mina-web, and reiko-web. It forces all automations, workers, integrations (mori-rei-app included), and healing off. Active preserves each module's existing enable value; never turn the two legacy workers back on. In home/rei-doctor.nix allow --heal and watchdog self-bootstrap only when enabled and active; stop the watchdog before other shutdown hooks.
 
-Extend bin/check-rei-mori-owner.py and bin/test-rei-mori-owner.py to validate stage, Caddy, and client tunnel placement. Reject dual owners, workers/healing during validation, runtime/Caddy on an inactive host, a client tunnel on the owner, and a tunnel pointing to its own machine. Preserve --expect none for the stopped interval. Add an --expect-backups option taking a host name or none, reading services.postgresql.backups.enable from each host; reject two backup owners and any disagreement with the expectation. Add tests for these hazards.
+Add the support-service switch. Create home/support-services.nix, imported by home/default.nix, declaring workstation.supportServices.enable (default true) and a read-only internal list of the agents it owns. It owns local-web-proxy, victorialogs, every generated victorialogs-shipper-* agent, victoriatraces, and victoriatraces-jaeger-ui. home/victorialogs.nix should export its shipper names rather than having them restated, so a new shipper cannot escape the switch. When the switch is false, force those agents off with lib.mkForce and set services.redpanda-container.enable to false. Do not remove the packages, so the CLIs and data stay. Removing a launch agent does not stop Redpanda's containers, which is why milestone 4 runs redpanda-down first. Before writing this, confirm through nix eval that services.redpanda-container.enable = false leaves the redpanda-0-data volume alone and runs no destructive activation. docs/redpanda.md says it does. If the deployed module disagrees, gate only the com.shinzui.redpanda agent instead. Leave Yujin's support services untouched by this revision: both hosts stay true in preparation.
+
+Extend bin/check-rei-mori-owner.py and bin/test-rei-mori-owner.py to validate stage, support-service, and client tunnel placement. Reject dual owners, workers/healing during validation, runtime on an inactive host, a client tunnel on the owner, and a tunnel pointing to its own machine. Preserve --expect none for the stopped interval. Add an --expect-backups option taking a host name or none, reading services.postgresql.backups.enable from each host; reject two backup owners and any disagreement with the expectation. Add an --expect-support option taking both or a host name, reading workstation.supportServices.enable. Once it names one host, reject the other host's support services, and reject a support tunnel on a host that also runs them, since its forwards could never bind. Add tests for these hazards.
 
 Extract hosts/yujin/home.nix's client logic into home/rei-mori-client.nix, imported by home/default.nix. Give it explicit enable, target, tunnelIdentityFile, reiIdentityFile, stateDirectory, forwardWebPort, and gitIngest options, and move the sungkyung-client-ingest agent and the programs.zsh.envExtra refresh into it so the reversed client keeps both. The ingest agent writes to the Mori store on the owner, so it must be off whenever the tunnel is. Reuse JSON/base64 argv encoding from bin/rei-ssh-dispatch.py; remove source-only wording and install the dispatcher at a stable managed path on the destination. The forced command must use Yujin's local managed Rei/environment and never resolve to another remote wrapper. Preserve argument boundaries, exit status, and interactive terminal behavior; reject malformed/non-string/NUL arguments without evaluating shell text.
 
@@ -227,11 +299,13 @@ Create dedicated Sungkyung-to-Yujin tunnel and Rei keys on Sungkyung and enroll 
 
 Sungkyung's final tunnel forwards ~/.local/state/yujin-clients/postgresql/.s.PGSQL.5432 to Yujin's PostgreSQL socket. Forward local 18780 to destination 8780, 18775 to 8775, and 19091 to 9091, bound only to 127.0.0.1. Forward both 127.0.0.1:80 and [::1]:80 to Yujin 127.0.0.1:80; preflight both bind addresses after stopping source Caddy. Keep PostgreSQL off TCP and all new forward listeners off non-loopback interfaces. Ensure socket directories are owned and mode 0700.
 
+Give home/rei-mori-client.nix a supportForwards option that runs a second agent, com.shinzui.yujin-support-tunnel, with the same SSH hardening and its own known_hosts check. It forwards 9428, 10428, 16686, 8080, 8081, 8082, 9092, and 9644 to the same port on Yujin's 127.0.0.1, binding each on both 127.0.0.1 and [::1] on Sungkyung, because OTEL_EXPORTER_OTLP_ENDPOINT and the shippers say localhost, which macOS may resolve to either. Same port numbers mean Sungkyung's OTEL settings, rpk profile, just recipes, and bookmarks need no change. Redpanda's broker advertises 127.0.0.1:9092, which a Sungkyung Kafka client then dials through the same forward. Confirm that with rpk in milestone 7 rather than assuming it. Port 80 stays on the database tunnel as already planned. A failure of the support tunnel must not affect the database tunnel. Add the forward targets to the tunnel key's authorized_keys permitopen list on Yujin.
+
 Sungkyung's final shell sets MORI_PG_CONNECTION_STRING, REI_PG_CONNECTION_STRING, NOTION_HUB_PG_CONNECTION_STRING, and MORI_REI_APP_PG_CONNECTION_STRING to the forwarded private socket with their existing database names and user=shinzui connect_timeout=5, MORI_API_URL to http://127.0.0.1:18780, and KIROKU_REMOTE_URL to http://127.0.0.1:19091. home/notion-hub.nix and home/mori-rei-app.nix also set the first of those in shared session variables, so the client overrides need lib.mkForce as hosts/yujin/home.nix does today. Without the Notion Hub setting, nhub on Sungkyung would connect to the fenced local database. Managed wrappers such as nhub-migrate keep hard-coded local sockets and correctly fail against the fence. Other client endpoint overrides require discovering supported variables first. Yujin loses its old forward agent, its ingest agent, its high-priority remote Rei package, and its remote mkForce environment overrides; it returns to shared local settings. Use fresh shells after switching.
 
 Do not access live SQLite across a network filesystem. Sungkyung's browser reaches Yujin's Mina database through the tunnel; mutable Mina/Reiko CLI operations run in an SSH shell on Yujin in the relevant repository. Document this explicitly so retained source SQLite/files are not used as a second active store. Milestone 1 records which deployed mina commands open the tracking store, so the runbook can name the ones that must run on Yujin; milestone 4's permission fence makes any that are missed fail visibly. Reiko has no comparable local store to fence, since it reads through rei.
 
-Deliver preparation changes with Sungkyung still active and Yujin inactive, keeping the existing client direction until the maintenance window. Prepare reviewed stopped, Yujin-validation, and Yujin-active revisions without activating later stages. Reverse forwarding remains off until final restore passes. Test argv encoding with harmless fake executables and shell metacharacters. Build both physical host targets without switching ownership. Acceptance: preparation still declares Sungkyung sole owner; evaluation of validation permits exactly the five web/API agents; tests reject premature workers; check-rei-mori-owner.py passes with --expect-backups SungkyungM1X; both builds pass. Inspect generated configuration through Nix values, never by traversing /nix/store.
+Deliver preparation changes with Sungkyung still active and Yujin inactive, keeping the existing client direction until the maintenance window. Prepare reviewed stopped, Yujin-validation, and Yujin-active revisions without activating later stages. Reverse forwarding remains off until final restore passes. Test argv encoding with harmless fake executables and shell metacharacters. Build both physical host targets without switching ownership. Acceptance: preparation still declares Sungkyung sole owner; evaluation of validation permits exactly the four web/API runtime agents; tests reject premature workers; check-rei-mori-owner.py passes with --expect-backups SungkyungM1X --expect-support both; evaluation of the stopped revision shows Sungkyung with no support agents and services.redpanda-container disabled, while Yujin's are unchanged; both builds pass. Inspect generated configuration through Nix values, never by traversing /nix/store.
 
 In this preparation revision, add backup ownership to home/postgresql.nix. Add services.postgresql.backups.enable, defaulting to false, gating the com.shinzui.pg-backup and com.shinzui.pg-backup-offsite-sync agents, and services.postgresql.backups.offsiteDirectory, defaulting to the existing /Volumes/aki-2023/postgresql-backups. Set enable true on Sungkyung and false on Yujin, and set Yujin's offsiteDirectory to /Volumes/aki-2023/postgresql-backups-yujin. That is a sibling of the old mirror, never a child, because rsync --delete on the old path would remove anything nested inside it. The general PostgreSQL agent stays enabled everywhere. Make pg-backup, pg-backup-offsite-sync, and pg-backup-purge exit with an explanatory error when the host is not the backup owner unless PG_BACKUP_ALLOW_INACTIVE=1 is set, following the --heal refusal in home/rei-doctor.nix. Add a pg18 wrapper that executes the named tool from the configured PostgreSQL 18 package, and leave postgresql_17 on PATH unchanged.
 
@@ -261,7 +335,9 @@ Never run production daemons or replay/reset commands against a rehearsal copy. 
 
 Notify the user in the current session that the maintenance window is beginning. Pause external webhook producers/routing and schedulers, close writer terminals/UIs on both machines including any running nhub sync, stop Yujin's com.shinzui.sungkyung-client-ingest agent and then its old tunnel, and block other known clients. Record each pause/resume action and pending-delivery handling. Pause backup/offsite jobs where necessary to prevent mutable catalogs and mirror races, preserving their previous state.
 
-Wait for in-flight work to reach the safe points recorded in milestone 1. Switch Sungkyung to the reviewed both-off revision with all client tunnels off. Complete its Mori directory conversion in docs/new-machine-bootstrap.md before switching if needed. Verify watchdog shutdown first, every owned label including Caddy unloaded, processes exited, and manual writers absent. Inspect pg_stat_activity and pg_prepared_xacts; investigate unexpected work rather than terminating unknown sessions.
+Wait for in-flight work to reach the safe points recorded in milestone 1. For mori-rei-app, that means mori app deliveries for app_01knxf3p1aezarprphnkpgsqzj shows nothing in flight, and the commit-batch queue depth and read counts have been recorded privately. Messages left in the queue are data and travel in the export. A message read but not yet deleted becomes visible again after its 300-second timeout, and the webhook_delivery ledger and Rei's idempotent request handling are what prevent a second action. Record which mechanism applies at the deployed revision. Do not drain or purge the queue by hand.
+
+On Sungkyung run redpanda-down and confirm with container ls that the Redpanda containers have stopped. Never run redpanda-purge. Then switch Sungkyung to the reviewed both-off revision with all client tunnels off and workstation.supportServices.enable false, so Caddy, VictoriaLogs, its shippers, VictoriaTraces, and the Jaeger UI stop with the runtime. From here until milestone 7, VictoriaLogs on Sungkyung is gone, so read Sungkyung's service logs from their files (~/.rei/logs, ~/.mori/logs, ~/.mori-rei-app/logs, ~/.notion-hub/logs, ~/.local/state/postgresql/logs). Complete its Mori directory conversion in docs/new-machine-bootstrap.md before switching if needed. Verify watchdog shutdown first, every owned label and every support label unloaded, processes exited, and manual writers absent. Confirm that nothing on Sungkyung still listens on 80, 9428, 10428, 16686, 8080, 8081, 8082, 9092, or 9644, because milestone 7's forwards need those ports. Inspect pg_stat_activity and pg_prepared_xacts; investigate unexpected work rather than terminating unknown sessions.
 
 Create the final immutable bundle: full PostgreSQL archives and globals, before/after database and filesystem fingerprints, SQLite backup, workspace/repository/state payloads, private manifest, and checksums. Require stable source contents across the entire export. If fingerprints differ, find the writer and repeat into a new bundle. Copy only manifest-selected paths; preserve modes/ownership/Git state; do not use rsync --delete against an existing home or checkout. Protect the bundle and transfer it over verified SSH. Independent storage must be encrypted at rest or hold an encrypted bundle addressed to verified recovery recipients; prove decryption without relying solely on Yujin's internal disk.
 
@@ -271,7 +347,7 @@ After final exports and unchanged-state comparison, connect to the source postgr
 
 Fence Sungkyung's retained Mina store the same way after its SQLite backup is in the bundle. Remove write permission from mina.db, mina.db-wal, and mina.db-shm and from their directory, recording the original modes, and do not delete or rename any of them. Prove that opening the database for writing now fails. Mina recreates a missing file, so removal would be worse than leaving it. The mode reversal is the rollback.
 
-Acceptance: both runtimes/clients are off, check-rei-mori-owner.py passes with --expect none --expect-backups none, final source comparisons match, each required payload exists, Sungkyung's final pg_rman full backup is valid and recorded, source migrated databases reject connections, Sungkyung's Mina store refuses writes, originals remain intact, and two independently stored complete final bundles have verified checksums. One copy must be outside both Macs' internal disks on independently protected storage. Missing or unverified recovery copies block promotion.
+Acceptance: both runtimes/clients are off, check-rei-mori-owner.py passes with --expect none --expect-backups none --expect-support yujin, Sungkyung's support agents and Redpanda containers are stopped with its telemetry directories and redpanda-0-data volume intact, final source comparisons match, each required payload exists, Sungkyung's final pg_rman full backup is valid and recorded, source migrated databases reject connections, Sungkyung's Mina store refuses writes, originals remain intact, and two independently stored complete final bundles have verified checksums. One copy must be outside both Macs' internal disks on independently protected storage. Missing or unverified recovery copies block promotion.
 
 
 ### Milestone 5: Restore final state and validate Yujin without workers
@@ -283,7 +359,7 @@ Compare all four PostgreSQL stores and Mina SQLite before application startup: s
 
 Keep or mint Yujin's own ~/.config/mori/host-id, protect it with restrictive permissions, and compare privately that it differs from Sungkyung. Do not restore source host-id, Tailscale identity, or SSH private keys. Establish Yujin's host-local repository locations with deployed mori register --path DIR, first proving in rehearsal that it preserves project/repository identities. Registration is a controlled new write after exact restore comparison; record its deltas. Do not re-observe historical Git or reset ingest positions. Verify mori path returns existing Yujin checkouts and all automations use available paths.
 
-Verify Sungkyung remains stopped/fenced. Move any ~/.local/state/postgresql/last-full-backup on Yujin aside so the scheduler cannot pick an incremental as the first backup of the restored data, because that stamp's absence is what selects a full. Confirm ~/.config/nhub/config.kdl has been provisioned on Yujin through the bootstrap runbook. Then enable only Yujin at stage validation with services.postgresql.backups.enable true, and switch it. APIs, Mina, Reiko, and Caddy may start; background workers, bridge, Notion consumer, and healing remain off. Run nhub-migrate verify and expect pending=0 and unknown=0 before the worker is ever allowed to start. Keep ingress paused and avoid mutation-capable UI actions except controlled probes. Inspect actual launch-agent environments privately: spawned Rei/Mori must use Yujin's local socket and intended binaries. A startup migration or version/schema mismatch returns to isolated repair.
+Verify Sungkyung remains stopped/fenced. Move any ~/.local/state/postgresql/last-full-backup on Yujin aside so the scheduler cannot pick an incremental as the first backup of the restored data, because that stamp's absence is what selects a full. Confirm ~/.config/nhub/config.kdl has been provisioned on Yujin through the bootstrap runbook. Then enable only Yujin at stage validation with services.postgresql.backups.enable true, and switch it. APIs, Mina, and Reiko may start. Caddy and the other support services are already running on Yujin. Background workers, the mori-rei-app bridge, the Notion consumer, and healing remain off. Before the restore, confirm Yujin has no mori_rei_app database (none existed on 2026-11-10). The bridge's wrapper creates an empty one whenever it starts, so if one exists, the bridge ran early, and that database is preserved as a conflict like any other. Confirm that Yujin's victorialogs-shipper agents are loaded for every runtime log file, so the first worker lines in milestone 7 are captured. Run nhub-migrate verify and expect pending=0 and unknown=0 before the worker is ever allowed to start. Keep ingress paused and avoid mutation-capable UI actions except controlled probes. Inspect actual launch-agent environments privately: spawned Rei/Mori must use Yujin's local socket and intended binaries. A startup migration or version/schema mismatch returns to isolated repair.
 
 Acceptance: exact offline comparisons pass before controlled binding writes; source cannot connect; Yujin identity/paths are correct; only validation agents run; APIs are ready; and known source records appear in the UI without empty-list errors.
 
@@ -309,19 +385,21 @@ Acceptance: Yujin's first full backup is valid and was actually restored with ma
 
 Switch Sungkyung to inactive-runtime/reverse-client configuration. Verify source Caddy and old forward agents are absent, and Yujin has no sungkyung-client-tunnel, sungkyung-client-ingest, or remote Rei wrapper. Start Sungkyung's yujin-client-tunnel only; its git ingest agent starts with the tunnel, so confirm the first ingest run succeeds and writes only to Yujin's Mori store. Verify fresh shell settings, bound listener addresses, forwarded server/database identity, API readiness, browser routes, and encoded Rei execution. Tunnel failure must fail quickly without falling back to source databases.
 
+Then start com.shinzui.yujin-support-tunnel and verify that it reaches Yujin's instances rather than anything left on Sungkyung. From Sungkyung, logs.localhost, traces.localhost, jaeger.localhost, and redpanda.localhost must show Yujin's data, and curl -fsS http://127.0.0.1:9428/health and the same on [::1] must succeed. Run one traced rei read command on Sungkyung, and find its trace in Yujin's VictoriaTraces by service name and time. A query against localhost:9428 from Sungkyung must return Yujin's recent mori-serve lines, and no line from Sungkyung's host. rpk cluster info on Sungkyung must report the same cluster ID as on Yujin, and rpk topic list must succeed, which proves the advertised broker address works through the forward. Stop the support tunnel once and confirm the database tunnel and the Rei, Mori, and Mina checks above are unaffected.
+
 Open mina.localhost and reiko.localhost on both machines and inspect the same known tracking item/Obeya/collection/note. Test mori.localhost and rei.localhost readiness via both IPv4 and IPv6 loopback. A second peer's crafted Host-header request to Yujin must not bypass the private Mori/Rei route matchers. PostgreSQL must still have no TCP listener. The forwarded metrics port may be unavailable during validation; test it when the worker starts.
 
 Confirm milestone 6's full backup is still the newest recovery point, taking another pg-backup full if any controlled write has happened since, then move Yujin to active while ingress remains paused. This is the external side-effect boundary: restored timers/queues/automations can execute immediately, before ingress reopens. Pending effects and webhook targets must already be reviewed. Watch subscription positions resume from saved values instead of zero. Keep legacy workers disabled. Verify bridge deduplication with a safely repeatable documented probe or isolated fixture; never blindly replay a real external effect.
 
 Run a uniquely identified controlled Rei write using verified deployed CLI syntax. Observe it through both machines/UI and its expected worker/workspace effect once. Record generated IDs privately.
 
-Acceptance: Sungkyung reaches Yujin's API, database, and web routes only through its outgoing tunnel; workers resumed from saved positions rather than zero; the controlled Rei write took effect exactly once; and ingress is still paused.
+Acceptance: Sungkyung reaches Yujin's API, database, web routes, telemetry, and Redpanda only through its outgoing tunnels, and the support tunnel fails independently of the database tunnel; workers resumed from saved positions rather than zero; the controlled Rei write took effect exactly once; and ingress is still paused.
 
 
-### Milestone 8: Prove Mina, Reiko, and Notion Hub on Yujin
+### Milestone 8: Prove Mina, Reiko, Notion Hub, and mori-rei-app on Yujin
 
 
-Mina, Reiko, and Notion Hub each fail in ways that the general probes miss, so each gets its own proof while ingress is still paused.
+Mina, Reiko, Notion Hub, and mori-rei-app each fail in ways that the general probes miss, so each gets its own proof while ingress is still paused.
 
 For Mina, open mina.localhost on both machines. The project picker must list projects, which proves the spawned mori reached Yujin's database, and a known intention must open, which proves the spawned rei did. Inspect the same known tracking item and Obeya board from both browsers. Perform one normal Mina tracking/Obeya action and confirm it from both browsers against Yujin's single SQLite store. Then run a mina command that opens the tracking store on Sungkyung and confirm it fails against the permission fence rather than quietly writing locally.
 
@@ -329,9 +407,11 @@ For Reiko, open reiko.localhost on both machines and confirm a known collection 
 
 For Notion Hub, compare nhub page list on Yujin and on Sungkyung through the tunnel with the frozen manifest's tracked_pages counts (12 active and 1 archived when last measured on 2026-11-10; use the manifest's figure). Run one controlled nhub page sync on a known harmless page, using deployed --help syntax, which contacts Notion and proves the provisioned token works on Yujin. Watch the worker's position in kiroku.subscriptions advance past its restored value with no growth in kiroku.dead_letters, and confirm launchctl print gui/$(id -u)/com.shinzui.notion-hub-subscription shows a running process whose runs count stops climbing. Run the status check twice several minutes apart so a crash loop cannot pass by timing.
 
+For mori-rei-app, first confirm that launchctl print gui/$(id -u)/com.shinzui.mori-rei-app shows a running process whose runs count holds steady, that mori app list still shows http://localhost:26862/webhook and active, and that the bridge's stderr log shows no signature (401) failures. Any messages that were pending in the commit-batch queue at the freeze will drain at the next batch interval. Compare the Rei actions they produce against the milestone 4 queue record, and confirm that no commit already in webhook_delivery produced a second action. Then make one controlled commit carrying an Intention trailer for a harmless intention, in a repository registered on Yujin, chosen and recorded in the runbook beforehand. Let mori-automate ingest it, and confirm in mori app deliveries that exactly one delivery succeeded. After the next batch drain, confirm that exactly one Rei action was recorded with rei action list for that intention, using deployed --help syntax. The batch interval defaults to an hour: wait for it rather than changing COMMIT_BATCH_INTERVAL_SECONDS, which would be a configuration change mid-migration. Confirm from the bridge's log that the summariser used its CLI rather than the deterministic fallback, and that the commit's project resolved through Mori rather than through the local-repo fallback. Both fallbacks succeed quietly and would hide a missing login or checkout on Yujin. The bridge's lines must also appear in Yujin's VictoriaLogs under app:mori-rei-app.
+
 Only then reopen ingress and verify one eligible normal automation produces its expected result once; inspect attempts/deliveries for duplicates.
 
-Acceptance: known records appear and one controlled action works in each of Mina, Reiko, and Notion Hub from both machines, each with a single store on Yujin; Notion Hub's worker is stable and advancing; Sungkyung's local Mina store rejects writes; and ingress is open with its first automation delivered exactly once.
+Acceptance: known records appear and one controlled action works in each of Mina, Reiko, and Notion Hub from both machines, each with a single store on Yujin; Notion Hub's worker is stable and advancing; mori-rei-app turned one controlled commit into exactly one Rei action using its CLI summariser and Mori project lookup, and queue entries carried over from the freeze produced no duplicates; Sungkyung's local Mina store rejects writes; and ingress is open with its first automation delivered exactly once.
 
 
 ### Milestone 9: Prove durability and update the runbooks
@@ -339,11 +419,11 @@ Acceptance: known records appear and one controlled action works in each of Mina
 
 Verify scheduled jobs fire on Yujin: the next com.shinzui.pg-backup run must pick incremental, validate, and sync. A missing external disk means no offsite copy, even if a sync command exits zero, because the script exits 0 when the volume is absent; check the log and the mirror's newest backup instead of the exit status.
 
-Test tunnel recovery after stopping only its process, and login/restart persistence on both Macs. Confirm source fencing survives rebuilding/restarting and Yujin is still sole owner of both the runtime and backups. Prove the end state directly: on Sungkyung, launchctl list shows none of the agents in workstation.reiMori.agents, local-web-proxy, pg-backup, or pg-backup-offsite-sync, and pg_stat_activity on its local cluster shows no client sessions beyond the inspecting psql. Retain old data, Sungkyung's frozen catalog, and immutable bundles at least 14 days and until scheduled backups plus recovery proof succeed. Retirement, including stopping Sungkyung's PostgreSQL server and deciding what to do with its retained scratch databases, is a separate deliberate action; do not delete old copies automatically.
+Test tunnel recovery after stopping only its process, and login/restart persistence on both Macs. Confirm source fencing survives rebuilding/restarting and Yujin is still sole owner of both the runtime and backups. Prove the end state directly: on Sungkyung, launchctl list shows none of the agents in workstation.reiMori.agents, none of the support-service agents (local-web-proxy, victorialogs and its shippers, victoriatraces, victoriatraces-jaeger-ui, redpanda), and neither pg-backup nor pg-backup-offsite-sync, container ls shows no Redpanda containers after a restart, and pg_stat_activity on its local cluster shows no client sessions beyond the inspecting psql. Retain old data, Sungkyung's frozen catalog, and immutable bundles at least 14 days and until scheduled backups plus recovery proof succeed. Retirement, including stopping Sungkyung's PostgreSQL server and deciding what to do with its retained scratch databases, telemetry directories, and redpanda-0-data volume, is a separate deliberate action; do not delete old copies automatically.
 
-Update docs/rei-mori-cutover.md, docs/local-services.md (including the LAN-name guidance now tied to Yujin's address), docs/pg-backup.md (backup ownership, the Yujin mirror path, the guard, and the frozen Sungkyung chain), and bootstrap references. Add a plain Markdown ADR for staged ownership, database fencing, and isolated backup namespaces.
+Update docs/rei-mori-cutover.md, docs/local-services.md (including the LAN-name guidance now tied to Yujin's address, the support-service switch, and the support tunnel), docs/redpanda.md (the cluster now lives on Yujin and Sungkyung reaches it through forwards), docs/pg-backup.md (backup ownership, the Yujin mirror path, the guard, and the frozen Sungkyung chain), and bootstrap references. Add a plain Markdown ADR for staged ownership, database fencing, and isolated backup namespaces.
 
-Acceptance: Yujin works independently as primary for every PostgreSQL-dependent service and for backups; Sungkyung reaches the same live records through its outgoing tunnel and runs none of those services; controlled writes/effects occur once; reconnect/restart preserves roles; and database plus non-database recovery is proven.
+Acceptance: Yujin works independently as primary for every PostgreSQL-dependent service, for backups, and for the support services; Sungkyung reaches the same live records through its outgoing tunnel and runs none of those services; controlled writes/effects occur once; reconnect/restart preserves roles; and database plus non-database recovery is proven.
 
 
 ## Concrete Steps
@@ -372,6 +452,30 @@ psql -X -v ON_ERROR_STOP=1 -h "$HOME/.local/state/postgresql" -p 5432 -U shinzui
   -c "SELECT datname, pg_database_size(oid), datallowconn FROM pg_database WHERE NOT datistemplate ORDER BY datname;"
 ```
 
+On Yujin, before aki-2023 is attached anywhere, stop the backup agents found loaded on 2026-11-10. bootout removes them only until the next switch. The preparation revision in milestone 2 is what keeps them off.
+
+```bash
+launchctl bootout "gui/$(id -u)/com.shinzui.pg-backup-offsite-sync"
+launchctl bootout "gui/$(id -u)/com.shinzui.pg-backup"
+launchctl list | grep -E 'pg-backup' || echo 'no pg-backup agents loaded'
+```
+
+Expect the final line to read no pg-backup agents loaded.
+
+Support-service and bridge inventory on each Mac, read-only:
+
+```bash
+launchctl list | grep -E 'local-web-proxy|victoria|redpanda|mori-rei-app'
+lsof -nP -iTCP -sTCP:LISTEN | grep -E ':(80|8080|8081|8082|9092|9428|9644|10428|16686|26862) '
+/usr/bin/du -sh ~/.local/share/victoria-logs/data ~/.local/share/victoria-traces/data
+container ls --all
+/opt/homebrew/bin/rpk topic list
+mori app list
+mori app deliveries app_01knxf3p1aezarprphnkpgsqzj
+```
+
+Use /usr/bin/du because du on PATH is another tool. mori app commands go to whichever machine's Mori the shell points at, so run them on Sungkyung, or note which machine answered. Record the output privately.
+
 If clients are absent, obtain the configured PostgreSQL package through the flake's package/development environment; never search /nix/store or update PostgreSQL as a shortcut. Missing configured databases must be investigated, not created as empty replacements. Capture detailed output privately. These read-only commands may use the version-17 psql on PATH; expect the pg_dump --version line to differ from SHOW server_version, which is why every command below that exports, restores, or creates a cluster uses the pg18 wrapper from milestone 2.
 
 After implementing preparation, run focused tests and builds from the root:
@@ -381,12 +485,12 @@ python3 bin/test-rei-mori-owner.py
 python3 bin/test-rei-mori-migration.py
 python3 bin/test-rei-ssh-dispatch.py
 python3 bin/test-pg-offsite-guard.py
-python3 bin/check-rei-mori-owner.py --expect SungkyungM1X --expect-backups SungkyungM1X
+python3 bin/check-rei-mori-owner.py --expect SungkyungM1X --expect-backups SungkyungM1X --expect-support both
 ./bin/build.sh SungkyungM1X --out-link result-sungkyung
 ./bin/build.sh yujin --out-link result-yujin
 ```
 
-The migration, SSH, and offsite-guard test files are proposed deliverables. Expected results are passing tests, the correct sole owner, and successful builds. At the stopped revision use --expect none --expect-backups none, and at validation and active revisions use --expect yujin --expect-backups yujin. Record exact revision/stage and preserve unrelated user changes.
+The migration, SSH, and offsite-guard test files are proposed deliverables. Expected results are passing tests, the correct sole owner, and successful builds. At the stopped revision use --expect none --expect-backups none --expect-support yujin, and at validation and active revisions use --expect yujin --expect-backups yujin --expect-support yujin. Record exact revision/stage and preserve unrelated user changes.
 
 The activation wrapper uses ./result. Do not activate after only a custom-output-link build. On the matching physical machine, build that reviewed revision into ./result immediately before switching:
 
@@ -522,6 +626,29 @@ curl -fsS http://reiko.localhost/ >/dev/null
 
 On Sungkyung use ports 18780/18775 for the first two direct probes. Require readiness success and actual known UI records, not HTTP 200 alone. After workers start query http://127.0.0.1:9091/subscriptions on Yujin and port 19091 on Sungkyung; compare with durable checkpoint evidence. Confirm deployed --help before using rei ops stream subscriptions or mori ops stream subscriptions.
 
+On Sungkyung, before the stopped switch in milestone 4, stop Redpanda without touching its data, then confirm after the switch that every support port is free:
+
+```bash
+redpanda-down
+container ls --all | grep -i redpanda || echo 'no redpanda containers'
+lsof -nP -iTCP -sTCP:LISTEN | grep -E ':(80|8080|8081|8082|9092|9428|9644|10428|16686) ' || echo 'support ports free'
+```
+
+Stopped containers may still be listed by container ls --all. What matters is that none is running, and that the redpanda-0-data volume still appears in container volume ls (confirm that subcommand against the deployed container --help).
+
+On Sungkyung, after the support tunnel starts in milestone 7:
+
+```bash
+curl -4 -fsS http://127.0.0.1:9428/health
+curl -6 -fsS 'http://[::1]:9428/health'
+curl -4 -fsS http://127.0.0.1:10428/health
+curl -fsS http://jaeger.localhost/ >/dev/null
+/opt/homebrew/bin/rpk cluster info
+/opt/homebrew/bin/rpk topic list
+```
+
+Compare the cluster ID from rpk cluster info with the same command run on Yujin. Confirm VictoriaTraces' health path against its deployed --help. If it differs, use its VMUI at /select/vmui/.
+
 From another peer request Yujin port 80 with Host: mori.localhost and Host: rei.localhost; Caddy's local-only matcher should return 404. A firewall denial is private but does not itself test the matcher. Do not open public access just for this check.
 
 Milestone 6 takes the backups over on Yujin, at stage validation, as shinzui:
@@ -575,9 +702,9 @@ Preparation must retain Sungkyung as sole owner. Both-off must prove labels and 
 
 Prove known Rei/Mina/Reiko content appears on Yujin, new controlled writes appear from both machines, and resumed automation has its expected effect once. Prove source database refusal separately from the declaration check. Verify listener addresses, IPv4/IPv6 routes, tunnel reconnect and failure without fallback, role persistence after physical restart, and recoverability of Yujin database plus non-database backups.
 
-bin/test-rei-mori-migration.py must cover corrupted/missing payloads, same-count changed content, sequence drift, duplicate rows, partitions, large objects, wrong sockets, destination conflicts, and incomplete/interrupted bundles. bin/test-rei-ssh-dispatch.py must cover malformed payloads and shell metacharacters using harmless fixtures. Ownership tests must reject workers/healing in validation, dual owners, dual backup owners, a wrong --expect-backups value, Caddy on an inactive client, and a tunnel on the owner. bin/test-pg-offsite-guard.py must cover a missing destination, an empty destination, a matching marker, a mismatched marker, a non-empty destination with no marker, and adoption. These checks protect data-loss and split-ownership hazards.
+bin/test-rei-mori-migration.py must cover corrupted/missing payloads, same-count changed content, sequence drift, duplicate rows, partitions, large objects, wrong sockets, destination conflicts, and incomplete/interrupted bundles. bin/test-rei-ssh-dispatch.py must cover malformed payloads and shell metacharacters using harmless fixtures. Ownership tests must reject workers/healing in validation, dual owners, dual backup owners, a wrong --expect-backups value, support services on both hosts once --expect-support names one, a support tunnel on a host that runs the support services, a victorialogs shipper that escapes the support switch, and a tunnel on the owner. bin/test-pg-offsite-guard.py must cover a missing destination, an empty destination, a matching marker, a mismatched marker, a non-empty destination with no marker, and adoption. These checks protect data-loss and split-ownership hazards.
 
-The end state is observable on both machines. On Yujin every PostgreSQL-dependent agent and both backup agents are loaded, and rei-doctor reports a healthy pipeline. On Sungkyung none of those agents is loaded, the forwarded socket reaches Yujin (SELECT system_identifier FROM pg_control_system() returns Yujin's value), and the local cluster has no client sessions. A Notion Hub worker that restarts repeatedly, an empty Reiko collection, or a Mina project picker with no projects each means the corresponding service has not moved, whatever its launch agent reports.
+The end state is observable on both machines. On Yujin every PostgreSQL-dependent agent, both backup agents, and every support-service agent are loaded, Redpanda's containers run, and rei-doctor reports a healthy pipeline. On Sungkyung none of those agents is loaded, no Redpanda container runs, a trace emitted there appears in Yujin's VictoriaTraces, the forwarded socket reaches Yujin (SELECT system_identifier FROM pg_control_system() returns Yujin's value), and the local cluster has no client sessions. A Notion Hub worker that restarts repeatedly, an empty Reiko collection, a Mina project picker with no projects, or a mori-rei-app delivery recorded with the summariser or Mori-lookup fallback each means the corresponding service has not moved, whatever its launch agent reports.
 
 If a physical machine, ingress control, credential, or independent storage is unavailable, record the precise unfinished milestone. A Nix build, loaded label, transport checksum, or HTTP status alone never establishes migration completion.
 
@@ -595,15 +722,19 @@ Once Yujin has registered paths, run a controlled write, applied a startup migra
 
 Backups roll back with the data. Sungkyung's frozen catalog, its WAL archive, and the old mirror directory stay untouched during this plan, so a rollback before Yujin takes writes needs only to restore source ALLOW_CONNECTIONS settings, restore the recorded Mina file modes, and activate a revision that sets services.postgresql.backups.enable true on Sungkyung and false on Yujin. Yujin's catalog and mirror remain for later use. Never let both hosts hold the backup flag, and never point one host's offsiteDirectory at the other's. A failed pg-backup full on Yujin is safe to rerun, and a failed restore proof leaves only its private directory. Delete that directory only after recording why it failed, and never restore into the production data directory.
 
+Support services roll back separately from the data and never drive a data rollback. To give Sungkyung its own support services back, stop com.shinzui.yujin-support-tunnel first, because its forwards hold the ports. Then activate a revision with workstation.supportServices.enable true on Sungkyung, and run redpanda-up, which restarts the cluster from the retained redpanda-0-data volume. Sungkyung's telemetry directories are untouched, so its VictoriaLogs and VictoriaTraces resume with their old history, minus whatever the seven-day retention has aged out. Yujin's support services never stop, so a rollback of the runtime does not need them changed. Re-enable Sungkyung's support switch only together with the runtime rollback, or the port-80 forward and Sungkyung's Caddy contend for the port.
+
 Fencing blocks new connections but does not end existing ones. Nix generation rollback does not undo database settings, data writes, or external effects. Retain source originals and protected bundles for the retention window; retirement requires a separate deliberate action after recovery conditions pass.
 
 
 ## Interfaces and Dependencies
 
 
-workstation.reiMori.enable remains the ownership interface, supplemented by stage = "validation" | "active". Disabled means no owned agents. Validation permits the five named web/API agents only. Active preserves original service enables; healing requires enabled + active. Caddy joins ownership. Bootstrap-arm remains unchanged.
+workstation.reiMori.enable remains the ownership interface, supplemented by stage = "validation" | "active". Disabled means no owned agents. Validation permits the four named web/API agents only (mori-serve, rei-api, mina-web, reiko-web). Active preserves original service enables; healing requires enabled + active. Bootstrap-arm remains unchanged.
 
-home/rei-mori-client.nix exposes explicit enable, target, tunnelIdentityFile, reiIdentityFile, stateDirectory, forwardWebPort, and gitIngest options. Client enablement or restoration must never implicitly enable a runtime. Final Sungkyung uses this interface and final Yujin disables it. Two loopback port-80 listeners reach Yujin Caddy, private high-port forwards reach API/metrics, and a private Unix socket supports PostgreSQL clients.
+home/support-services.nix exposes workstation.supportServices.enable (default true) and a read-only list of the agents it owns: local-web-proxy, victorialogs, every victorialogs-shipper-* agent as exported by home/victorialogs.nix, victoriatraces, and victoriatraces-jaeger-ui. False forces those agents off and disables services.redpanda-container while keeping packages, data directories, and the Redpanda volume. It is independent of workstation.reiMori and never enables or disables a runtime agent. bin/check-rei-mori-owner.py gains --expect-support both|<host>.
+
+home/rei-mori-client.nix exposes explicit enable, target, tunnelIdentityFile, reiIdentityFile, stateDirectory, forwardWebPort, gitIngest, and supportForwards options. supportForwards runs com.shinzui.yujin-support-tunnel, a separate SSH agent forwarding 9428, 10428, 16686, 8080, 8081, 8082, 9092, and 9644 on both loopback addresses to the same ports on the target's 127.0.0.1. Client enablement or restoration must never implicitly enable a runtime. Final Sungkyung uses this interface and final Yujin disables it. Two loopback port-80 listeners reach Yujin Caddy, private high-port forwards reach API/metrics, and a private Unix socket supports PostgreSQL clients.
 
 The proposed bin/rei-mori-migration.py provides inventory, fingerprint, manifest, and verify-bundle subcommands with required explicit --socket and/or --root plus a machine role for database evidence operations. Define --help, nonzero failure statuses, immutable complete/incomplete bundle markers, and redacted terminal summaries. Use Python's standard library and installed PostgreSQL clients with argument arrays. The helper collects/verifies evidence only; it never stops services, changes schemas, restores databases, overwrites targets, or opens ingress. No new runtime dependency is needed.
 
@@ -619,3 +750,5 @@ Revised 2026-11-10: at the user's request the plan was reviewed and expanded so 
 Revised 2026-11-10: the user confirmed the 14 rollout and scratch databases stay on Sungkyung, so milestone 1 now only checks that no service depends on them.
 
 Revised 2026-11-10: recorded the deployed Notion Hub fix and the refreshed, verified offsite mirror, which closes those two milestone 1 items.
+
+Revised 2026-11-10: at the user's request, the scope now includes the shared support services (Caddy, VictoriaLogs with its shippers, VictoriaTraces with its Jaeger UI, and Redpanda) and gives mori-rei-app its own proof in milestone 8. The support services get a separate switch, workstation.supportServices.enable, instead of joining the runtime agents. They stop on Sungkyung in the stopped revision, Sungkyung reaches Yujin's instances through a second SSH agent on the same port numbers, and no support step touches PostgreSQL data. Telemetry history and Redpanda topics are not carried over, by user decision. Because the user stressed not losing the PostgreSQL data, this revision also adds a list of data-safety invariants at the start of Plan of Work. It records a read-only check of Yujin that found its backup agents loaded, the drive's most immediate hazard, now its own first step, as well as two Yujin scratch databases and a Yujin mina.db that the restore must preserve.
