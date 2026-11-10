@@ -60,9 +60,9 @@
       url = "github:shinzui/mori/3ba3562309d48c775e4a1b1bef72cf2b5401f094";
     };
     rei = {
-      # Coordinated global runtime, API CLI, outcomes and Note references.
-      # mori://shinzui/rei/plans/289-audit-and-roll-out-the-current-rei-cohort-to-the-global-database
-      url = "github:shinzui/rei/e322c675c7adbce81957cb8168e16a0d1fe140ee";
+      # Qualified runtime and foreground session admission renewal.
+      # mori://shinzui/rei/plans/291-keep-foreground-session-admissions-alive-and-make-failures-diagnosable
+      url = "github:shinzui/rei/597e041b9179be9801836a082827360bb48547a4";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
@@ -112,7 +112,7 @@
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     mori-rei-app = {
-      url = "github:shinzui/mori-rei-app/c353368f64aac5725b188ce38b6cd8518f5f23ba";
+      url = "github:shinzui/mori-rei-app/17f2e2f246feeb813dcd9944ee5be191b9927bbb";
       # The integration embeds Rei's codecs and catalog: deploy the same source.
       inputs.rei.follows = "rei";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
