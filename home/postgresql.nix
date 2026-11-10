@@ -16,7 +16,42 @@ let
   # catalog mid-backup.
   pgBackupLock = "${pgStateDir}/backup.lock";
   pgOffsiteVolume = "/Volumes/aki-2023";
-  pgOffsiteDir = "${pgOffsiteVolume}/postgresql-backups";
+  backups = config.services.postgresql.backups;
+  pgOffsiteDir = backups.offsiteDirectory;
+
+  # Only the host that owns scheduled backups may run them. A non-owner keeps
+  # the scripts so an operator can take one deliberate backup with the
+  # override, but a stray run there would apply retention to a chain that a
+  # host move has frozen, or mirror the wrong cluster.
+  refuseUnlessBackupOwner = name: lib.optionalString (!backups.enable) ''
+    if [ "''${PG_BACKUP_ALLOW_INACTIVE:-}" != 1 ]; then
+      echo "${name}: this host does not own PostgreSQL backups (services.postgresql.backups.enable is false)." >&2
+      echo "Set PG_BACKUP_ALLOW_INACTIVE=1 only for a deliberate, recorded run. See docs/pg-backup.md." >&2
+      exit 1
+    fi
+  '';
+
+  # Runs a named tool from the server's own PostgreSQL build. The PATH carries
+  # an older major version for interactive use, and pg_dump refuses a newer
+  # server while an older initdb builds a cluster this server cannot open.
+  pg18 = pkgs.writeShellScriptBin "pg18" ''
+    set -euo pipefail
+    if [ "$#" -eq 0 ] || [ "$1" = --help ] || [ "$1" = -h ]; then
+      echo "Usage: pg18 <tool> [arguments...]   e.g. pg18 pg_dump --version" >&2
+      echo "Runs <tool> from ${pg.name}." >&2
+      [ "$#" -eq 0 ] && exit 2 || exit 0
+    fi
+    tool="$1"
+    shift
+    case "$tool" in
+      */*|.*|"") echo "pg18: expected a tool name, not a path: $tool" >&2; exit 2 ;;
+    esac
+    if [ ! -x "${pg}/bin/$tool" ]; then
+      echo "pg18: ${pg.name} has no tool named $tool" >&2
+      exit 2
+    fi
+    exec "${pg}/bin/$tool" "$@"
+  '';
 
   pg-ensure-db = pkgs.writeShellScriptBin "pg-ensure-db" ''
     set -euo pipefail
@@ -43,8 +78,9 @@ let
     fi
   '';
 
-  pg-backup = pkgs.writeShellScriptBin "pg-backup" ''
+  pg-backup = pkgs.writeShellScriptBin "pg-backup" (''
     set -euo pipefail
+  '' + refuseUnlessBackupOwner "pg-backup" + ''
     PGHOST="${pgSocket}"
     BACKUP_MODE="''${1:-full}"
 
@@ -107,7 +143,7 @@ let
     echo "Backup complete. Recent backups:"
     ${pkgs.pg_rman}/bin/pg_rman show \
       -B "${pgBackupDir}"
-  '';
+  '');
 
   # Run daily by launchd. One agent that picks the mode, rather than separate
   # weekly-full and daily-incremental agents: launchd fires missed calendar jobs
@@ -139,8 +175,9 @@ let
   # Mirrors the pg_rman catalog to the external drive. Runs after each scheduled
   # backup and on any volume mount, so a backup taken while the drive was
   # unplugged is copied the next time it is attached.
-  pg-backup-offsite-sync = pkgs.writeShellScriptBin "pg-backup-offsite-sync" ''
+  pg-backup-offsite-sync = pkgs.writeShellScriptBin "pg-backup-offsite-sync" (''
     set -euo pipefail
+  '' + refuseUnlessBackupOwner "pg-backup-offsite-sync" + ''
 
     # /Volumes/<name> only exists while mounted, but a real mount has its own
     # device id; check that so --delete can never target a stray directory.
@@ -163,9 +200,26 @@ let
     fi
 
     echo "=== $(${pkgs.coreutils}/bin/date -Is) offsite sync to ${pgOffsiteDir} ==="
-    mkdir -p "${pgOffsiteDir}"
-    ${pkgs.rsync}/bin/rsync -a --delete "${pgBackupDir}/" "${pgOffsiteDir}/"
+    # Refuses unless the destination is empty or already marked with this
+    # cluster's system identifier, so --delete can never replace another
+    # cluster's chain. The marker is excluded so --delete keeps it.
+    ${pkgs.python3}/bin/python3 ${../bin/pg-offsite-guard.py} check \
+      --pg-controldata "${pg}/bin/pg_controldata" \
+      --data-dir "${pgData}" \
+      --destination "${pgOffsiteDir}"
+    ${pkgs.rsync}/bin/rsync -a --delete --exclude=/.postgresql-cluster-id \
+      "${pgBackupDir}/" "${pgOffsiteDir}/"
     echo "Offsite sync complete."
+  '');
+
+  # Marks an existing mirror as this cluster's after an operator has verified
+  # that it holds this cluster's chain (docs/pg-backup.md).
+  pg-backup-offsite-adopt = pkgs.writeShellScriptBin "pg-backup-offsite-adopt" ''
+    set -euo pipefail
+    exec ${pkgs.python3}/bin/python3 ${../bin/pg-offsite-guard.py} adopt \
+      --pg-controldata "${pg}/bin/pg_controldata" \
+      --data-dir "${pgData}" \
+      --destination "${pgOffsiteDir}" "$@"
   '';
 
   pg-backup-show = pkgs.writeShellScriptBin "pg-backup-show" ''
@@ -175,8 +229,9 @@ let
       "$@"
   '';
 
-  pg-backup-purge = pkgs.writeShellScriptBin "pg-backup-purge" ''
+  pg-backup-purge = pkgs.writeShellScriptBin "pg-backup-purge" (''
     set -euo pipefail
+  '' + refuseUnlessBackupOwner "pg-backup-purge" + ''
     KEEP_DAYS="''${1:-7}"
     echo "Deleting backups older than $KEEP_DAYS days..."
     # Pinned coreutils: `date -v-Nd` is BSD syntax, but PATH here resolves to GNU
@@ -185,7 +240,7 @@ let
       -B "${pgBackupDir}" \
       $(${pkgs.coreutils}/bin/date -d "''${KEEP_DAYS} days ago" +%Y-%m-%d)
     echo "Done."
-  '';
+  '');
 in
 {
   options.services.postgresql = {
@@ -202,14 +257,47 @@ in
       readOnly = true;
       description = "The PostgreSQL package used by the shared server.";
     };
+
+    backups = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether this host owns scheduled PostgreSQL backups: the daily
+          com.shinzui.pg-backup agent and the on-mount offsite sync. Exactly
+          one host sets this, except while both are stopped during a host
+          move. On other hosts pg-backup, pg-backup-offsite-sync and
+          pg-backup-purge refuse unless PG_BACKUP_ALLOW_INACTIVE=1.
+        '';
+      };
+      offsiteDirectory = lib.mkOption {
+        type = lib.types.str;
+        default = "${pgOffsiteVolume}/postgresql-backups";
+        description = ''
+          Mirror destination on the external drive. Each cluster needs its
+          own directory, and never one nested inside another cluster's mirror,
+          because the sync runs rsync --delete against the whole destination.
+        '';
+      };
+    };
   };
 
   config = {
+    assertions = [
+      {
+        assertion = lib.hasPrefix "${pgOffsiteVolume}/" pgOffsiteDir
+          && builtins.match ".*/\\.\\.?(/.*)?" pgOffsiteDir == null;
+        message = "services.postgresql.backups.offsiteDirectory must be a plain path under ${pgOffsiteVolume}/";
+      }
+    ];
+
     home.packages = [
+      pg18
       pg-ensure-db
       pg-backup
       pg-backup-scheduled
       pg-backup-offsite-sync
+      pg-backup-offsite-adopt
       pg-backup-show
       pg-backup-purge
     ];
@@ -287,7 +375,7 @@ PGCONF
     };
 
     launchd.agents.pg-backup = {
-      enable = true;
+      enable = backups.enable;
       config = {
         Label = "com.shinzui.pg-backup";
         ProgramArguments = [ "${pg-backup-scheduled}/bin/pg-backup-scheduled" ];
@@ -301,7 +389,7 @@ PGCONF
     };
 
     launchd.agents.pg-backup-offsite-sync = {
-      enable = true;
+      enable = backups.enable;
       config = {
         Label = "com.shinzui.pg-backup-offsite-sync";
         ProgramArguments = [ "${pg-backup-offsite-sync}/bin/pg-backup-offsite-sync" ];

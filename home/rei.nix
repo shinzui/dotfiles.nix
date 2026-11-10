@@ -201,6 +201,31 @@ let
     exec ${pkgs.rei-api}/bin/rei-api
   '';
 
+  # Forced command for a client's remote `rei` (home/rei-mori-client.nix),
+  # installed at a stable path for the owner's authorized_keys entry:
+  #
+  #   restrict,pty,command="/Users/shinzui/.local/libexec/rei-ssh-dispatch" ssh-ed25519 ...
+  #
+  # It carries the owner's own local settings and runs the managed Rei by
+  # absolute path, so neither the login environment nor a client's
+  # high-priority remote `rei` on PATH can redirect it to another machine.
+  rei-ssh-dispatch = pkgs.writeShellScript "rei-ssh-dispatch" (
+    if !config.workstation.reiMori.enable then ''
+      echo "rei SSH client: this host does not run the Rei/Mori runtime; remote rei is refused." >&2
+      exit 2
+    '' else ''
+      set -euo pipefail
+      export REI_API_URL="${reiCli.cliEnv.REI_API_URL}"
+      export REI_PG_CONNECTION_STRING="${connStr}"
+      export PG_CONNECTION_STRING="${connStr}"
+      export KIROKU_REMOTE_URL="${kirokuRemoteUrl}"
+      export MORI_API_URL="${moriApi.url}"
+      export PATH="${agentCliPath}"
+      ${otelExports "rei"}
+      export REI_SSH_DISPATCH_REI="${rei-cli-wrapper}/bin/rei"
+      exec ${pkgs.python3}/bin/python3 ${../bin/rei-ssh-dispatch.py}
+    '');
+
   rei-zsh-completions = pkgs.runCommand "rei-zsh-completions" { } ''
     REI_PG_CONNECTION_STRING="host=localhost dbname=rei" ${reiBin} completions zsh > $out
   '';
@@ -223,6 +248,7 @@ in
   ];
 
   home.file.".zfunc/_rei".source = rei-zsh-completions;
+  home.file.".local/libexec/rei-ssh-dispatch".source = rei-ssh-dispatch;
 
   home.activation.rei-log-dir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run mkdir -p "${reiLogDir}"

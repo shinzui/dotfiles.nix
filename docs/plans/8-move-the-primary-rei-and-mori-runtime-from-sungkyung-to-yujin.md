@@ -20,6 +20,11 @@ provenance:
       at: 2026-11-10T21:34:09Z
       mode: "update"
       note: "Added support services (Caddy, VictoriaLogs, VictoriaTraces, Redpanda) and a mori-rei-app proof; data-safety invariants; Yujin backup-agent hazard"
+    - model: "claude-opus-5-5"
+      harness: "claude-code"
+      at: 2026-11-10T21:57:43Z
+      mode: "implement"
+      note: "Milestone 2 preparation code (cutover phase, staged ownership, support switch, backup ownership, guard, client module, evidence helper) and first inventories"
 ---
 
 # Move every PostgreSQL-backed service, its backups, and the shared support services from Sungkyung to Yujin
@@ -45,6 +50,10 @@ Success means existing records survive a verified restore, a controlled new writ
 - [x] (2026-11-10) Milestone 1: locate the aki-2023 drive and establish which cluster its mirror holds. It holds Sungkyung's chain, verified by checksum after a fresh full backup.
 - [x] (2026-11-10) Milestone 1: stop Yujin's com.shinzui.pg-backup and com.shinzui.pg-backup-offsite-sync agents before aki-2023 is attached anywhere. Both were booted out with exit 0, launchctl list shows no pg-backup agent, com.shinzui.postgresql is still running, and aki-2023 was not mounted. This lasts only until Yujin's next switch: any Yujin switch before the milestone 2 preparation revision reloads both agents, so stop them again after such a switch.
 - [ ] Milestone 2: implement and verify staged ownership, support-service ownership, backup ownership, the PostgreSQL 18 tool wrapper, reverse client configuration, and evidence tooling without moving the active runtime.
+- [x] (2026-11-10) Milestone 1: evidence helper bin/rei-mori-migration.py with tests, and the first read-only inventory of both clusters (19 databases on Sungkyung, 3 on Yujin), stored privately under ~/.local/state/rei-mori-move-evidence on each machine.
+- [x] (2026-11-10) Milestone 2: preparation code written and verified by evaluation and tests: the cutover phase (hosts/rei-mori-cutover-phase.nix, home/rei-mori-cutover.nix), workstation.reiMori.stage, workstation.supportServices, services.postgresql.backups with the owner refusal and pg18, bin/pg-offsite-guard.py, home/rei-mori-client.nix, the managed rei-ssh-dispatch, the extended owner checker, and docs/rei-mori-yujin-migration.md. check-rei-mori-owner.py --all-phases passes for all four phases, and the four test files pass (19, 14, 8, and 9 tests). Validation evaluates to exactly mori-serve, rei-api, mina-web, and reiko-web. ./bin/build.sh SungkyungM1X --out-link result-sungkyung and ./bin/build.sh yujin --out-link result-yujin both succeeded on Yujin. Against the pre-change evaluation, the preparation revision changes Sungkyung only in its two backup scripts, and removes Yujin's two backup agents and extends its client tunnel and shell settings.
+
+Handoff, 2026-11-10: milestone 2 still needs the preparation revision switched on Yujin and then Sungkyung (each needs an interactive sudo), pg-backup-offsite-adopt --verified on Sungkyung right after its switch, and the Sungkyung-to-Yujin keys created and enrolled per the runbook. Milestone 1 still needs the second inventory sample on Sungkyung at least a day after 2026-11-10T13:56Z, the mori-rei-app, support-service, and workspace inventory, and the disk-capacity figures.
 - [ ] Milestone 3: rehearse PostgreSQL/SQLite restoration and a pg_rman restore on Yujin in isolation; record timing and recovery proof.
 - [ ] Milestone 4: freeze writes, stop and verify Sungkyung (runtime and support services), create final exports, take the final physical backup, and fence its old databases and Mina store.
 - [ ] Milestone 5: restore and compare final data on Yujin; establish its own Mori identity and repository locations; validate Yujin with workers off.
@@ -57,7 +66,7 @@ Success means existing records survive a verified restore, a controlled new writ
 ## Surprises & Discoveries
 
 
-Nothing has been recorded during implementation yet. The entries below come from the 2026-11-10 read-only review of the working tree and of Sungkyung; Yujin was not inspected.
+The entries up to the support-service measurements come from the 2026-11-10 read-only review. The ones after them were found during implementation.
 
 The PostgreSQL tools on PATH are one major version behind the server. home/default.nix installs postgresql_17 while home/postgresql.nix runs postgresql_18, so the earlier revision's bare pg_dump and initdb commands would fail or build the wrong cluster, because pg_dump refuses a server newer than itself.
 
@@ -148,6 +157,26 @@ app_01knxf3p1aezarprphnkpgsqzj  mori-rei-app  http://localhost:26862/webhook  ac
 ```
 
 
+Implementation, 2026-11-10: Yujin's cluster holds only the shinzui role. Sungkyung also has the login role message_store, which owns part of notion_hub, so reviewed-globals.sql must create it on Yujin before any restore with preserved owners.
+
+```text
+Sungkyung roles: message_store (login), shinzui (superuser)
+Yujin roles:     shinzui (superuser)
+```
+
+Implementation, 2026-11-10: neither machine allows sudo without a password, so an agent cannot switch either host. Every switch in this plan is an operator step at that machine's terminal.
+
+Implementation, 2026-11-10: Sungkyung's existing mirror has no .postgresql-cluster-id marker, so once the preparation revision is active there, its offsite sync refuses until pg-backup-offsite-adopt --verified runs. aki-2023 was attached to Sungkyung at the time, so adopt immediately after that switch, after a fresh rsync -anc dry run shows no differences.
+
+Implementation, 2026-11-10: on Sungkyung, every retained-not-migrated database showed xact_commit 0 and xact_rollback 0, and no session. The statistics have no reset time, so they count from the last server start. The helper's inventory itself opens one read-only transaction in each database, so the second sample may show each count up by the number of inventories taken in between, and no more.
+
+```text
+session mori 17, session rei 26, session notion_hub 3 (all idle, all migrated databases)
+rei_ep272_* / notion_hub_* / nhub_global_rollout_* / mori_rei_app_test: commit 0, rollback 0
+replication slots: none; shared_preload_libraries: empty
+```
+
+
 ## Decision Log
 
 
@@ -198,6 +227,16 @@ app_01knxf3p1aezarprphnkpgsqzj  mori-rei-app  http://localhost:26862/webhook  ac
 2026-11-10: The user confirmed that the 14 rollout and scratch databases do not move. This settles the earlier default for all 14, including notion_hub_okf_live_20260923, and removes the option of promoting one into the migration set without asking.
 
 2026-11-10: Fix the Notion Hub crash loop as a direct commit against BUG-4 in mori://shinzui/notion-hub rather than through a new ExecPlan, which milestone 1 had called for. The change is one projection rule with tests and a proof on a clone, and it did not alter the schema, so the deployed version stays stable for the rehearsal.
+
+2026-11-10 (implementation): Represent the reviewed revisions as one shared value, workstation.reiMoriCutover.phase in hosts/rei-mori-cutover-phase.nix (preparation, stopped, validation, active). Each host declares only its role (source or destination) and its client target, and home/rei-mori-cutover.nix derives the runtime, stage, backup, support, and client flags from it. This makes each revision a one-word change that both hosts read identically, and lets check-rei-mori-owner.py evaluate any phase through extendModules (--phase, --all-phases) without editing files. The phase table in docs/rei-mori-yujin-migration.md is the reference.
+
+2026-11-10 (implementation): The client module forwards the Rei API (127.0.0.1:18775 to 8775) in both directions, so Yujin's current tunnel gains that forward at its preparation switch. It also sets all four connection strings, which now gives Yujin's shell Notion Hub and mori-rei-app settings through the tunnel instead of local databases Yujin does not have.
+
+2026-11-10 (implementation): Install the forced command at ~/.local/libexec/rei-ssh-dispatch (home/rei.nix). It sets the owner's local settings itself and runs the managed Rei by absolute path, so neither a login shell nor a high-priority remote rei on PATH can redirect it. On a non-owner it refuses. bin/rei-ssh-dispatch.py keeps working for Sungkyung's existing authorized_keys entry.
+
+2026-11-10 (implementation): Gate the whole redpanda-container module with the support switch. Evaluation showed that disabling it removes only the module's redpanda-container-init and redpanda-container-stop-agents activation steps and the com.shinzui.redpanda agent, and that no activation step in either state mentions purge or volume removal. Its CLIs (redpanda-up and the rest) leave with it, so a rollback re-enables the switch before running redpanda-up.
+
+2026-11-10 (implementation): Set workstation.reiMori.projectOutcomeWrites on both hosts, so Yujin keeps Sungkyung's project-outcome setting when it becomes the owner. On a non-owner it only changes environment values of commands that are not run.
 
 
 ## Outcomes & Retrospective

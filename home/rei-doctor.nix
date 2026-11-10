@@ -22,10 +22,10 @@ let
   fullPath = "${binPath}:/usr/bin:/bin:/usr/sbin:/sbin";
 
   rei-doctor = pkgs.writeShellScriptBin "rei-doctor" (
-    lib.optionalString (!config.workstation.reiMori.enable) ''
+    lib.optionalString (!config.workstation.reiMori.healing) ''
       for argument in "$@"; do
         if [ "$argument" = --heal ]; then
-          echo "Rei/Mori runtime is inactive on this host; healing is disabled until cutover." >&2
+          echo "Rei/Mori runtime is inactive or validating on this host; healing is disabled." >&2
           exit 1
         fi
       done
@@ -66,7 +66,7 @@ in
   # mori-automate DB-pool exhaustion went undetected/unhealed for ~5h. Re-assert
   # on every activation: if the plist exists but the agent isn't loaded, load it.
   # Runs AFTER setupLaunchAgents so it sees the freshly-written plist.
-  home.activation.rei-watchdog-ensure-loaded = lib.mkIf config.workstation.reiMori.enable (lib.hm.dag.entryAfter [ "setupLaunchAgents" ] ''
+  home.activation.rei-watchdog-ensure-loaded = lib.mkIf config.workstation.reiMori.healing (lib.hm.dag.entryAfter [ "setupLaunchAgents" ] ''
     label="com.shinzui.rei-watchdog"
     domain="gui/$(id -u)"
     plist="$HOME/Library/LaunchAgents/$label.plist"

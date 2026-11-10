@@ -44,7 +44,10 @@ in
     ./redpanda.nix
     ./victorialogs.nix
     ./victoriatraces.nix
+    ./support-services.nix
     ./rei-mori-runtime.nix
+    ./rei-mori-client.nix
+    ./rei-mori-cutover.nix
     ./mori.nix
     ./mori-rei-app.nix
     ./rei.nix

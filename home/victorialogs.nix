@@ -97,64 +97,76 @@ let
   allLabels = [ "com.shinzui.victorialogs" ] ++ map shipperLabel shippers;
 in
 {
-  home.packages = [ vl ];
+  # Exported so home/support-services.nix gates every shipper without restating
+  # the list: a shipper added above cannot escape the support-service switch.
+  options.services.victorialogs.shipperAgents = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
+    readOnly = true;
+    internal = true;
+    default = map shipperKey shippers;
+    description = "launchd.agents names of the generated VictoriaLogs shippers.";
+  };
 
-  home.activation.victorialogs-init = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    run mkdir -p "${dataDir}" "${logDir}"
-  '';
+  config = {
+    home.packages = [ vl ];
 
-  # Stop victorialogs agents and wait for processes to fully exit before
-  # home-manager tries to re-register them. Without this, bootout returns
-  # before the process terminates, and the subsequent bootstrap fails with
-  # I/O error (code 5). Mirrors home/mori.nix:home.activation.mori-stop-agents.
-  home.activation.victorialogs-stop-agents = lib.hm.dag.entryBefore [ "setupLaunchAgents" ] ''
-    stop_and_wait() {
-      local label="$1"
-      local domain="gui/$(id -u)"
-      local newPlist="$newGenPath/LaunchAgents/$label.plist"
-      local curPlist="$HOME/Library/LaunchAgents/$label.plist"
+    home.activation.victorialogs-init = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      run mkdir -p "${dataDir}" "${logDir}"
+    '';
 
-      if cmp -s "$newPlist" "$curPlist"; then
-        verboseEcho "$label plist unchanged, skipping stop"
-        return
-      fi
+    # Stop victorialogs agents and wait for processes to fully exit before
+    # home-manager tries to re-register them. Without this, bootout returns
+    # before the process terminates, and the subsequent bootstrap fails with
+    # I/O error (code 5). Mirrors home/mori.nix:home.activation.mori-stop-agents.
+    home.activation.victorialogs-stop-agents = lib.hm.dag.entryBefore [ "setupLaunchAgents" ] ''
+      stop_and_wait() {
+        local label="$1"
+        local domain="gui/$(id -u)"
+        local newPlist="$newGenPath/LaunchAgents/$label.plist"
+        local curPlist="$HOME/Library/LaunchAgents/$label.plist"
 
-      if /bin/launchctl print "$domain/$label" &>/dev/null; then
-        local pid
-        # awk-only (exits 0 on no match) + `|| true`: a loaded-but-not-running
-        # agent (crash-looping / mid-restart, no `pid = ` line) makes grep exit 1,
-        # which home-manager's `set -euo pipefail` would turn into an aborted switch.
-        pid=$(/bin/launchctl print "$domain/$label" 2>/dev/null \
-              | /usr/bin/awk '/[[:space:]]pid = /{print $NF; exit}') || true
-
-        verboseEcho "Stopping $label (pid ''${pid:-unknown})..."
-        /bin/launchctl bootout "$domain/$label" 2>/dev/null || true
-
-        if [ -n "$pid" ]; then
-          while kill -0 "$pid" 2>/dev/null; do
-            sleep 1
-          done
+        if cmp -s "$newPlist" "$curPlist"; then
+          verboseEcho "$label plist unchanged, skipping stop"
+          return
         fi
-      fi
-    }
 
-    ${lib.concatMapStringsSep "\n" (label: ''stop_and_wait "${label}"'') allLabels}
-  '';
+        if /bin/launchctl print "$domain/$label" &>/dev/null; then
+          local pid
+          # awk-only (exits 0 on no match) + `|| true`: a loaded-but-not-running
+          # agent (crash-looping / mid-restart, no `pid = ` line) makes grep exit 1,
+          # which home-manager's `set -euo pipefail` would turn into an aborted switch.
+          pid=$(/bin/launchctl print "$domain/$label" 2>/dev/null \
+                | /usr/bin/awk '/[[:space:]]pid = /{print $NF; exit}') || true
 
-  launchd.agents = {
-    victorialogs = {
-      enable = true;
-      config = {
-        Label = "com.shinzui.victorialogs";
-        ProgramArguments = [ "${victorialogs-wrapper}" ];
-        RunAtLoad = true;
-        KeepAlive = true;
-        ExitTimeOut = 30;
-        StandardOutPath = "${logDir}/victoria-logs.stdout.log";
-        StandardErrorPath = "${logDir}/victoria-logs.stderr.log";
+          verboseEcho "Stopping $label (pid ''${pid:-unknown})..."
+          /bin/launchctl bootout "$domain/$label" 2>/dev/null || true
+
+          if [ -n "$pid" ]; then
+            while kill -0 "$pid" 2>/dev/null; do
+              sleep 1
+            done
+          fi
+        fi
+      }
+
+      ${lib.concatMapStringsSep "\n" (label: ''stop_and_wait "${label}"'') allLabels}
+    '';
+
+    launchd.agents = {
+      victorialogs = {
+        enable = true;
+        config = {
+          Label = "com.shinzui.victorialogs";
+          ProgramArguments = [ "${victorialogs-wrapper}" ];
+          RunAtLoad = true;
+          KeepAlive = true;
+          ExitTimeOut = 30;
+          StandardOutPath = "${logDir}/victoria-logs.stdout.log";
+          StandardErrorPath = "${logDir}/victoria-logs.stderr.log";
+        };
       };
-    };
-  } // lib.listToAttrs (map shipperAgent shippers);
+    } // lib.listToAttrs (map shipperAgent shippers);
+  };
 
   # Useful LogsQL queries (run via VLUI at http://localhost:9428/select/vmui/
   # or `just logs-query 'QUERY'`):

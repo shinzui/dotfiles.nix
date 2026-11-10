@@ -22,7 +22,12 @@ runtime on a second machine. Do not perform the migration during initial setup.
 | `SungkyungM1X` | `true` | Active, authoritative databases and application state |
 | `yujin` | `false` | Prepare the workstation with the runtime stopped |
 
-The host settings are in `hosts/sungkyung/home.nix` and `hosts/yujin/home.nix`.
+The flags are no longer set per host by hand. The shared cutover phase in
+`hosts/rei-mori-cutover-phase.nix` (now `preparation`) sets them through
+`home/rei-mori-cutover.nix`, together with backup ownership, the support
+services, and the client tunnels. The move to Yujin follows
+[the migration runbook](rei-mori-yujin-migration.md) rather than the outline in
+"Cutover later" below.
 The shared [runtime profile](../home/rei-mori-runtime.nix) defaults to disabled,
 so a future host must be explicitly chosen as the runtime owner. It disables
 Mori's daemon and API, Rei's workers/API/subscriptions/watchdog, the webhook
@@ -49,7 +54,7 @@ second production event store or run automatic migrations, consumers, registry
 restoration, or replay on Yujin as a bootstrap check.
 
 ```bash
-python3 ./bin/check-rei-mori-owner.py --expect SungkyungM1X
+python3 ./bin/check-rei-mori-owner.py --expect SungkyungM1X --expect-backups SungkyungM1X --expect-support both
 ```
 
 This read-only check evaluates the declared flags, detects multiple declared
