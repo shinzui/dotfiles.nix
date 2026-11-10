@@ -9,7 +9,15 @@
 #   Mori API    127.0.0.1:18780 -> 8780
 #   Rei API     127.0.0.1:18775 -> 8775
 #   metrics     127.0.0.1:19091 -> 9091
-#   web         127.0.0.1:80 and [::1]:80 -> 80   (forwardWebPort)
+#   web         127.0.0.1:18081 -> 80, behind a loopback-only Caddy on :80
+#               (forwardWebPort)
+#
+# macOS lets an unprivileged process bind a port below 1024 only on the
+# wildcard address, so SSH cannot listen on 127.0.0.1:80 itself. A wildcard
+# SSH forward would expose the owner's private Mori and Rei routes to the LAN,
+# because the owner's Caddy sees every forwarded connection as loopback. So a
+# client-side Caddy binds *:80 (as local-web-proxy did), answers only loopback
+# peers, and proxies to the private 18081 forward, keeping the Host header.
 #
 # PostgreSQL uses trust authentication on its socket, so the forwarded socket
 # carries the owner's full database authority. It stays inside a mode-0700
@@ -72,7 +80,7 @@ let
     ++ forward "127.0.0.1:18780" "127.0.0.1:8780"
     ++ forward "127.0.0.1:18775" "127.0.0.1:8775"
     ++ forward "127.0.0.1:19091" "127.0.0.1:9091"
-    ++ lib.optionals cfg.forwardWebPort (loopbackForwards 80 "127.0.0.1:80")
+    ++ lib.optionals cfg.forwardWebPort (forward "127.0.0.1:${toString webForwardPort}" "127.0.0.1:80")
     ++ [ [ sshDestination ] ];
 
   supportTunnelArgs = [ [ "-NT" ] ] ++ sshHardening
@@ -119,7 +127,32 @@ let
       --mori ${pkgs.mori}/bin/mori
   '';
 
+  webForwardPort = 18081;
+  webProxyHome = "${cfg.stateDirectory}/caddy";
+  webProxyCaddyfile = pkgs.writeText "${target.name}-client-web.Caddyfile" ''
+    {
+      admin off
+      persist_config off
+    }
+
+    :80 {
+      @loopback remote_ip 127.0.0.1/32 ::1/128
+      handle @loopback {
+        reverse_proxy 127.0.0.1:${toString webForwardPort}
+      }
+      handle {
+        respond "${target.name}-client-web: loopback clients only" 403
+      }
+    }
+  '';
+  webProxy = pkgs.writeShellScript "${target.name}-client-web" ''
+    set -euo pipefail
+    mkdir -p "${webProxyHome}"
+    exec ${pkgs.caddy}/bin/caddy run --config ${webProxyCaddyfile} --adapter caddyfile
+  '';
+
   tunnelAgent = "${target.name}-client-tunnel";
+  webAgent = "${target.name}-client-web";
   ingestAgent = "${target.name}-client-ingest";
   supportAgent = "${target.name}-support-tunnel";
 in
@@ -202,6 +235,7 @@ in
       default = lib.optionals cfg.enable (
         [ tunnelAgent ]
         ++ lib.optional cfg.gitIngest ingestAgent
+        ++ lib.optional cfg.forwardWebPort webAgent
         ++ lib.optional cfg.supportForwards supportAgent
       );
       description = "launchd.agents names this client runs.";
@@ -257,6 +291,23 @@ in
           StartInterval = 600;
           StandardOutPath = "${cfg.stateDirectory}/ingest.stdout.log";
           StandardErrorPath = "${cfg.stateDirectory}/ingest.stderr.log";
+        };
+      };
+
+      ${webAgent} = lib.mkIf cfg.forwardWebPort {
+        enable = true;
+        config = {
+          Label = "com.shinzui.${webAgent}";
+          ProgramArguments = [ "${webProxy}" ];
+          RunAtLoad = true;
+          KeepAlive = true;
+          StandardOutPath = "${cfg.stateDirectory}/web.stdout.log";
+          StandardErrorPath = "${cfg.stateDirectory}/web.stderr.log";
+          EnvironmentVariables = {
+            HOME = config.home.homeDirectory;
+            XDG_CONFIG_HOME = webProxyHome;
+            XDG_DATA_HOME = webProxyHome;
+          };
         };
       };
 
