@@ -4,5 +4,5 @@
 # means per host, and docs/rei-mori-yujin-migration.md before changing it.
 # A change here takes effect on a machine only when that machine is switched.
 {
-  workstation.reiMoriCutover.phase = "validation";
+  workstation.reiMoriCutover.phase = "active";
 }
