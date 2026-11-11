@@ -24,7 +24,6 @@
         name = "Nadeem Bitar";
       };
       alias = {
-        dft = "difftool";
         fpush = "push --force-with-lease";
       };
       credential.helper =
