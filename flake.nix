@@ -55,9 +55,14 @@
     # limited to their resource owner. Keep these existing source revisions;
     # review the overrides when updating the consuming tool inputs.
     mori = {
-      # Retain Mori's own runtime/toolchain for the rehearsed global registry rollout.
-      # mori://shinzui/mori/plans/306-upgrade-mori-to-keiro-0-22-and-compatible-released-runtime-dependencies
-      url = "github:shinzui/mori/3ba3562309d48c775e4a1b1bef72cf2b5401f094";
+      # Tracks master. A revision that adds migrations or changes the projection
+      # catalog must be applied to the global registry (stopped writers, backup,
+      # mori-migrations up, `mori ops rebuild adopt`) before activation; the
+      # services refuse to start against an unmigrated or drifted registry.
+      # Runbook: mori://shinzui/mori docs/operations/backup-restore.md (artifact-level URI pending)
+      url = "github:shinzui/mori";
+      inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
+      inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     rei = {
       # Qualified runtime and foreground session admission renewal.
