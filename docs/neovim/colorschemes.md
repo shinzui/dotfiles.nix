@@ -1,14 +1,14 @@
 # Colorschemes
 
-The default colorscheme is [onenord](https://github.com/rmehri01/onenord.nvim). It is applied by `require("onenord").setup()` in `config/nvim/lua/shinzui/onenord-nvim.lua`, which runs after `init.lua` during startup.
+The default colorscheme is `charcoal-atelier`. It is applied by `vim.cmd.colorscheme("charcoal-atelier")` at the end of `config/nvim/lua/shinzui/onenord-nvim.lua`, right after `require("onenord").setup()` (which applies onenord itself). That file runs after `init.lua` during startup and before lualine's setup, so lualine's `auto` theme picks up the matching theme.
 
 Other colorschemes are installed but not applied, so they are available with `:colorscheme <name>`:
 
 | Name | Source | Notes |
 |------|--------|-------|
-| `onenord` | plugin | Default |
+| `onenord` | plugin | Configured with custom highlights; overridden at startup |
 | `catppuccin` | plugin | Configured for the `mocha` flavour; `catppuccin-latte` is used by zen-mode |
-| `charcoal-atelier` | `config/nvim/colors/charcoal-atelier.lua` | Custom, built from the terminal palette below |
+| `charcoal-atelier` | `config/nvim/colors/charcoal-atelier.lua` | Default. Custom, built from the terminal palette below |
 
 ## charcoal-atelier
 
@@ -43,6 +43,6 @@ Highlight groups are defined for the plugins in use (telescope, nvim-cmp, nvim-t
 
 `:colorscheme charcoal-atelier` needs the `nvim/colors` symlink from `home/neovim.nix`, which requires a `darwin-rebuild switch --flake .`.
 
-### Making it the default
+### Changing the default
 
-Replace the onenord entry in `programs.neovim.plugins` (`home/neovim.nix`) or add a `vim.cmd.colorscheme "charcoal-atelier"` after it; `init.lua` runs before the plugin configs, so setting it there would be overridden by onenord's `setup()`.
+Edit the `vim.cmd.colorscheme(...)` call at the end of `config/nvim/lua/shinzui/onenord-nvim.lua` (or remove it to fall back to onenord). Don't set it in `init.lua`: that runs before the plugin configs, so onenord's `setup()` would override it.

@@ -10,3 +10,7 @@ require("onenord").setup({
     CmpItemKindVariable = { fg = colors.dark_blue, style = "bold" }
   }
 })
+
+-- onenord's setup() applies itself; switch to the default colorscheme afterwards.
+-- onenord stays available via `:colorscheme onenord`.
+vim.cmd.colorscheme("charcoal-atelier")
