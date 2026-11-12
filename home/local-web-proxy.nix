@@ -14,6 +14,7 @@ let
   #   jaeger   -> 127.0.0.1:16686  (Jaeger UI, home/victoriatraces.nix)
   #   redpanda -> 127.0.0.1:8080   (Redpanda Console, home/redpanda.nix)
   #   mori     -> 127.0.0.1:8780   (mori serve, home/mori.nix) -- this machine only
+  #   mori-ui  -> 127.0.0.1:8785   (mori-ui, home/mori-ui.nix) -- this machine only
   #   rei      -> 127.0.0.1:8775   (rei-api, home/rei.nix) -- this machine only
   #
   # Plain HTTP on :80 avoids local CA trust for these names.
@@ -45,8 +46,12 @@ let
   # rei-api is here for the same reason: its reads need no token (only writes
   # carry a bearer token), so a LAN route would hand anyone on the network the
   # whole of Rei's read surface.
+  #
+  # mori-ui likewise: it has no authentication and shows everything the
+  # registry holds (mori-ui ADR-13).
   localOnlyServices = {
     mori = (import ./mori-api-env.nix).port;
+    mori-ui = (import ./mori-ui-env.nix).port;
     rei = (import ./rei-api-env.nix).port;
   };
 

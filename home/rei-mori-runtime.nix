@@ -11,6 +11,7 @@ let
     "rei-api"
     "mina-web"
     "reiko-web"
+    "mori-ui"
   ];
 
   # Agents forced off on this host: all of them when it is not the owner, and
@@ -62,6 +63,7 @@ in
         "notion-hub-subscription"
         "mina-web"
         "reiko-web"
+        "mori-ui"
       ];
       description = "Runtime agents and integrations which move together during host cutover.";
     };

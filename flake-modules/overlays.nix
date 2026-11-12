@@ -88,6 +88,8 @@
         kizamu = hsBin "kizamu" (hsPkg "kizamu");
         kazuha = hsBin "kazuha" (hsPkg "kazuha");
         mina = hsBinShare "mina" (hsPkg "mina");
+        # Not a Haskell flake: no lib/ to collide, so the package is used as is.
+        mori-ui = inputs.mori-ui.packages.${prev.stdenv.hostPlatform.system}.mori-ui;
         nihongo = hsBin "nihongo" (hsPkg "nihongo");
         shiki = hsBin "shiki" (hsPkg "shiki");
         okf = hsBin "okf" (hsPkg "okf");

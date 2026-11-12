@@ -57,6 +57,7 @@ in
     ./kizamu.nix
     ./kazuha.nix
     ./mina.nix
+    ./mori-ui.nix
     ./nihongo.nix
     ./okf.nix
     ./shiki.nix

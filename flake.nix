@@ -91,6 +91,11 @@
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
+    mori-ui = {
+      # A bun application with its own pinned nixpkgs and bun2nix; built as-is.
+      # The service is home/mori-ui.nix.
+      url = "github:shinzui/mori-ui";
+    };
     mina = {
       url = "github:shinzui/mina";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";

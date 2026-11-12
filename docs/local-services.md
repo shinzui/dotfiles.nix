@@ -32,6 +32,7 @@ It's plain HTTP on `:80`, so there's no local CA to trust.
 | http://traces.localhost | `127.0.0.1:10428` | VictoriaTraces (UI at `/select/vmui/`) |
 | http://jaeger.localhost | `127.0.0.1:16686` | Jaeger UI |
 | http://mina.localhost | `127.0.0.1:8765` | mina web |
+| http://mori-ui.localhost | `127.0.0.1:8785` | mori-ui — **this machine only** |
 | http://reiko.localhost | `127.0.0.1:8770` | reiko web |
 | http://redpanda.localhost | `127.0.0.1:8080` | Redpanda Console |
 
@@ -201,6 +202,16 @@ Home Manager activation and did not require an administrator system switch.
 | --- | --- | --- | --- |
 | mina web | `home/mina.nix` | `com.shinzui.mina-web` | http://mina.localhost (`127.0.0.1:8765`) |
 | reiko web | `home/reiko.nix` | `com.shinzui.reiko-web` | http://reiko.localhost (`127.0.0.1:8770`) |
+| mori-ui | `home/mori-ui.nix` | `com.shinzui.mori-ui` | http://mori-ui.localhost (`127.0.0.1:8785`) |
+
+mori-ui (`mori://shinzui/mori-ui`) is the read-only browser for the global
+Mori registry. It reads only Mori's HTTP API (`mori.localhost`'s upstream,
+`127.0.0.1:8780`) and has no authentication, so like `mori` itself its Caddy
+route answers clients on this machine only. Its pages live under `/r/local/…`.
+Domain models and search need a `mori serve` that includes Mori IR-50 and
+IR-47; an older Mori shows those pages as "not served yet". Logs:
+`~/.mori-ui/logs/web.{stdout,stderr}.log`. Update with
+`nix flake update mori-ui`, then rebuild.
 
 ## Operating the services
 
