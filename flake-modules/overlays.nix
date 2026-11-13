@@ -73,6 +73,8 @@
         defuddle = final.callPackage (self + "/derivations/defuddle") { };
         hunk = final.callPackage (self + "/derivations/hunk") { };
         jaeger-ui = final.callPackage (self + "/derivations/jaeger-ui") { };
+        # Prebuilt upstream release binary; nixpkgs has no Jaeger package.
+        jaeger = final.callPackage (self + "/derivations/jaeger.nix") { };
         bootstrap-repos = final.callPackage (self + "/derivations/bootstrap-repos") { };
         pg_rman = final.callPackage (self + "/derivations/pg_rman.nix") {
           postgresql = final.postgresql_18;

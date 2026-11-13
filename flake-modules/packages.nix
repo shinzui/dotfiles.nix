@@ -37,6 +37,7 @@
           defuddle
           hunk
           jaeger-ui
+          jaeger
           pg_rman
           bootstrap-repos
           mina

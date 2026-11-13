@@ -136,6 +136,7 @@ in
     dateutils
     uuinfo #debug unique identifiers (UUID, ULID, Snowflake, etc)
     ck #semantic code search
+    jaeger #distributed tracing (all-in-one v2 binary)
     moreutils #collection of unix tools
     dust #Fancy `du` https://github.com/bootandy/dust
     eza #fancy `ls`
