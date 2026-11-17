@@ -50,6 +50,15 @@ Use `mori registry list`, `mori registry search`, `mori registry show --full`, a
 
   **NEVER search, glob, grep, read, or otherwise traverse the filesystem root `/` under any circumstances.** It is enormous and not a source of truth for project code. Scope searches to the current project directory (or another specific path) and use `mori` (see above) to locate dependency sources on disk instead.
 
+## Stopping Processes (IMPORTANT)
+
+**Never use `pkill`, `killall`, or `pgrep … | xargs kill` to stop a process.** They match by name or command line and can kill the user's terminals, editors, browsers, and other agents' sessions. On macOS, BSD `pkill` treats a flag written after the pattern as another pattern: `pkill -f "fake" -n` matched every terminal shell (`login … --noprofile --norc`) and wiped out all of the user's sessions.
+
+- When you start a background process, save its PID (`cmd & echo $! > pidfile`) and stop it with `kill <pid>`.
+- To stop a server on a port, first confirm with `lsof -i tcp:PORT` that it is a process you started, then run `kill $(lsof -ti tcp:PORT -sTCP:LISTEN)`.
+- Prefer the project's own stop command (`just process-down`, `docker compose down`, and so on).
+- Never kill a process you did not start without asking the user.
+
 ## Linux Builds and Containers
 
 **Prefer local Apple containers over remote Linux builders whenever possible.** Use Apple's `container` tooling for Linux builds and tests when it can satisfy the task's architecture, resource, and environment requirements. Fall back to remote Linux builders when local Apple containers are unavailable or unsuitable.
