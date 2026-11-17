@@ -153,7 +153,7 @@ in
     viewMd = "glow -p -w 200";
 
     ###claude-code
-    claude-yolo = "SHELL=zsh /Users/shinzui/.local/bin/claude --dangerously-skip-permissions";
+    claude-yolo = "SHELL=/bin/zsh /Users/shinzui/.local/bin/claude --dangerously-skip-permissions";
     ccusage = "bunx ccusage@latest";
   };
 }
