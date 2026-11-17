@@ -35,6 +35,9 @@ in
       if [[ -r ${age.secrets.openapi_secret.path} ]]; then
         export OPENAI_API_KEY=$(< ${age.secrets.openapi_secret.path})
       fi
+      if [[ -r ${age.secrets.claude-oauth-token.path} ]]; then
+        export CLAUDE_CODE_OAUTH_TOKEN=$(< ${age.secrets.claude-oauth-token.path})
+      fi
     '')
     (lib.mkOrder 550 ''
       fpath=(~/.zfunc $fpath)
