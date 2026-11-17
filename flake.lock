@@ -2971,11 +2971,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794366951,
-        "narHash": "sha256-KOSEP1BjmaV9ATd9H+AxQDkGdI/BuqvkIpv06hGRe2o=",
+        "lastModified": 1794868974,
+        "narHash": "sha256-fxxT21xNZtWLFjvVh0Y5RCVZrrzoZsbspFPjS94hn7w=",
         "owner": "shinzui",
         "repo": "mina",
-        "rev": "5d07d72e42554bb1cef88a6ed790675c60ebdb3a",
+        "rev": "aa2c5b2f226d413bcc0f2dbb40692df7ec48de12",
         "type": "github"
       },
       "original": {
