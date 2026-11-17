@@ -3137,11 +3137,11 @@
         "pre-commit-hooks": "pre-commit-hooks_3"
       },
       "locked": {
-        "lastModified": 1794505764,
-        "narHash": "sha256-KGBaSXt2bBfmxx7C5SZ3ZRGyo3EuyNxcsrrbS+uSWQM=",
+        "lastModified": 1794938756,
+        "narHash": "sha256-8jf+2rU4nHhAL8U6wij0rvblbdlI/z12dL3TWPyzy4o=",
         "owner": "shinzui",
         "repo": "mori-ui",
-        "rev": "8351160cac73ad96d786f3aab18b1e11002ddecb",
+        "rev": "fe9acdce98bc03bbbcda8e4cec66b060f0e9c6e2",
         "type": "github"
       },
       "original": {
