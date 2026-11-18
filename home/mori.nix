@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, age, ... }:
 
 let
   pg = config.services.postgresql.package;
@@ -12,6 +12,11 @@ let
   # seven contexts flipped 2026-06-13 (runbook: mori repo docs/plans/117).
   # To roll back, set this to "" and `darwin-rebuild switch`.
   moriKirokuContexts = "app,automation_registration,workflow,group,reaction,repository,project";
+
+  # Shared registry the daemon publishes to, and the Shomei issuer it signs in at.
+  pushUrl = "https://mori-registry.labs.topagentnetwork.net";
+  pushIssuer = "https://auth.labs.topagentnetwork.net";
+  pushSecret = age.secrets.mori-push-shomei.path;
 
   mori-automate-wrapper = pkgs.writeShellScript "mori-automate" ''
     set -euo pipefail
@@ -37,7 +42,26 @@ let
       sleep 2
     done
 
-    exec ${pkgs.mori}/bin/mori automate daemon --ingest-interval 600
+    # Automatic push to the shared tan-ng-labs registry (Mori ExecPlans 336-339;
+    # which projects is `mori registry push-policy`, currently namespace tan).
+    # The daemon authenticates as the Shomei service account in the agenix
+    # secret mori-push-shomei (MORI_PUSH_SHOMEI_CLIENT_ID/SECRET), bound on the
+    # registry to a principal with publish on tan. Without the secret it keeps
+    # ingesting and does not publish.
+    pushArgs=()
+    if [[ -r "${pushSecret}" ]]; then
+      set -a
+      . "${pushSecret}"
+      set +a
+      export MORI_PUSH_URL="${pushUrl}"
+      export MORI_PUSH_AUTH_MODE=shomei
+      export MORI_PUSH_SHOMEI_ISSUER="${pushIssuer}"
+      pushArgs=(--auto-push)
+    else
+      echo "mori-automate: ${pushSecret} is unreadable; automatic push is off" >&2
+    fi
+
+    exec ${pkgs.mori}/bin/mori automate daemon --ingest-interval 600 "''${pushArgs[@]}"
   '';
 
   moriApi = import ./mori-api-env.nix;
