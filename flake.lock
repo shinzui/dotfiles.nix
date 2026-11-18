@@ -3013,11 +3013,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795009570,
-        "narHash": "sha256-da9s6jeLdlQ4UFlAg8UwGNJnTJfk9NqmA3AJ6Ht0Gjw=",
+        "lastModified": 1795018171,
+        "narHash": "sha256-jlmh6rgPQr+3mFA2/tZGPP6JbsvxkYAJlIhlCN4BQcM=",
         "owner": "shinzui",
         "repo": "mori",
-        "rev": "39fa48448f54d6c717bad6d4cab6bfb46bb0bf72",
+        "rev": "7425264e110d9500b356677a150560f3032546c0",
         "type": "github"
       },
       "original": {
