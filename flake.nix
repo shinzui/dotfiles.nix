@@ -67,7 +67,7 @@
     rei = {
       # Qualified runtime and foreground session admission renewal.
       # mori://shinzui/rei/plans/306-qualify-and-roll-out-the-global-rei-personal-mode-runtime
-      url = "github:shinzui/rei/6c6502e3fe19f29d66f1c463aad84f36bbd2383e";
+      url = "github:shinzui/rei/42c217cf1b10f191b6d947c96402e2347f9361f3";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };

@@ -4951,17 +4951,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1795115014,
-        "narHash": "sha256-I1upLm2Q/3t87qdHH6vVBFN6lTvTzFJh3t7w2m+vYaw=",
+        "lastModified": 1795116253,
+        "narHash": "sha256-V4Tu9/tTgIgoEVwLO9HQX7ZyXMFGhRlrS2w87nnk820=",
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "6c6502e3fe19f29d66f1c463aad84f36bbd2383e",
+        "rev": "42c217cf1b10f191b6d947c96402e2347f9361f3",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "6c6502e3fe19f29d66f1c463aad84f36bbd2383e",
+        "rev": "42c217cf1b10f191b6d947c96402e2347f9361f3",
         "type": "github"
       }
     },
