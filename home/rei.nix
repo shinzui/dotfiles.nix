@@ -120,6 +120,16 @@ let
     exec ${reiBin} subscription run all
   '';
 
+  # Scheduled Claude calls share the existing shell credential. Load it only
+  # for the provider subprocess so the worker and other providers need no token.
+  claudeWorkerCli = pkgs.writeShellScriptBin "claude" ''
+    export PATH="${agentCliPath}"
+    if [ -r "${age.secrets.claude-oauth-token.path}" ]; then
+      export CLAUDE_CODE_OAUTH_TOKEN="$(< "${age.secrets.claude-oauth-token.path}")"
+    fi
+    exec claude "$@"
+  '';
+
   rei-worker-wrapper = pkgs.writeShellScript "rei-worker" ''
     set -euo pipefail
     export REI_PG_CONNECTION_STRING="${connStr}"
@@ -351,7 +361,7 @@ in
         # Scheduled agent work launches the configured provider CLI by name.
         # launchd's default PATH cannot see the user-installed Claude CLI or
         # the Nix-installed Codex CLI.
-        PATH = agentCliPath;
+        PATH = "${claudeWorkerCli}/bin:${agentCliPath}";
       } // reiCli.topicProfileEnv // otelEnv "rei-worker";
     };
   };
