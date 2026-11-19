@@ -66,8 +66,8 @@
     };
     rei = {
       # Qualified runtime and foreground session admission renewal.
-      # mori://shinzui/rei/plans/291-keep-foreground-session-admissions-alive-and-make-failures-diagnosable
-      url = "github:shinzui/rei/597e041b9179be9801836a082827360bb48547a4";
+      # mori://shinzui/rei/plans/306-qualify-and-roll-out-the-global-rei-personal-mode-runtime
+      url = "github:shinzui/rei/6c6502e3fe19f29d66f1c463aad84f36bbd2383e";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
@@ -122,7 +122,7 @@
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     mori-rei-app = {
-      url = "github:shinzui/mori-rei-app/17f2e2f246feeb813dcd9944ee5be191b9927bbb";
+      url = "github:shinzui/mori-rei-app/bca7f8bf7d5a07af870f1194adc81bf49b48bb08";
       # The integration embeds Rei's codecs and catalog: deploy the same source.
       inputs.rei.follows = "rei";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";

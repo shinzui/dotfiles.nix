@@ -417,6 +417,7 @@ in
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
         REI_API_PORT = reiApiPort;
+        REI_IDENTITY_MODE = "personal";
         MORI_API_URL = moriApi.url;
       } // reiCli.topicProfileEnv // otelEnv "rei-api";
     };

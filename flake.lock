@@ -3080,17 +3080,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1794284411,
-        "narHash": "sha256-9onyntZnFh8JFD33mC+uofpUUyUH3/HwzVwYKf/a1tw=",
+        "lastModified": 1795115631,
+        "narHash": "sha256-XWLpUvU7XI8jFGsdQGXGscSHY7DsPDT5ez/Bs3AYqNc=",
         "owner": "shinzui",
         "repo": "mori-rei-app",
-        "rev": "17f2e2f246feeb813dcd9944ee5be191b9927bbb",
+        "rev": "bca7f8bf7d5a07af870f1194adc81bf49b48bb08",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "mori-rei-app",
-        "rev": "17f2e2f246feeb813dcd9944ee5be191b9927bbb",
+        "rev": "bca7f8bf7d5a07af870f1194adc81bf49b48bb08",
         "type": "github"
       }
     },
@@ -4951,17 +4951,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1794275829,
-        "narHash": "sha256-NComE+grvMwob+b2/N1OW7dQlj+3lvSIZVxFYahcFYg=",
+        "lastModified": 1795115014,
+        "narHash": "sha256-I1upLm2Q/3t87qdHH6vVBFN6lTvTzFJh3t7w2m+vYaw=",
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "597e041b9179be9801836a082827360bb48547a4",
+        "rev": "6c6502e3fe19f29d66f1c463aad84f36bbd2383e",
         "type": "github"
       },
       "original": {
         "owner": "shinzui",
         "repo": "rei",
-        "rev": "597e041b9179be9801836a082827360bb48547a4",
+        "rev": "6c6502e3fe19f29d66f1c463aad84f36bbd2383e",
         "type": "github"
       }
     },
