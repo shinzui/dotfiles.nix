@@ -3536,11 +3536,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795144953,
-        "narHash": "sha256-CSJ8mepKsnsUqBEuoTjLiOEwIjRzlnyJdoBjYsQFtMQ=",
+        "lastModified": 1795369167,
+        "narHash": "sha256-zmh4XasE7YXacq5nQ5XBezModqPFtwvHR5VkuvAQTtc=",
         "owner": "shinzui",
         "repo": "mori",
-        "rev": "117ee41a61f82f207e22fd0b5b16e47c43aab857",
+        "rev": "f2fe565eeac24631b7ecbe99f2baa583e4515200",
         "type": "github"
       },
       "original": {
@@ -3660,11 +3660,11 @@
         "pre-commit-hooks": "pre-commit-hooks_4"
       },
       "locked": {
-        "lastModified": 1795018216,
-        "narHash": "sha256-tA0n2W/DBgCNi0cz8hLQUpWSXG8ssSZV03WwcaK1edI=",
+        "lastModified": 1795369259,
+        "narHash": "sha256-dOuR+tVxJxLAwIXNi1CSSpL66gRrmmIfzp8lppRVOyg=",
         "owner": "shinzui",
         "repo": "mori-ui",
-        "rev": "0d8297138c3be716cb323ac45eff4bb0243d24a8",
+        "rev": "555bc4b578de9c4db55374ce2b6137d88233d600",
         "type": "github"
       },
       "original": {
@@ -6194,11 +6194,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794778707,
-        "narHash": "sha256-AlfcAYQP0sqU3V2Q87psnyKOfiJ4F5zmU5LXB4etY2Q=",
+        "lastModified": 1795367094,
+        "narHash": "sha256-rnDYn0Tu3zqO+bpyV+kbllMwN2K90H5RYsXRhKdgeiM=",
         "owner": "shinzui",
         "repo": "seihou",
-        "rev": "4540d20ca8cba6399ace34295002ea9ae0d02f94",
+        "rev": "93c9789ace798b41e18ae36d5ff8fbe06ace02b2",
         "type": "github"
       },
       "original": {
