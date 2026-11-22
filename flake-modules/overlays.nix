@@ -92,10 +92,15 @@
         mina = hsBinShare "mina" (hsPkg "mina");
         # Not a Haskell flake: no lib/ to collide, so the package is used as is.
         mori-ui = inputs.mori-ui.packages.${prev.stdenv.hostPlatform.system}.mori-ui;
+        keiro-ui = inputs.keiro-ui.packages.${prev.stdenv.hostPlatform.system}.console;
         nihongo = hsBin "nihongo" (hsPkg "nihongo");
         shiki = hsBin "shiki" (hsPkg "shiki");
         okf = hsBin "okf" (hsPkg "okf");
-        mori-rei-app = hsBin "mori-rei-app" (hsPkg "mori-rei-app");
+        # The bridge compiles against the same embedded Rei and runtime as the CLI.
+        mori-rei-app = hsBin "mori-rei-app" (import ../lib/mori-rei-app.nix {
+          inherit (inputs) rei mori-rei-app;
+          system = prev.stdenv.hostPlatform.system;
+        });
         notion-cli = hsBin "notion-cli" (hsPkg "notion-cli");
         notion-hub = hsBin "notion-hub" (hsPkg "notion-hub");
         notion-hub-subscriptions = hsBin "notion-hub-subscriptions"

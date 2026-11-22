@@ -3,12 +3,13 @@ let
   cfg = config.workstation.reiMori;
 
   # The only agents an owner may run at stage "validation": the APIs and the
-  # two web tools that read them. Workers, automations, integrations (the
+  # web tools that read them. Workers, automations, integrations (the
   # mori-rei-app bridge and the Notion Hub consumer) and healing stay off so a
   # freshly restored host can be inspected before it causes any side effect.
   validationAgents = [
     "mori-serve"
     "rei-api"
+    "rei-ops"
     "mina-web"
     "reiko-web"
     "mori-ui"
@@ -55,6 +56,7 @@ in
         "mori-serve"
         "mori-rei-app"
         "rei-api"
+        "rei-ops"
         "rei-worker"
         "rei-worker-kiroku"
         "rei-subscription"

@@ -65,9 +65,8 @@
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
     rei = {
-      # Qualified runtime and foreground session admission renewal.
-      # mori://shinzui/rei/plans/306-qualify-and-roll-out-the-global-rei-personal-mode-runtime
-      url = "github:shinzui/rei/8601e4c044166a088dba9cd0c1357b6f25e34f46";
+      # mori://shinzui/rei/masterplans/34-upgrade-rei-to-released-keiro-and-connect-its-dsl-topology-to-keiro-ui
+      url = "github:shinzui/rei/d4606665bae13971f271d79c9bbafc959196a7ef";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";
       inputs.haskell-nix-dev.follows = "haskell-nix-dev";
     };
@@ -96,6 +95,7 @@
       # The service is home/mori-ui.nix.
       url = "github:shinzui/mori-ui";
     };
+    keiro-ui.url = "github:shinzui/keiro-ui/256528be2441d1f3de1651cc0c2d69836e045941";
     mina = {
       url = "github:shinzui/mina";
       inputs.nixpkgs.follows = "haskell-nix-dev/nixpkgs";

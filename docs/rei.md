@@ -1,8 +1,7 @@
 # Rei
 
-Sungkyung is the current sole runtime host. Keep the Yujin runtime stopped until
-the separate [host cutover](rei-mori-cutover.md); runtime setup, migrations and
-restart commands below apply to the active host.
+Yujin is the current runtime host. Apply runtime setup, migrations and restart
+commands on the active host selected by the [host cutover](rei-mori-cutover.md).
 
 Event-driven task processing system. Configured in `home/rei.nix`.
 
@@ -62,6 +61,22 @@ on the caller. Secrets are read at process startup and are never Nix inputs.
 the active host only after compatible readers, migrations and shared outcome-ID
 reconstruction are verified. Runtime host ownership remains governed by
 [the host cutover procedure](rei-mori-cutover.md).
+
+## Keiro UI
+
+Open [Keiro UI](http://keiro-ui.localhost) to see Rei's service topology, live
+aggregate instances and projection status. Caddy serves the packaged console
+and proxies `/keiro` and its WebSocket to the loopback-only
+`com.shinzui.rei-ops` LaunchAgent. The preconfigured Rei target uses the global
+database and provides read-only inspection. The listener logs to
+`~/.rei/logs/ops.stdout.log` and `~/.rei/logs/ops.stderr.log`.
+
+For the runtime upgrade in
+`mori://shinzui/rei/masterplans/34-upgrade-rei-to-released-keiro-and-connect-its-dsl-topology-to-keiro-ui`,
+apply Keiro migration `0033` with the candidate Rei migrator before starting
+Keiro 0.26 workers. It adds nullable timer trace context and workflow trace hint
+columns. Use the explicit global database target and verify the migration ledger
+after applying it.
 
 ## Database and coordinated rollouts
 

@@ -139,8 +139,73 @@ let
       }
   '';
 
+  reiOps = import ./rei-ops-env.nix;
+  keiroConsoleConfig = pkgs.writeTextDir "console-config.json" (builtins.toJSON {
+    version = 1;
+    defaultTargetId = "rei-local";
+    targets = [{
+      id = "rei-local";
+      label = "Rei";
+      app = "rei";
+      environment = "local";
+      surfaces = {
+        keiro = "/keiro";
+        kiroku = "/kiroku";
+        pgmq = "/pgmq";
+      };
+      workers = [{
+        id = "rei-worker-kiroku";
+        label = "Kiroku worker";
+        shibuyaBaseUrl = "/shibuya";
+      }] ++ lib.optionals config.launchd.agents.rei-worker.enable [{
+        id = "rei-worker";
+        label = "PGMQ worker";
+        shibuyaBaseUrl = "/shibuya-pgmq";
+      }];
+      defaultWorkerId = "rei-worker-kiroku";
+    }];
+  });
+  # The composed host needs its prefixes. The worker listens at its own root.
+  keiroConsoleRoute = lib.optionalString config.launchd.agents.rei-ops.enable ''
+      @keiro-ui {
+        host ${reiOps.host}
+        remote_ip 127.0.0.1/32 ::1/128
+      }
+      handle @keiro-ui {
+        @rei-ops path /keiro /keiro/* /kiroku /kiroku/* /pgmq /pgmq/*
+        handle @rei-ops {
+          reverse_proxy 127.0.0.1:${toString reiOps.port}
+        }
+        handle_path /shibuya/* {
+          reverse_proxy 127.0.0.1:${toString reiOps.workerInspectionPort}
+        }
+        ${lib.optionalString config.launchd.agents.rei-worker.enable ''
+          handle_path /shibuya-pgmq/* {
+            reverse_proxy 127.0.0.1:${toString reiOps.pgmqWorkerInspectionPort}
+          }
+        ''}
+        handle /console-config.json {
+          root * ${keiroConsoleConfig}
+          header Cache-Control "no-store"
+          file_server
+        }
+        handle /assets/* {
+          root * ${pkgs.keiro-ui}/share/keiro-ui
+          header Cache-Control "public, max-age=31536000, immutable"
+          file_server
+        }
+        handle {
+          root * ${pkgs.keiro-ui}/share/keiro-ui
+          header Cache-Control "no-cache"
+          try_files {path} /index.html
+          file_server
+        }
+      }
+  '';
+
   caddyfile = pkgs.writeText "local-web-proxy.Caddyfile" ''
     :80 {
+    ${keiroConsoleRoute}
     ${lib.concatStringsSep "\n" (lib.mapAttrsToList localOnlyRoute localOnlyServices)}
     ${lib.concatStringsSep "\n" (lib.mapAttrsToList route allRoutes)}
       handle {

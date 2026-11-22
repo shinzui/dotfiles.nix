@@ -178,6 +178,7 @@ let
 
   # rei's HTTP API (rei-api); where it listens is shared with the Caddy proxy.
   reiApi = import ./rei-api-env.nix;
+  reiOps = import ./rei-ops-env.nix;
   reiApiPort = toString reiApi.port;
   reiApiTokensPath = age.secrets.rei-api-tokens.path;
   moriApi = import ./mori-api-env.nix;
@@ -209,6 +210,14 @@ let
     ${waitForPg}
 
     exec ${pkgs.rei-api}/bin/rei-api
+  '';
+
+  rei-ops-wrapper = pkgs.writeShellScript "rei-ops" ''
+    set -euo pipefail
+    export REI_PG_CONNECTION_STRING="${connStr}"
+    ${waitForPg}
+    exec ${reiBin} ops serve-http --bind 127.0.0.1 --port ${toString reiOps.port} \
+      --allow-origin ${lib.escapeShellArg reiOps.origin}
   '';
 
   # Forced command for a client's remote `rei` (home/rei-mori-client.nix),
@@ -311,6 +320,7 @@ in
     stop_and_wait "com.shinzui.rei-worker-git-sync"
     stop_and_wait "com.shinzui.rei-worker-kiroku"
     stop_and_wait "com.shinzui.rei-api"
+    stop_and_wait "com.shinzui.rei-ops"
   '';
 
   programs.zsh.sessionVariables = {
@@ -362,6 +372,8 @@ in
         # launchd's default PATH cannot see the user-installed Claude CLI or
         # the Nix-installed Codex CLI.
         PATH = "${claudeWorkerCli}/bin:${agentCliPath}";
+        REI_SHIBUYA_METRICS_PORT = toString reiOps.pgmqWorkerInspectionPort;
+        REI_SHIBUYA_METRICS_ORIGIN = reiOps.origin;
       } // reiCli.topicProfileEnv // otelEnv "rei-worker";
     };
   };
@@ -404,6 +416,8 @@ in
         REI_PG_CONNECTION_STRING = connStr;
         PG_CONNECTION_STRING = connStr;
         REI_KIROKU_METRICS_PORT = kirokuMetricsPort;
+        REI_SHIBUYA_METRICS_PORT = toString reiOps.workerInspectionPort;
+        REI_SHIBUYA_METRICS_ORIGIN = reiOps.origin;
       } // reiCli.topicProfileEnv // otelEnv "rei-worker-kiroku";
     };
   };
@@ -430,6 +444,19 @@ in
         REI_IDENTITY_MODE = "personal";
         MORI_API_URL = moriApi.url;
       } // reiCli.topicProfileEnv // otelEnv "rei-api";
+    };
+  };
+
+  launchd.agents.rei-ops = {
+    enable = true;
+    config = {
+      Label = "com.shinzui.rei-ops";
+      ProgramArguments = [ "${rei-ops-wrapper}" ];
+      RunAtLoad = true;
+      KeepAlive = true;
+      ExitTimeOut = 30;
+      StandardOutPath = "${reiLogDir}/ops.stdout.log";
+      StandardErrorPath = "${reiLogDir}/ops.stderr.log";
     };
   };
 }
