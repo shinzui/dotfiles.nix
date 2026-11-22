@@ -53,6 +53,11 @@ the explicitly selected target again before activation. The owner build checks
 the configuration and primes access to private inputs. Activate each full host
 only on its corresponding workstation.
 
+To build and activate a host with unpublished local changes, put its input
+overrides in `.local-inputs/<host>`, one input name and flake reference per
+line. Both wrappers use the same file. Use a local Git reference with a full
+revision to select a committed build. These files are ignored by Git.
+
 The switch wrapper explicitly selects `/Users/shinzui/.ssh/id_ed25519` for
 root's SSH Git fetches, because root does not read the owner's SSH configuration.
 An explicitly supplied `GIT_SSH_COMMAND` takes precedence. A passphrase-protected

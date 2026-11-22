@@ -40,4 +40,6 @@ fi
 if (( EUID == 0 )) && [[ -z "${GIT_SSH_COMMAND:-}" ]]; then
   export GIT_SSH_COMMAND='/usr/bin/ssh -i /Users/shinzui/.ssh/id_ed25519 -o IdentitiesOnly=yes'
 fi
-exec ./result/sw/bin/darwin-rebuild switch --flake ".#${host}" "$@"
+source "$repo_dir/bin/local-flake-inputs.sh"
+load_local_flake_inputs "$repo_dir" "$host"
+exec ./result/sw/bin/darwin-rebuild switch --flake ".#${host}" ${local_flake_args[@]+"${local_flake_args[@]}"} "$@"

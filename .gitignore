@@ -1,6 +1,7 @@
 result
 /result-bootstrap
 /result-yujin
+/.local-inputs/
 todo.md
 .luarc.json
 .envrc

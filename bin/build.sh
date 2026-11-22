@@ -12,4 +12,6 @@ esac
 
 repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd -- "$repo_dir"
-exec nix build ".#darwinConfigurations.${host}.system" "$@"
+source "$repo_dir/bin/local-flake-inputs.sh"
+load_local_flake_inputs "$repo_dir" "$host"
+exec nix build ".#darwinConfigurations.${host}.system" ${local_flake_args[@]+"${local_flake_args[@]}"} "$@"
