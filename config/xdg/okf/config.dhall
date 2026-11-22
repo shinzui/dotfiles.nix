@@ -6,7 +6,7 @@ let Effort = < Minimal | Low | Medium | High | XHigh | Max >
 
 in  { kit =
         { repoUrl = "https://github.com/shinzui/okf-kit.git"
-        , providers = [ Provider.Claude ]
+        , providers = [ Provider.Claude, Provider.Codex ]
         }
     , agent =
         -- Shared defaults for every agent-launching command.
