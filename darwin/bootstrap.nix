@@ -47,9 +47,8 @@
   # Remote builders
   ##################
   # On-demand x86_64-linux builder hosted in GCP (tan-nb-exp / us-west1-a).
-  # The wrapper that opens the SSH connection lives in
-  # ~/Keikaku/dotfiles.nix/home/gcp-nix-builder.nix; that wrapper starts
-  # the VM on demand and shuts it back down via an in-guest systemd timer.
+  # darwin/gcp-nix-builder.nix wires up the start-on-demand SSH proxy.
+  # mori://shinzui/kama owns the VM and its idle shutdown timer.
   #
   # Determinate Nix shadows nix-darwin's `nix.buildMachines` /
   # `nix.distributedBuilds` with its own `determinateNix.*` equivalents.

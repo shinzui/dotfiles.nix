@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 # System-level wiring for the on-demand x86_64-linux Nix remote builder
-# in GCP (tan-nb-exp / us-west1-a).
+# in GCP (tan-nb-exp / us-west1-a), managed by mori://shinzui/kama.
 #
 # Why this lives in the darwin layer (not just home-manager): the
 # nix-daemon runs as root and is what invokes `ssh` for remote builds.
@@ -21,6 +21,10 @@ let
 in
 {
   environment.systemPackages = [ proxyScript ];
+
+  # The NixOS guest loads the same SSH host key on each replacement.
+  programs.ssh.knownHosts."nix-gcp-builder".publicKey =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICySXuuS9ImpcoMVla5esd5RnOPRhRK9fb7mSQK/xMjg";
 
   # System-wide SSH client config drop-in. Both root (nix-daemon) and
   # interactive users see Host nix-gcp-builder.
